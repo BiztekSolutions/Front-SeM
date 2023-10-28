@@ -1,5 +1,11 @@
+import Rutinas from "../../components/Rutinas/Rutinas";
+
 function Home() {
-  return <div></div>;
+  return (
+    <div>
+      <Rutinas></Rutinas>
+    </div>
+  );
 }
 
 export default Home;

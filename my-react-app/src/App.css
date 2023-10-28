@@ -5,7 +5,7 @@
   background-color: black;
 }
 
-/* FONT FACES /
+/* FONT FACES */
 @font-face {
   font-family: "BarlowBold";
   src: local("BarlowBold"), url("./Fonts/Barlow/Barlow-Bold.ttf") format("ttf");
@@ -45,13 +45,7 @@ button:focus {
   box-shadow: none !important;
 }
 
-/ ------------- 
-     RUTINAS
-------------- */
-
-.video-container {
-  position: relative;
-}
+/* ------------- RUTINAS ------------- */
 
 .rutinas-titulo {
   background-color: #f87b15;
@@ -74,7 +68,7 @@ button:focus {
 
 .rutinas-button {
   position: absolute;
-  top: 80%;
+  top: 55%;
   left: 50%;
   width: 30%;
   transform: translate(-50%, -50%);
@@ -93,5 +87,62 @@ button:focus {
 
 .custom-video {
   width: 100%;
-  max-height: 900px;
+  max-height: 1000px;
+}
+
+/* -------------- Categorias ------------ */
+.opciones {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+.categoria {
+  background-color: black;
+}
+.categoria h1 {
+  color: #f87b15;
+  padding: 10px;
+  text-align: center;
+  font-family: "AntonRegular", AntonRegular;
+}
+.categoria h3 {
+  padding-right: 10px;
+  width: 55%;
+  margin: 0 auto;
+  text-align: center;
+  font-family: "AntonRegular", AntonRegular;
+}
+
+.wave {
+  animation-name: wave-animation; /* Refers to the name of your @keyframes element below */
+  animation-duration: 2.1s; /* Change to speed up or slow down */
+  animation-iteration-count: infinite; /* Never stop waving :) */
+  transform-origin: 70% 70%; /* Pivot around the bottom-left palm */
+  display: inline-block;
+}
+
+@keyframes wave-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  } /* The following five values can be played with to make the waving more or less extreme */
+  20% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  } /* Reset for the last half to pause */
+  100% {
+    transform: rotate(0deg);
+  }
 }

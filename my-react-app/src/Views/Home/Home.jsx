@@ -1,9 +1,13 @@
 import Rutinas from "../../components/Rutinas/Rutinas";
+import Header from "../../components/Header";
+import Inicio from "../../components/Inicio/Inicio";
 
 function Home() {
   return (
     <div>
-      <Rutinas></Rutinas>
+      <Header />
+      <Inicio />
+      <Rutinas />
     </div>
   );
 }

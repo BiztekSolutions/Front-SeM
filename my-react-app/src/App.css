@@ -1,11 +1,13 @@
 #root {
+  background-color: black;
   width: 100%;
+  margin: auto;
   height: 100vh;
   text-align: center;
-  background-color: black;
+  height: max-content;
 }
 
-/* FONT FACES /
+/* FONT FACES */
 @font-face {
   font-family: "BarlowBold";
   src: local("BarlowBold"), url("./Fonts/Barlow/Barlow-Bold.ttf") format("ttf");
@@ -45,10 +47,7 @@ button:focus {
   box-shadow: none !important;
 }
 
-/ ------------- 
-     RUTINAS
-------------- */
-
+/* ------------- RUTINAS ------------- */
 .video-container {
   position: relative;
 }

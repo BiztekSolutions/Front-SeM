@@ -31,7 +31,7 @@ const Inicio = () => {
                 />
               </div>
               <h2 className="text-white text-5xl text-left">
-                SALUD EN MOVIMEINTO
+                SALUD EN MOVIMIENTO
               </h2>
             </div>
             <div>
@@ -57,7 +57,7 @@ const Inicio = () => {
                     />
                   </svg>
                   <div>
-                    <p>SALADILLO</p>
+                    <div style={{ marginRight: "90px" }}>SALADILLO</div>
                     <p>AV. RIVADAVIA 2344</p>
                   </div>
                 </div>

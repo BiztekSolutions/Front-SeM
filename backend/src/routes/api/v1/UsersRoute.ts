@@ -1,5 +1,4 @@
 import express from 'express';
-import User from '../models/UserModel';
 
 const router = express.Router();
 
@@ -39,3 +38,4 @@ router.post('/login', async (req, res) => {
 // });
 
 export { router as userRouter };
+  

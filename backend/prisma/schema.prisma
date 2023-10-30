@@ -1,11 +1,3 @@
-model User {
-  id    Int    @id @default(autoincrement())
-  name  String?
-  email String @unique
-  password String
-  token String? @unique
-}
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,4 +5,45 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = "postgresql://postgres:arian@localhost:5432/salud-en-movimiento?schema=public"
+}
+
+// Model for User
+model User {
+  idUser       Int       @id @default(autoincrement())
+  name         String?
+  lastname     String?
+  birthday     DateTime?
+  weight       Decimal?
+  rol          String?
+  created_date DateTime?
+  updated_date DateTime?
+
+  // Define the relation with Routine_has_User
+  //routines      Routine_has_User[]
+  credentials Credential[]
+}
+
+model Credential {
+  idCredential Int       @id @default(autoincrement())
+  email        String    @unique
+  password     String
+  created_date DateTime?
+  updated_date DateTime?
+
+  // Define the relation with User
+  user   User? @relation(fields: [idUser], references: [idUser])
+  idUser Int?
+
+  sessions Session[]
+}
+
+model Session {
+  idSession    Int       @id @default(autoincrement())
+  token        String    @unique
+  created_date DateTime?
+  updated_date DateTime?
+
+  // Define the relation with User
+  credential   Credential @relation(fields: [idCredential], references: [idCredential])
+  idCredential Int
 }

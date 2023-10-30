@@ -1,12 +1,18 @@
-import express, { Request, Response } from "express";
+import express from 'express';
+var bodyParser = require('body-parser')
+import { authRouter } from './routes/api/v1/AuthRoute';
 
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, World!");
-});
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+// parse application/json
+app.use(bodyParser.json());
+
+app.use('/api/v1/auth', authRouter);
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });

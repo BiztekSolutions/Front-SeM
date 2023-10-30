@@ -1,7 +1,8 @@
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.png";
 import { Link } from "react-scroll";
 import Register from "./Register";
 import { useEffect, useRef, useState } from "react";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,6 +16,7 @@ const Header = () => {
       if (prevMenu) {
         setSubMenuOpen(false);
         setMenuMenOpen(false);
+        setRegisterOpen(false);
         document.body.style.overflow = "";
       } else {
         document.body.style.overflow = "";
@@ -26,6 +28,7 @@ const Header = () => {
     if (!isMenuOpen) {
       setSubMenuOpen(false);
       setMenuMenOpen(false);
+      setRegisterOpen(false);
     }
   }, [isMenuOpen]);
   useEffect(() => {
@@ -48,10 +51,13 @@ const Header = () => {
 
   console.log(isMenuOpen);
   return (
-    <div className="sticky top-0 z-50 bg-white w-full shadow-lg flex items-center justify-between p-4 ">
+    <div
+      id="navbar"
+      className="sticky top-0 z-50  w-full shadow-lg flex items-center justify-between p-4 "
+    >
       <div className="">
         <Link
-          className="text-white hover:text-customOrange transition-colors duration-300 cursor-pointer"
+          className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
           to="inicio"
           smooth={true}
           duration={1000}
@@ -59,33 +65,37 @@ const Header = () => {
           <img src={logo} alt="Logo" className="h-12 w-auto ml-10" />
         </Link>
       </div>
-      <ul className="flex  text-white text-2xl p-5 gap-4 font-bold">
+      <ul className="flex text-2xl p-5 gap-7 font-bold">
+        <DarkModeToggle />
         <li className="">
           <Link
-            className="text-white hover:text-customOrange transition-colors duration-300 cursor-pointer"
+            className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
             duration={1000}
+            id="sedes"
           >
             SEDES
           </Link>
         </li>
         <li className="">
           <Link
-            className="text-white hover:text-customOrange transition-colors duration-300 cursor-pointer"
+            className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
             to="nosotras"
             smooth={true}
             duration={1000}
+            id="nosotras"
           >
             SOBRE NOSOTRAS
           </Link>
         </li>
         <li className="z-10">
           <Link
-            className="text-white hover:text-customOrange transition-colors duration-300 cursor-pointer "
+            className="hover:text-customOrange transition-colors duration-300 cursor-pointer "
             to="formulario"
             smooth={true}
             duration={1000}
+            id="contacto"
           >
             CONTACTO
           </Link>

@@ -5,10 +5,6 @@ import { Link } from "react-scroll";
 const Rutinas = () => {
   const videoRef = useRef(null);
 
-  function handleButton() {
-    console.log("Click happened");
-  }
-
   return (
     <div className="landingClassForCarousel">
       <div className="rutinas-titulo">
@@ -36,7 +32,7 @@ const Rutinas = () => {
           </div>
         </div>
         <Link
-          className="rutinas-button text-white bg-customOrange hover: font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
+          className="rutinas-button  bg-customOrange hover: font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
           to="formulario"
           smooth={true}
           duration={1000}

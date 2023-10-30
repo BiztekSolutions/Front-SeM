@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-
 import googleLogo from "../assets/googleLogin.png";
 
+// eslint-disable-next-line react/prop-types
 const Register = ({ isRegisterOpen, setRegisterOpen }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
@@ -21,6 +21,9 @@ const Register = ({ isRegisterOpen, setRegisterOpen }) => {
     } else {
       setRegisterOpen(false);
     }
+  };
+  const handleSubmit = () => {
+    console.log("enviado");
   };
 
   return (
@@ -67,7 +70,7 @@ const Register = ({ isRegisterOpen, setRegisterOpen }) => {
           </div>
           <div className="flex flex-col ">
             <div className="mb-4 ">
-              <div className="mb-4 relative">
+              <div className=" relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   id="form3Example4c"
@@ -118,13 +121,23 @@ const Register = ({ isRegisterOpen, setRegisterOpen }) => {
 
           <div className="flex justify-center pt-8">
             <button
-              onClick={handleRegister}
+              onClick={handleSubmit}
               type="button"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-orange-700  font-bold py-2 px-4 rounded"
             >
-              {isRegisterOpen ? "INICIAR SESION" : "CREAR CUENTA"}
+              ENVIAR
             </button>
           </div>
+          <button
+            onClick={handleRegister}
+            type="button"
+            className=" bg-black hover:bg-orange-700 text-white font-bold py-2 px-4 rounded mt-4"
+          >
+            {isRegisterOpen
+              ? "CAMBIAR A INICIAR SESION"
+              : "CAMBIAR A CREAR CUENTA"}
+          </button>
+
           <div className="text-center mt-10">
             <p>
               {isRegisterOpen

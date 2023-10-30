@@ -7,7 +7,7 @@ function Seccion6() {
       className="flex w-full mb-20"
       style={{ backgroundColor: "#FF914D", height: "90vh" }}
     >
-      <div className="grid grid-cols-6 grid-rows-6 w-1/2 gap-2 bg-gradient-to-r from-black via-black to-customOrange">
+      <div className="grid grid-cols-6 grid-rows-6 w-1/2 gap-2 gradiente">
         <img
           src="https://media-public.canva.com/kCUrg/MAD0WHkCUrg/1/s.jpg"
           alt="imagen-seccion6"
@@ -28,7 +28,7 @@ function Seccion6() {
       <div className="flex-1 flex relative">
         <img src={ImgSeM} alt="" className="h-full" />
         <div className="flex absolute bottom-1/4 right-4">
-          <div className="text-white text-end">
+          <div className=" text-end">
             <h3 className="flex relative mb-2 max-w-lg text-black text-bold text-2xl text-center">
               LA ACTIVIDAD FISICA ES INNEGOCIABLE PARA UNA VIDA SALUDABLE
             </h3>

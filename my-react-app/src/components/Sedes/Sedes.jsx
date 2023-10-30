@@ -18,10 +18,10 @@ function Sedes() {
         />
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-customOrange bg-black py-4">
+          <h1 className="text-4xl font-bold text-customOrangepy-4">
             NUESTRAS SEDES
           </h1>
-          <h3 className="text-lg font-serif w-8/12 m-auto text-white">
+          <h3 className="text-lg font-serif w-8/12 m-auto ">
             En nuestro Centro de Entrenamiento todos los días tenemos clases
             semipersonalizadas, en las cuales la rutina está organizada según
             las necesidades y objetivos de cada persona. Elige nuestras clases
@@ -37,13 +37,13 @@ function Sedes() {
         </div>
         <div className="mt-24 flex justify-around">
           <div>
-            <span className="text-2xl text-white border-gray-300 p-7">
+            <span className="text-2xl  border-gray-300 p-7">
               📌 Av. Saavedra 3253
             </span>
             <SimpleMap />
           </div>
           <div>
-            <span className="text-2xl text-white border-gray-300 p-7">
+            <span className="text-2xl  border-gray-300 p-7">
               📌Av. Rivadavia 3215
             </span>
             <SimpleMap />

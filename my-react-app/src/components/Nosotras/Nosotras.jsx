@@ -4,7 +4,7 @@ import TeamMember from "./TeamMember";
 
 function Nosotras() {
   return (
-    <div className="flex p-8 text-white">
+    <div className="flex text-white">
       <div className="w-1/2 bg-gray-800 p-8">
         <h1 className="text-5xl  text-orange-500 font-bold m-10 mb-20">
           NUESTRO EQUIPO

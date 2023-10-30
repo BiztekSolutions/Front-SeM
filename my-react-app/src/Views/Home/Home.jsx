@@ -4,6 +4,7 @@ import Categorias from "../../components/Categorias/Categorias";
 import Inicio from "../../components/Inicio/Inicio";
 import Sedes from "../../components/Sedes/Sedes";
 import Nosotras from "../../components/Nosotras/Nosotras";
+import Seccion6 from "../../components/Seccion6/Seccion6";
 
 function Home() {
   return (
@@ -14,6 +15,7 @@ function Home() {
       <Categorias />
       <Sedes />
       <Nosotras />
+      <Seccion6 />
     </div>
   );
 }

@@ -10,8 +10,13 @@ Routes
         /api/v1/users/{id}/routines
     Routines:
         /api/v1/routines
+        /api/v1/routines/create
         /api/v1/routines/{id}
         /api/v1/routines/{id}/exercises
+    Exercises:
+        /api/v1/exercises
+        /api/v1/exercises/create
+        /api/v1/exercises/{id}
 Controllers
 
 Models

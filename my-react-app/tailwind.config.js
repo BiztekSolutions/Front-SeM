@@ -6,6 +6,9 @@ module.exports = {
       fontFamily: {
         "barlow-regular": ["BarlowRegular", "sans-serif"],
       },
+      colors: {
+        customOrange: "#FF914D",
+      },
     },
   },
   plugins: [],

@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import videoFondo from "../../assets/video.mp4";
+import { Link } from "react-scroll";
 
 const Rutinas = () => {
   const videoRef = useRef(null);
@@ -11,7 +12,7 @@ const Rutinas = () => {
   return (
     <div className="landingClassForCarousel">
       <div className="rutinas-titulo">
-        <h2>Rutinas Personalizadas</h2>
+        <h2>RUTINAS PERSONALIZADAS</h2>
         <h3>
           En Salud en Movimiento ofrecemos rutinas hecha a la medida para hacer
           desde tu casa
@@ -34,9 +35,14 @@ const Rutinas = () => {
             </div>
           </div>
         </div>
-        <button className="rutinas-button" onClick={handleButton}>
-          Obtene tu plan personalizado
-        </button>
+        <Link
+          className="rutinas-button text-white bg-customOrange hover: font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
+          to="formulario"
+          smooth={true}
+          duration={1000}
+        >
+          OBTEN TU PLAN PERSONALIZADO
+        </Link>
       </div>
     </div>
   );

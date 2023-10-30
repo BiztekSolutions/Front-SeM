@@ -1,4 +1,5 @@
 import React from "react";
+import primerimg from "../../assets/primerimg.webp";
 
 const Inicio = () => {
   const imgBgStyle = {
@@ -68,7 +69,7 @@ const Inicio = () => {
             </div>
           </div>
           <img
-            src="https://media.canva.com/1/image-resize/1/575_628_100_PNG_F/czM6Ly9tZWRpYS1wcml2YXRlLmNhbnZhLmNvbS84N0dkZy9NQUZ5WDU4N0dkZy8xL3AucG5n?osig=AAAAAAAAAAAAAAAAAAAAAKQgs2iWku_Kbs77v-LtyNtA-zsXfjvPIulVMX88s6II&exp=1698543342&x-canva-quality=screen&csig=AAAAAAAAAAAAAAAAAAAAAM_rvU89Ys0-sed2uKgqgZ3PgZhhixYu-BgXoM2vbEgS"
+            src={primerimg}
             alt=""
             className="w-1/3 h-1/4 pt-36 pl-44"
           />

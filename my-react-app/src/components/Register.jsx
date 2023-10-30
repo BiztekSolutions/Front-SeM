@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-
 import googleLogo from "../assets/googleLogin.png";
 
+// eslint-disable-next-line react/prop-types
 const Register = ({ isRegisterOpen, setRegisterOpen }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);

@@ -84,7 +84,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="bg-black h-16 flex justify-between items-center p-8">
-        <div className="flex items-center text-white">
+        <div className="flex items-center ">
           <div onClick={redirectToWhatsapp}>
             <img
               src={wppLogo}

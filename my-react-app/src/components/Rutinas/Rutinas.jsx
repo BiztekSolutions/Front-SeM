@@ -5,10 +5,6 @@ import { Link } from "react-scroll";
 const Rutinas = () => {
   const videoRef = useRef(null);
 
-  function handleButton() {
-    console.log("Click happened");
-  }
-
   return (
     <div className="landingClassForCarousel">
       <div className="rutinas-titulo">

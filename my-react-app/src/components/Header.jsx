@@ -16,6 +16,7 @@ const Header = () => {
       if (prevMenu) {
         setSubMenuOpen(false);
         setMenuMenOpen(false);
+        setRegisterOpen(false);
         document.body.style.overflow = "";
       } else {
         document.body.style.overflow = "";
@@ -27,6 +28,7 @@ const Header = () => {
     if (!isMenuOpen) {
       setSubMenuOpen(false);
       setMenuMenOpen(false);
+      setRegisterOpen(false);
     }
   }, [isMenuOpen]);
   useEffect(() => {

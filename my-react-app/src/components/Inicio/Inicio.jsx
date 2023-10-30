@@ -1,5 +1,5 @@
 import primerimg from "../../assets/primerimg.webp";
-
+import { Link } from "react-scroll";
 const Inicio = () => {
   const imgBgStyle = {
     position: "absolute",
@@ -61,9 +61,17 @@ const Inicio = () => {
                     <p>AV. RIVADAVIA 2344</p>
                   </div>
                 </div>
-                <button className="bg-customOrange rounded-none text-white border-white p-3 pl-10 pr-10">
+                {/* <button className="">
+                  
+                </button> */}
+                <Link
+                  className="mt-4 bg-customOrange rounded-none text-white border-white pt-3 pl-10 pr-10 hover:cursor-pointer"
+                  to="formulario"
+                  smooth={true}
+                  duration={1000}
+                >
                   CONTACTO
-                </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -22,6 +22,9 @@ const Register = ({ isRegisterOpen, setRegisterOpen }) => {
       setRegisterOpen(false);
     }
   };
+  const handleSubmit = () => {
+    console.log("enviado");
+  };
 
   return (
     <section>
@@ -67,7 +70,7 @@ const Register = ({ isRegisterOpen, setRegisterOpen }) => {
           </div>
           <div className="flex flex-col ">
             <div className="mb-4 ">
-              <div className="mb-4 relative">
+              <div className=" relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   id="form3Example4c"
@@ -118,13 +121,23 @@ const Register = ({ isRegisterOpen, setRegisterOpen }) => {
 
           <div className="flex justify-center pt-8">
             <button
-              onClick={handleRegister}
+              onClick={handleSubmit}
               type="button"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-              {isRegisterOpen ? "INICIAR SESION" : "CREAR CUENTA"}
+              ENVIAR
             </button>
           </div>
+          <button
+            onClick={handleRegister}
+            type="button"
+            className="bg-white hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+          >
+            {isRegisterOpen
+              ? "CAMBIAR A INICIAR SESION"
+              : "CAMBIAR A CREAR CUENTA"}
+          </button>
+
           <div className="text-center mt-10">
             <p>
               {isRegisterOpen

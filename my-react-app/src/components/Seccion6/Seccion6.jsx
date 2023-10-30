@@ -1,4 +1,4 @@
-import ImgSeM from "../../assets/SeM2.png";
+import ImgSeM from "../../assets/SeM.png";
 import { Link } from "react-scroll";
 
 function Seccion6() {
@@ -28,7 +28,7 @@ function Seccion6() {
       <div className="flex-1 flex relative">
         <img src={ImgSeM} alt="" className="h-full" />
         <div className="flex absolute bottom-1/4 right-4">
-          <div className="text-white text-end">
+          <div className=" text-end">
             <h3 className="flex relative mb-2 max-w-lg text-black text-bold text-2xl text-center">
               LA ACTIVIDAD FISICA ES INNEGOCIABLE PARA UNA VIDA SALUDABLE
             </h3>

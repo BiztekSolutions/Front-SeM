@@ -1,4 +1,4 @@
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.png";
 import { Link } from "react-scroll";
 import Register from "./Register";
 import { useEffect, useRef, useState } from "react";
@@ -51,7 +51,10 @@ const Header = () => {
 
   console.log(isMenuOpen);
   return (
-    <div className="sticky top-0 z-50  w-full shadow-lg flex items-center justify-between p-4 ">
+    <div
+      id="navbar"
+      className="sticky top-0 z-50  w-full shadow-lg flex items-center justify-between p-4 "
+    >
       <div className="">
         <Link
           className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
@@ -62,7 +65,7 @@ const Header = () => {
           <img src={logo} alt="Logo" className="h-12 w-auto ml-10" />
         </Link>
       </div>
-      <ul className="flex   text-2xl p-5 gap-4 font-bold">
+      <ul className="flex text-2xl p-5 gap-7 font-bold">
         <DarkModeToggle />
         <li className="">
           <Link
@@ -70,6 +73,7 @@ const Header = () => {
             to="sedes"
             smooth={true}
             duration={1000}
+            id="sedes"
           >
             SEDES
           </Link>
@@ -80,16 +84,18 @@ const Header = () => {
             to="nosotras"
             smooth={true}
             duration={1000}
+            id="nosotras"
           >
             SOBRE NOSOTRAS
           </Link>
         </li>
         <li className="z-10">
           <Link
-            className=" hover:text-customOrange transition-colors duration-300 cursor-pointer "
+            className="hover:text-customOrange transition-colors duration-300 cursor-pointer "
             to="formulario"
             smooth={true}
             duration={1000}
+            id="contacto"
           >
             CONTACTO
           </Link>

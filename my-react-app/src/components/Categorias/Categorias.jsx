@@ -11,7 +11,7 @@ const Categorias = () => {
         </span>
         <Opciones className="text-2x1" />
       </h1>
-      <h3 className="mb-20 text-white">
+      <h3 className="mb-20 ">
         En nuestro Centro de Entrenamiento todos los días tenemos clases
         semipersonalizadas, en las cuales la rutina esta organizada según las
         necesidades y objetivos de cada persona. Elige nuestras clases para

@@ -30,13 +30,11 @@ const Inicio = () => {
                   alt=""
                 />
               </div>
-              <h2 className="text-white text-5xl text-left">
-                SALUD EN MOVIMIENTO
-              </h2>
+              <h2 className=" text-5xl text-left">SALUD EN MOVIMIENTO</h2>
             </div>
             <div>
               <div className="flex gap-20 pt-10">
-                <div className="text-white text-2xl flex">
+                <div className=" text-2xl flex">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="icon icon-tabler icon-tabler-map-pin-filled"
@@ -65,7 +63,7 @@ const Inicio = () => {
                   
                 </button> */}
                 <Link
-                  className="mt-4 bg-customOrange rounded-none text-white border-white pt-3 pl-10 pr-10 hover:cursor-pointer"
+                  className="text-white mt-4 bg-customOrange rounded-none  border-white pt-3 pl-10 pr-10 hover:cursor-pointer"
                   to="formulario"
                   smooth={true}
                   duration={1000}

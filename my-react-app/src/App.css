@@ -324,3 +324,7 @@ input.form-control:focus {
 .loginGoogle {
   background: transparent;
 }
+
+.gradiente {
+  background-image: linear-gradient(to right, black, black, #ff914d);
+}

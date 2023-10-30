@@ -26,7 +26,20 @@ export const get = async (idCredential: number) => {
     throw new Error(e.message);
   }
 };
+
+export const remove = async (idSession: number) => {
+  try {
+    return await prisma.session.delete({
+      where: {
+        idSession: idSession,
+      },
+    });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
 module.exports = {
   create,
   get,
+  remove,
 };

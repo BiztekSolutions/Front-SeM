@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { isRegistered, create } from '../services/AuthService';
 import { create as createSession, get } from '../services/SessionService';
 
@@ -64,4 +64,13 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-module.exports = { register, login };
+export const logout = async (req: Request, res: Response) => {
+  try {
+    if (!req?.body?.email || !req?.body?.password) return res.status(400).json({ message: 'Email and password are required' });
+    const { email, password } = req.body;
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { register, login, logout };

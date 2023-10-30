@@ -10,16 +10,20 @@
 /* FONT FACES */
 @font-face {
   font-family: "BarlowBold";
-  src: local("BarlowBold"), url("./Fonts/Barlow/Barlow-Bold.ttf") format("ttf");
+  src:
+    local("BarlowBold"),
+    url("./Fonts/Barlow/Barlow-Bold.ttf") format("ttf");
 }
 @font-face {
   font-family: "BarlowRegular";
-  src: local("BarlowRegular"),
+  src:
+    local("BarlowRegular"),
     url("./Fonts/Barlow/Barlow-Regular.ttf") format("ttf");
 }
 @font-face {
   font-family: "AntonRegular";
-  src: local("AntonRegular"),
+  src:
+    local("AntonRegular"),
     url("./Fonts/Anton/Anton-Regular.ttf") format("ttf");
 }
 
@@ -50,7 +54,7 @@ button:focus {
 /* ------------- RUTINAS ------------- */
 
 .rutinas-titulo {
-  background-color: #f87b15;
+  background-color: #ff914d;
   padding: 10px;
   text-align: center;
 }
@@ -101,7 +105,7 @@ button:focus {
   background-color: black;
 }
 .categoria h1 {
-  color: #f87b15;
+  color: #ff914d;
   padding: 10px;
   text-align: center;
   font-family: "AntonRegular", AntonRegular;

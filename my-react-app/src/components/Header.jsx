@@ -12,7 +12,7 @@ const Header = () => {
         <li className=""></li>
         <li className="">
           <Link
-            className="text-white hover:text-orange-500 transition-colors duration-300 cursor-pointer"
+            className="text-white hover:text-customOrange transition-colors duration-300 cursor-pointer"
             to="inicio"
             smooth={true}
             duration={1000}
@@ -22,7 +22,7 @@ const Header = () => {
         </li>
         <li className="">
           <Link
-            className="text-white hover:text-orange-500 transition-colors duration-300 cursor-pointer"
+            className="text-white hover:text-customOrange transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
             duration={1000}
@@ -32,7 +32,7 @@ const Header = () => {
         </li>
         <li className="">
           <Link
-            className="text-white hover:text-orange-500 transition-colors duration-300 cursor-pointer"
+            className="text-white hover:text-customOrange transition-colors duration-300 cursor-pointer"
             to="nosotras"
             smooth={true}
             duration={1000}
@@ -42,7 +42,7 @@ const Header = () => {
         </li>
         <li className="z-10">
           <Link
-            className="text-white hover:text-orange-500 transition-colors duration-300 cursor-pointer"
+            className="text-white hover:text-customOrange transition-colors duration-300 cursor-pointer"
             to="formulario"
             smooth={true}
             duration={1000}

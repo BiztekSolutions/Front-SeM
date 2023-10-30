@@ -12,8 +12,8 @@ function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto">
-      <h2 className="text-3xl text-orange-500 font-bold mb-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto py-20">
+      <h2 className="text-3xl text-customOrange font-bold mb-4">
         AQUI PUEDES CONTACTARNOS
       </h2>
       <h3 className="text-sm mb-4">

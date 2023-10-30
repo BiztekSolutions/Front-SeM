@@ -2,7 +2,7 @@ import wppLogo from "../assets/wpp-orange.png";
 import { Link } from "react-scroll";
 const Footer = () => {
   return (
-    <div className="bg-orange-500 flex flex-col">
+    <div className="bg-customOrange flex flex-col">
       <div className="flex justify-between text-white p-8">
         <div className="w-1/4">
           <h1 className="text-3xl w-3/4 text-black font-bold pt-10">

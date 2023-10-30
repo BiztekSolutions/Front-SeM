@@ -18,7 +18,7 @@ function Sedes() {
         />
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-orange-500 bg-black py-4">
+          <h1 className="text-4xl font-bold text-customOrange bg-black py-4">
             NUESTRAS SEDES
           </h1>
           <h3 className="text-lg font-serif w-8/12 m-auto text-white">
@@ -31,7 +31,9 @@ function Sedes() {
 
         <div className="flex items-center justify-center content-center pt-10">
           <FaMapMarkerAlt className="inline w-12 h-12 pr-3" />
-          <span className="text-orange-500 text-4xl font-bold">SALADILLO</span>
+          <span className="text-customOrange text-4xl font-bold">
+            SALADILLO
+          </span>
         </div>
         <div className="mt-24 flex justify-around">
           <div>

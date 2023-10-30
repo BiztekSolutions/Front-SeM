@@ -7,7 +7,7 @@ const Inicio = () => {
   };
 
   return (
-    <div>
+    <div className="relative overflow-x-hidden overflow-y-hidden">
       <img
         className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1/2"
         src="https://media-public.canva.com/mn-RI/MAEL5Bmn-RI/3/s.svg"
@@ -20,7 +20,7 @@ const Inicio = () => {
             <div>
               <div className="flex gap-7">
                 <div className="text-left">
-                  <h1 className=" text-orange-600 relative top-2/3">
+                  <h1 className=" text-customOrange relative top-2/3">
                     GIMNASIO
                   </h1>
                 </div>
@@ -61,7 +61,7 @@ const Inicio = () => {
                     <p>AV. RIVADAVIA 2344</p>
                   </div>
                 </div>
-                <button className="bg-orange-600 rounded-none text-white border-white p-3 pl-10 pr-10">
+                <button className="bg-customOrange rounded-none text-white border-white p-3 pl-10 pr-10">
                   CONTACTO
                 </button>
               </div>

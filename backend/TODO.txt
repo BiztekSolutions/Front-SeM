@@ -2,11 +2,11 @@ Routes
     Auth:
         /api/v1/auth/login (X)
         /api/v1/auth/register (X)
-        /api/v1/auth/logout
+        /api/v1/auth/logout (X)
         /api/v1/auth/refresh
     Users:
         /api/v1/users (X)
-        /api/v1/users/{id}
+        /api/v1/users/{id} (X)
         /api/v1/users/{id}/routines
     Routines:
         /api/v1/routines

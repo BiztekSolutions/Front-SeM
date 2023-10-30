@@ -38,8 +38,22 @@ export const remove = async (idSession: number) => {
     throw new Error(e.message);
   }
 };
+
+export const find = async (token: string) => {
+  try {
+    return await prisma.session.findFirst({
+      where: {
+        token: token,
+      },
+    });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
+
 module.exports = {
   create,
   get,
   remove,
+  find,
 };

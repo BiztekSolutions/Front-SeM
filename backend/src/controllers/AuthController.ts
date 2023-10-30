@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { isRegistered, create } from '../services/AuthService';
 import { Request, Response } from 'express';
+import { isRegistered, create } from '../services/AuthService';
+import { create as createSession, get } from '../services/SessionService';
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -13,6 +14,8 @@ export const register = async (req: Request, res: Response) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await create(email, hashedPassword);
+    console.log(newUser, 'newUser');
+
     if (newUser) {
       return res.status(201).json({ message: 'User registered successfully' });
     }
@@ -21,28 +24,44 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// const login = async (req: Request, res: Response) => {
-//   try {
-//     const { email, password } = req.body;
+export const login = async (req: Request, res: Response) => {
+  try {
+    if (!req?.body?.email || !req?.body?.password) return res.status(400).json({ message: 'Email and password are required' });
+    const { email, password } = req.body;
 
-//     const user = await User.findOne({ email });
+    const user = await isRegistered(email);
 
-//     if (!user) {
-//       return res.status(401).json({ message: 'Invalid credentials' });
-//     }
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
 
-//     const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password);
 
-//     if (!isValidPassword) {
-//       return res.status(401).json({ message: 'Invalid credentials' });
-//     }
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
 
-//     const token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
+    const checkExistingSession = await get(user.idCredential);
 
-//     res.json({ token });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+    if (checkExistingSession) {
+      return res.status(200).json({
+        session: {
+          token: checkExistingSession.token,
+        },
+      });
+    }
 
-module.exports = { register };
+    const token = jwt.sign({ userId: user.idUser }, 'your-secret-key', { expiresIn: '1h' });
+    const session = await createSession(token, user.idCredential);
+
+    return res.json({
+      session: {
+        token: session.token,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { register, login };

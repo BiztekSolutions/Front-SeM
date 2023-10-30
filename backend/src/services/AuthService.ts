@@ -24,27 +24,15 @@ export const create = async (email: string, password: string) => {
         password,
         created_date: new Date(),
         updated_date: new Date(),
+        user: {
+          create: {
+            created_date: new Date(),
+            updated_date: new Date(),
+          },
+        },
       },
     });
   } catch (e: any) {
     throw new Error(e.message);
   }
-};
-
-// export const login = async (email: string, password: string) => {
-//   try {
-//     return await prisma.user.findUnique({
-//       where: {
-//         email,
-//         password,
-//       },
-//     });
-//   } catch (e: any) {
-//     throw new Error(e.message);
-//   }
-// };
-
-module.exports = {
-  isRegistered,
-  create,
 };

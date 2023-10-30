@@ -95,10 +95,6 @@ model ExerciseGroup {
   name            String?
   created_date    DateTime?
   updated_date    DateTime?
-  series          Int?
-  repetitions     Int?
-  weight          Decimal?
-  time            Int?
 
   routine_has_exerciseGroups  Routine_has_ExerciseGroup[]
   exerciseGroup_has_exercises ExerciseGroup_has_Exercise[]
@@ -116,13 +112,16 @@ model Exercise {
 }
 
 model ExerciseGroup_has_Exercise {
-  idExerciseGroup_has_Exercise Int       @id @default(autoincrement())
+  idExerciseGroup_has_Exercise Int           @id @default(autoincrement())
   created_date                 DateTime?
   updated_date                 DateTime?
-
+  series                       Int?
+  repetitions                  Int?
+  weight                       Decimal?
+  time                         Int?
   // Define the relation with ExerciseGroup
-  exerciseGroup   ExerciseGroup @relation(fields: [idExerciseGroup], references: [idExerciseGroup])
-  idExerciseGroup Int
+  exerciseGroup                ExerciseGroup @relation(fields: [idExerciseGroup], references: [idExerciseGroup])
+  idExerciseGroup              Int
 
   // Define the relation with Exercise
   exercise   Exercise @relation(fields: [idExercise], references: [idExercise])

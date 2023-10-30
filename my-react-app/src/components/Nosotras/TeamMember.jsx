@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { useState } from "react";
+
 import { IoPersonCircleOutline } from "react-icons/io5";
 
 const TeamMember = ({ nombre, titulo, educacion, contacto }) => {

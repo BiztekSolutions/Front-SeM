@@ -1,6 +1,6 @@
 import logo from "../../assets/logoUbi.png";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import SimpleMap from "./SimpleMap"; // Importa el componente SimpleMap
+import SimpleMap from "./simpleMap"; // Importa el componente SimpleMap
 
 function Sedes() {
   const imgBg = {

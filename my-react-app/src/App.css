@@ -110,9 +110,7 @@ button:focus {
   font-size: 2.25rem;
   font-weight: 700;
 }
-.categoria {
-  background-color: black;
-}
+
 .categoria h1 {
   color: #ff914d;
   padding: 10px;
@@ -180,14 +178,12 @@ button:focus {
 }
 
 .menu-toggle-landing {
-  color: rgb(0, 0, 0);
   z-index: 1202;
   border-bottom: none;
   cursor: pointer;
 }
 
 .create-landing {
-  color: rgb(0, 0, 0);
   font-family: "futuraStd";
   margin-top: 30px;
   font-size: 20px;
@@ -327,4 +323,29 @@ input.form-control:focus {
 
 .gradiente {
   background-image: linear-gradient(to right, black, black, #ff914d);
+}
+
+.bg-navbar {
+  background-color: #000000; /* Color de fondo oscuro */
+}
+
+.bg-white {
+  background-color: #fff; /* Color de fondo claro */
+}
+
+.ctm-color1 {
+  color: #000000;
+}
+
+.ctm-color2 {
+  color: #ffffff;
+}
+
+#themeToggle {
+  text-decoration: none;
+}
+
+#themeToggle:hover {
+  text-decoration: none;
+  border: none;
 }

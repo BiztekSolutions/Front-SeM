@@ -35,7 +35,7 @@ function Nosotras() {
     }
   }
   return (
-    <div className="flex text-white pb-14 py-14 bg-gray-900">
+    <div className="flex  pb-14 py-14">
       <div className="w-1/2 p-8">
         <h1 className="text-5xl  text-customOrange font-bold m-10 mb-20">
           NUESTRO EQUIPO
@@ -46,7 +46,7 @@ function Nosotras() {
           a gusto y puedas lograr tus objetivos.
         </h3>
         <Link
-          className="text-white bg-customOrange hover:bg-customOrange font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
+          className=" bg-customOrange hover:bg-customOrange font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
           to="formulario"
           smooth={true}
           duration={1000}

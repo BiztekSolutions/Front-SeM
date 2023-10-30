@@ -12,6 +12,19 @@ export const list = async () => {
   }
 };
 
+export const get = async (idUser: number) => {
+  try {
+    return await prisma.user.findUnique({
+      where: {
+        idUser: idUser,
+      },
+    });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
+
 module.exports = {
   list,
+  get,
 };

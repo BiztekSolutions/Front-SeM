@@ -11,13 +11,6 @@ function Sedes() {
   return (
     <>
       <div className="relative bg-gray-100 dark:bg-gray-800 py-20 pb-36">
-        <img
-          className="absolute top-0 left-1 transform -translate-x-1/2 w-1/2"
-          src="https://media-public.canva.com/mn-RI/MAEL5Bmn-RI/3/s.svg"
-          alt=""
-          style={imgBg}
-        />
-
         <div className="mb-8">
           <h1 className=" font-bold text-customOrangepy-4 text-customOrange">
             NUESTRAS SEDES

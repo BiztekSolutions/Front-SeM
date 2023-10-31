@@ -1,10 +1,10 @@
 import GoogleMapReact from "google-map-react";
 import PropTypes from "prop-types";
-import chincheUbi from "../../assets/chinchetaUbi.png";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 export const AnyReactComponent = () => (
   <div>
-    <img src={chincheUbi} alt="ubicacion" className="bg-transparent w-8 h-8" />
+    <FaMapMarkerAlt className="h-8 w-8 text-red-500" />
   </div>
 );
 

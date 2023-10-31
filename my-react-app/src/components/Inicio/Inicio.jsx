@@ -43,7 +43,7 @@ const Inicio = () => {
                     <FaMapMarkerAlt className="inline w-12 h-12 pr-3 pt-2" />
                     <div className="mr-20">
                       SALADILLO
-                      <p>AV. RIVADAVIA 2344</p>
+                      <p>AV. SAAVEDRA 3253</p>
                     </div>
                   </div>
                 </div>

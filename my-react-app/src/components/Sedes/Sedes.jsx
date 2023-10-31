@@ -1,5 +1,6 @@
 import { FaMapMarkerAlt } from "react-icons/fa";
 import SimpleMap from "./simpleMap";
+import { AnyReactComponent } from "./simpleMap";
 
 function Sedes() {
   const imgBg = {
@@ -9,7 +10,7 @@ function Sedes() {
 
   return (
     <>
-      <div className="relative py-20 pb-36">
+      <div className="relative bg-gray-100 dark:bg-gray-800 py-20 pb-36">
         <img
           className="absolute top-0 left-1 transform -translate-x-1/2 w-1/2"
           src="https://media-public.canva.com/mn-RI/MAEL5Bmn-RI/3/s.svg"
@@ -35,13 +36,30 @@ function Sedes() {
             <span className="text-2xl  border-gray-300 p-7">
               📌 Av. Saavedra 3253
             </span>
-            <SimpleMap />
+            <SimpleMap
+              center={{ lat: -35.645371538529965, lng: -59.788460514655945 }}
+              className="min-h-max"
+            >
+              <AnyReactComponent
+                lat={-35.645371538529965}
+                lng={-59.788460514655945}
+                text="Rutinas semipersonalizadas"
+              />
+            </SimpleMap>
           </div>
           <div>
             <span className="text-2xl  border-gray-300 p-7">
-              📌Av. Rivadavia 3215
+              📌Av. Rivadavia 3589
             </span>
-            <SimpleMap />
+            <SimpleMap
+              center={{ lat: -35.64257015491178, lng: -59.78436736500533 }}
+            >
+              <AnyReactComponent
+                lat={-35.64257015491178}
+                lng={-59.78436736500533}
+                text="Funcional"
+              />
+            </SimpleMap>
           </div>
         </div>
       </div>

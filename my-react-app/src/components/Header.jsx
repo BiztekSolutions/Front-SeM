@@ -50,6 +50,8 @@ const Header = () => {
   }, [isMenuOpen]);
 
   console.log(isMenuOpen);
+
+  const HeaderHeight = 112;
   return (
     <div
       id="navbar"
@@ -57,10 +59,11 @@ const Header = () => {
     >
       <div className="">
         <Link
+          offset={-HeaderHeight}
           className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
           to="inicio"
           smooth={true}
-          duration={1000}
+          duration={500}
         >
           <img src={logo} alt="Logo" className="h-12 w-auto ml-10" />
         </Link>
@@ -69,6 +72,7 @@ const Header = () => {
         <DarkModeToggle />
         <li className="">
           <Link
+            offset={-HeaderHeight}
             className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
@@ -80,6 +84,7 @@ const Header = () => {
         </li>
         <li className="">
           <Link
+            offset={-HeaderHeight}
             className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
             to="nosotras"
             smooth={true}
@@ -91,6 +96,7 @@ const Header = () => {
         </li>
         <li className="z-10">
           <Link
+            offset={-HeaderHeight}
             className="hover:text-customOrange transition-colors duration-300 cursor-pointer "
             to="formulario"
             smooth={true}

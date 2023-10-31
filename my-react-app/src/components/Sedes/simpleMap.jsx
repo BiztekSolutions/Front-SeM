@@ -12,6 +12,7 @@ AnyReactComponent.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
+// eslint-disable-next-line react/prop-types
 export default function SimpleMap({ center, children }) {
   const defaultProps = {
     center: center,

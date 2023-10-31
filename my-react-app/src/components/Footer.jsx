@@ -29,7 +29,7 @@ const Footer = () => {
         <div className="w-1/4 text-left">
           <h3 className="text-stone-950 mb-10 font-bold">SOBRE NOSOTROS</h3>
           <Link
-            className=" hover:text-green-500 transition-colors duration-300 cursor-pointer"
+            className="font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to="nosotras"
             smooth={true}
             duration={1000}
@@ -38,7 +38,7 @@ const Footer = () => {
           </Link>
           <br />
           <Link
-            className=" hover:text-green-500 transition-colors duration-300 cursor-pointer"
+            className="font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
             duration={1000}
@@ -49,7 +49,7 @@ const Footer = () => {
         <div className="w-1/4 text-left">
           <h3 className="text-stone-950 mb-10 font-bold">QUE HACEMOS?</h3>
           <Link
-            className=" hover:text-green-500 transition-colors duration-300 cursor-pointer"
+            className="font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
             duration={1000}
@@ -58,7 +58,7 @@ const Footer = () => {
           </Link>
           <br />
           <Link
-            className="font-light  hover:text-green-500 transition-colors duration-300 cursor-pointer"
+            className="font-light  hover:text-black transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
             duration={1000}
@@ -67,7 +67,7 @@ const Footer = () => {
           </Link>
           <br />
           <Link
-            className=" hover:text-green-500 transition-colors duration-300 cursor-pointer"
+            className="font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
             duration={1000}
@@ -93,7 +93,7 @@ const Footer = () => {
             />
           </div>
           <p className="ml-11">
-            Salud en <span className="text-green-500">MOVIMIENTO.</span>
+            Salud en <span className="text-black">MOVIMIENTO.</span>
           </p>
         </div>
         <a

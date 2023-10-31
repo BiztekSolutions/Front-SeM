@@ -54,7 +54,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   //         {
   //           headers: {
   //             Authorization: `Bearer ${token}`,
-  //             "x-api-key": "AIzaSyAFzNgmSlSiOSiD2_BNO99tQXlrfOjXhuU",
+  //
   //             Accept: "application/json",
   //           },
   //         }

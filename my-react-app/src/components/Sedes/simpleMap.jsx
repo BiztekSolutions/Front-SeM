@@ -1,18 +1,23 @@
 import GoogleMapReact from "google-map-react";
-
 import PropTypes from "prop-types";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+const LocationPin = ({ text }) => (
+  <div className="pin">
+    <FaMapMarkerAlt className="pin-icon" />
+    <p className="pin-text text-black">{text}</p>
+  </div>
+);
 
-AnyReactComponent.propTypes = {
+LocationPin.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
 export default function SimpleMap() {
   const defaultProps = {
     center: {
-      lat: -35.6453777,
-      lng: -59.7910402,
+      lat: -35.6423179,
+      lng: -59.7843731,
     },
     zoom: 17,
   };
@@ -24,9 +29,9 @@ export default function SimpleMap() {
         defaultCenter={defaultProps.center}
         defaultZoom={defaultProps.zoom}
       >
-        <AnyReactComponent
-          lat={-35.6528}
-          lng={-60.6958}
+        <LocationPin
+          lat={-35.6423179}
+          lng={-59.7843731}
           text="Salud en movimiento GIMNASIO"
         />
       </GoogleMapReact>

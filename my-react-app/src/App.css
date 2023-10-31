@@ -18,6 +18,18 @@ html.dark {
 
 /* FONT FACES */
 @font-face {
+  font-family: "BebasNeueCyrillic";
+  src:
+    local("BebasNeueCyrillic"),
+    url("./Fonts/BebasNeueCyrillic/Bebas-Neue-Cyrillic.ttf") format("ttf");
+}
+@font-face {
+  font-family: "NeueMachina";
+  src:
+    local("NeueMachina"),
+    url("./Fonts/NeueMachina/NeueMachina.otf") format("otf");
+}
+@font-face {
   font-family: "BarlowBold";
   src:
     local("BarlowBold"),
@@ -60,6 +72,30 @@ button:focus {
   box-shadow: none !important;
 }
 
+.shadow-custom {
+  text-shadow: 5px 5px 7px rgba(255, 99, 71, 0.6);
+}
+.shadow-custom1 {
+  text-shadow: 5px 5px 7px rgba(0, 0, 0, 0.6);
+}
+
+.pin {
+  position: relative;
+}
+
+.pin-icon {
+  color: red; /* Color del ícono de ubicación */
+  font-size: 24px; /* Tamaño del ícono */
+}
+
+.pin-text {
+  position: absolute;
+  top: 30px; /* Ajusta la posición vertical del texto */
+  left: -50px; /* Ajusta la posición horizontal del texto */
+  width: 100px; /* Ancho del contenedor del texto */
+  text-align: center; /* Centra el texto dentro del contenedor */
+}
+
 /* ------------- RUTINAS ------------- */
 
 .rutinas-titulo {
@@ -70,7 +106,6 @@ button:focus {
 
 .rutinas-titulo h2 {
   color: black;
-  font-family: "BarlowBold", BarlowBold;
   font-size: 40px;
   text-align: center;
 }
@@ -96,8 +131,10 @@ button:focus {
   font-family: "AntonRegular", AntonRegular;
 }
 .rutinas-button:hover {
-  background-color: white;
-  color: black;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  transform: translate(-50%, -50%) scale(1.1);
+  transition: 0.4s ease-in-out;
 }
 
 .custom-video {
@@ -115,7 +152,6 @@ button:focus {
   color: #ff914d;
   padding: 10px;
   text-align: center;
-  font-family: "AntonRegular", AntonRegular;
 }
 .categoria h3 {
   padding-right: 10px;

@@ -9,7 +9,7 @@ function Sedes() {
 
   return (
     <>
-      <div className="relative py-28 pb-36">
+      <div className="relative py-20 pb-36">
         <img
           className="absolute top-0 left-1 transform -translate-x-1/2 w-1/2"
           src="https://media-public.canva.com/mn-RI/MAEL5Bmn-RI/3/s.svg"
@@ -18,22 +18,17 @@ function Sedes() {
         />
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-customOrangepy-4">
+          <h1 className=" font-bold text-customOrangepy-4 text-customOrange">
             NUESTRAS SEDES
           </h1>
-          <h3 className="text-lg font-serif w-8/12 m-auto ">
-            En nuestro Centro de Entrenamiento todos los días tenemos clases
-            semipersonalizadas, en las cuales la rutina está organizada según
-            las necesidades y objetivos de cada persona. Elige nuestras clases
-            para ponerte en forma mientras te diviertes.
-          </h3>
+          <h2 className="text-lg font-serif w-8/12 m-auto ">
+            Acercate a conocernos!
+          </h2>
         </div>
 
         <div className="flex items-center justify-center content-center pt-10">
           <FaMapMarkerAlt className="inline w-12 h-12 pr-3" />
-          <span className="text-customOrange text-4xl font-bold">
-            SALADILLO
-          </span>
+          <span className=" text-4xl font-bold">SALADILLO</span>
         </div>
         <div className="mt-24 flex justify-around">
           <div>

@@ -7,7 +7,7 @@ const Inicio = () => {
     position: "absolute",
     left: "100%",
   };
-
+  const HeaderHeight = 112;
   return (
     <div className="relative overflow-x-hidden overflow-y-hidden">
       <img
@@ -32,7 +32,7 @@ const Inicio = () => {
                   alt=""
                 />
               </div>
-              <h2 className=" text-6xl text-left font-bold shadow-custom">
+              <h2 className="text-6xl text-left font-bold shadow-custom">
                 SALUD EN MOVIMIENTO
               </h2>
             </div>
@@ -51,7 +51,8 @@ const Inicio = () => {
                   
                 </button> */}
                 <Link
-                  className="text-white mt-4 bg-customOrange rounded-none  border-white border-4 text-2xl pt-5 pb-5 pl-16 pr-16 hover:cursor-pointer"
+                  offset={-HeaderHeight}
+                  className="hover:text-white text-white mt-4 bg-customOrange rounded-none  border-white border-4 text-2xl pt-5 pb-5 pl-16 pr-16 hover:cursor-pointer"
                   to="formulario"
                   smooth={true}
                   duration={1000}

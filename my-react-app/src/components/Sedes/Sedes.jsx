@@ -6,7 +6,7 @@ import { TypingEffect } from "./typingText";
 function Sedes() {
   return (
     <>
-      <div className="relative bg-gray-100 dark:bg-gray-800 pt-10 pb-36">
+      <div className="relative bg-gray-100 dark:bg-gray-800 pt-10 pb-12">
         <div className="mb-8">
           <h1 className=" font-bold text-customOrangepy-4 text-customOrange">
             NUESTRAS SEDES
@@ -22,7 +22,7 @@ function Sedes() {
             <span className="text-2xl  border-gray-300 p-7">
               📌 Av. Saavedra 3253
             </span>
-            <div className="mb-64">
+            <div className="mb-52">
               <SimpleMap
                 center={{ lat: -35.645371538529965, lng: -59.788460514655945 }}
               >
@@ -34,15 +34,15 @@ function Sedes() {
               </SimpleMap>
             </div>
             <TypingEffect
-              firstText="Pilates tabata"
-              secondText="Trabajamos flexibilidad, coordinacion, movilidad, estabilidad fuerza y resistencia"
+              firstText="Ponte en forma con nuestro programa de Pilates Tabata. Mejora tu flexibilidad, coordinación, movilidad, estabilidad, fuerza y resistencia"
+              secondText="Descubre cómo puedes transformar tu cuerpo y mente con nuestros entrenamientos"
               medidaWindow={1}
             />
           </div>
           <div>
             <TypingEffect
-              firstText="En este centro ofrecemos un entrenamiento semipersonalizado"
-              secondText="Contactanos para conocer nuestros horarios!"
+              firstText="Bienvenido a nuestro gimnasio funcional! Ofrecemos un entrenamiento semipersonalizado en nuestras sedes."
+              secondText="Contáctanos para conocer nuestros horarios y ubicación exacta!"
               medidaWindow={0.5}
             />
             <FaMapMarkerAlt className="inline w-12 h-12 pr-3" />

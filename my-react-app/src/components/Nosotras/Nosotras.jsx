@@ -34,6 +34,7 @@ function Nosotras() {
       );
     }
   }
+  const HeaderHeight = 112;
   return (
     <div className="flex  pb-14 py-14">
       <div className="w-1/2 p-8">
@@ -46,6 +47,7 @@ function Nosotras() {
           a gusto y puedas lograr tus objetivos.
         </h3>
         <Link
+          offset={-HeaderHeight}
           className=" bg-customOrange hover:bg-customOrange font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
           to="formulario"
           smooth={true}

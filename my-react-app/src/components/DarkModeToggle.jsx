@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const DarkModeToggle = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -45,8 +45,6 @@ const DarkModeToggle = () => {
     const theme = newDarkMode ? "dark" : "light";
     setIsDarkMode(newDarkMode);
     localStorage.setItem("theme", theme);
-
-    const navbar = document.getElementById("navbar");
   };
 
   return (

@@ -17,7 +17,7 @@ const Footer = () => {
       );
     }
   }
-
+  const HeaderHeight = 112;
   return (
     <div className="bg-customOrange flex flex-col">
       <div className="flex justify-between  p-8">
@@ -29,7 +29,8 @@ const Footer = () => {
         <div className="w-1/4 text-left">
           <h3 className="text-stone-950 mb-10 font-bold">SOBRE NOSOTROS</h3>
           <Link
-            className="font-light hover:text-black transition-colors duration-300 cursor-pointer"
+            offset={-HeaderHeight}
+            className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to="nosotras"
             smooth={true}
             duration={1000}
@@ -38,7 +39,8 @@ const Footer = () => {
           </Link>
           <br />
           <Link
-            className="font-light hover:text-black transition-colors duration-300 cursor-pointer"
+            offset={-HeaderHeight}
+            className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
             duration={1000}
@@ -49,8 +51,8 @@ const Footer = () => {
         <div className="w-1/4 text-left">
           <h3 className="text-stone-950 mb-10 font-bold">QUE HACEMOS?</h3>
           <Link
-            className="font-light hover:text-black transition-colors duration-300 cursor-pointer"
-            to="sedes"
+            className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
+            to=""
             smooth={true}
             duration={1000}
           >
@@ -58,8 +60,8 @@ const Footer = () => {
           </Link>
           <br />
           <Link
-            className="font-light  hover:text-black transition-colors duration-300 cursor-pointer"
-            to="sedes"
+            className="text-white font-light  hover:text-black transition-colors duration-300 cursor-pointer"
+            to=""
             smooth={true}
             duration={1000}
           >
@@ -67,8 +69,8 @@ const Footer = () => {
           </Link>
           <br />
           <Link
-            className="font-light hover:text-black transition-colors duration-300 cursor-pointer"
-            to="sedes"
+            className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
+            to=""
             smooth={true}
             duration={1000}
           >
@@ -83,7 +85,7 @@ const Footer = () => {
           <p>FAQs</p>
         </div>
       </div>
-      <div className="bg-black h-16 flex justify-between items-center p-8">
+      <div className="bg-black  h-16 flex justify-between items-center p-8">
         <div className="flex items-center ">
           <div onClick={redirectToWhatsapp}>
             <img

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// eslint-disable-next-line react/prop-types
 export const TypingEffect = ({ firstText, secondText, medidaWindow }) => {
   const [text1, setText1] = useState("");
   const [text3, setText3] = useState("");
@@ -8,22 +9,22 @@ export const TypingEffect = ({ firstText, secondText, medidaWindow }) => {
     function typeText1(text) {
       let index = 0;
       let interval = setInterval(() => {
-        setText1((prev) => text.substring(0, index + 1));
+        setText1(() => text.substring(0, index + 1));
         index++;
         if (index === text.length) {
           clearInterval(interval);
           typeText3(secondText);
         }
-      }, 50);
+      }, 40);
     }
 
     function typeText3(text) {
       let index = 0;
       let interval = setInterval(() => {
-        setText3((prev) => text.substring(0, index + 1));
+        setText3(() => text.substring(0, index + 1));
         index++;
         if (index === text.length) clearInterval(interval);
-      }, 50);
+      }, 40);
     }
 
     function handleScroll() {

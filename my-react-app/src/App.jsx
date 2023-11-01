@@ -2,6 +2,8 @@ import Router from "./router";
 import "./App.css";
 import "tailwindcss/tailwind.css";
 import { useEffect, useContext } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import { GlobalContext } from "./context/globalContext";
 
 function App() {

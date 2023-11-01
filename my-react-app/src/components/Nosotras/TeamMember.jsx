@@ -28,7 +28,7 @@ const TeamMember = (props) => {
                 <i className="far fa-star"></i>
               </div>
               <label htmlFor={id} className="button" aria-hidden="true">
-                Details
+                Informacion
               </label>
             </div>
           </div>

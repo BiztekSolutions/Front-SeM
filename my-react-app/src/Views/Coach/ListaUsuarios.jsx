@@ -337,6 +337,7 @@ const ListaUsuarios = () => {
       const disabled = faker.datatype.boolean();
       users.push({
         key: i,
+        id: faker.string.uuid(),
         userName: faker.internet.userName(),
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
@@ -354,7 +355,7 @@ const ListaUsuarios = () => {
             <FcInfo
               size={19}
               className="userInfo"
-              onClick={() => navigate(`/`)}
+              onClick={() => navigate(`user/${users[i].id}`)}
             />
             <FcFullTrash
               size={19}

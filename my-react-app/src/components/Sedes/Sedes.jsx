@@ -22,7 +22,7 @@ function Sedes() {
             <span className="text-2xl  border-gray-300 p-7">
               📌 Av. Saavedra 3253
             </span>
-            <div className="mb-52">
+            <div className="mb-20">
               <SimpleMap
                 center={{ lat: -35.645371538529965, lng: -59.788460514655945 }}
               >

@@ -12,15 +12,18 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* outside */}
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/coach" element={<Coach />}>
-          <Route path="coach/noticias" element={<Noticias />} />
-          <Route path="coach/listaDeUsuarios" element={<ListaUsuarios />} />
-          <Route path="coach/grupos" element={<Grupos />} />
-          <Route path="coach/listaDeRutinas" element={<ListaRutinas />} />
-          <Route path="coach/agregarRutina" element={<AgregarRutina />} />
-          <Route path="coach/mensajeria" element={<Mensajeria />} />
+        {/* inside COACH */}
+        <Route path="/coach" element={<Coach />}>
+          <Route index element={<ListaUsuarios />} />
+          <Route path="noticias" element={<Noticias />} />
+          <Route path="grupos" element={<Grupos />} />
+          <Route path="listaDeRutinas" element={<ListaRutinas />} />
+          <Route path="agregarRutina" element={<AgregarRutina />} />
+          <Route path="mensajeria" element={<Mensajeria />} />
         </Route>
+        {/* inside CLIENT */}
       </Routes>
     </BrowserRouter>
   );

@@ -36,7 +36,7 @@ function Nosotras() {
   }
   const HeaderHeight = 112;
   return (
-    <div className="flex  pb-14 py-14">
+    <div className="flex pb-14 py-14" style={{ minHeight: "617px" }}>
       <div className="w-1/2 p-8">
         <h1 className="text-5xl  text-customOrange font-bold m-10 mb-20">
           NUESTRO EQUIPO

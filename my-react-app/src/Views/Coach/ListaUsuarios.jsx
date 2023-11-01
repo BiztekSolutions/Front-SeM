@@ -6,17 +6,18 @@ import { TailSpin } from "react-loader-spinner";
 import Highlighter from "react-highlight-words";
 import { FcFullTrash, FcApproval, FcCancel, FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, updateUser } from "../../features/user/userSlice";
-import Swal from "sweetalert2";
+// import { useDispatch, useSelector } from "react-redux";
+// import { deleteUser, updateUser } from "../../features/user/userSlice";
+// import Swal from "sweetalert2";
+import { faker } from "@faker-js/faker";
 // import "@sweetalert2/themes/dark/dark.css";
 
 const ListaUsuarios = () => {
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { users, message } = state.users;
+  // const dispatch = useDispatch();
+  // const state = useSelector((state) => state);
+  // const { users, message } = state.users;
 
-  const handleUpdateUser = (info, userId) => {
+  /*const handleUpdateUser = (info, userId) => {
     if (info === "activate") {
       dispatch(
         updateUser({
@@ -38,9 +39,9 @@ const ListaUsuarios = () => {
         })
       );
     }
-  };
+  };*/
 
-  const handleDelete = (userName, userId) => {
+  /*const handleDelete = (userName, userId) => {
     Swal.fire({
       color: "whitesmoke",
       icon: "warning",
@@ -74,7 +75,7 @@ const ListaUsuarios = () => {
         return;
       }
     });
-  };
+  }; */
 
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
@@ -269,8 +270,7 @@ const ListaUsuarios = () => {
     },
   ];
 
-  const dataSource = [];
-  if (users.length > 0) {
+  /* if (users.length > 0) {
     for (let i = 0; i < users.length; i++) {
       dataSource.push({
         key: i,
@@ -328,12 +328,79 @@ const ListaUsuarios = () => {
         ),
       });
     }
-  }
+*/
+  const message = "";
+  const generateDummyData = (count) => {
+    const users = [];
+    for (let i = 0; i < count; i++) {
+      const logged = faker.datatype.boolean();
+      const disabled = faker.datatype.boolean();
+      users.push({
+        key: i,
+        userName: faker.internet.userName(),
+        firstName: faker.person.firstName(),
+        lastName: faker.person.lastName(),
+        email: faker.internet.email(),
+        logged: logged,
+        disabled: disabled,
+        status: (
+          <div className="userStatusSpan">
+            <span className={`${logged ? "online" : "offline"}`}></span>
+            {logged ? "Online" : "Offline"}
+          </div>
+        ),
+        actions: (
+          <div className="flex align-middle gap-3">
+            <FcInfo
+              size={19}
+              className="userInfo"
+              onClick={() => navigate(`/`)}
+            />
+            <FcFullTrash
+              size={19}
+              className="userDelete"
+              onClick={() => console.log()}
+            />
+            {message === `ban updating` ? (
+              <TailSpin
+                height="20"
+                width="20"
+                color="#4fa94d"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            ) : users ? (
+              <FcApproval
+                // data-activate={users[i].id}
+                onClick={() => console.log("activate")}
+                size={19}
+                className={styles.activate}
+              />
+            ) : (
+              <FcCancel
+                // data-disable={users[i].id}
+                onClick={() => console.log("disable")}
+                size={19}
+                className="userBan"
+              />
+            )}
+          </div>
+        ),
+      });
+    }
+    return users;
+  };
+
+  const dataSource = generateDummyData(10);
+  console.log(dataSource);
 
   return (
     <div className={styles.wrapper}>
       <div>
-        <h3>Users List</h3>
+        <h3>Lista de Usuarios</h3>
       </div>
       <Table dataSource={dataSource} columns={columns} />
     </div>

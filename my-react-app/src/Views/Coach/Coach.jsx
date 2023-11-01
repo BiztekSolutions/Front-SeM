@@ -1,16 +1,16 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  DownOutlined,
+  // DownOutlined,
 } from "@ant-design/icons";
-import { Menu, Dropdown, Layout as AntLayout, Button } from "antd";
+import { Dropdown, Menu, Layout as AntLayout, Button } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Flag from "react-world-flags";
 import { FcConferenceCall, FcShipped, FcFeedback } from "react-icons/fc";
 import { CgProfile } from "react-icons/cg";
 import logo from "../../assets/logo.png";
-import { GlobalContext } from "../../context/globalContext";
+// import { GlobalContext } from "../../context/globalContext";
 const { Header, Sider, Content } = AntLayout;
 
 function getItem(label, key, icon, children, type) {
@@ -22,7 +22,9 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-
+const handleLogout = () => {
+  console.log("logout");
+};
 const menu = (
   <Menu>
     <Menu.Item key="1">
@@ -56,11 +58,11 @@ const Coach = () => {
   const [current, setCurrent] = useState("listaDeUsuarios");
   const [collapsed, setCollapsed] = useState(false);
 
-  const globalContext = useContext(GlobalContext);
-  const { setLogged } = globalContext;
+  // const globalContext = useContext(GlobalContext);
+  // const { setLogged } = globalContext;
 
   const onClick = (e) => {
-    if (e.key !== "noticias") {
+    if (e.key !== "listaDeUsuarios") {
       navigate(e.key);
       setCurrent(e.key);
     } else {
@@ -145,7 +147,7 @@ const Coach = () => {
                     onClick={(e) => e.preventDefault()}
                     href="/#"
                   >
-                    <CgProfile className="h-12 w-12 mr-20" />
+                    <CgProfile className="h-8 w-8 mr-20" />
                   </a>
                 </Dropdown>
               </div>

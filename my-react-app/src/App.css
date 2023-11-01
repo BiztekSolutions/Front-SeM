@@ -392,3 +392,8 @@ input.form-control:focus {
   font-size: 11px !important;
   letter-spacing: 1px;
 }
+
+.userData {
+  font-size: 11px;
+  letter-spacing: 1px;
+}

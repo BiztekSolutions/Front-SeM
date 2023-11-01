@@ -1,6 +1,10 @@
 import { useState, useContext } from "react";
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
-import { Menu, Layout as AntLayout, Button } from "antd";
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
+import { Menu, Dropdown, Layout as AntLayout, Button } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Flag from "react-world-flags";
 import { FcConferenceCall, FcShipped, FcFeedback } from "react-icons/fc";
@@ -18,6 +22,17 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
+
+const menu = (
+  <Menu>
+    <Menu.Item key="1">
+      <Link to="/change-password">Change Password</Link>
+    </Menu.Item>
+    <Menu.Item key="2" onClick={() => handleLogout()}>
+      Logout
+    </Menu.Item>
+  </Menu>
+);
 
 const items = [
   getItem("General", "sub1", <FcConferenceCall size={20} />, [
@@ -121,42 +136,27 @@ const Coach = () => {
             <div className="flex gap-3 items-center justify-center dropdown">
               {/* User Image */}
               <div
-                className=" header-user-image flex justify-center"
+                className="header-user-image flex justify-center"
                 role="button"
                 id="dropdownMenuLink"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-              >
-                <CgProfile className="h-12 w-12" />
-              </div>
+              ></div>
               {/* User Details */}
-              <div className="d-flex flex-column gap-2 userData mr-12">
+              <div className="d-flex flex-column userData pr-10">
                 <span style={{ marginTop: "-3rem" }}>User Name</span>
               </div>
-              <ul
-                className="dropdown-menu userDropdown"
-                aria-labelledby="dropdownMenuButton1"
-              >
-                {/* <li><Link className="dropdown-item" to="/">View Profile</Link></li> */}
-                <li>
-                  <Link className="dropdown-item" to="/change-password">
-                    Change Password
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item"
-                    onClick={() => {
-                      console.log();
-                      localStorage.removeItem("nerdyUser");
-                      setLogged(false);
-                      window.location.reload();
-                    }}
+              <div>
+                <Dropdown overlay={menu} trigger={["click"]}>
+                  <a
+                    className="ant-dropdown-link"
+                    onClick={(e) => e.preventDefault()}
+                    href="/#"
                   >
-                    Logout
-                  </Link>
-                </li>
-              </ul>
+                    <CgProfile className="h-12 w-12 mr-20" />
+                  </a>
+                </Dropdown>
+              </div>
             </div>
           </div>
         </Header>

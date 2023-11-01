@@ -4,7 +4,8 @@ import { Menu, Layout as AntLayout, Button } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Flag from "react-world-flags";
 import { FcConferenceCall, FcShipped, FcFeedback } from "react-icons/fc";
-
+import { CgProfile } from "react-icons/cg";
+import logo from "../../assets/logo.png";
 import { GlobalContext } from "../../context/globalContext";
 const { Header, Sider, Content } = AntLayout;
 
@@ -37,7 +38,7 @@ const items = [
 
 const Coach = () => {
   const navigate = useNavigate();
-  const [current, setCurrent] = useState("userList");
+  const [current, setCurrent] = useState("listaDeUsuarios");
   const [collapsed, setCollapsed] = useState(false);
 
   const globalContext = useContext(GlobalContext);
@@ -64,16 +65,11 @@ const Coach = () => {
         <div className="logo flex items-center justify-center">
           {collapsed ? (
             <div>
-              <img
-                src="/images/versace.svg"
-                alt="abc"
-                width={30}
-                className="mt-2"
-              />
+              <img src={logo} alt="abc" width={30} className="mt-2" />
             </div>
           ) : (
-            <div className="flex items-start justify-start">
-              <h2 className="mainTitle">Rivélle Admin</h2>
+            <div className="flex items-start justify-start m-10">
+              <h2 className="mainTitle">Salud en Movimiento</h2>
             </div>
           )}
         </div>
@@ -125,22 +121,16 @@ const Coach = () => {
             <div className="flex gap-3 items-center justify-center dropdown">
               {/* User Image */}
               <div
-                className="header-user-image flex justify-center"
+                className=" header-user-image flex justify-center"
                 role="button"
                 id="dropdownMenuLink"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img
-                  width={30}
-                  height={30}
-                  className="img-fluid"
-                  src="/images/user.svg"
-                  alt="abc"
-                />
+                <CgProfile className="h-12 w-12" />
               </div>
               {/* User Details */}
-              <div className="d-flex flex-column gap-2 userData">
+              <div className="d-flex flex-column gap-2 userData mr-12">
                 <span style={{ marginTop: "-3rem" }}>User Name</span>
               </div>
               <ul

@@ -111,15 +111,9 @@ const Coach = () => {
               <Flag code={"arg"} height={"15"} />
             </div>
 
-            {/* BELL */}
-            {/* <div className='relative'>
-                <AppstoreFilled className='text-2xl'/>
-                <span className='absolute notifications'>3</span>
-            </div> */}
-
-            {/* USER */}
+     
             <div className="flex gap-3 items-center justify-center dropdown">
-              {/* User Image */}
+      
               <div
                 className=" header-user-image flex justify-center"
                 role="button"

@@ -94,8 +94,9 @@ const Footer = () => {
               className="w-12 h-12 mb-12 cursor-pointer"
             />
           </div>
-          <p className="ml-11">
-            Salud en <span className="text-black">MOVIMIENTO.</span>
+          <p className="ml-11 text-customOrange">
+            Salud en movimeinto
+            <span className="text-green-500"> GIMNASIO.</span>
           </p>
         </div>
         <a

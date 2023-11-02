@@ -6,7 +6,7 @@ import { TypingEffect } from "./typingText";
 function Sedes() {
   return (
     <>
-      <div className=" relative bg-gray-100 dark:bg-gray-800 pt-10 pb-12">
+      <div id="nuestras-sedes" className=" relative pt-10 pb-12">
         <div className="mb-8">
           <h1 className=" font-bold text-customOrangepy-4 text-customOrange">
             NUESTRAS SEDES

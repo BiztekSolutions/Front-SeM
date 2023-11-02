@@ -9,9 +9,9 @@ const Inicio = () => {
   };
   const HeaderHeight = 112;
   return (
-    <div className="relative overflow-x-hidden overflow-y-hidden">
+    <div className="relative overflow-x-hidden overflow-y-hidden ">
       <img
-        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1/2"
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1/2 img-1"
         src="https://media-public.canva.com/mn-RI/MAEL5Bmn-RI/3/s.svg"
         alt=""
         style={imgBgStyle}
@@ -20,7 +20,7 @@ const Inicio = () => {
         <div className="flex mb-44">
           <div className="p-10 pt-32 pl-40">
             <div>
-              <div className="flex gap-7">
+              <div id="tittle-gim" className="flex gap-7 tittle-gim">
                 <div className="text-left">
                   <h1 className="text-customOrange relative top-2/3 text-7xl tittle-gimnasio font-bold tracking-widest shadow-custom">
                     GIMNASIO
@@ -62,7 +62,7 @@ const Inicio = () => {
               </div>
             </div>
           </div>
-          <img src={primerimg} alt="" className="w-1/4 h-1/4 pt-36 " />
+          <img src={primerimg} alt="" className="w-1/4 h-1/4 pt-36 img-1" />
         </div>
       </div>
     </div>

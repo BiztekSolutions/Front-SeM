@@ -357,8 +357,17 @@ input.form-control:focus {
   background: transparent;
 }
 
-.gradiente {
+.gradiente1 {
   background-image: linear-gradient(to right, black, black, #ff914d);
+}
+
+.gradiente2 {
+  background-image: linear-gradient(
+    to right,
+    rgb(255, 253, 253),
+    rgb(255, 255, 255),
+    #ff914d
+  );
 }
 
 .bg-navbar {
@@ -384,6 +393,16 @@ input.form-control:focus {
 #themeToggle:hover {
   text-decoration: none;
   border: none;
+}
+
+.black-sedes {
+  background-color: #0c0c0c;
+  color: #ffffff;
+}
+
+.white-sedes {
+  background-color: #f1f1f1;
+  color: #000000;
 }
 
 /* -------------- Coach -------------- */

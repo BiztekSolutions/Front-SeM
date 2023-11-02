@@ -14,6 +14,8 @@ const DarkModeToggle = () => {
     const contacto = document.getElementById("contacto");
     const nosotros = document.getElementById("nosotras");
     const sedes = document.getElementById("sedes");
+    const nuestrasSedes = document.getElementById("nuestras-sedes");
+    const seccion6 = document.getElementById("seccion6");
 
     if (isDarkMode) {
       rootElement.classList.add("dark");
@@ -26,6 +28,10 @@ const DarkModeToggle = () => {
       nosotros.classList.add("ctm-color2");
       sedes.classList.remove("ctm-color1");
       sedes.classList.add("ctm-color2");
+      nuestrasSedes.classList.add("black-sedes");
+      nuestrasSedes.classList.remove("white-sedes");
+      seccion6.classList.add("gradiente1");
+      seccion6.classList.remove("gradiente2");
     } else {
       rootElement.classList.add("light");
       rootElement.classList.remove("dark");
@@ -37,6 +43,10 @@ const DarkModeToggle = () => {
       nosotros.classList.remove("ctm-color2");
       sedes.classList.add("ctm-color1");
       sedes.classList.remove("ctm-color2");
+      nuestrasSedes.classList.remove("black-sedes");
+      nuestrasSedes.classList.add("white-sedes");
+      seccion6.classList.remove("gradiente1");
+      seccion6.classList.add("gradiente2");
     }
   }, [isDarkMode]);
 

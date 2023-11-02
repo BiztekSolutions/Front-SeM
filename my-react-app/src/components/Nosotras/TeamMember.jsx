@@ -1,6 +1,7 @@
 import React from "react";
 import "./TeamMember.css";
 import { CgProfile } from "react-icons/cg";
+import { FaInstagram } from "react-icons/fa";
 
 const TeamMember = (props) => {
   const { id, nombre, edad, descripcion, ubicacion } = props;
@@ -46,10 +47,13 @@ const TeamMember = (props) => {
                 <p>{descripcion}</p>
               </div>
               <div className="location">{ubicacion}</div>
-              <div className="price">38€ / day</div>
+              <div className="price">
+                {" "}
+                <FaInstagram className="m-2 h-12 w-12 cursor-pointer" />
+              </div>
               <label
                 htmlFor={id}
-                className="button return text-black"
+                className="button return bg-black text-customOrange"
                 aria-hidden="true"
               >
                 Volver

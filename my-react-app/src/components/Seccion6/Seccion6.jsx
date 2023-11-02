@@ -7,7 +7,10 @@ function Seccion6() {
       className="flex w-full mb-20"
       style={{ backgroundColor: "#FF914D", height: "90vh" }}
     >
-      <div className="grid grid-cols-6 grid-rows-6 w-1/2 gap-2 gradiente">
+      <div
+        id="seccion6"
+        className="grid grid-cols-6 grid-rows-6 w-1/2 gap-2 gradiente"
+      >
         <img
           src="https://media-public.canva.com/kCUrg/MAD0WHkCUrg/1/s.jpg"
           alt="imagen-seccion6"

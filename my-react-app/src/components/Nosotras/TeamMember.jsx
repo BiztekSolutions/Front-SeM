@@ -8,7 +8,7 @@ const TeamMember = (props) => {
 
   return (
     <div className="wrapper">
-      <div className="card">
+      <div className="cards">
         <input type="checkbox" id={id} className="more" aria-hidden="true" />
         <div className="content">
           <div

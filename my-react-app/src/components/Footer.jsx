@@ -107,7 +107,7 @@ const Footer = () => {
           Todos los derechos reservados | Biztek Solutions
         </a>
         <Link
-          className="h-12 w-12 mb-20 cursor-pointer"
+          className="h-12 w-12 mb-32 cursor-pointer"
           to="inicio"
           smooth={true}
           duration={1000}

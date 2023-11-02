@@ -12,7 +12,7 @@ import {
   FcGoogle,
 } from "react-icons/fc";
 import { Table } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   deleteUser,
   getUser,
@@ -20,7 +20,7 @@ import {
 } from "../../../features/user/userSlice";
 import { TailSpin } from "react-loader-spinner";
 import Swal from "sweetalert2";
-
+import { faker } from "@faker-js/faker";
 import { GlobalContext } from "../../../context/globalContext";
 
 const SingleUser = () => {
@@ -31,8 +31,8 @@ const SingleUser = () => {
   const userId = useParams().id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const state = useSelector((state) => state);
-  const { user, message } = state.users;
+  // const state = useSelector((state) => state);
+  // const { user, message } = state.users;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -179,13 +179,16 @@ const SingleUser = () => {
       dispatch(getUser(userId));
     }
   }, []);
-
-  useEffect(() => {
-    if (message === "Delete User Success") {
-      navigate("/admin");
-    }
-  }, [message]);
-
+  const user = {
+    key: 1,
+    userName: faker.internet.userName(),
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    email: faker.internet.email(),
+    logged: faker.datatype.boolean(),
+    disabled: faker.datatype.boolean(),
+  };
+  const message = "";
   const dataSource = [
     {
       key: 1,
@@ -316,8 +319,8 @@ const SingleUser = () => {
 
   return (
     <div className={`${styles.wrapper} userDetails`}>
-      <UserFavsModal />
-      <UserCartModal />
+      {/* <UserFavsModal />
+      <UserCartModal /> */}
       <div className={styles.title}>
         <div className={styles.goBack} onClick={() => navigate("/admin")}>
           <i className="fa-solid fa-caret-left fa-lg"></i>

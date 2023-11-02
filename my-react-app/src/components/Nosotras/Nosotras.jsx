@@ -73,14 +73,14 @@ function Nosotras() {
         </div>
         <Link
           offset={-HeaderHeight}
-          className=" bg-customOrange hover:bg-customOrange font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
+          className=" bg-customOrange text-white hover:border-black hover:border-4 hover:text-white font-bold py-4 px-8 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
           to="formulario"
           smooth={true}
           duration={1000}
         >
           CONTACTO
         </Link>
-        <div className="flex justify-center py-4">
+        <div className="flex justify-center m-10">
           <div onClick={redirectToInstagram}>
             <FaInstagram className="m-2 h-12 w-12 cursor-pointer" />
           </div>

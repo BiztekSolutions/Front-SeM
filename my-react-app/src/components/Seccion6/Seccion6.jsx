@@ -4,7 +4,7 @@ import { Link } from "react-scroll";
 function Seccion6() {
   return (
     <div
-      className="flex w-full mb-20"
+      className="flex w-full mb-20 section6"
       style={{ backgroundColor: "#FF914D", height: "90vh" }}
     >
       <div

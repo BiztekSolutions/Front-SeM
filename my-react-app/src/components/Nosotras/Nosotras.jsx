@@ -1,6 +1,7 @@
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import TeamMember from "./TeamMember";
 import { Link } from "react-scroll";
+import "./TeamMember.css";
 
 function Nosotras() {
   function redirectToInstagram() {
@@ -36,7 +37,7 @@ function Nosotras() {
   }
   const HeaderHeight = 112;
   return (
-    <div style={{ height: "900px" }}>
+    <div style={{ minHeight: "900px" }}>
       <div className="pt-16">
         <div>
           <h1 className="text-5xl  text-customOrange font-bold ">
@@ -48,7 +49,7 @@ function Nosotras() {
             sientas a gusto y puedas lograr tus objetivos.
           </h3>
         </div>
-        <div className="relative flex justify-center content-center mb-20">
+        <div className="relative flex justify-center content-center mb-20 flex-wrap m-auto">
           <TeamMember
             id="card1"
             nombre="Florencia Peix"

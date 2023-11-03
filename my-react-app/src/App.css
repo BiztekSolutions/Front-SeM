@@ -522,6 +522,14 @@ input.form-control:focus {
 }
 
 @media (max-width: 768px) {
+  .section6 {
+    display: none !important;
+  }
+
+  .img-seccion6 {
+    display: none !important;
+  }
+
   .menu-header {
     display: none;
   }
@@ -533,11 +541,6 @@ input.form-control:focus {
   #themeToggle {
     padding-top: 5px;
     margin-right: 4rem;
-  }
-
-  .menu-header.open {
-    display: flex; /* Muestra el menú en columna cuando se abre */
-    flex-direction: column; /* Alinea los elementos en columna */
   }
 
   .menu-header.open .hamburger {

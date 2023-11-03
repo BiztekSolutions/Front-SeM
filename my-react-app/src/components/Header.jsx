@@ -15,8 +15,38 @@ const Header = () => {
 
   const [isMenuDesOpen, setIsMenuDesOpen] = useState(true);
 
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (window.innerWidth < 800) {
+  //       setIsMenuDesOpen(false);
+  //     }
+  //   };
+
+  //   window.addEventListener("resize", handleResize);
+
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
+
+  const cambiarEstilosDelUl = () => {
+    const ulElement = document.querySelector(".menu-header.navigation");
+
+    if (ulElement && isMenuDesOpen) {
+      ulElement.setAttribute(
+        "style",
+        "background-color: #d46910; position: absolute; top: 75%; right: 0; border-radius: 10px; padding: 10px; margin-left: 10px;"
+      );
+      ulElement.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+      ulElement.style.opacity = "1";
+    } else if (ulElement) {
+      ulElement.setAttribute("style", ""); // Restaurar estilos originales
+    }
+  };
+
   const desplegableMenu = () => {
     setIsMenuDesOpen(!isMenuDesOpen);
+    cambiarEstilosDelUl();
   };
 
   const toggleMenu = () => {

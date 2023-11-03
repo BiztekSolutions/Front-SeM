@@ -215,3 +215,12 @@
   line-height: 3em;
   text-shadow: none;
 }
+
+@media screen and (max-width: 768px) {
+  .cards {
+    width: 250px !important;
+    height: 250px;
+    margin: 1em;
+    perspective: 1500px;
+  }
+}

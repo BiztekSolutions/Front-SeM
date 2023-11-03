@@ -334,7 +334,7 @@ const ListaUsuarios = () => {
     const users = [];
     for (let i = 0; i < count; i++) {
       const logged = faker.datatype.boolean();
-      const disabled = faker.datatype.boolean();
+
       users.push({
         key: i,
         id: faker.string.uuid(),
@@ -343,7 +343,7 @@ const ListaUsuarios = () => {
         lastName: faker.person.lastName(),
         email: faker.internet.email(),
         logged: logged,
-        disabled: disabled,
+
         status: (
           <div className="userStatusSpan">
             <span className={`${logged ? "online" : "offline"}`}></span>
@@ -351,11 +351,21 @@ const ListaUsuarios = () => {
           </div>
         ),
         actions: (
-          <div className="flex align-middle gap-3">
+          <div className="flex align-middle  gap-3">
             <FcInfo
               size={19}
               className="userInfo"
-              onClick={() => navigate(`user/${users[i].id}`)}
+              onClick={() =>
+                navigate(`user/${users[i].id}`, {
+                  state: {
+                    firstName: users[i].firstName,
+                    lastName: users[i].lastName,
+                    userName: users[i].userName,
+                    email: users[i].email,
+                    logged: users[i].logged,
+                  },
+                })
+              }
             />
             <FcFullTrash
               size={19}

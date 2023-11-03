@@ -1,16 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import styles from "./SingleUser.module.css";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  FcFullTrash,
-  FcApproval,
-  FcCancel,
-  FcLock,
-  FcUnlock,
-  FcLike,
-  FcCurrencyExchange,
-  FcGoogle,
-} from "react-icons/fc";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { FcFullTrash, FcApproval, FcCancel } from "react-icons/fc";
 import { Table } from "antd";
 import { useDispatch } from "react-redux";
 import {
@@ -20,22 +11,18 @@ import {
 } from "../../../features/user/userSlice";
 import { TailSpin } from "react-loader-spinner";
 import Swal from "sweetalert2";
-import { faker } from "@faker-js/faker";
-import { GlobalContext } from "../../../context/globalContext";
+import UserCalendar from "./UserCalendar";
 
 const SingleUser = () => {
   // CONTEXT API
-  const globalContext = useContext(GlobalContext);
-  const { setShowUserFavsModal, setShowUserCartModal } = globalContext;
 
   const userId = useParams().id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const state = useSelector((state) => state);
   // const { user, message } = state.users;
-
-  const [showPassword, setShowPassword] = useState(false);
-
+  const location = useLocation();
+  const userState = location.state;
   const handleUpdateUser = (info, userId) => {
     if (info === "activate") {
       dispatch(
@@ -147,30 +134,11 @@ const SingleUser = () => {
       dataIndex: "actions",
       key: "actions",
     },
+
     {
-      title: "Password",
-      dataIndex: "password",
-      key: "password",
-    },
-    {
-      title: "Admin",
-      dataIndex: "admin",
-      key: "admin",
-    },
-    {
-      title: "Social User",
-      dataIndex: "socialUser",
-      key: "socialUser",
-    },
-    {
-      title: "Wishlist",
-      dataIndex: "wishList",
-      key: "wishList",
-    },
-    {
-      title: "Cart",
-      dataIndex: "cart",
-      key: "cart",
+      title: "Rutina",
+      dataIndex: "rutina",
+      key: "rutina",
     },
   ];
 
@@ -181,12 +149,12 @@ const SingleUser = () => {
   }, []);
   const user = {
     key: 1,
-    userName: faker.internet.userName(),
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    email: faker.internet.email(),
-    logged: faker.datatype.boolean(),
-    disabled: faker.datatype.boolean(),
+    userName: userState.userName,
+    firstName: userState.firstName,
+    lastName: userState.lastName,
+    email: userState.email,
+    logged: userState.logged,
+    disabled: userState.disabled,
   };
   const message = "";
   const dataSource = [
@@ -203,7 +171,7 @@ const SingleUser = () => {
         </div>
       ),
       actions: (
-        <div className="d-flex align-items-center gap-3">
+        <div className="flex align-middle  gap-3">
           <FcFullTrash
             size={19}
             className="userDelete"
@@ -237,81 +205,10 @@ const SingleUser = () => {
           )}
         </div>
       ),
-      password: (
-        <div className="d-flex align-items-center gap-1">
-          <span style={{ fontSize: "10px" }}>
-            {showPassword
-              ? user.password.length > 7
-                ? user.password.slice(0, 7) + "…"
-                : user.password
-              : "•••••••"}
-          </span>
-          {showPassword ? (
-            <FcLock size={20} onClick={() => setShowPassword(false)} />
-          ) : (
-            <FcUnlock size={20} onClick={() => setShowPassword(true)} />
-          )}
-        </div>
-      ),
-      admin: (
+
+      rutina: (
         <div className="text-center">
-          {message === `admin updating ${user.id}` ? (
-            <TailSpin
-              height="20"
-              width="20"
-              color="#4fa94d"
-              ariaLabel="tail-spin-loading"
-              radius="1"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          ) : user.admin ? (
-            <FcApproval
-              size={20}
-              className="userActivate"
-              onClick={() => handleUpdateUser("noAdmin", user.id)}
-            />
-          ) : (
-            <FcCancel
-              size={19}
-              className="userBan"
-              onClick={() => handleUpdateUser("admin", user.id)}
-            />
-          )}
-        </div>
-      ),
-      socialUser: (
-        <div className="text-center">
-          {user.googleUser ? (
-            <FcGoogle size={20} />
-          ) : user.githubUser ? (
-            <i
-              className="fa-brands fa-github"
-              style={{ color: "#1f1f1f" }}
-              width={20}
-            ></i>
-          ) : (
-            <FcCancel size={20} />
-          )}
-        </div>
-      ),
-      wishList: (
-        <div className="text-center">
-          <FcLike
-            size={20}
-            className="userWishlist"
-            onClick={() => setShowUserFavsModal(user.favorites)}
-          />
-        </div>
-      ),
-      cart: (
-        <div className="text-center">
-          <FcCurrencyExchange
-            size={20}
-            className="userCart"
-            onClick={() => setShowUserCartModal(user.cart)}
-          />
+          <button className="border-spacing-20 bg-customOrange ">Rutina</button>
         </div>
       ),
     },
@@ -322,29 +219,35 @@ const SingleUser = () => {
       {/* <UserFavsModal />
       <UserCartModal /> */}
       <div className={styles.title}>
-        <div className={styles.goBack} onClick={() => navigate("/admin")}>
-          <i className="fa-solid fa-caret-left fa-lg"></i>
+        <div
+          className={`${styles.goBack} my-4`}
+          onClick={() => navigate("/coach")}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 "
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+          <div className="ml-5">
+            <h3>{userState.firstName} Info</h3>
+          </div>
         </div>
-        <h3>User Info</h3>
       </div>
       <div className={styles.container}>
-        <div className={styles.left}>
-          <div className={styles.userId}>
-            <span>
-              <i
-                className="fa-solid fa-key fa-xs me-1"
-                style={{ color: "#1f1f1f" }}
-              ></i>
-              ID:
-            </span>
-            <span>{userId}</span>
-          </div>
-          <div className={styles.avatar}>
-            <img src={user?.avatar} alt="abc" />
-          </div>
-        </div>
-        <div className={styles.right}>
+        <div className={`${styles.right} w-full`}>
           <Table dataSource={dataSource} columns={columns} />
+        </div>
+        <div className="w-full">
+          <UserCalendar userId={userId} />
         </div>
       </div>
     </div>

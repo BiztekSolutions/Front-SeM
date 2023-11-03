@@ -34,7 +34,7 @@ const Rutinas = () => {
           </div>
         </div>
         <Link
-          className="rutinas-button text-center bg-customOrange hover: font-bold py-2 px-4 pt-7 rounded-full border-white border-8 cursor-pointer"
+          className="rutinas-button text-center bg-customOrange hover: font-bold py-7 px-16 rounded-full border-white border-8 cursor-pointer w-fit h-fit"
           to="formulario"
           smooth={true}
           duration={1000}

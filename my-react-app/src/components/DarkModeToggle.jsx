@@ -59,7 +59,7 @@ const DarkModeToggle = () => {
 
   return (
     <div>
-      <button className="p-0 pt-1" id="themeToggle" onClick={handleToggleClick}>
+      <button className="p-0 pt-6" id="themeToggle" onClick={handleToggleClick}>
         <svg
           width="30px"
           xmlns="http://www.w3.org/2000/svg"

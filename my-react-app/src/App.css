@@ -213,12 +213,6 @@ button:focus {
   display: block;
 }
 
-.menu-toggle-landing {
-  z-index: 1202;
-  border-bottom: none;
-  cursor: pointer;
-}
-
 .create-landing {
   font-family: "futuraStd";
   margin-top: 30px;
@@ -227,7 +221,6 @@ button:focus {
   letter-spacing: 3px;
 }
 
-/* TOGGLE MENU LANDING */
 .toggleMenuLanding {
   position: fixed !important;
   top: 0;
@@ -247,6 +240,7 @@ button:focus {
 .toggleMenuLanding.open {
   transform: translateX(0);
 }
+
 /* -------------- Register -------------- */
 .card-login {
   width: 530px;
@@ -507,4 +501,63 @@ input.form-control:focus {
   color: #f38695;
   display: block;
   margin-top: 5px;
+}
+
+/* -------------- Toggle menu -------------- */
+
+.menu-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.hamburger {
+  display: none; /* Oculta el botón de hamburguesa en desktop */
+}
+
+@media (min-width: 768px) {
+  .menu-header {
+    display: flex !important;
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-header {
+    display: none;
+  }
+
+  .hamburger {
+    display: block; /* Aparece el botón de hamburguesa en mobile */
+  }
+
+  #themeToggle {
+    padding-top: 5px;
+    margin-right: 4rem;
+  }
+
+  .menu-header.open {
+    display: flex; /* Muestra el menú en columna cuando se abre */
+    flex-direction: column; /* Alinea los elementos en columna */
+  }
+
+  .menu-header.open .hamburger {
+    display: block; /* Muestra el botón de hamburguesa cuando se abre el menú */
+  }
+}
+.hamburger {
+  border: 0;
+  height: 40px;
+  width: 40px;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: #db721c;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  transform: translateY(-50%);
+}
+.hamburger:hover {
+  background-color: #2642af;
 }

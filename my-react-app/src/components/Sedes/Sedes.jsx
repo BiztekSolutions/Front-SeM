@@ -2,11 +2,15 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import SimpleMap from "./simpleMap";
 import { AnyReactComponent } from "./simpleMap";
 import { TypingEffect } from "./typingText";
+import styles from "./Sedes.module.css";
 
 function Sedes() {
   return (
     <>
-      <div id="nuestras-sedes" className=" relative pt-10 pb-12">
+      <div
+        id="nuestras-sedes"
+        className={`relative pt-10 pb-12 ${styles.tittleSedes}`}
+      >
         <div className="mb-8">
           <h1 className=" font-bold text-customOrangepy-4 text-customOrange">
             NUESTRAS SEDES
@@ -14,11 +18,17 @@ function Sedes() {
           <h2 className="text-lg  w-8/12 m-auto ">ACERCATE A CONOCERNOS!</h2>
         </div>
 
-        <div className="grid grid-rows-2 grid-cols-2 place-items-center ">
-          <div className="">
-            <FaMapMarkerAlt className="inline w-12 h-12 pr-3" />
-            <span className=" text-2xl font-bold">SALADILLO</span>
-            <span className="text-2xl  border-gray-300 p-7">
+        <div
+          className={`grid grid-rows-2 grid-cols-2 place-items-center ${styles.gridcontainer}`}
+        >
+          <div className={` ${styles.map}`}>
+            <FaMapMarkerAlt
+              className={`inline w-12 h-12 pr-3 ${styles.famap}`}
+            />
+            <span className={`${styles.sala} text-2xl font-bold`}>
+              SALADILLO
+            </span>
+            <span className={`${styles.sala} text-2xl border-gray-300 p-7`}>
               📌 Av. Saavedra 3253
             </span>
             <div className="mb-20">
@@ -36,24 +46,28 @@ function Sedes() {
               </SimpleMap>
             </div>
           </div>
-          <div>
+          <div className={styles.typingeffect}>
             <TypingEffect
               firstText="Bienvenido a nuestro gimnasio funcional! Ofrecemos un entrenamiento semipersonalizado en nuestras sedes."
               secondText="Contáctanos para conocer nuestros horarios y ubicación exacta!"
               medidaWindow={0.5}
             />
           </div>
-          <div>
+          <div className={styles.typingeffect}>
             <TypingEffect
               firstText="Ponte en forma con nuestro programa de Pilates Tabata. Mejora tu flexibilidad, coordinación, movilidad, estabilidad, fuerza y resistencia"
               secondText="Descubre cómo puedes transformar tu cuerpo y mente con nuestros entrenamientos"
               medidaWindow={1}
             />
           </div>
-          <div>
-            <FaMapMarkerAlt className="inline w-12 h-12 pr-3" />
-            <span className=" text-2xl font-bold">SALADILLO</span>
-            <span className="text-2xl  border-gray-300 p-7">
+          <div className={` ${styles.map}`}>
+            <FaMapMarkerAlt
+              className={`inline w-12 h-12 pr-3 ${styles.famap}`}
+            />
+            <span className={`${styles.sala} text-2xl font-bold`}>
+              SALADILLO
+            </span>
+            <span className={`${styles.sala} text-2xl border-gray-300 p-7`}>
               📌Av. Rivadavia 3589
             </span>
             <SimpleMap

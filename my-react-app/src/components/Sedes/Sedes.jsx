@@ -19,7 +19,7 @@ function Sedes() {
         </div>
 
         <div
-          className={`grid grid-rows-2 grid-cols-2 place-items-center ${styles.gridcontainer}`}
+          className={`grid grid-rows-2 grid-cols-2 w-full place-items-center ${styles.gridcontainer}`}
         >
           <div className={` ${styles.map}`}>
             <FaMapMarkerAlt
@@ -64,7 +64,9 @@ function Sedes() {
             <FaMapMarkerAlt
               className={`inline w-12 h-12 pr-3 ${styles.famap}`}
             />
-            <span className={`${styles.sala} text-2xl font-bold`}>
+            <span
+              className={`${styles.sala} ${styles.saladillo2} text-2xl font-bold`}
+            >
               SALADILLO
             </span>
             <span className={`${styles.sala} text-2xl border-gray-300 p-7`}>

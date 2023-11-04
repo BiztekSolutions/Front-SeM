@@ -43,7 +43,7 @@ function Nosotras() {
           <h1 className="text-5xl  text-customOrange font-bold ">
             NUESTRO EQUIPO
           </h1>
-          <h3 className="text-lg my-4 text-center mb-28 w-3/5 m-auto">
+          <h3 className="text-lg my-4 text-center mb-28 w-3/5 m-auto description-about">
             Contamos con un equipo de profesionales dispuestos a ayudarte en
             cada paso del proceso de entrenamiento. Nuestro objetivo es que te
             sientas a gusto y puedas lograr tus objetivos.

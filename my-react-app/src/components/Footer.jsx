@@ -20,14 +20,16 @@ const Footer = () => {
   const HeaderHeight = 112;
   return (
     <div className="bg-customOrange flex flex-col">
-      <div className="flex justify-between  p-8">
-        <div className="w-1/4">
-          <h1 className="text-3xl w-3/4 text-black font-bold pt-10">
+      <div className="flex justify-between p-8 wrapper-footer">
+        <div className="w-1/4 text-footer">
+          <h1 className="text-3xl w-3/4 text-black font-bold pt-10 ">
             CONTACTA CON NOSOTROS
           </h1>
         </div>
-        <div className="w-1/4 text-left">
-          <h3 className="text-stone-950 mb-10 font-bold">SOBRE NOSOTROS</h3>
+        <div className="w-1/4 text-left container-footer">
+          <h3 className="text-stone-950 mb-10 font-bold tittle-footer">
+            SOBRE NOSOTROS
+          </h3>
           <Link
             offset={-HeaderHeight}
             className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
@@ -48,8 +50,10 @@ const Footer = () => {
             ¿Donde encontrarnos?
           </Link>
         </div>
-        <div className="w-1/4 text-left">
-          <h3 className="text-stone-950 mb-10 font-bold">QUE HACEMOS?</h3>
+        <div className="w-1/4 text-left container-footer">
+          <h3 className="text-stone-950 mb-10 font-bold tittle-footer">
+            QUE HACEMOS?
+          </h3>
           <Link
             className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to=""
@@ -77,8 +81,10 @@ const Footer = () => {
             Indumentaria
           </Link>
         </div>
-        <div className="w-1/4 text-left">
-          <h3 className="text-stone-950 mb-10 font-bold">CONTACTO</h3>
+        <div className="w-1/4 text-left container-footer">
+          <h3 className="text-stone-950 mb-10 font-bold tittle-footer">
+            CONTACTO
+          </h3>
           <p>Contacta con nosotros</p>
           <p>Políticas de privacidad</p>
           <p>Términos y condiciones</p>
@@ -91,17 +97,17 @@ const Footer = () => {
             <img
               src={wppLogo}
               alt="whatsapp"
-              className="w-12 h-12 mb-12 cursor-pointer"
+              className="w-12 h-12 mb-12 cursor-pointer fawpp"
             />
           </div>
-          <p className="ml-11 text-customOrange">
+          <p className="ml-11 text-customOrange sem">
             Salud en movimeinto
             <span className="text-green-500"> GIMNASIO.</span>
           </p>
         </div>
         <a
           href="https://lefelink.com/bizteksolutions/"
-          className=""
+          className="derechos"
           target="_blank"
           rel="noopener noreferrer"
         >

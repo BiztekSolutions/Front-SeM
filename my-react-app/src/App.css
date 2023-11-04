@@ -518,6 +518,11 @@ input.form-control:focus {
   .menu-header {
     display: flex !important;
     flex-direction: row;
+    background-color: transparent !important;
+    position: relative !important;
+  }
+  #themeToggle {
+    padding-top: 1.5rem;
   }
 }
 
@@ -529,6 +534,48 @@ input.form-control:focus {
   .img-seccion6 {
     display: none !important;
   }
+  .logo {
+    margin-left: 0px !important;
+  }
+
+  .wrapper-footer {
+    padding-left: 0% !important;
+    padding-right: 0% !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tittle-categoria {
+    font-size: 10px !important;
+  }
+
+  .container-footer {
+    width: 50% !important;
+    margin: auto !important;
+  }
+  .sem {
+    margin-left: 5px !important;
+  }
+
+  .borde-inf {
+    justify-content: left !important;
+  }
+
+  .derechos {
+    font-size: 0.7rem;
+  }
+
+  .fawpp {
+    height: auto !important;
+    width: 85px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .tittle-footer {
+    font-size: 20px !important;
+    margin-bottom: 0.5rem !important;
+  }
 
   .menu-header {
     display: none;
@@ -536,6 +583,13 @@ input.form-control:focus {
 
   .hamburger {
     display: block; /* Aparece el botón de hamburguesa en mobile */
+  }
+  .description-about {
+    display: none;
+  }
+
+  .text-footer {
+    display: none;
   }
 
   #themeToggle {

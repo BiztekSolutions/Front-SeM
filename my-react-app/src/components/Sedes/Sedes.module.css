@@ -5,12 +5,18 @@
   .gridcontainer {
     grid-template-columns: 1fr !important;
   }
-
+  .mapa {
+    height: 20vh !important;
+    max-width: 40vh !important;
+  }
   .typingeffect {
     display: none !important;
   }
-}
 
+  .probando {
+    display: none !important;
+  }
+}
 /* Estilos para dispositivos con ancho menor o igual a 500px */
 @media (max-width: 500px) {
   .gridcontainer {
@@ -22,7 +28,8 @@
   }
   .mapa {
     height: 20vh !important;
-    max-width: 300px !important;
+    max-width: 75vw !important;
+    margin: auto !important;
   }
   .sala {
     display: flex !important;
@@ -32,6 +39,9 @@
     margin: 0 !important;
     margin-left: 40px !important;
     padding: 10px !important;
+  }
+  .saladillo2 {
+    display: none !important;
   }
   .famap {
     display: none !important;

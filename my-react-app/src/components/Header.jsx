@@ -16,30 +16,14 @@ const Header = () => {
 
   const [isMenuDesOpen, setIsMenuDesOpen] = useState(true);
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (window.innerWidth < 800) {
-  //       setIsMenuDesOpen(false);
-  //     }
-  //   };
-
-  //   window.addEventListener("resize", handleResize);
-
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
-
   const cambiarEstilosDelUl = () => {
     const ulElement = document.querySelector(".menu-header.navigation");
 
     if (ulElement && isMenuDesOpen) {
       ulElement.setAttribute(
         "style",
-        "background-color: #d46910; position: absolute; top: 75%; right: 0; border-radius: 10px; padding: 10px; margin-left: 10px;"
+        "background-color: #d46910; position: absolute; width:100%; top: 80%; right: 0; border-radius: 10px; border-bottom: 5px solid #000;"
       );
-      ulElement.style.transition = "opacity 0.3s ease, transform 0.3s ease";
-      ulElement.style.opacity = "1";
     } else if (ulElement) {
       ulElement.setAttribute("style", ""); // Restaurar estilos originales
     }
@@ -107,7 +91,7 @@ const Header = () => {
           smooth={true}
           duration={500}
         >
-          <img src={logo} alt="Logo" className="h-12 w-auto ml-10" />
+          <img src={logo} alt="Logo" className="h-12 w-auto ml-10 logo" />
         </Link>
       </div>
       <div className="flex">

@@ -167,8 +167,9 @@ const Header = () => {
       </div>
 
       <div
+      
         ref={menuRef}
-        className={`toggleMenuLanding ${isMenuOpen ? "open" : ""} `}
+        className={`toggleMenuLanding ${isMenuOpen ? "open" : ""} iniSesion`}
       >
         <div className="flex justify-end">
 
@@ -179,10 +180,13 @@ const Header = () => {
         <IoClose size={40} color="black" />
       </button>
         </div>
+        <div >
+
         <Register
           isRegisterOpen={isRegisterOpen}
           setRegisterOpen={setRegisterOpen}
-        />
+          />
+          </div>
       </div>
     </div>
   );

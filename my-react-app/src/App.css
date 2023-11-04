@@ -618,3 +618,9 @@ input.form-control:focus {
 .hamburger:hover {
   background-color: #2642af;
 }
+
+@media (max-width: 768px) {
+  .iniSesion {
+    max-width: 100% !important;
+  }
+}

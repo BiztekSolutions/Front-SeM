@@ -4,6 +4,7 @@ import Register from "./Register";
 import { useEffect, useRef, useState } from "react";
 import DarkModeToggle from "../components/DarkModeToggle";
 import "../App.css";
+import { IoClose } from "react-icons/io5";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -183,11 +184,17 @@ const Header = () => {
 
       <div
         ref={menuRef}
-        className={`toggleMenuLanding ${isMenuOpen ? "open" : ""}`}
+        className={`toggleMenuLanding ${isMenuOpen ? "open" : ""} `}
       >
-        <h3 className="create-landing mb-5 text-uppercase">
+        <div className="flex justify-end">
+
+        <h3 className="create-landing mb-5 text-uppercase mr-20">
           {isRegisterOpen ? "CREAR CUENTA" : "INICIAR SESION"}
         </h3>
+        <button className="bg-transparent flex border-none mt-2" onClick={() => setIsMenuOpen(false)}>
+        <IoClose size={40} color="black" />
+      </button>
+        </div>
         <Register
           isRegisterOpen={isRegisterOpen}
           setRegisterOpen={setRegisterOpen}

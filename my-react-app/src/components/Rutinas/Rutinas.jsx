@@ -11,8 +11,8 @@ const Rutinas = () => {
         <h2 className=" py-5 top-2/3 text-7xl tittle-gimnasio font-bold tracking-tighter shadow-custom1">
           RUTINAS PERSONALIZADAS
         </h2>
-        <h3 className="font-mono">
-          En <span className="font-bold">Salud en Movimiento</span> ofrecemos
+        <h3 className="font-mono d-rutinas">
+          En <span className="font-bold ">Salud en Movimiento</span> ofrecemos
           rutinas hecha a la medida para hacer desde tu casa
         </h3>
       </div>
@@ -28,7 +28,7 @@ const Rutinas = () => {
                 loop
                 muted
               >
-                <source src={videoFondo} type="video/mp4" />
+                <source src={videoFondo} type="video/mp4" loop />
               </video>
             </div>
           </div>

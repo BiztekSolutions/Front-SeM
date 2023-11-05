@@ -4,7 +4,8 @@ import { CgProfile } from "react-icons/cg";
 import { FaInstagram } from "react-icons/fa";
 
 const TeamMember = (props) => {
-  const { id, nombre, edad, descripcion, ubicacion } = props;
+  const { id, nombre, edad, descripcion, ubicacion, instagram } = props;
+  const enlaceInstagram = `https://www.instagram.com/${instagram}/`;
 
   return (
     <div className="wrapper">
@@ -36,7 +37,7 @@ const TeamMember = (props) => {
           <div className="back text-black">
             <div className="inner">
               <div className="info">
-                <span>{edad}</span>
+                <span className="number-edad">{edad}</span>
                 <div className="icon">
                   <i className="fas fa-users"></i>
                   <span>Años</span>
@@ -48,8 +49,13 @@ const TeamMember = (props) => {
               </div>
               <div className="location">{ubicacion}</div>
               <div className="price">
-                {" "}
-                <FaInstagram className="m-2 h-12 w-12 cursor-pointer" />
+                <a
+                  href={enlaceInstagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaInstagram className="m-2 h-12 w-12 faig cursor-pointer" />
+                </a>
               </div>
               <label
                 htmlFor={id}

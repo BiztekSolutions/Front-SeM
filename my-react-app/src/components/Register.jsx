@@ -212,10 +212,10 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   }, [userMessage, user]);
 
   return (
-    <section >
+    <section>
       <Toast ref={refToast} position="top-left"></Toast>
       <div>
-        <div className="bg-white md:p-8 w-full " >
+        <div className="bg-white md:p-8 w-full ">
           {isRegisterOpen ? (
             <div className="flex flex-col md:flex-row ">
               <div className="mb-4 md:mb-0 md:w-1/2">

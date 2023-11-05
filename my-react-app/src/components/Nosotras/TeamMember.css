@@ -223,4 +223,31 @@
     margin: 1em;
     perspective: 1500px;
   }
+
+  .location {
+    font-size: 10px;
+  }
+
+  .faig {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+
+  .number-edad {
+    font-size: 1rem !important;
+  }
+
+  .info {
+    display: none !important;
+  }
+
+  .inner {
+    padding: 10px !important;
+  }
+
+  .description {
+    height: 15vh;
+    border: 1px solid rgb(100, 100, 100);
+    border-bottom: none;
+  }
 }

@@ -8,6 +8,7 @@ import ListaRutinas from "./Views/Coach/ListaRutinas";
 import AgregarRutina from "./Views/Coach/AgregarRutina";
 import Mensajeria from "./Views/Coach/Mensajeria";
 import SingleUser from "./Views/Coach/SingleUser/SingleUser";
+import User from "./Views/User/User";
 
 const Router = () => {
   return (
@@ -17,6 +18,16 @@ const Router = () => {
         <Route exact path="/" element={<Home />} />
         {/* inside COACH */}
         <Route path="/coach" element={<Coach />}>
+          <Route index element={<ListaUsuarios />} />
+          <Route exact path="user/:id" element={<SingleUser />} />
+          <Route path="noticias" element={<Noticias />} />
+          <Route path="grupos" element={<Grupos />} />
+          <Route path="listaDeRutinas" element={<ListaRutinas />} />
+          <Route path="agregarRutina" element={<AgregarRutina />} />
+          <Route path="mensajeria" element={<Mensajeria />} />
+        </Route>
+
+        <Route path="/user" element={<User />}>
           <Route index element={<ListaUsuarios />} />
           <Route exact path="user/:id" element={<SingleUser />} />
           <Route path="noticias" element={<Noticias />} />

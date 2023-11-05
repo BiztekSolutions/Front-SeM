@@ -47,13 +47,14 @@ export const TypingEffect = ({ firstText, secondText, medidaWindow }) => {
     <div style={{ minHeight: "300px" }}>
       <h1
         id="text1"
-        className="pt-10 text-2xl font-bold max-w-md text-customOrange"
+        className="pt-10 text-2xl font-bold max-w-md text-customOrange text-left"
       >
         {text1}
       </h1>
+      <br />
       <h1
         id="text3"
-        className="pb-10 text-2xl font-bold max-w-md text-customOrange"
+        className="pb-10 text-2xl font-bold max-w-md text-white text-left"
       >
         {text3}
       </h1>

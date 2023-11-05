@@ -20,7 +20,7 @@ const Footer = () => {
   const HeaderHeight = 112;
   return (
     <div className="bg-customOrange flex flex-col">
-      <div className="flex justify-between p-8 wrapper-footer">
+      <div className="flex justify-between p-8 wrapper-footer container1-footer">
         <div className="w-1/4 text-footer">
           <h1 className="text-3xl w-3/4 text-black font-bold pt-10 ">
             CONTACTA CON NOSOTROS
@@ -60,7 +60,7 @@ const Footer = () => {
             smooth={true}
             duration={1000}
           >
-            Entrenamiento Semipersonalizado
+            Semipersonalizado
           </Link>
           <br />
           <Link
@@ -81,17 +81,17 @@ const Footer = () => {
             Indumentaria
           </Link>
         </div>
+
         <div className="w-1/4 text-left container-footer">
           <h3 className="text-stone-950 mb-10 font-bold tittle-footer">
-            CONTACTO
+            PRIVACIDAD
           </h3>
-          <p>Contacta con nosotros</p>
           <p>Políticas de privacidad</p>
           <p>Términos y condiciones</p>
           <p>FAQs</p>
         </div>
       </div>
-      <div className="bg-black  h-16 flex justify-between items-center p-8">
+      <div className="bg-black h-24 flex justify-between items-center p-8">
         <div className="flex items-center ">
           <div onClick={redirectToWhatsapp}>
             <img
@@ -114,7 +114,7 @@ const Footer = () => {
           Todos los derechos reservados | Biztek Solutions
         </a>
         <Link
-          className="h-12 w-12 mb-32 cursor-pointer"
+          className="h-12 w-12 mb-40 ic-up cursor-pointer"
           to="inicio"
           smooth={true}
           duration={1000}

@@ -22,7 +22,7 @@ const Header = () => {
     if (ulElement && isMenuDesOpen) {
       ulElement.setAttribute(
         "style",
-        "background-color: #d46910; position: absolute; width:100%; top: 80%; right: 0; border-radius: 10px; border-bottom: 5px solid #000;"
+        "background-color: #d46910; position: absolute; width:100%; top: 80%; right: 0; border-radius: 10px;"
       );
     } else if (ulElement) {
       ulElement.setAttribute("style", ""); // Restaurar estilos originales
@@ -117,7 +117,7 @@ const Header = () => {
           }`}
           id="menu-header1"
         >
-          <li className="">
+          <li className="li-bb">
             <Link
               offset={-HeaderHeight}
               className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
@@ -126,10 +126,12 @@ const Header = () => {
               duration={1000}
               id="sedes"
             >
-              SEDES
+              <a className="block a-header" href="#sedes">
+                SEDES
+              </a>
             </Link>
           </li>
-          <li className="">
+          <li className="li-bb">
             <Link
               offset={-HeaderHeight}
               className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
@@ -138,10 +140,12 @@ const Header = () => {
               duration={1000}
               id="nosotras"
             >
-              SOBRE NOSOTRAS
+              <a className="block a-header" href="#nosotras">
+                SOBRE NOSOTRAS
+              </a>
             </Link>
           </li>
-          <li className="z-10">
+          <li className="z-10 li-bb">
             <Link
               offset={-HeaderHeight}
               className="hover:text-customOrange transition-colors duration-300 cursor-pointer "
@@ -150,10 +154,12 @@ const Header = () => {
               duration={1000}
               id="contacto"
             >
-              CONTACTO
+              <a className="block a-header" href="#formulario">
+                CONTACTO
+              </a>
             </Link>
           </li>
-          <li className="">
+          <li className="li-bb">
             <div className={isMenuOpen ? "overlay open" : "overlay"}></div>
             <div
               ref={closeRef}
@@ -167,26 +173,26 @@ const Header = () => {
       </div>
 
       <div
-      
         ref={menuRef}
         className={`toggleMenuLanding ${isMenuOpen ? "open" : ""} iniSesion`}
       >
         <div className="flex justify-end">
-
-        <h3 className="create-landing mb-5 text-uppercase mr-20">
-          {isRegisterOpen ? "CREAR CUENTA" : "INICIAR SESION"}
-        </h3>
-        <button className="bg-transparent flex border-none mt-2" onClick={() => setIsMenuOpen(false)}>
-        <IoClose size={40} color="black" />
-      </button>
+          <h3 className="create-landing mb-5 text-uppercase mr-20">
+            {isRegisterOpen ? "CREAR CUENTA" : "INICIAR SESION"}
+          </h3>
+          <button
+            className="bg-transparent flex border-none mt-2"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <IoClose size={40} color="black" />
+          </button>
         </div>
-        <div >
-
-        <Register
-          isRegisterOpen={isRegisterOpen}
-          setRegisterOpen={setRegisterOpen}
+        <div>
+          <Register
+            isRegisterOpen={isRegisterOpen}
+            setRegisterOpen={setRegisterOpen}
           />
-          </div>
+        </div>
       </div>
     </div>
   );

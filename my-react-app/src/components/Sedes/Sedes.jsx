@@ -3,6 +3,7 @@ import SimpleMap from "./simpleMap";
 import { AnyReactComponent } from "./simpleMap";
 import { TypingEffect } from "./typingText";
 import styles from "./Sedes.module.css";
+import "./Sedes.module.css";
 
 function Sedes() {
   return (
@@ -47,19 +48,39 @@ function Sedes() {
             </div>
           </div>
           <div className={styles.typingeffect}>
-            <TypingEffect
-              firstText="Bienvenido a nuestro gimnasio funcional! Ofrecemos un entrenamiento semipersonalizado en nuestras sedes."
-              secondText="Contáctanos para conocer nuestros horarios y ubicación exacta!"
-              medidaWindow={0.5}
-            />
+            <div class="ag-format-container">
+              <div class="ag-courses_box">
+                <div class="ag-courses_item">
+                  <a href="#" class="ag-courses-item_link">
+                    <div class="ag-courses-item_bg"></div>
+                    <TypingEffect
+                      firstText="Bienvenido a nuestro gimnasio funcional. 
+                      Ofrecemos un entrenamiento semipersonalizado en nuestras sedes."
+                      secondText="Contáctanos para conocer nuestros horarios y ubicación exacta!"
+                      medidaWindow={0.5}
+                    />
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
           <div className={styles.typingeffect}>
-            <TypingEffect
-              firstText="Ponte en forma con nuestro programa de Pilates Tabata. Mejora tu flexibilidad, coordinación, movilidad, estabilidad, fuerza y resistencia"
-              secondText="Descubre cómo puedes transformar tu cuerpo y mente con nuestros entrenamientos"
-              medidaWindow={1}
-            />
+            <div class="ag-format-container">
+              <div class="ag-courses_box">
+                <div class="ag-courses_item">
+                  <a href="#" class="ag-courses-item_link">
+                    <div class="ag-courses-item_bg"></div>
+                    <TypingEffect
+                      firstText="Ponte en forma con nuestro programa de Pilates Tabata. Mejora tu flexibilidad, coordinación, movilidad, estabilidad, fuerza y resistencia"
+                      secondText="Descubre cómo puedes transformar tu cuerpo y mente con nuestros entrenamientos"
+                      medidaWindow={1}
+                    />
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
+
           <div className={` ${styles.map}`}>
             <FaMapMarkerAlt
               className={`inline w-12 h-12 pr-3 ${styles.famap}`}

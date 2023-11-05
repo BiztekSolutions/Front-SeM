@@ -4,11 +4,14 @@ import "./ExerciseModal.css";
 import VideoEmbed from "./VideoEmbed";
 function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
   return (
-    <div className="modal show" tabIndex="-1">
+    <div
+      className="modal show border-8 border-white absolute top-5 left-1/4 rounded-3xl bg-gray-900 w-1/2"
+      tabIndex="-1"
+    >
       <div className="modal-dialog">
         <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">{exercise.name}</h5>
+          <div className="modal-header ">
+            <h5 className="modal-title text-3xl text-black">{exercise.name}</h5>
             <button
               type="button"
               className="btn-close"
@@ -16,21 +19,23 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
               onClick={closeModal}
             ></button>
           </div>
-          <div className="modal-body">
-            <p>{exercise.description}</p>
-            <VideoEmbed youtubeLink={exercise.video} />
+          <div className="modal-body border-t-4 py-5 flex gap-6 justify-center">
+            <div className="flex">
+              <p className="pt-14">{exercise.description}</p>
+              <VideoEmbed youtubeLink={exercise.video} />
+            </div>
           </div>
-          <div className="modal-footer">
-            <h5 className="modal-subtitle">Edit Exercise</h5>
+          <div className="border-t-4 border-b-4 py-5 modal-footer flex justify-center">
+            <h5 className="modal-subtitle p-20 text-2xl">Editar ejercicio</h5>
             <ExerciseForm exercise={exercise} onSubmit={handleEditExercise} />
-            <button
-              type="button"
-              onClick={closeModal}
-              className="btn btn-secondary"
-            >
-              Close
-            </button>
           </div>
+          <button
+            type="button"
+            onClick={closeModal}
+            className="btn btn-secondary bg-black my-7"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { useEffect } from "react";
 import styles from "./SingleUser.module.css";
 import { useNavigate } from "react-router-dom";
@@ -13,20 +13,16 @@ import {
 import { TailSpin } from "react-loader-spinner";
 import Swal from "sweetalert2";
 
-
-
-export default function User({user}) {
-console.log(user);
-   const userId = user.userId;
+export default function User({ user }) {
+  console.log(user);
+  const userId = user.userId;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const state = useSelector((state) => state);
   // const { user, message } = state.users;
-  
-  
 
-  function nullCheck(condition,component) {
-    return condition ? component : <div>Page is Loading</div>
+  function nullCheck(condition, component) {
+    return condition ? component : <div>Page is Loading</div>;
   }
 
   const handleUpdateUser = (info, userId) => {
@@ -154,7 +150,6 @@ console.log(user);
     }
   }, []);
 
-  
   const message = "";
   const dataSource = [
     {
@@ -164,13 +159,13 @@ console.log(user);
       lastName: user.lastName,
       email: user.email,
       status: (
-        <div className="userStatusSpan">
+        <div className="userStatusSpan ">
           <span className={`${user.logged ? "online" : "offline"}`}></span>
           {user.logged ? "Online" : "Offline"}
         </div>
       ),
       actions: (
-        <div className="flex align-middle  gap-3">
+        <div className="flex align-middle gap-3">
           <FcFullTrash
             size={19}
             className="userDelete"
@@ -187,7 +182,9 @@ console.log(user);
               wrapperClass=""
               visible={true}
             />
-          ) : user.disabled }
+          ) : (
+            user.disabled
+          )}
         </div>
       ),
 
@@ -199,7 +196,6 @@ console.log(user);
     },
   ];
 
- 
   return (
     <div className={`${styles.wrapper} userDetails bg-gray-500`}>
       {/* <UserFavsModal />
@@ -232,10 +228,8 @@ console.log(user);
         <div className={`${styles.right} w-full`}>
           <Table dataSource={dataSource} columns={columns} />
         </div>
-        <div className="w-full">
-          
-        </div>
+        <div className="w-full"></div>
       </div>
     </div>
-  )
+  );
 }

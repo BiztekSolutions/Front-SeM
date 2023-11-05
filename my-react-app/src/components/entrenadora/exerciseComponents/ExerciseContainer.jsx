@@ -47,15 +47,22 @@ function ExerciseContainer({ exercises, setExercises }) {
     setShowForm((prevState) => !prevState);
   }
   return (
-    <div className="row justify-content-center">
-      <h1 className="display-2 text-center">Explore Exercises</h1>
-      {showForm ? <ExerciseForm onSubmit={handlePostExercise} /> : null}
-      <div className="flex justify-center m-2">
-        <button className="btn btn-primary" onClick={handleButtonClick}>
-          {showForm ? "Close Form" : "Add an Exercise"}
-        </button>
+    <div className="relative">
+      <h1 className="display-2 text-center">Explorar Ejercicios</h1>
+      <div className="flex flex-col justify-center">
+        {showForm ? <ExerciseForm onSubmit={handlePostExercise} /> : null}
+        <div className="flex flex-col justify-center m-2">
+          <button
+            className="btn btn-primary w-fit m-auto"
+            onClick={handleButtonClick}
+          >
+            {showForm ? "Close Form" : "Add an Exercise"}
+          </button>
+        </div>
+        <div className="w-full flex flex-wrap justify-center">
+          {populateCards()}
+        </div>
       </div>
-      {populateCards()}
     </div>
   );
 }

@@ -6,17 +6,13 @@ import { TailSpin } from "react-loader-spinner";
 import Highlighter from "react-highlight-words";
 import { FcFullTrash, FcApproval, FcCancel, FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
-// import { useDispatch, useSelector } from "react-redux";
-// import { deleteUser, updateUser } from "../../features/user/userSlice";
-// import Swal from "sweetalert2";
 import { faker } from "@faker-js/faker";
-// import "@sweetalert2/themes/dark/dark.css";
 
-const ListaUsuarios = () => {
+// import "@sweetalert2/themes/dark/dark.css";
+export const ListaUsuarios = () => {
   // const dispatch = useDispatch();
   // const state = useSelector((state) => state);
   // const { users, message } = state.users;
-
   /*const handleUpdateUser = (info, userId) => {
     if (info === "activate") {
       dispatch(
@@ -40,7 +36,6 @@ const ListaUsuarios = () => {
       );
     }
   };*/
-
   /*const handleDelete = (userName, userId) => {
     Swal.fire({
       color: "whitesmoke",
@@ -76,7 +71,6 @@ const ListaUsuarios = () => {
       }
     });
   }; */
-
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -409,15 +403,12 @@ const ListaUsuarios = () => {
   console.log(dataSource);
 
   return (
-    <>
-      <div className={styles.wrapper}>
-        <div>
-          <h3>Lista de Usuarios</h3>
-        </div>
-        <Table dataSource={dataSource} columns={columns} />
+    (<div className />)`{styles.wrapper} bg-black` >
+    ((
+      <div>
+        <h3>Lista de Usuarios</h3>
       </div>
-    </>
+    ),
+    (<Table dataSource={dataSource} columns={columns} className="bg-black" />))
   );
 };
-
-export default ListaUsuarios;

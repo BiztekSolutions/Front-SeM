@@ -72,12 +72,7 @@ const Coach = () => {
   };
   return (
     <AntLayout>
-      <Sider
-        trigger={null}
-        theme="light"
-        collapsible
-        collapsed={collapsed}
-      >
+      <Sider trigger={null} theme="light" collapsible collapsed={collapsed}>
         <div className="logo flex items-center justify-center">
           {collapsed ? (
             <div>

@@ -17,7 +17,6 @@
     "@sweetalert2/themes": "^5.0.15",
     "antd": "^5.10.3",
     "axios": "^1.5.1",
-    "bootstrap": "^3.4.1",
     "date-fns": "^2.30.0",
     "google-map-react": "^2.2.1",
     "primeicons": "^6.0.1",

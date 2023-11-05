@@ -75,7 +75,7 @@ console.log(user);
 
   const handleDelete = (userName, userId) => {
     Swal.fire({
-      color: "whitesmoke",
+      color: "gray",
       icon: "warning",
       iconColor: "white",
       background: "#1f1f1f",
@@ -201,7 +201,7 @@ console.log(user);
 
  
   return (
-    <div className={`${styles.wrapper} userDetails`}>
+    <div className={`${styles.wrapper} userDetails bg-gray-500`}>
       {/* <UserFavsModal />
       <UserCartModal /> */}
       <div className={styles.title}>

@@ -11,8 +11,10 @@ const SingleUser = () => {
   // CONTEXT API
   const activeStyle={
     fontWeight: "bold",
-    color: "red",
-    backgroundColor: "black"
+    color: "black",
+    backgroundColor: "white",
+    padding: "20px", 
+    borderRadius: "10px",
   }
   const user = {
     key: 1,
@@ -27,8 +29,8 @@ const SingleUser = () => {
   return (
     <div>
 
-      <nav className="row navbar mx-1">
-            <ul>
+      <nav className="row  mx-1">
+            <ul className='flex gap-4'>
                 <li>
                     <NavLink to='./' style={activeStyle}>User</NavLink>
                 </li>

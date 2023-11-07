@@ -1,11 +1,12 @@
-import React from "react";
 import ExerciseForm from "./ExerciseForm";
 import "./ExerciseModal.css";
 import VideoEmbed from "./VideoEmbed";
+
+// eslint-disable-next-line react/prop-types
 function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
   return (
     <div
-      className="modal show border-8 border-white absolute top-5 left-1/4 rounded-3xl bg-gray-900 w-1/2"
+      className="modal show border-8 absolute z-10 border-white top-5 left-1/4 rounded-3xl bg-gray-900 w-1/2"
       tabIndex="-1"
     >
       <div className="modal-dialog">

@@ -15,7 +15,7 @@ import WorkoutContainer from "./components/entrenadora/workoutComponents/Workout
 import WorkoutCreator from "./components/entrenadora/workoutComponents/WorkoutCreator.jsx";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import userCalendar from "./Views/Coach/SingleUser/UserCalendar";
+import UserCalendar from "./Views/Coach/SingleUser/UserCalendar";
 
 const Router = () => {
   const [exercises, setExercises] = useState(null);
@@ -30,7 +30,7 @@ const Router = () => {
         const workoutsResponse = await axios.get(
           "http://localhost:3000/workouts"
         );
-        console.log(exercisesResponse);
+
         setExercises(exercisesResponse.data);
         setWorkouts(workoutsResponse.data);
       } catch (error) {
@@ -51,13 +51,9 @@ const Router = () => {
           <Route path="user/:id" element={<SingleUser />}>
             <Route
               path="ejercicios"
-              element={
-                <userCalendar
-                  exercises={exercises}
-                  setExercises={setExercises}
-                />
-              }
+              element={<UserCalendar exercises={exercises} />}
             />
+
             <Route
               path="hoy"
               element={

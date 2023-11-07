@@ -2,22 +2,51 @@ import { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import Modal from "react-modal";
+import ExerciseModal from "../../../components/entrenadora/exerciseComponents/ExerciseModal";
 Modal.setAppElement("#root");
-// eslint-disable-next-line react/prop-types
-const UserCalendar = ({ exercises, setExercises }) => {
-  const [routines, setRoutines] = useState([]);
-  const [selectedExercise, setSelectedExercise] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [events, setEvents] = useState([]);
-  // Simulación de datos de rutinas desde la base de datos
-  useEffect(() => {
-    const fetchedRoutines = exercises;
 
-    const events = fetchedRoutines.reduce((acc, routine) => {
+const UserCalendar = ({ exercises }) => {
+  const [events, setEvents] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedExercise, setSelectedExercise] = useState(null);
+
+  useEffect(() => {
+    const fetchedRoutines = [
+      {
+        id: 1,
+        clientId: 1,
+        startDate: "2023-10-25",
+        endDate: "2023-11-30",
+        exercises: exercises,
+      },
+    ];
+
+    const updatedEvents = fetchedRoutines.reduce((acc, routine) => {
       return acc.concat(generateEvents(routine));
     }, []);
-    setEvents(events);
-  }, [userId]);
+    setEvents(updatedEvents);
+  }, []);
+
+  function handleCardClick(exercise) {
+    setSelectedExercise(exercise);
+    setShowModal(true);
+  }
+
+  async function handleEditExercise(exercise, data) {
+    try {
+      const response = await axios.patch(
+        `http://localhost:3000/exercises/${exercise.id}`,
+        data
+      );
+      const updatedExercises = exercises.map((exercise) => {
+        if (exercise.id === response.data.id) return response.data;
+        return exercise;
+      });
+      setExercises(updatedExercises);
+    } catch (error) {
+      console.error("Error updating exercise:", error);
+    }
+  }
 
   const generateEvents = (routine) => {
     const { startDate, endDate, exercises } = routine;
@@ -33,11 +62,25 @@ const UserCalendar = ({ exercises, setExercises }) => {
         const dayOfWeek = currentDate.getDay(); // Domingo: 0, Lunes: 1, ..., Sábado: 6
 
         if (dayOfWeek === exercise.day) {
+          const cardComponent = (
+            <div
+              className="card highlight shadow"
+              onClick={() => handleCardClick(exercise)}
+            >
+              <div className="card-body">
+                <h5 className="card-title">{exercise.name}</h5>
+                <h6 className="card-subtitle">{exercise.type}</h6>
+              </div>
+            </div>
+          );
+
           events.push({
-            title: exercise.name,
             start: currentDate.toISOString().split("T")[0],
             description: exercise.description,
-            id: exercise.id, // Agrega el ID del ejercicio al objeto del evento
+            id: exercise.id,
+            extendedProps: {
+              cardComponent: cardComponent,
+            },
           });
         }
       });
@@ -52,44 +95,37 @@ const UserCalendar = ({ exercises, setExercises }) => {
     return events;
   };
 
+  function closeModal() {
+    setShowModal(false);
+  }
+
   return (
-    <div className="w-full min-h-screen">
-      <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridWeek"
-        events={events}
-        eventClick={(info) => {
-          // Obtén el ID del evento haciendo clic
+    <div>
+      <div className="w-full min-h-screen">
+        <FullCalendar
+          plugins={[dayGridPlugin]}
+          initialView="dayGridWeek"
+          events={events}
+          weekends={false}
+          eventContent={(arg) => {
+            return (
+              <div>
+                <b>{arg.timeText}</b>
 
-          const eventId = parseInt(info.event.id, 10);
-
-          // Encuentra el ejercicio correspondiente en la lista de ejercicios
-          let clickedExercise;
-          for (let routine of routines) {
-            console.log(routine.exercises);
-            clickedExercise = routine.exercises.find(
-              (exercise) => exercise.id === eventId
+                {arg.event.extendedProps &&
+                  arg.event.extendedProps.cardComponent}
+              </div>
             );
-            if (clickedExercise) break;
-          }
-          console.log(clickedExercise);
-
-          setSelectedExercise(clickedExercise);
-
-          setIsOpen(true);
-        }}
-      />
-
-      {isOpen && selectedExercise && (
-        <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
-          {/* Otras informaciones relevantes del ejercicio */}
-          <button className="mb-20" onClick={() => setIsOpen(false)}>
-            Cerrar
-          </button>
-          <h2>{selectedExercise.title}</h2>
-          <p>{selectedExercise.description}</p>
-        </Modal>
-      )}
+          }}
+        />
+      </div>
+      {showModal ? (
+        <ExerciseModal
+          exercise={selectedExercise}
+          closeModal={closeModal}
+          handleEditExercise={handleEditExercise}
+        />
+      ) : null}
     </div>
   );
 };

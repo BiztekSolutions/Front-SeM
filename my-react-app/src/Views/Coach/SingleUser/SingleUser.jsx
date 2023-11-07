@@ -19,8 +19,8 @@ const SingleUser = () => {
   const user = {
     key: 1,
     userName: userState?.userName || faker.internet.userName(),
-    firstName: userState?.firstName || faker.name.firstName(),
-    lastName: userState?.lastName || faker.name.lastName(),
+    firstName: userState?.firstName || faker.person.firstName(),
+    lastName: userState?.lastName || faker.person.lastName(),
     email: userState?.email || faker.internet.email(),
     logged:
       userState?.logged !== undefined
@@ -60,7 +60,7 @@ const SingleUser = () => {
         </ul>
       </nav>
       <User user={user} />
-      <Outlet />
+      <Outlet userId={userId} />
     </div>
   );
 };

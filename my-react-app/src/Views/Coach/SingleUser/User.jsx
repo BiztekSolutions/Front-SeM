@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import styles from "./SingleUser.module.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FcFullTrash } from "react-icons/fc";
 import { Table } from "antd";
 import { useDispatch } from "react-redux";

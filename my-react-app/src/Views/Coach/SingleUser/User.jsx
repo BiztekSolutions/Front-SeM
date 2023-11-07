@@ -1,7 +1,6 @@
-import React from 'react'
 import { useEffect } from "react";
 import styles from "./SingleUser.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FcFullTrash } from "react-icons/fc";
 import { Table } from "antd";
 import { useDispatch } from "react-redux";
@@ -13,20 +12,16 @@ import {
 import { TailSpin } from "react-loader-spinner";
 import Swal from "sweetalert2";
 
-
-
-export default function User({user}) {
-console.log(user);
-   const userId = user.userId;
+export default function User({ user }) {
+  console.log(user);
+  const userId = useParams().id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const state = useSelector((state) => state);
   // const { user, message } = state.users;
-  
-  
 
-  function nullCheck(condition,component) {
-    return condition ? component : <div>Page is Loading</div>
+  function nullCheck(condition, component) {
+    return condition ? component : <div>Page is Loading</div>;
   }
 
   const handleUpdateUser = (info, userId) => {
@@ -154,7 +149,6 @@ console.log(user);
     }
   }, []);
 
-  
   const message = "";
   const dataSource = [
     {
@@ -187,7 +181,9 @@ console.log(user);
               wrapperClass=""
               visible={true}
             />
-          ) : user.disabled }
+          ) : (
+            user.disabled
+          )}
         </div>
       ),
 
@@ -199,7 +195,6 @@ console.log(user);
     },
   ];
 
- 
   return (
     <div className={`${styles.wrapper} userDetails`}>
       {/* <UserFavsModal />
@@ -232,10 +227,8 @@ console.log(user);
         <div className={`${styles.right} w-full`}>
           <Table dataSource={dataSource} columns={columns} />
         </div>
-        <div className="w-full">
-          
-        </div>
+        <div className="w-full"></div>
       </div>
     </div>
-  )
+  );
 }

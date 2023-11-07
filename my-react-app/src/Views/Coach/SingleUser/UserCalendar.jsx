@@ -4,80 +4,14 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import Modal from "react-modal";
 Modal.setAppElement("#root");
 // eslint-disable-next-line react/prop-types
-const UserCalendar = ({ userId }) => {
+const UserCalendar = ({ exercises, setExercises }) => {
   const [routines, setRoutines] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [events, setEvents] = useState([]);
   // Simulación de datos de rutinas desde la base de datos
   useEffect(() => {
-    const fetchedRoutines = [
-      {
-        id: 1,
-        clientId: 1,
-        startDate: "2023-10-25",
-        endDate: "2023-11-30",
-        exercises: [
-          {
-            id: 1,
-            name: "Flexiones",
-            description: "Hacer 3 series de 10 repeticiones",
-            day: 1, // Lunes
-          },
-          {
-            id: 2,
-            name: "Sentadillas",
-            description: "Hacer 3 series de 15 repeticiones",
-            day: 3, // Miércoles
-          },
-          {
-            id: 3,
-            name: "Abdominales",
-            description: "Hacer 3 series de 20 repeticiones",
-            day: 5, // Viernes
-          },
-          {
-            id: 4,
-            name: "Fondos",
-            description: "Hacer 3 series de 20 repeticiones",
-            day: 5, // Viernes
-          },
-          {
-            id: 5,
-            name: "Peso Muerto",
-            description: "Hacer 3 series de 20 repeticiones",
-            day: 3, // Viernes
-          },
-          {
-            id: 6,
-            name: "Press de banca",
-            description: "Hacer 3 series de 20 repeticiones",
-            day: 1, // Viernes
-          },
-          {
-            id: 7,
-            name: "Remo con barra",
-            description: "Hacer 3 series de 20 repeticiones",
-            day: 3, // Viernes
-          },
-          {
-            id: 8,
-            name: "Salto de soga",
-            description: "1 minuto",
-            day: 1, // Viernes
-          },
-          {
-            id: 9,
-            name: "Abdominales",
-            description: "Hacer 3 series de 20 repeticiones",
-            day: 5, // Viernes
-          },
-          // Añade más ejercicios aquí
-        ],
-      },
-      // Añade más rutinas aquí
-    ];
-    setRoutines(fetchedRoutines);
+    const fetchedRoutines = exercises;
 
     const events = fetchedRoutines.reduce((acc, routine) => {
       return acc.concat(generateEvents(routine));

@@ -15,6 +15,7 @@ import WorkoutContainer from "./components/entrenadora/workoutComponents/Workout
 import WorkoutCreator from "./components/entrenadora/workoutComponents/WorkoutCreator.jsx";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import userCalendar from "./Views/Coach/SingleUser/UserCalendar";
 
 const Router = () => {
   const [exercises, setExercises] = useState(null);
@@ -51,7 +52,7 @@ const Router = () => {
             <Route
               path="ejercicios"
               element={
-                <ExerciseContainer
+                <userCalendar
                   exercises={exercises}
                   setExercises={setExercises}
                 />

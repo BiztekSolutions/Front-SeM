@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect } from "react";
 import styles from "./SingleUser.module.css";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,7 +15,7 @@ import Swal from "sweetalert2";
 
 export default function User({ user }) {
   console.log(user);
-  const userId = useParams().id;
+  const userId = user.userId;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const state = useSelector((state) => state);
@@ -70,7 +71,7 @@ export default function User({ user }) {
 
   const handleDelete = (userName, userId) => {
     Swal.fire({
-      color: "whitesmoke",
+      color: "gray",
       icon: "warning",
       iconColor: "white",
       background: "#1f1f1f",
@@ -158,13 +159,13 @@ export default function User({ user }) {
       lastName: user.lastName,
       email: user.email,
       status: (
-        <div className="userStatusSpan">
+        <div className="userStatusSpan ">
           <span className={`${user.logged ? "online" : "offline"}`}></span>
           {user.logged ? "Online" : "Offline"}
         </div>
       ),
       actions: (
-        <div className="flex align-middle  gap-3">
+        <div className="flex align-middle gap-3">
           <FcFullTrash
             size={19}
             className="userDelete"
@@ -196,7 +197,7 @@ export default function User({ user }) {
   ];
 
   return (
-    <div className={`${styles.wrapper} userDetails`}>
+    <div className={`${styles.wrapper} userDetails bg-gray-500`}>
       {/* <UserFavsModal />
       <UserCartModal /> */}
       <div className={styles.title}>

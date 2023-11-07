@@ -72,13 +72,7 @@ const Coach = () => {
   };
   return (
     <AntLayout>
-      <Sider
-        trigger={null}
-        theme="light"
-        className="bg-white"
-        collapsible
-        collapsed={collapsed}
-      >
+      <Sider trigger={null} theme="light" collapsible collapsed={collapsed}>
         <div className="logo flex items-center justify-center">
           {collapsed ? (
             <div>
@@ -91,7 +85,7 @@ const Coach = () => {
           )}
         </div>
         <Menu
-          theme={"light"}
+          theme={"black"}
           onClick={onClick}
           defaultOpenKeys={["sub1"]}
           selectedKeys={[current]}
@@ -102,7 +96,7 @@ const Coach = () => {
       <AntLayout>
         <Header
           className="flex justify-between px-1 pe-5"
-          style={{ padding: 0, backgroundColor: "white" }}
+          style={{ padding: 0, backgroundColor: "grey" }}
         >
           <div className="flex items-center">
             <Button
@@ -155,7 +149,7 @@ const Coach = () => {
           </div>
         </Header>
 
-        <Content className="bg-gray-200 p-24 min-h-screen">
+        <Content className="bg-gray-800 p-24 min-h-screen">
           <Outlet />
         </Content>
       </AntLayout>

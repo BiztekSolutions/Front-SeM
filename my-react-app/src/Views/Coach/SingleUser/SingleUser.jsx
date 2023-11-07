@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import User from "./User";
 import { useLocation, useParams } from "react-router-dom";
 import { Outlet } from "react-router-dom";
+
 import { faker } from "@faker-js/faker";
 
 const SingleUser = () => {
@@ -15,7 +16,6 @@ const SingleUser = () => {
     color: "red",
     backgroundColor: "black",
   };
-
   const user = {
     key: 1,
     userName: userState?.userName || faker.internet.userName(),

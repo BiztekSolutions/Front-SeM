@@ -24,8 +24,8 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const dispatch = useDispatch();
-  const state = useSelector((state) => state.user);
-  const { message: userMessage, user } = state;
+  const state = useSelector((state) => state);
+  const { message: userMessage, user } = state.users;
   // const [token, setToken] = useState(null);
   const refToast = useRef();
 

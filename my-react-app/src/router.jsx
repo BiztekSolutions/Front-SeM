@@ -49,20 +49,9 @@ const Router = () => {
         <Route path="/coach" element={<Coach />}>
           <Route index element={<ListaUsuarios />} />
           <Route path="user/:id" element={<SingleUser />}>
-            <Route
-              path="ejercicios"
-              element={<UserCalendar exercises={exercises} />}
-            />
+            <Route path="ejercicios" element={<UserCalendar />} />
 
-            <Route
-              path="hoy"
-              element={
-                <WorkoutContainer
-                  workouts={workouts}
-                  setWorkouts={setWorkouts}
-                />
-              }
-            />
+            <Route path="hoy" element={<WorkoutContainer />} />
             <Route
               path="agregarRutina"
               element={

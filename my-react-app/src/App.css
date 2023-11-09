@@ -701,8 +701,8 @@ input.form-control:focus {
 /* ---------------------------------------------------------------- */
 
 .ag-format-container {
-  width: 1800px;
-  margin-left: 1200px;
+  width: 100%;
+  margin-left: auto;
 }
 
 .ag-courses_box {
@@ -714,12 +714,11 @@ input.form-control:focus {
   align-items: flex-start;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-
   padding: 50px 0;
 }
 .ag-courses_item {
-  -ms-flex-preferred-size: calc(33.33333% - 30px);
-  flex-basis: calc(33.33333% - 30px);
+  /* -ms-flex-preferred-size: calc(33.33333% - 30px);
+  flex-basis: calc(33.33333% - 30px); */
 
   margin: 0 15px 30px;
 

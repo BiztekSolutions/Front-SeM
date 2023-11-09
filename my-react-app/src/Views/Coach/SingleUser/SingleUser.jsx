@@ -1,36 +1,13 @@
-import { NavLink } from "react-router-dom";
 import User from "./User";
-import { useLocation, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 
-import { faker } from "@faker-js/faker";
-
 const SingleUser = () => {
-  const userId = useParams().id;
-  const location = useLocation();
-  const userState = location.state;
-
   // CONTEXT API
   const activeStyle = {
     fontWeight: "bold",
     color: "red",
     backgroundColor: "black",
-  };
-  const user = {
-    key: 1,
-    userName: userState?.userName || faker.internet.userName(),
-    firstName: userState?.firstName || faker.person.firstName(),
-    lastName: userState?.lastName || faker.person.lastName(),
-    email: userState?.email || faker.internet.email(),
-    logged:
-      userState?.logged !== undefined
-        ? userState.logged
-        : faker.datatype.boolean(),
-    disabled:
-      userState?.disabled !== undefined
-        ? userState.disabled
-        : faker.datatype.boolean(),
-    userId: userId,
   };
 
   return (
@@ -59,8 +36,8 @@ const SingleUser = () => {
           </li>
         </ul>
       </nav>
-      <User user={user} />
-      <Outlet userId={userId} />
+      <User />
+      <Outlet />
     </div>
   );
 };

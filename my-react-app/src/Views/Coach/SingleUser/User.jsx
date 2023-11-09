@@ -1,74 +1,23 @@
-import React from "react";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import styles from "./SingleUser.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FcFullTrash } from "react-icons/fc";
 import { Table } from "antd";
 import { useDispatch } from "react-redux";
-import {
-  deleteUser,
-  getUser,
-  updateUser,
-} from "../../../features/user/userSlice";
+import { deleteUser, getUser } from "../../../features/user/userSlice";
 import { TailSpin } from "react-loader-spinner";
 import Swal from "sweetalert2";
 
-export default function User({ user }) {
-  console.log(user);
-  const userId = user.userId;
+export default function User() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const state = useSelector((state) => state);
-  // const { user, message } = state.users;
-
-  function nullCheck(condition, component) {
-    return condition ? component : <div>Page is Loading</div>;
-  }
-
-  const handleUpdateUser = (info, userId) => {
-    if (info === "activate") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            disabled: false,
-          },
-          action: `ban updating ${userId}`,
-        })
-      );
-    } else if (info === "disable") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            disabled: true,
-          },
-          action: `ban updating ${userId}`,
-        })
-      );
-    } else if (info === "admin") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            admin: true,
-          },
-          action: `admin updating ${userId}`,
-        })
-      );
-    } else if (info === "noAdmin") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            admin: false,
-          },
-          action: `admin updating ${userId}`,
-        })
-      );
-    }
-  };
-
+  const state = useSelector((state) => state);
+  const { user, message } = state.users;
+  const { id } = useParams();
+  const userId = id;
+  console.log(user);
+  console.log(id);
   const handleDelete = (userName, userId) => {
     Swal.fire({
       color: "gray",
@@ -107,11 +56,6 @@ export default function User({ user }) {
 
   const columns = [
     {
-      title: "Username",
-      dataIndex: "userName",
-      key: "userName",
-    },
-    {
       title: "First Name",
       dataIndex: "firstName",
       key: "firstName",
@@ -127,20 +71,14 @@ export default function User({ user }) {
       key: "email",
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
-    {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
     },
-
     {
-      title: "Rutina",
-      dataIndex: "rutina",
-      key: "rutina",
+      title: "Grupo",
+      dataIndex: "grupo",
+      key: "grupo",
     },
   ];
 
@@ -150,11 +88,9 @@ export default function User({ user }) {
     }
   }, []);
 
-  const message = "";
   const dataSource = [
     {
       key: 1,
-      userName: user.userName,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -169,7 +105,7 @@ export default function User({ user }) {
           <FcFullTrash
             size={19}
             className="userDelete"
-            onClick={() => handleDelete(user.userName, user.id)}
+            onClick={() => handleDelete(user.firstName, user.id)}
           />
           {message === `ban updating ${user.id}` ? (
             <TailSpin
@@ -188,11 +124,7 @@ export default function User({ user }) {
         </div>
       ),
 
-      rutina: (
-        <div className="text-center">
-          <button className="border-spacing-20 bg-customOrange ">Rutina</button>
-        </div>
-      ),
+      grupo: <div className="text-center"></div>,
     },
   ];
 

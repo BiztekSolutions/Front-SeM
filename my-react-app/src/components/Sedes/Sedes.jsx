@@ -48,11 +48,11 @@ function Sedes() {
             </div>
           </div>
           <div className={styles.typingeffect}>
-            <div class="ag-format-container">
-              <div class="ag-courses_box">
-                <div class="ag-courses_item">
-                  <a href="#" class="ag-courses-item_link">
-                    <div class="ag-courses-item_bg"></div>
+            <div className="ag-format-container">
+              <div className="ag-courses_box">
+                <div className="ag-courses_item">
+                  <a href="#" className="ag-courses-item_link">
+                    <div className="ag-courses-item_bg"></div>
                     <TypingEffect
                       firstText="Bienvenido a nuestro gimnasio funcional. 
                       Ofrecemos un entrenamiento semipersonalizado en nuestras sedes."
@@ -65,11 +65,11 @@ function Sedes() {
             </div>
           </div>
           <div className={styles.typingeffect}>
-            <div class="ag-format-container">
-              <div class="ag-courses_box">
-                <div class="ag-courses_item">
-                  <a href="#" class="ag-courses-item_link">
-                    <div class="ag-courses-item_bg"></div>
+            <div className="ag-format-container">
+              <div className="ag-courses_box">
+                <div className="ag-courses_item">
+                  <a href="#" className="ag-courses-item_link">
+                    <div className="ag-courses-item_bg"></div>
                     <TypingEffect
                       firstText="Ponte en forma con nuestro programa de Pilates Tabata. Mejora tu flexibilidad, coordinación, movilidad, estabilidad, fuerza y resistencia"
                       secondText="Descubre cómo puedes transformar tu cuerpo y mente con nuestros entrenamientos"

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import WorkoutFormRadio from "./WorkoutFormRadio";
 import AddedExerciseContainer from "./AddedExerciseContainer";
 
@@ -8,8 +7,6 @@ function WorkoutForm({ exercises, postWorkout }) {
     name: "",
     description: "",
     exercises: [],
-    startDate: "",
-    endDate: "",
   };
 
   const [formData, setFormData] = useState(initialState);
@@ -51,25 +48,25 @@ function WorkoutForm({ exercises, postWorkout }) {
     }
   }
 
-  // function addExerciseClick(event) {
-  //   event.preventDefault();
-  //   if (chosenExercise !== "") {
-  //     const newExercises = [...formData.exercises];
-  //     const exerciseId = parseInt(chosenExercise, 10);
-  //     const length = parseInt(exerciseLength, 10);
-  //     if (length) {
-  //       setFormData({
-  //         ...formData,
-  //         exercises: [
-  //           ...newExercises,
-  //           { "exercise-id": exerciseId, length: length },
-  //         ],
-  //       });
-  //     }
-  //     setChosenExercise("");
-  //     setExerciseLength("");
-  //   }
-  // }
+  function addExerciseClick(event) {
+    event.preventDefault();
+    if (chosenExercise !== "") {
+      const newExercises = [...formData.exercises];
+      const exerciseId = parseInt(chosenExercise, 10);
+      const length = parseInt(exerciseLength, 10);
+      if (length) {
+        setFormData({
+          ...formData,
+          exercises: [
+            ...newExercises,
+            { "exercise-id": exerciseId, length: length },
+          ],
+        });
+      }
+      setChosenExercise("");
+      setExerciseLength("");
+    }
+  }
 
   function filterByType(exercises) {
     return exercises.filter((exercise) => {
@@ -97,36 +94,53 @@ function WorkoutForm({ exercises, postWorkout }) {
           required
         />
       </div>
-      {/* Agregar campo de fecha de inicio */}
       <div className="form-group my-2 mx-4">
-        <input
-          type="date"
+        <textarea
           className="form-control"
-          name="startDate"
-          placeholder="Start Date"
-          value={formData.startDate}
-          onChange={handleStartDateChange}
+          name="description"
+          placeholder="Description"
+          onChange={handleChange}
+          value={formData.description}
           required
         />
       </div>
-      {/* Agregar campo de fecha de fin */}
       <div className="form-group my-2 mx-4">
-        <input
-          type="date"
-          className="form-control"
-          name="endDate"
-          placeholder="End Date"
-          value={formData.endDate}
-          onChange={handleEndDateChange}
-          required
-        />
-      </div>
-      {/* Resto del código... */}
-      <Link to="./agregarEjercicios">
-        <button className="btn btn-primary my-1 mx-5">
-          Agregar Ejercicios
+        <WorkoutFormRadio handleRadioChange={handleRadioChange} />
+        <select
+          className="form-select"
+          onChange={handleExerciseChange}
+          name="type"
+          value={chosenExercise}
+        >
+          <option value="">Select Exercise</option>
+          {populateFormOptions(exercises)}
+        </select>
+        <div className="form-group my-2 mx-4">
+          <input
+            type="number"
+            className="form-control"
+            name="length"
+            placeholder="Exercise Length (minutes)"
+            pattern="[0-9]*"
+            inputMode="numeric"
+            value={exerciseLength}
+            onChange={handleExerciseLengthChange}
+          />
+        </div>
+        <button
+          className="btn btn-secondary my-2 mx-4"
+          onClick={addExerciseClick}
+        >
+          Add Exercise
         </button>
-      </Link>
+      </div>
+      <AddedExerciseContainer
+        addedExercises={formData.exercises}
+        exercises={exercises}
+      />
+      <button type="submit" className="btn btn-primary my-1 mx-5">
+        Save Workout
+      </button>
     </form>
   );
 }

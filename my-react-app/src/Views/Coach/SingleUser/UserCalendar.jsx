@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import Modal from "react-modal";
 import ExerciseModal from "../../../components/entrenadora/exerciseComponents/ExerciseModal";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getRutines } from "../../../features/rutinas/rutinasSlice";
 Modal.setAppElement("#root");
 
-const UserCalendar = ({ exercises }) => {
+const UserCalendar = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
   const [events, setEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const state = useSelector((state) => state);
+  const { rutinas } = state.rutinas;
 
   useEffect(() => {
-    const fetchedRoutines = [
-      {
-        id: 1,
-        clientId: 1,
-        startDate: "2023-10-25",
-        endDate: "2023-11-30",
-        exercises: exercises,
-      },
-    ];
+    dispatch(getRutines(id));
+  }, []);
 
-    const updatedEvents = fetchedRoutines.reduce((acc, routine) => {
+  useEffect(() => {
+    const updatedEvents = rutinas?.reduce((acc, routine) => {
+      console.log(routine);
       return acc.concat(generateEvents(routine));
     }, []);
     setEvents(updatedEvents);
@@ -32,59 +35,58 @@ const UserCalendar = ({ exercises }) => {
     setShowModal(true);
   }
 
-  async function handleEditExercise(exercise, data) {
-    try {
-      const response = await axios.patch(
-        `http://localhost:3000/exercises/${exercise.id}`,
-        data
-      );
-      const updatedExercises = exercises.map((exercise) => {
-        if (exercise.id === response.data.id) return response.data;
-        return exercise;
-      });
-      setExercises(updatedExercises);
-    } catch (error) {
-      console.error("Error updating exercise:", error);
-    }
-  }
+  // async function handleEditExercise(exercise, data) {
+  //   try {
+  //     const response = await axios.patch(
+  //       `http://localhost:3000/exercises/${exercise.id}`,
+  //       data
+  //     );
+  //     const updatedExercises = exercises.map((exercise) => {
+  //       if (exercise.id === response.data.id) return response.data;
+  //       return exercise;
+  //     });
+  //     setExercises(updatedExercises);
+  //   } catch (error) {
+  //     console.error("Error updating exercise:", error);
+  //   }
+  // }
 
   const generateEvents = (routine) => {
-    const { startDate, endDate, exercises } = routine;
+    const { createdAt, expiredAt, exerciseGroups } = routine;
     const events = [];
 
-    const startDateObject = new Date(startDate);
-    const endDateObject = new Date(endDate);
+    const startDateObject = new Date(createdAt);
+    const endDateObject = new Date(expiredAt);
 
     let currentDate = new Date(startDateObject);
 
     while (currentDate < endDateObject) {
-      exercises.forEach((exercise) => {
-        const dayOfWeek = currentDate.getDay(); // Domingo: 0, Lunes: 1, ..., Sábado: 6
-
-        if (dayOfWeek === exercise.day) {
-          const cardComponent = (
-            <div
-              className="card highlight shadow"
-              onClick={() => handleCardClick(exercise)}
-            >
-              <div className="card-body">
-                <h5 className="card-title">{exercise.name}</h5>
-                <h6 className="card-subtitle">{exercise.type}</h6>
+      const dayOfWeek = currentDate.getDay(); // Domingo: 0, Lunes: 1, ..., Sábado: 6
+      for (let i = 0; i < exerciseGroups.length; i++) {
+        if (dayOfWeek === exerciseGroups[i].day) {
+          exerciseGroups.exercises.forEach((exercise) => {
+            const cardComponent = (
+              <div
+                className="card highlight shadow"
+                onClick={() => handleCardClick(exercise)}
+              >
+                <div className="card-body">
+                  <h5 className="card-title">{exercise.name}</h5>
+                  <h6 className="card-subtitle">{exercise.type}</h6>
+                </div>
               </div>
-            </div>
-          );
-
-          events.push({
-            start: currentDate.toISOString().split("T")[0],
-            description: exercise.description,
-            id: exercise.id,
-            extendedProps: {
-              cardComponent: cardComponent,
-            },
+            );
+            events.push({
+              start: currentDate.toISOString().split("T")[0],
+              description: exercise.description,
+              id: exercise.id,
+              extendedProps: {
+                cardComponent: cardComponent,
+              },
+            });
           });
         }
-      });
-
+      }
       currentDate = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
@@ -106,12 +108,10 @@ const UserCalendar = ({ exercises }) => {
           plugins={[dayGridPlugin]}
           initialView="dayGridWeek"
           events={events}
-          weekends={false}
           eventContent={(arg) => {
             return (
               <div>
                 <b>{arg.timeText}</b>
-
                 {arg.event.extendedProps &&
                   arg.event.extendedProps.cardComponent}
               </div>
@@ -123,7 +123,7 @@ const UserCalendar = ({ exercises }) => {
         <ExerciseModal
           exercise={selectedExercise}
           closeModal={closeModal}
-          handleEditExercise={handleEditExercise}
+          // handleEditExercise={handleEditExercise}
         />
       ) : null}
     </div>

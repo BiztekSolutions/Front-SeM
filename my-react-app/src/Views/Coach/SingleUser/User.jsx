@@ -16,8 +16,7 @@ export default function User() {
   const { user, message } = state.users;
   const { id } = useParams();
   const userId = id;
-  console.log(user);
-  console.log(id);
+
   const handleDelete = (userName, userId) => {
     Swal.fire({
       color: "gray",

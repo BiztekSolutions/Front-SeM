@@ -35,14 +35,9 @@ const deleteUser = async (userId) => {
 };
 
 const getUser = async (userId) => {
-  try {
-    const response = await axios(`http://localhost:3000/users/${userId}`);
-    const userData = response.data;
-    return userData;
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    return null;
-  }
+  const response = await axios(`http://localhost:3000/users/${userId}`);
+  const userData = response.data;
+  return userData;
 };
 
 const createUser = async (data) => {

@@ -4,6 +4,7 @@ import { authenticateToken } from '../../../utils/validateToken';
 
 const router = express.Router();
 
+router.put('/:userId', authenticateToken, getUser);
 router.get('/:userId/routines', authenticateToken, getUserRoutines);
 router.get('/:userId', authenticateToken, getUser);
 router.get('/', authenticateToken, getUsers);

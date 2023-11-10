@@ -24,7 +24,26 @@ export const get = async (idUser: number) => {
   }
 };
 
+export const getRoutinesId = async (idUser: number) => {
+  try {
+    return await prisma.user.findUnique({
+      where: {
+        idUser: idUser,
+      },
+      select: {
+        routines_has_user: {
+          select: {
+            idRoutine: true,
+          },
+        },
+      },
+    });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
 module.exports = {
   list,
   get,
+  getRoutinesId,
 };

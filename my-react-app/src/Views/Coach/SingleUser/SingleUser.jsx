@@ -19,7 +19,7 @@ const SingleUser = () => {
 
   return (
     <div>
-      <nav className="row navbar mx-1 border-t-2 mb-3 border-b-2 border-black">
+      <nav className="row navbar mx-1 border-t-2 mb-3 ">
         <ul className="flex gap-3 text-white justify-center content-center mt-2">
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./" style={activeStyle}>

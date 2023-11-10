@@ -156,46 +156,49 @@ function WorkoutForm({ exercises, postWorkout }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-xl mx-auto p-6 bg-white rounded shadow-md"
+      className="max-w-xl mx-auto p-6 rounded shadow-md "
     >
       <div className="form-group my-2 mx-4">
         <input
           type="text"
           className="form-control"
           name="name"
-          placeholder="Name"
+          placeholder="Nombre de la rutina"
           value={formData.name}
           onChange={handleChange}
           required
         />
       </div>
-      <div className="form-group my-2 mx-4">
-        <DatePicker
-          onChange={handleDateChange}
-          defaultValue={moment(startDate, "YYYY-MM-DD")}
-          format="YYYY-MM-DD"
-          dropdownMode="top"
-        />
-      </div>
-      <div className="form-group my-2 mx-4">
-        <label>Semanas de Duración:</label>
-        <input
-          type="number"
-          className="form-control"
-          onChange={handleDurationChange}
-          value={durationInWeeks}
-          required
-        />
+      <div className="flex  justify-center py-2">
+        <div className="form-group my-2 mx-4 flex flex-col">
+          <label>Inicio:</label>
+          <DatePicker
+            onChange={handleDateChange}
+            defaultValue={moment(startDate, "YYYY-MM-DD")}
+            format="YYYY-MM-DD"
+            dropdownMode="top"
+          />
+        </div>
+        <div className="form-group my-2 mx-4 flex flex-col">
+          <label>Semanas:</label>
+          <input
+            type="number"
+            className="form-control"
+            onChange={handleDurationChange}
+            value={durationInWeeks}
+            required
+          />
+        </div>
       </div>
       <div className="form-group my-2 mx-4">
         <WorkoutFormRadio handleRadioChange={handleRadioChange} />
         <select
-          className="form-select"
+          className="form-select p-2 rounded-lg"
           onChange={handleExerciseChange}
           name="type"
           value={chosenExercise}
         >
-          <option value="">Select Exercise</option>
+          <option value="">Seleccionar ejercicio</option>
           {populateFormOptions(exercises)}
         </select>
         <div className="form-group my-2 mx-4">
@@ -266,7 +269,7 @@ function WorkoutForm({ exercises, postWorkout }) {
                   >
                     <div>
                       <p className="text-gray-800">
-                        Exercise ID: {exercise["exercise-id"]}
+                        Ejercicio ID: {exercise["exercise-id"]}
                       </p>
                       <p className="text-gray-800">Series: {exercise.series}</p>
                       <p className="text-gray-800">

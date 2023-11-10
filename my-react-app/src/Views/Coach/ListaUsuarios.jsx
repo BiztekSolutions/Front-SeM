@@ -260,14 +260,14 @@ function ListaUsuarios() {
   }
 
   return (
-    <div className={`${styles.wrapper} bg-gray-500`}>
+    <div className={`${styles.wrapper}`} style={{"backgroundColor":"#202932"}}>
       <div>
         <h3 className="text-5xl">Lista de Usuarios</h3>
       </div>
 <Table
   dataSource={dataSource}
   columns={columns}
-  className="bg-gray-500 text-white text-xl"
+  className="text-white text-xl"
   rowClassName="h-12"
 />    </div>
   );

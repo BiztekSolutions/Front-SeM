@@ -72,7 +72,7 @@ const Coach = () => {
     <AntLayout>
       <Sider
         trigger={null}
-        style={{ backgroundColor: "#202932" }} // Cambia el color de fondo aquí
+        style={{ backgroundColor: "#202932", "color":"white" }} // Cambia el color de fondo aquí
         theme="light"
         collapsible
         collapsed={collapsed}
@@ -94,7 +94,7 @@ const Coach = () => {
           selectedKeys={[current]}
           mode="inline"
           items={items}
-          className=""
+          className="text-white"
         />
       </Sider>
       <AntLayout>
@@ -154,7 +154,7 @@ const Coach = () => {
           </div>
         </Header>
 
-        <Content style={{"backgroundColor":"#202932"}} className="bg-gray-800 p-24 pt-14 min-h-screen">
+        <Content style={{"backgroundColor":"#202932", "color":"white"}} className="bg-gray-800 p-24 pt-0 mt-0 min-h-screen">
           <Outlet />
         </Content>
       </AntLayout>

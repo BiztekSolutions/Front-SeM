@@ -7,7 +7,7 @@ import {
 import { Dropdown, Menu, Layout as AntLayout, Button } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Flag from "react-world-flags";
-import { FcConferenceCall, FcShipped, FcFeedback } from "react-icons/fc";
+import { FcConferenceCall, FcFeedback } from "react-icons/fc";
 import { CgProfile } from "react-icons/cg";
 import logo from "../../assets/logo.png";
 // import { GlobalContext } from "../../context/globalContext";
@@ -44,10 +44,7 @@ const items = [
     getItem("Lista de usuarios", "listaDeUsuarios"),
     getItem("Grupos", "grupos"),
   ]),
-  getItem("Rutinas", "sub3", <FcShipped size={20} />, [
-    getItem("Lista de rutinas", "listaDeRutinas"),
-    getItem("Agregar rutina", "agregarRutina"),
-  ]),
+
   getItem("Mensajeria", "sub4", <FcFeedback size={20} />, [
     getItem("Mensajeria", "mensajeria"),
   ]),

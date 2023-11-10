@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import "./WorkoutContainer.css";
 function WorkoutContainer({ workouts, setWorkouts }) {
   function deleteCard(id) {
-    fetch(`${process.env.REACT_APP_API_URL}/workouts/${id}`, {
+    fetch(`http://localhost:3000/workouts/${id}`, {
       method: "DELETE",
     })
       .then((resp) => resp.json())

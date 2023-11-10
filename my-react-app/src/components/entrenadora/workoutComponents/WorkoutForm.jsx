@@ -1,23 +1,59 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import WorkoutFormRadio from "./WorkoutFormRadio";
-import AddedExerciseContainer from "./AddedExerciseContainer";
+import { useParams } from "react-router-dom";
+import { DatePicker } from "antd";
+import moment from "moment";
 
 function WorkoutForm({ exercises, postWorkout }) {
   const initialState = {
     name: "",
-    description: "",
+    fechaDeInicio: "",
+    fechaDeFin: "",
     exercises: [],
   };
-
+  const { id } = useParams();
   const [formData, setFormData] = useState(initialState);
   const [chosenExercise, setChosenExercise] = useState("");
-  const [exerciseLength, setExerciseLength] = useState("");
+  const [series, setSeries] = useState("");
+  const [repeticiones, setRepeticiones] = useState("");
   const [typeFilter, setTypeFilter] = useState("All");
+  const [startDate, setStartDate] = useState(moment());
+  const [durationInWeeks, setDurationInWeeks] = useState(1);
+  const [selectedDay, setSelectedDay] = useState("");
 
+  const [exercisesByDay, setExercisesByDay] = useState({
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Thursday: [],
+    Friday: [],
+    Saturday: [],
+  });
+  const dayMapping = {
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+  };
+  const [exerciseTypes, setExerciseTypes] = useState([]);
+
+  useEffect(() => {
+    const types = [...new Set(exercises.map((exercise) => exercise.type))];
+    setExerciseTypes(types);
+  }, [exercises]);
+  const handleDurationChange = (e) => {
+    setDurationInWeeks(parseInt(e.target.value));
+  };
+  function handleDayChange(event) {
+    setSelectedDay(event.target.value);
+  }
   function populateFormOptions(exercises) {
     const filteredExercises = filterByType(exercises);
 
-    return filteredExercises.map((exercise) => (
+    return filteredExercises?.map((exercise) => (
       <option key={exercise.id} value={exercise.id}>
         {exercise.name}
       </option>
@@ -34,8 +70,11 @@ function WorkoutForm({ exercises, postWorkout }) {
     });
   }
 
-  function handleExerciseLengthChange(event) {
-    setExerciseLength(event.target.value);
+  function handleSeries(event) {
+    setSeries(event.target.value);
+  }
+  function handleRepeticiones(event) {
+    setRepeticiones(event.target.value);
   }
 
   function handleExerciseChange(event) {
@@ -47,29 +86,32 @@ function WorkoutForm({ exercises, postWorkout }) {
       setTypeFilter(event.target.value);
     }
   }
+  const handleDateChange = (date, dateString) => {
+    // dateString es la fecha en formato "YYYY-MM-DD"
+    setStartDate(moment(dateString));
+  };
 
   function addExerciseClick(event) {
     event.preventDefault();
-    if (chosenExercise !== "") {
-      const newExercises = [...formData.exercises];
+    if (chosenExercise !== "" && selectedDay !== "") {
       const exerciseId = parseInt(chosenExercise, 10);
-      const length = parseInt(exerciseLength, 10);
-      if (length) {
-        setFormData({
-          ...formData,
-          exercises: [
-            ...newExercises,
-            { "exercise-id": exerciseId, length: length },
-          ],
-        });
-      }
+      const exercise = {
+        "exercise-id": exerciseId,
+        series: series,
+        repeticiones: repeticiones,
+      };
+      setExercisesByDay((prevState) => ({
+        ...prevState,
+        [selectedDay]: [...(prevState[selectedDay] || []), exercise],
+      }));
       setChosenExercise("");
-      setExerciseLength("");
+      setSeries("");
+      setRepeticiones("");
     }
   }
-
+  console.log(exercisesByDay);
   function filterByType(exercises) {
-    return exercises.filter((exercise) => {
+    return exercises?.filter((exercise) => {
       if (typeFilter === "All") return true;
       return typeFilter === exercise.type;
     });
@@ -77,12 +119,45 @@ function WorkoutForm({ exercises, postWorkout }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    // console.log(formData)
-    postWorkout(formData);
+    const formattedEndDate = moment(startDate)
+      .add(durationInWeeks, "weeks")
+      .format("YYYY-MM-DD");
+    const updatedFormData = {
+      name: formData.name,
+      createdAt: moment(startDate).format("YYYY-MM-DD"),
+      expiredAt: formattedEndDate,
+      exerciseGroups: Object.entries(exercisesByDay)
+        .map(([day, exercises]) => {
+          return {
+            day: dayMapping[day],
+            exercises: exercises.map((exercise) => ({
+              id: exercise["exercise-id"],
+              name: exercise.name,
+              series: exercise.series,
+              repeticiones: exercise.repeticiones,
+            })),
+          };
+        })
+        .filter((group) => group !== null),
+    };
+    postWorkout([updatedFormData], id);
     setFormData(initialState);
   }
+  function removeExercise(day, exerciseIndex) {
+    const updatedExercises = exercisesByDay[day].filter(
+      (_, index) => index !== exerciseIndex
+    );
+    setExercisesByDay({
+      ...exercisesByDay,
+      [day]: updatedExercises,
+    });
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-xl mx-auto p-6 bg-white rounded shadow-md"
+    >
       <div className="form-group my-2 mx-4">
         <input
           type="text"
@@ -95,12 +170,20 @@ function WorkoutForm({ exercises, postWorkout }) {
         />
       </div>
       <div className="form-group my-2 mx-4">
-        <textarea
+        <DatePicker
+          onChange={handleDateChange}
+          defaultValue={moment(startDate, "YYYY-MM-DD")}
+          format="YYYY-MM-DD"
+          dropdownMode="top"
+        />
+      </div>
+      <div className="form-group my-2 mx-4">
+        <label>Semanas de Duración:</label>
+        <input
+          type="number"
           className="form-control"
-          name="description"
-          placeholder="Description"
-          onChange={handleChange}
-          value={formData.description}
+          onChange={handleDurationChange}
+          value={durationInWeeks}
           required
         />
       </div>
@@ -119,14 +202,43 @@ function WorkoutForm({ exercises, postWorkout }) {
           <input
             type="number"
             className="form-control"
-            name="length"
-            placeholder="Exercise Length (minutes)"
-            pattern="[0-9]*"
+            name="series"
+            placeholder="Series"
             inputMode="numeric"
-            value={exerciseLength}
-            onChange={handleExerciseLengthChange}
+            value={series}
+            onChange={handleSeries}
           />
         </div>
+        <div className="form-group my-2 mx-4">
+          <input
+            type="number"
+            className="form-control"
+            name="repeticiones"
+            placeholder="Repeticiones"
+            inputMode="numeric"
+            value={repeticiones}
+            onChange={handleRepeticiones}
+          />
+        </div>
+        <div className="form-group my-2 mx-4">
+          <label>Select Day:</label>
+          <select
+            className="form-select"
+            onChange={handleDayChange}
+            name="day"
+            value={selectedDay}
+          >
+            <option value="">Select Day</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+        </div>
+
         <button
           className="btn btn-secondary my-2 mx-4"
           onClick={addExerciseClick}
@@ -134,13 +246,46 @@ function WorkoutForm({ exercises, postWorkout }) {
           Add Exercise
         </button>
       </div>
-      <AddedExerciseContainer
-        addedExercises={formData.exercises}
-        exercises={exercises}
-      />
+
       <button type="submit" className="btn btn-primary my-1 mx-5">
         Save Workout
       </button>
+      <div className="container">
+        {Object.entries(exercisesByDay).map(([day, exercises]) => (
+          <div
+            key={day}
+            className={`${exercises.length > 0 ? "block" : "hidden"} my-4`}
+          >
+            <div className="bg-gray-100 rounded p-4">
+              <h3 className="text-lg font-semibold mb-2">{day}</h3>
+              <ul>
+                {exercises.map((exercise, index) => (
+                  <li
+                    key={index}
+                    className="mb-2 p-2 border border-gray-300 rounded flex justify-between items-center"
+                  >
+                    <div>
+                      <p className="text-gray-800">
+                        Exercise ID: {exercise["exercise-id"]}
+                      </p>
+                      <p className="text-gray-800">Series: {exercise.series}</p>
+                      <p className="text-gray-800">
+                        Repeticiones: {exercise.repeticiones}
+                      </p>
+                    </div>
+                    <button
+                      className="text-red-500"
+                      onClick={() => removeExercise(day, index)}
+                    >
+                      &#10006;
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
     </form>
   );
 }

@@ -1,6 +1,6 @@
 import WorkoutForm from "./WorkoutForm";
 function WorkoutCreator({ exercises, workouts, setWorkouts }) {
-  async function postWorkout(data) {
+  async function postWorkout(data, id) {
     try {
       const configObj = {
         method: "POST",
@@ -11,7 +11,7 @@ function WorkoutCreator({ exercises, workouts, setWorkouts }) {
       };
 
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/workouts`,
+        `http://localhost:3000/users/${id}/rutinas`,
         configObj
       );
 

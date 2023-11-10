@@ -41,11 +41,7 @@ const SingleUser = () => {
               AGREGAR RUTINA
             </NavLink>
           </li>
-          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
-            <NavLink to="./agregarEjercicio" style={activeStyle}>
-              AGREGAR EJERCICIO
-            </NavLink>
-          </li>
+
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./editarRutinas" style={activeStyle}>
               EDITAR RUTINAS
@@ -53,8 +49,13 @@ const SingleUser = () => {
           </li>
         </ul>
       </nav>
-
-{!(isExerciseRoute || isRoutineRoute || isAddExerciseRoute || isModRoute) && <User />}      <Outlet />
+      {!(
+        isExerciseRoute ||
+        isRoutineRoute ||
+        isAddExerciseRoute ||
+        isModRoute
+      ) && <User />}{" "}
+      <Outlet />
     </div>
   );
 };

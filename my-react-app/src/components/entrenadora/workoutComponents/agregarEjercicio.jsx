@@ -59,7 +59,7 @@ function AgregarEjercicio() {
   return (
     <div>
       <div className="form-group my-2 mx-4">
-        <label>Nombre de la Rutina:</label>
+        <label>Nombre:</label>
         <input
           type="text"
           className="form-control"

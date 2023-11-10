@@ -19,6 +19,7 @@ import UserCalendar from "./Views/Coach/SingleUser/UserCalendar";
 import AgregarEjercicio from "./components/entrenadora/workoutComponents/agregarEjercicio.jsx";
 
 import EditarRutinas from "./components/entrenadora/workoutComponents/editarRutinas.jsx";
+import ChangePassword from "./Views/Coach/ChangePassword/ChangePassword.jsx";
 
 const Router = () => {
   const [exercises, setExercises] = useState(null);
@@ -66,10 +67,6 @@ const Router = () => {
               }
             />
             <Route
-              path="agregarEjercicio"
-              element={<AgregarEjercicio exercises={exercises} />}
-            />
-            <Route
               path="editarRutinas"
               element={<EditarRutinas exercises={exercises} />}
             />
@@ -84,11 +81,14 @@ const Router = () => {
               }
             />
           </Route>
+          <Route
+            path="agregarEjercicios"
+            element={<AgregarEjercicio exercises={exercises} />}
+          />
           <Route path="noticias" element={<Noticias />} />
           <Route path="grupos" element={<Grupos />} />
-          <Route path="listaDeRutinas" element={<ListaRutinas />} />
-          <Route path="agregarRutina" element={<AgregarRutina />} />
           <Route path="mensajeria" element={<Mensajeria />} />
+          <Route path="changePassword/:id" element={<ChangePassword />} />
         </Route>
 
         {/* <Route path="/user" element={<User />}>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -10,6 +10,7 @@ import Flag from "react-world-flags";
 import { FcConferenceCall, FcFeedback } from "react-icons/fc";
 import { CgProfile } from "react-icons/cg";
 import logo from "../../assets/logo.png";
+import { GlobalContext } from "../../context/globalContext";
 // import { GlobalContext } from "../../context/globalContext";
 const { Header, Sider, Content } = AntLayout;
 
@@ -22,19 +23,6 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-const handleLogout = () => {
-  console.log("logout");
-};
-const menu = (
-  <Menu>
-    <Menu.Item key="1">
-      <Link to="/change-password">Change Password</Link>
-    </Menu.Item>
-    <Menu.Item key="2" onClick={() => handleLogout()}>
-      Logout
-    </Menu.Item>
-  </Menu>
-);
 
 const items = [
   getItem("General", "sub1", <FcConferenceCall size={20} />, [
@@ -44,6 +32,9 @@ const items = [
     getItem("Lista de usuarios", "listaDeUsuarios"),
     getItem("Grupos", "grupos"),
   ]),
+  getItem("Ejercicios", "sub3", <FcConferenceCall size={20} />, [
+    getItem("Agregar ejercicios", "agregarEjercicios"),
+  ]),
 
   getItem("Mensajeria", "sub4", <FcFeedback size={20} />, [
     getItem("Mensajeria", "mensajeria"),
@@ -51,6 +42,23 @@ const items = [
 ];
 
 const Coach = () => {
+  const handleLogout = () => {
+    setLogged(false);
+    navigate("/");
+  };
+  const { setLogged } = useContext(GlobalContext);
+  const userId = localStorage.getItem("userId");
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">
+        <Link to={`./changePassword/${userId}`}>Change Password</Link>
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => handleLogout()}>
+        Logout
+      </Menu.Item>
+    </Menu>
+  );
+
   const navigate = useNavigate();
   const [current, setCurrent] = useState("listaDeUsuarios");
   const [collapsed, setCollapsed] = useState(false);
@@ -68,15 +76,16 @@ const Coach = () => {
     }
   };
   return (
-    
     <AntLayout>
       <Sider
         trigger={null}
-        style={{ backgroundColor: "#202932", "color":"white" }} // Cambia el color de fondo aquí
+        style={{ backgroundColor: "#202932", color: "white" }} // Cambia el color de fondo aquí
         theme="light"
         collapsible
         collapsed={collapsed}
-      >        <div className="logo flex items-center justify-center">
+      >
+        {" "}
+        <div className="logo flex items-center justify-center">
           {collapsed ? (
             <div>
               <img src={logo} alt="abc" width={30} className="mt-2" />
@@ -100,8 +109,11 @@ const Coach = () => {
       <AntLayout>
         <Header
           className="flex justify-between px-1 pe-5"
-          style={{ padding: 0, backgroundColor: "#202932", borderBottom: "1px solid #ffff" }}
-          
+          style={{
+            padding: 0,
+            backgroundColor: "#202932",
+            borderBottom: "1px solid #ffff",
+          }}
         >
           <div className="flex items-center">
             <Button
@@ -154,7 +166,10 @@ const Coach = () => {
           </div>
         </Header>
 
-        <Content style={{"backgroundColor":"#202932", "color":"white"}} className="bg-gray-800 p-24 pt-0 mt-0 min-h-screen">
+        <Content
+          style={{ backgroundColor: "#202932", color: "white" }}
+          className="bg-gray-800 p-24 pt-0 mt-0 min-h-screen"
+        >
           <Outlet />
         </Content>
       </AntLayout>

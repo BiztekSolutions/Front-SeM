@@ -128,46 +128,70 @@ export default function User() {
   ];
 
   return (
-    <div className={`${styles.wrapper} bg-gray-300 p-6 rounded-lg shadow-lg userDetails`}>
+    <div
+      className={`${styles.wrapper} bg-gray-300 p-6 rounded-lg shadow-lg userDetails`}
+    >
       <div className={styles.title}>
-        <div className={`${styles.goBack} my-4`} onClick={() => navigate("/coach")}>
-       
+        <div
+          className={`${styles.goBack} my-4`}
+          onClick={() => navigate("/coach")}
+        >
           <div className="ml-5 text-4xl font-bold font-barlow-regular flex gap-4">
-            <MdOutlinePerson2 className="bg-gray-500 rounded-full h-15 w-15"/>
-            <h3 className="text-black text-center">  Perfil de {user.firstName}</h3>
+            <MdOutlinePerson2 className="bg-gray-500 rounded-full h-15 w-15" />
+            <h3 className="text-black text-center">
+              {" "}
+              Perfil de {user.firstName}
+            </h3>
           </div>
         </div>
       </div>
       <div className="w-full">
-  {dataSource.map((item) => (
-    <div key={item.key} className={styles.customDiv + " bg-gray-200 p-4 rounded-lg shadow mb-4 ml-5"}>
-      <div className="mb-2 w-fit flex gap-5">
-        <h3 className=" text-left text-3xl text-green-900">Nombre:</h3>
-        <b className="text-black text-left text-3xl font-bold">{item.firstName}</b>
+        {dataSource.map((item) => (
+          <div
+            key={item.key}
+            className={
+              styles.customDiv + " bg-gray-200 p-4 rounded-lg shadow mb-4 ml-5"
+            }
+          >
+            <div className="mb-2 w-fit flex gap-5">
+              <h3 className=" text-left text-3xl text-green-900">Nombre:</h3>
+              <b className="text-black text-left text-3xl font-bold">
+                {item.firstName}
+              </b>
+            </div>
+            <div className="mb-2 w-fit flex gap-5">
+              <h3 className=" text-left text-3xl text-green-900 ">Apellido:</h3>
+              <b className="text-black text-left text-3xl font-bold">
+                {item.lastName}
+              </b>
+            </div>
+            <div className="mb-2 w-fit flex gap-5">
+              <h3 className=" text-left text-3xl text-green-900">Email:</h3>
+              <b className="text-black text-left text-3xl font-bold">
+                {item.email}
+              </b>
+            </div>
+            <div className="mb-2 w-fit flex gap-5">
+              <h3 className="text-left text-3xl text-green-900">Grupo:</h3>
+              <b className="text-black text-left text-3xl font-bold">
+                2{item.group}
+              </b>
+            </div>
+            <div className="mb-2 w-fit flex gap-5">
+              <h3 className="text-left text-3xl text-green-900">Status:</h3>
+              <b className="text-black text-left text-3xl font-bold">
+                {item.status}
+              </b>
+            </div>
+            <div className="mb-2 w-fit flex gap-5">
+              <h3 className="text-left text-3xl text-green-900">Eliminar:</h3>
+              <b className="text-black text-left text-3xl font-bold mt-2 cursor-pointer ">
+                {item.actions}
+              </b>
+            </div>
+          </div>
+        ))}
       </div>
-      <div className="mb-2 w-fit flex gap-5">
-        <h3 className=" text-left text-3xl text-green-900 ">Apellido:</h3>
-        <b className="text-black text-left text-3xl font-bold">{item.lastName}</b>
-      </div>
-      <div className="mb-2 w-fit flex gap-5">
-        <h3 className=" text-left text-3xl text-green-900">Email:</h3>
-        <b className="text-black text-left text-3xl font-bold">{item.email}</b>
-      </div>
-      <div className="mb-2 w-fit flex gap-5">
-        <h3 className="text-left text-3xl text-green-900">Grupo:</h3>
-        <b className="text-black text-left text-3xl font-bold">2{item.group}</b>
-      </div>
-      <div className="mb-2 w-fit flex gap-5">
-        <h3 className="text-left text-3xl text-green-900">Status:</h3>
-        <b className="text-black text-left text-3xl font-bold">{item.status}</b>
-      </div>
-      <div className="mb-2 w-fit flex gap-5">
-        <h3 className="text-left text-3xl text-green-900">Eliminar:</h3>
-        <b className="text-black text-left text-3xl font-bold mt-2 cursor-pointer ">{item.actions}</b>
-      </div>
-    </div>
-  ))}
-</div>
     </div>
   );
 }

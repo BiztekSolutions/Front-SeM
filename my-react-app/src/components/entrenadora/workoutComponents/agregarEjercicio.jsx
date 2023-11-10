@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function AgregarEjercicio() {
   const [formData, setFormData] = useState({
+    name: "",
     description: "",
     video: "",
   });
@@ -57,6 +58,18 @@ function AgregarEjercicio() {
 
   return (
     <div>
+      <div className="form-group my-2 mx-4">
+        <label>Nombre de la Rutina:</label>
+        <input
+          type="text"
+          className="form-control"
+          name="name"
+          placeholder="Nombre de la Rutina"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+      </div>
       <div className="form-group my-2 mx-4">
         <label>Description:</label>
         <input

@@ -4,7 +4,7 @@ import {
   getRutines,
   updateRutines,
 } from "../../../features/rutinas/rutinasSlice";
-import WorkoutFormRadio from "./workoutFormRadio";
+import WorkoutFormRadio from "./WorkoutFormRadio";
 import { useParams } from "react-router-dom";
 
 const EditarRutinas = ({ exercises }) => {

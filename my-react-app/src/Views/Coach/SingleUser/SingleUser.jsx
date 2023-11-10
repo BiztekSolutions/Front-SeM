@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-
 const SingleUser = () => {
   // CONTEXT API
   const activeStyle = {
@@ -15,12 +14,12 @@ const SingleUser = () => {
   const location = useLocation();
   const isExerciseRoute = location.pathname.endsWith("/ejercicios");
   const isRoutineRoute = location.pathname.endsWith("/agregarRutina");
-
+  const isAddExerciseRoute = location.pathname.endsWith("/agregarEjercicio");
+  const isModRoute = location.pathname.endsWith("/editarRutinas");
 
   return (
     <div>
-      
-      <nav className="row navbar mx-1  mb-3 ">
+      <nav className="row navbar mx-1 border-t-2 mb-3 border-b-2 border-black">
         <ul className="flex gap-3 text-white justify-center content-center mt-2">
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./" style={activeStyle}>
@@ -55,8 +54,7 @@ const SingleUser = () => {
         </ul>
       </nav>
 
-      {!(isExerciseRoute || isRoutineRoute) && <User />}
-      <Outlet />
+{!(isExerciseRoute || isRoutineRoute || isAddExerciseRoute || isModRoute) && <User />}      <Outlet />
     </div>
   );
 };

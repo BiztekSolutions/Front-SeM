@@ -1,34 +1,38 @@
 import GoogleMapReact from "google-map-react";
-
 import PropTypes from "prop-types";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import styles from "./Sedes.module.css";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+export const AnyReactComponent = () => (
+  <div>
+    <FaMapMarkerAlt className="h-8 w-8 text-red-500" />
+  </div>
+);
 
 AnyReactComponent.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
-export default function SimpleMap() {
+// eslint-disable-next-line react/prop-types
+export default function SimpleMap({ center, children }) {
   const defaultProps = {
-    center: {
-      lat: -35.6453777,
-      lng: -59.7910402,
-    },
+    center: center,
     zoom: 17,
   };
 
   return (
-    <div style={{ height: "30vh", width: "550px" }} className="m-12">
+    <div
+      style={{ height: "30vh", width: "550px" }}
+      className={`m-12 ${styles.mapa}`}
+    >
       <GoogleMapReact
-        bootstrapURLKeys={{ key: "AIzaSyCMoTEepJRZ2GBDkmK5RGN3pbH-BK3z8Go" }}
+        bootstrapURLKeys={{
+          key: "AIzaSyCMoTEepJRZ2GBDkmK5RGN3pbH-BK3z8Go",
+        }}
         defaultCenter={defaultProps.center}
         defaultZoom={defaultProps.zoom}
       >
-        <AnyReactComponent
-          lat={-35.6528}
-          lng={-60.6958}
-          text="Salud en movimiento GIMNASIO"
-        />
+        {children}
       </GoogleMapReact>
     </div>
   );

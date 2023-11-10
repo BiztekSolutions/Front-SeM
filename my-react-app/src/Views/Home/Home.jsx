@@ -35,22 +35,22 @@ function Home() {
           isSticky ? "fixed top-0 z-50 w-full bg-white shadow-md" : "relative"
         }`}
       />
-      <Element name="inicio">
+      <Element id="inicio" name="inicio">
         <Inicio />
       </Element>
 
       <Rutinas />
       <Categorias />
 
-      <Element name="sedes">
+      <Element id="sedes" name="sedes">
         <Sedes />
       </Element>
 
-      <Element name="nosotras">
+      <Element id="nosotras" name="nosotras">
         <Nosotras />
       </Element>
       <Seccion6 />
-      <Element name="formulario">
+      <Element id="formulario" name="formulario">
         <Formulario />
       </Element>
 

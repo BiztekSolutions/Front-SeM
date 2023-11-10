@@ -19,20 +19,21 @@ function ContactForm() {
       <h3 className="text-sm mb-4">
         Coloca tus datos y qué preguntas quieres hacernos
       </h3>
+      {errors.firstName && <span>Este campo es obligatorio</span>}
       <input
         type="text"
         placeholder="Nombre"
         {...register("firstName", { required: true })}
         className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
       />
-      {errors.firstName && <span>Este campo es obligatorio</span>}
+      {errors.lastName && <span>Este campo es obligatorio</span>}
       <input
         type="text"
         placeholder="Apellido"
         {...register("lastName", { required: true })}
         className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
       />
-      {errors.lastName && <span>Este campo es obligatorio</span>}
+      {errors.interest && <span>Selecciona una opción</span>}
       <select
         {...register("interest", { required: true })}
         className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
@@ -46,14 +47,13 @@ function ContactForm() {
         </option>
         <option value="indumentaria">Indumentaria</option>
       </select>
-      {errors.interest && <span>Selecciona una opción</span>}
+      {errors.email && <span>Ingresa un correo electrónico válido</span>}
       <input
         type="email"
         placeholder="Email"
         {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
         className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
       />
-      {errors.email && <span>Ingresa un correo electrónico válido</span>}
       <textarea
         placeholder="Mensaje"
         {...register("message")}

@@ -202,12 +202,13 @@ const LoginModalN = () => {
 
   return (
     <article
-      className={`${styles.article} loginModalUtil`}
+    id="menuToggleRegister"
+      className={`${styles.article} loginModalUtil menuToggleRegister`}
       style={{ right: showLoginModal ? "0" : "-1500px" }}
     >
       <Toast ref={refToast} position="top-left"></Toast>
       <div className={styles.div}>
-        <div className={styles.container}>
+        <div className={`${styles.article} menuToggleRegister`}>
           {/* LOGIN */}
           <div className={styles.login}>
             <div className="d-flex align-items-end justify-content-end w-100">

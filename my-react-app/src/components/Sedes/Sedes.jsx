@@ -47,12 +47,12 @@ function Sedes() {
               </SimpleMap>
             </div>
           </div>
-          <div className={styles.typingeffect}>
-            <div className="ag-format-container">
-              <div className="ag-courses_box">
-                <div className="ag-courses_item">
-                  <a href="#" className="ag-courses-item_link">
-                    <div className="ag-courses-item_bg"></div>
+          <div className="typingeffect ">
+            <div class="ag-format-container">
+              <div class="ag-courses_box">
+                <div class="ag-courses_item">
+                  <a href="#" class="ag-courses-item_link">
+                    <div class="ag-courses-item_bg"></div>
                     <TypingEffect
                       firstText="Bienvenido a nuestro gimnasio funcional. 
                       Ofrecemos un entrenamiento semipersonalizado en nuestras sedes."

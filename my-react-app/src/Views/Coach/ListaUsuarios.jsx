@@ -172,10 +172,11 @@ function ListaUsuarios() {
 
   const columns = [
     {
-      title: "First Name",
+      title: "Nombre",
       dataIndex: "firstName",
       key: "firstName",
       defaultSortOrder: "ascend",
+      className: "text-3xl",       
       sorter: (a, b) => {
         if (a.firstName < b.firstName) {
           return -1;
@@ -188,10 +189,12 @@ function ListaUsuarios() {
       ...getColumnSearchProps("firstName"),
     },
     {
-      title: "Last Name",
+      title: "Apellido",
       dataIndex: "lastName",
       key: "lastName",
       defaultSortOrder: "ascend",
+      className: "text-3xl",       
+
       sorter: (a, b) => {
         if (a.lastName < b.lastName) {
           return -1;
@@ -208,6 +211,8 @@ function ListaUsuarios() {
       dataIndex: "email",
       key: "email",
       defaultSortOrder: "ascend",
+      className: "text-3xl",       
+
       sorter: (a, b) => {
         if (a.email < b.email) {
           return -1;
@@ -220,9 +225,11 @@ function ListaUsuarios() {
       ...getColumnSearchProps("email"),
     },
     {
-      title: "Actions",
+      title: "Acciones",
       dataIndex: "actions",
       key: "actions",
+      className: "text-3xl",       
+
     },
   ];
 
@@ -235,15 +242,15 @@ function ListaUsuarios() {
         lastName: users[i].lastName,
         email: users[i].email,
         actions: (
-          <div className="d-flex align-items-center gap-3">
+          <div className="flex align-items-center gap-3">
             <FcInfo
               size={19}
-              className="userInfo"
+              className="userInfo h-9 w-9"
               onClick={() => navigate(`./user/${users[i].id}`)}
             />
             <FcFullTrash
               size={19}
-              className="userDelete"
+              className="userDelete h-9 w-9"
               onClick={() => handleDelete(users[i].userName, users[i].id)}
             />
           </div>
@@ -253,12 +260,16 @@ function ListaUsuarios() {
   }
 
   return (
-    <div className={`${styles.wrapper} bg-black`}>
+    <div className={`${styles.wrapper} bg-gray-500`}>
       <div>
-        <h3>Lista de Usuarios</h3>
+        <h3 className="text-5xl">Lista de Usuarios</h3>
       </div>
-      <Table dataSource={dataSource} columns={columns} className="bg-black" />
-    </div>
+<Table
+  dataSource={dataSource}
+  columns={columns}
+  className="bg-gray-500 text-white text-xl"
+  rowClassName="h-12"
+/>    </div>
   );
 }
 

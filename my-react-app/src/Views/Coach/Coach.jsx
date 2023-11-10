@@ -71,9 +71,15 @@ const Coach = () => {
     }
   };
   return (
+    
     <AntLayout>
-      <Sider trigger={null} theme="light" collapsible collapsed={collapsed}>
-        <div className="logo flex items-center justify-center">
+      <Sider
+        trigger={null}
+        style={{ backgroundColor: "#202932" }} // Cambia el color de fondo aquí
+        theme="light"
+        collapsible
+        collapsed={collapsed}
+      >        <div className="logo flex items-center justify-center">
           {collapsed ? (
             <div>
               <img src={logo} alt="abc" width={30} className="mt-2" />
@@ -91,12 +97,14 @@ const Coach = () => {
           selectedKeys={[current]}
           mode="inline"
           items={items}
+          className=""
         />
       </Sider>
       <AntLayout>
         <Header
           className="flex justify-between px-1 pe-5"
-          style={{ padding: 0, backgroundColor: "grey" }}
+          style={{ padding: 0, backgroundColor: "#202932", borderBottom: "1px solid #ffff" }}
+          
         >
           <div className="flex items-center">
             <Button
@@ -149,7 +157,7 @@ const Coach = () => {
           </div>
         </Header>
 
-        <Content className="bg-gray-800 p-24 min-h-screen">
+        <Content style={{"backgroundColor":"#202932"}} className="bg-gray-800 p-24 pt-14 min-h-screen">
           <Outlet />
         </Content>
       </AntLayout>

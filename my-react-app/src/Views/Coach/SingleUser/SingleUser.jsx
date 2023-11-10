@@ -6,36 +6,38 @@ const SingleUser = () => {
   // CONTEXT API
   const activeStyle = {
     fontWeight: "bold",
-    color: "red",
-    backgroundColor: "black",
+    color: "white",
+    fontSize: "1.7rem",
   };
 
   return (
     <div>
-      <nav className="row navbar mx-1">
-        <ul>
-          <li>
+      <nav className="row navbar mx-1 border-t-2 mb-3 border-b-2 border-black">
+        <ul className="flex gap-3 text-white justify-center content-center mt-2">
+          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./" style={activeStyle}>
-              User
+              USUARIO
             </NavLink>
           </li>
-          <li>
+          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./ejercicios" style={activeStyle}>
-              Ejercicios
+              EJERCICIOS
             </NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink to="./hoy" style={activeStyle}>
               Ejercicios de hoy
             </NavLink>
-          </li>
-          <li>
+          </li> */}
+          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./agregarRutina" style={activeStyle}>
-              Agregar Rutina
+              AGREGAR RUTINA
             </NavLink>
           </li>
         </ul>
       </nav>
+
+      
       <User />
       <Outlet />
     </div>

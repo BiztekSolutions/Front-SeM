@@ -6,28 +6,28 @@ import VideoEmbed from "./VideoEmbed";
 function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
   return (
     <div
-      className="modal show border-8 absolute z-10 border-white top-5 left-1/4 rounded-3xl bg-gray-900 w-1/2"
+      className="modal show border-8 absolute z-10 border-white top-1/2 left-1/4 rounded-3xl bg-blue-600 w-1/2"
       tabIndex="-1"
     >
       <div className="modal-dialog">
         <div className="modal-content">
-          <div className="modal-header ">
-            <h5 className="modal-title text-3xl text-black">{exercise.name}</h5>
+          <div className="modal-header relative">
+            <h5 className="modal-title text-3xl text-white p-5">{exercise.name}</h5>
             <button
               type="button"
-              className="btn-close"
+              className="btn-close text-white absolute top-0 right-0 text-2xl"
               aria-label="Close"
               onClick={closeModal}
-            ></button>
+            >X</button>
           </div>
           <div className="modal-body border-t-4 py-5 flex gap-6 justify-center">
             <div className="flex">
-              <p className="pt-14">{exercise.description}</p>
+              <p className="pt-14 pr-16">{exercise.description}</p>
               <VideoEmbed youtubeLink={exercise.video} />
             </div>
           </div>
-          <div className="border-t-4 border-b-4 py-5 modal-footer flex justify-center">
-            <h5 className="modal-subtitle p-20 text-2xl">Editar ejercicio</h5>
+          <div className="border-t-4  py-5 modal-footer flex flex-col justify-center">
+            <h5 className="modal-subtitle  text-2xl">Editar ejercicio</h5>
             <ExerciseForm exercise={exercise} onSubmit={handleEditExercise} />
           </div>
           <button

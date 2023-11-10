@@ -18,6 +18,18 @@ html.dark {
 
 /* FONT FACES */
 @font-face {
+  font-family: "BebasNeueCyrillic";
+  src:
+    local("BebasNeueCyrillic"),
+    url("./Fonts/BebasNeueCyrillic/Bebas-Neue-Cyrillic.ttf") format("ttf");
+}
+@font-face {
+  font-family: "NeueMachina";
+  src:
+    local("NeueMachina"),
+    url("./Fonts/NeueMachina/NeueMachina.otf") format("otf");
+}
+@font-face {
   font-family: "BarlowBold";
   src:
     local("BarlowBold"),
@@ -60,6 +72,42 @@ button:focus {
   box-shadow: none !important;
 }
 
+.shadow-custom {
+  text-shadow: 5px 5px 7px rgba(255, 99, 71, 0.6);
+}
+.shadow-custom1 {
+  text-shadow: 5px 5px 7px rgba(0, 0, 0, 0.6);
+}
+
+.pin {
+  position: relative;
+}
+
+.pin-icon {
+  color: red; /* Color del ícono de ubicación */
+  font-size: 24px; /* Tamaño del ícono */
+}
+
+.pin-text {
+  position: absolute;
+  top: 30px; /* Ajusta la posición vertical del texto */
+  left: -50px; /* Ajusta la posición horizontal del texto */
+  width: 100px; /* Ancho del contenedor del texto */
+  text-align: center; /* Centra el texto dentro del contenedor */
+}
+
+.a-header {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.a-header:hover {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
 /* ------------- RUTINAS ------------- */
 
 .rutinas-titulo {
@@ -70,7 +118,6 @@ button:focus {
 
 .rutinas-titulo h2 {
   color: black;
-  font-family: "BarlowBold", BarlowBold;
   font-size: 40px;
   text-align: center;
 }
@@ -96,8 +143,10 @@ button:focus {
   font-family: "AntonRegular", AntonRegular;
 }
 .rutinas-button:hover {
-  background-color: white;
-  color: black;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  transform: translate(-50%, -50%) scale(1.1);
+  transition: 0.4s ease-in-out;
 }
 
 .custom-video {
@@ -115,7 +164,6 @@ button:focus {
   color: #ff914d;
   padding: 10px;
   text-align: center;
-  font-family: "AntonRegular", AntonRegular;
 }
 .categoria h3 {
   padding-right: 10px;
@@ -177,12 +225,6 @@ button:focus {
   display: block;
 }
 
-.menu-toggle-landing {
-  z-index: 1202;
-  border-bottom: none;
-  cursor: pointer;
-}
-
 .create-landing {
   font-family: "futuraStd";
   margin-top: 30px;
@@ -191,7 +233,6 @@ button:focus {
   letter-spacing: 3px;
 }
 
-/* TOGGLE MENU LANDING */
 .toggleMenuLanding {
   position: fixed !important;
   top: 0;
@@ -211,6 +252,7 @@ button:focus {
 .toggleMenuLanding.open {
   transform: translateX(0);
 }
+
 /* -------------- Register -------------- */
 .card-login {
   width: 530px;
@@ -236,10 +278,10 @@ button:focus {
   margin: 2px;
   border-radius: 6px;
   padding: 7px;
-  background-color: #e0e0e0;
+  background-color: #c0c0c0;
   box-shadow:
-    4px 4px 10px #c0c0c0,
-    -2px -2px 5px #c5c5c5;
+    2px 2px 10px #8490f7,
+    -2px -2px 5px #8490f7;
   font-size: 13px;
   color: rgb(117, 117, 117);
   letter-spacing: 1.5px;
@@ -251,6 +293,10 @@ input.form-control:focus {
   border: 3px solid rgba(241, 241, 241, 0.822);
   outline: none !important;
   box-shadow: none;
+}
+
+.form-control::placeholder {
+  color: #000000;
 }
 
 .form-label {
@@ -321,8 +367,17 @@ input.form-control:focus {
   background: transparent;
 }
 
-.gradiente {
+.gradiente1 {
   background-image: linear-gradient(to right, black, black, #ff914d);
+}
+
+.gradiente2 {
+  background-image: linear-gradient(
+    to right,
+    rgb(255, 253, 253),
+    rgb(255, 255, 255),
+    #ff914d
+  );
 }
 
 .bg-navbar {
@@ -348,4 +403,498 @@ input.form-control:focus {
 #themeToggle:hover {
   text-decoration: none;
   border: none;
+}
+
+.black-sedes {
+  background-color: #0c0c0c;
+  color: #ffffff;
+}
+
+.white-sedes {
+  background-color: #f1f1f1;
+  color: #000000;
+}
+
+/* -------------- Coach -------------- */
+
+.userDropdown a {
+  font-size: 11px !important;
+  letter-spacing: 1px;
+}
+
+.userData {
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+/* -------------- card seccion 6 -------------- */
+
+.box {
+  width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-gap: 15px;
+  margin: 0 auto;
+}
+.card-s6 {
+  position: relative;
+  width: 300px;
+  height: 350px;
+  background: #e97a13;
+  margin: 0 auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.card-s6:before,
+.card-s6:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background: #e97a13;
+  transition: 0.5s;
+  z-index: -1;
+}
+.card-s6:hover:before {
+  transform: rotate(20deg);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+.card-s6:hover:after {
+  transform: rotate(10deg);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+.card-s6 .imgBx {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  bottom: 10px;
+  right: 10px;
+  background: #222;
+  transition: 0.5s;
+  z-index: 1;
+}
+
+.card-s6:hover .imgBx {
+  bottom: 30px;
+  top: 30px;
+  left: 30px;
+  right: 30px;
+}
+
+.card-s6 .imgBx img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-s6 .details {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  height: 60px;
+  text-align: center;
+}
+
+.card .details h2 {
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  font-size: 20px;
+  color: #777;
+  text-transform: uppercase;
+}
+
+.card .details h2 span {
+  font-weight: 500;
+  font-size: 16px;
+  color: #f38695;
+  display: block;
+  margin-top: 5px;
+}
+
+/* -------------- Toggle menu -------------- */
+
+.menu-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.hamburger {
+  display: none; /* Oculta el botón de hamburguesa en desktop */
+}
+
+@media (min-width: 768px) {
+  .menu-header {
+    display: flex !important;
+    flex-direction: row;
+    background-color: transparent !important;
+    position: relative !important;
+  }
+  #themeToggle {
+    padding-top: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section6 {
+    display: none !important;
+  }
+
+  .img-seccion6 {
+    display: none !important;
+  }
+  .logo {
+    margin-left: 0px !important;
+  }
+
+  .wrapper-footer {
+    padding-left: 0% !important;
+    padding-right: 0% !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tittle-categoria {
+    font-size: 45px !important;
+  }
+
+  .container-footer {
+    width: 100% !important;
+  }
+  .sem {
+    margin-left: 5px !important;
+  }
+
+  .borde-inf {
+    justify-content: left !important;
+  }
+
+  .derechos {
+    font-size: 0.7rem;
+  }
+
+  .fawpp {
+    height: auto !important;
+    width: 85px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .tittle-footer {
+    font-size: 20px !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .menu-header {
+    display: none;
+  }
+
+  .li-bb {
+    border-bottom: 2px solid rgb(255, 162, 100) !important;
+    height: 5vh;
+  }
+
+  .li-bb a {
+    padding-top: 7px;
+  }
+
+  .iniSesion {
+    margin-top: 70px !important;
+  }
+
+  .container1-footer {
+    display: flex !important;
+    flex-direction: row !important;
+    font-size: 80%;
+    height: 20vh;
+    padding: 2px !important;
+  }
+
+  .container1-footer > div {
+    height: 15vh !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-right: 2px solid rgba(163, 99, 4, 0.753) !important;
+    padding-left: 0.2rem;
+    text-align: center;
+  }
+
+  .container1-footer h3 {
+    font-size: 0.5rem !important;
+    display: none;
+  }
+
+  .container1-footer link {
+    font-size: 8px;
+  }
+
+  .hamburger {
+    display: block; /* Aparece el botón de hamburguesa en mobile */
+  }
+
+  .d-rutinas {
+    display: none;
+  }
+  .description-about {
+    display: none;
+  }
+
+  .text-footer {
+    display: none;
+  }
+
+  #themeToggle {
+    padding-top: 5px;
+    margin-right: 4rem;
+  }
+
+  .menu-header.open .hamburger {
+    display: block;
+    gap: 0px;
+  }
+
+  .rutinas-button {
+    padding: 0.8rem !important;
+    width: 80% !important;
+    font-size: 0.8rem !important;
+    border: 1px solid #050505 !important;
+    overflow: hidden;
+  }
+}
+.hamburger {
+  border: 0;
+  height: 40px;
+  width: 40px;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: #db721c;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  transform: translateY(-50%);
+}
+.hamburger:hover {
+  background-color: #2642af;
+}
+
+@media (max-width: 768px) {
+  .iniSesion {
+    max-width: 100% !important;
+  }
+}
+
+.iniSesion {
+  cursor: pointer !important;
+}
+
+@media (max-width: 400px) {
+  .ic-up {
+    margin-bottom: 35% !important;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+
+.ag-format-container {
+  width: 100%;
+  margin-left: auto;
+}
+
+.ag-courses_box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 50px 0;
+}
+.ag-courses_item {
+  /* -ms-flex-preferred-size: calc(33.33333% - 30px);
+  flex-basis: calc(33.33333% - 30px); */
+
+  margin: 0 15px 30px;
+
+  overflow: hidden;
+
+  border-radius: 28px;
+}
+.ag-courses-item_link {
+  display: block;
+  padding: 30px 20px;
+  background-color: #292929;
+
+  overflow: hidden;
+
+  position: relative;
+}
+.ag-courses-item_link:hover,
+.ag-courses-item_link:hover .ag-courses-item_date {
+  text-decoration: none;
+  color: #fff;
+}
+.ag-courses-item_link:hover .ag-courses-item_bg {
+  -webkit-transform: scale(10);
+  -ms-transform: scale(10);
+  transform: scale(10);
+}
+.ag-courses-item_title {
+  min-height: 87px;
+  margin: 0 0 25px;
+
+  overflow: hidden;
+
+  font-weight: bold;
+  font-size: 30px;
+  color: #fff;
+
+  z-index: 2;
+  position: relative;
+}
+.ag-courses-item_date-box {
+  font-size: 18px;
+  color: #fff;
+
+  z-index: 2;
+  position: relative;
+}
+.ag-courses-item_date {
+  font-weight: bold;
+  color: #ff914d;
+
+  -webkit-transition: color 0.5s ease;
+  -o-transition: color 0.5s ease;
+  transition: color 0.5s ease;
+}
+.ag-courses-item_bg {
+  height: 128px;
+  width: 128px;
+  background-color: #f5650b60;
+
+  z-index: 1;
+  position: absolute;
+  top: -75px;
+  right: -75px;
+
+  border-radius: 50%;
+
+  -webkit-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+.ag-courses_item:nth-child(2n) .ag-courses-item_bg {
+  background-color: #3ecd5e;
+}
+.ag-courses_item:nth-child(3n) .ag-courses-item_bg {
+  background-color: #e44002;
+}
+.ag-courses_item:nth-child(4n) .ag-courses-item_bg {
+  background-color: #952aff;
+}
+.ag-courses_item:nth-child(5n) .ag-courses-item_bg {
+  background-color: #cd3e94;
+}
+.ag-courses_item:nth-child(6n) .ag-courses-item_bg {
+  background-color: #4c49ea;
+}
+
+@media only screen and (max-width: 979px) {
+  .ag-courses_item {
+    -ms-flex-preferred-size: calc(50% - 30px);
+    flex-basis: calc(50% - 30px);
+  }
+  .ag-courses-item_title {
+    font-size: 24px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .ag-format-container {
+    width: 96%;
+  }
+}
+@media only screen and (max-width: 639px) {
+  .ag-courses_item {
+    -ms-flex-preferred-size: 100%;
+    flex-basis: 100%;
+  }
+  .ag-courses-item_title {
+    min-height: 72px;
+    line-height: 1;
+
+    font-size: 24px;
+  }
+  .ag-courses-item_link {
+    padding: 22px 40px;
+  }
+  .ag-courses-item_date-box {
+    font-size: 16px;
+  }
+}
+
+/* -------------- Seccion 6 -------------- */
+.calendar-container {
+  font-size: 16px;
+}
+
+.card.highlight {
+  font-size: 20px;
+}
+
+.card-calendar {
+  width: 100%;
+  height: 12vh;
+  font-weight: bold;
+  display: flex;
+  font-size: 1.5rem;
+}
+
+/* -------------- Mensajeria -------------- */
+
+/* ChatStyles.css */
+.wrapper {
+  display: flex;
+}
+
+.userList {
+  flex: 1;
+  padding: 20px;
+}
+
+.chat {
+  flex: 2;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #4e4e4e;
+  height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  flex-grow: 1;
+}
+
+input[type="text"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 10px;
 }

@@ -8,10 +8,12 @@ const Rutinas = () => {
   return (
     <div className="landingClassForCarousel">
       <div className="rutinas-titulo">
-        <h2>RUTINAS PERSONALIZADAS</h2>
-        <h3>
-          En Salud en Movimiento ofrecemos rutinas hecha a la medida para hacer
-          desde tu casa
+        <h2 className=" py-5 top-2/3 text-7xl tittle-gimnasio font-bold tracking-tighter shadow-custom1">
+          RUTINAS PERSONALIZADAS
+        </h2>
+        <h3 className="font-mono d-rutinas">
+          En <span className="font-bold ">Salud en Movimiento</span> ofrecemos
+          rutinas hecha a la medida para hacer desde tu casa
         </h3>
       </div>
       <div style={{ position: "relative" }}>
@@ -26,13 +28,13 @@ const Rutinas = () => {
                 loop
                 muted
               >
-                <source src={videoFondo} type="video/mp4" />
+                <source src={videoFondo} type="video/mp4" loop />
               </video>
             </div>
           </div>
         </div>
         <Link
-          className="rutinas-button  bg-customOrange hover: font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"
+          className="rutinas-button text-center bg-customOrange hover: font-bold py-7 px-16 rounded-full border-white border-8 cursor-pointer w-fit h-fit"
           to="formulario"
           smooth={true}
           duration={1000}

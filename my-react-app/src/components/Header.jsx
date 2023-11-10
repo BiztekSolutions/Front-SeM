@@ -3,6 +3,8 @@ import { Link } from "react-scroll";
 import Register from "./Register";
 import { useEffect, useRef, useState } from "react";
 import DarkModeToggle from "../components/DarkModeToggle";
+import "../App.css";
+import { IoClose } from "react-icons/io5";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,6 +13,27 @@ const Header = () => {
   const [, setSubMenuOpen] = useState(false);
   const [, setMenuMenOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
+
+  const [isMenuDesOpen, setIsMenuDesOpen] = useState(true);
+
+  const cambiarEstilosDelUl = () => {
+    const ulElement = document.querySelector(".menu-header.navigation");
+
+    if (ulElement && isMenuDesOpen) {
+      ulElement.setAttribute(
+        "style",
+        "background-color: #d46910; position: absolute; width:100%; top: 80%; right: 0; border-radius: 10px;"
+      );
+    } else if (ulElement) {
+      ulElement.setAttribute("style", ""); // Restaurar estilos originales
+    }
+  };
+
+  const desplegableMenu = () => {
+    setIsMenuDesOpen(!isMenuDesOpen);
+    cambiarEstilosDelUl();
+  };
+
   const toggleMenu = () => {
     setIsMenuOpen((prevMenu) => {
       if (prevMenu) {
@@ -19,11 +42,12 @@ const Header = () => {
         setRegisterOpen(false);
         document.body.style.overflow = "";
       } else {
-        document.body.style.overflow = "";
+        document.body.style.overflow = "hidden";
       }
       return !prevMenu;
     });
   };
+
   useEffect(() => {
     if (!isMenuOpen) {
       setSubMenuOpen(false);
@@ -31,6 +55,7 @@ const Header = () => {
       setRegisterOpen(false);
     }
   }, [isMenuOpen]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -43,13 +68,16 @@ const Header = () => {
         setIsMenuOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isMenuOpen]);
 
-  console.log(isMenuOpen);
+  const HeaderHeight = 112;
+
   return (
     <div
       id="navbar"
@@ -57,71 +85,114 @@ const Header = () => {
     >
       <div className="">
         <Link
+          offset={-HeaderHeight}
           className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
           to="inicio"
           smooth={true}
-          duration={1000}
+          duration={500}
         >
-          <img src={logo} alt="Logo" className="h-12 w-auto ml-10" />
+          <img src={logo} alt="Logo" className="h-12 w-auto ml-10 logo" />
         </Link>
       </div>
-      <ul className="flex text-2xl p-5 gap-7 font-bold">
+      <div className="flex">
         <DarkModeToggle />
-        <li className="">
-          <Link
-            className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
-            to="sedes"
-            smooth={true}
-            duration={1000}
-            id="sedes"
+        <button className="hamburger" onClick={desplegableMenu}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="white"
           >
-            SEDES
-          </Link>
-        </li>
-        <li className="">
-          <Link
-            className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
-            to="nosotras"
-            smooth={true}
-            duration={1000}
-            id="nosotras"
-          >
-            SOBRE NOSOTRAS
-          </Link>
-        </li>
-        <li className="z-10">
-          <Link
-            className="hover:text-customOrange transition-colors duration-300 cursor-pointer "
-            to="formulario"
-            smooth={true}
-            duration={1000}
-            id="contacto"
-          >
-            CONTACTO
-          </Link>
-        </li>
-        <li className="">
-          <div className={isMenuOpen ? "overlay open" : "overlay"}></div>
-          <div
-            ref={closeRef}
-            onClick={toggleMenu}
-            className="menu-toggle-landing hover:text-customOrange"
-          >
-            {isMenuOpen ? "Close" : "LOGIN"}
-          </div>
-        </li>
-      </ul>
+            <path
+              fillRule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+
+        <ul
+          className={`flex text-2xl p-5 gap-7 font-bold menu-header navigation ${
+            isMenuDesOpen ? "hidden" : "flex"
+          }`}
+          id="menu-header1"
+        >
+          <li className="li-bb">
+            <Link
+              offset={-HeaderHeight}
+              className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
+              to="sedes"
+              smooth={true}
+              duration={1000}
+              id="sedes"
+            >
+              <a className="block a-header" href="#sedes">
+                SEDES
+              </a>
+            </Link>
+          </li>
+          <li className="li-bb">
+            <Link
+              offset={-HeaderHeight}
+              className=" hover:text-customOrange transition-colors duration-300 cursor-pointer"
+              to="nosotras"
+              smooth={true}
+              duration={1000}
+              id="nosotras"
+            >
+              <a className="block a-header" href="#nosotras">
+                SOBRE NOSOTRAS
+              </a>
+            </Link>
+          </li>
+          <li className="z-10 li-bb">
+            <Link
+              offset={-HeaderHeight}
+              className="hover:text-customOrange transition-colors duration-300 cursor-pointer "
+              to="formulario"
+              smooth={true}
+              duration={1000}
+              id="contacto"
+            >
+              <a className="block a-header" href="#formulario">
+                CONTACTO
+              </a>
+            </Link>
+          </li>
+          <li className="li-bb">
+            <div className={isMenuOpen ? "overlay open" : "overlay"}></div>
+            <div
+              ref={closeRef}
+              onClick={toggleMenu}
+              className="menu-toggle-landing hover:text-customOrange"
+            >
+              {isMenuOpen ? "Close" : "LOGIN"}
+            </div>
+          </li>
+        </ul>
+      </div>
+
       <div
         ref={menuRef}
-        className={`toggleMenuLanding ${isMenuOpen ? "open" : ""}`}
+        className={`toggleMenuLanding ${isMenuOpen ? "open" : ""} iniSesion`}
       >
-        <h3 className="create-landing mb-5 text-uppercase">
-          {isRegisterOpen ? "CREAR CUENTA" : "INICIAR SESION"}
-        </h3>
-        <Register
-          isRegisterOpen={isRegisterOpen}
-          setRegisterOpen={setRegisterOpen}
-        />
+        <div className="flex justify-end">
+          <h3 className="create-landing mb-5 text-uppercase mr-20">
+            {isRegisterOpen ? "CREAR CUENTA" : "INICIAR SESION"}
+          </h3>
+          <button
+            className="bg-transparent flex border-none mt-2"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <IoClose size={40} color="black" />
+          </button>
+        </div>
+        <div>
+          <Register
+            isRegisterOpen={isRegisterOpen}
+            setRegisterOpen={setRegisterOpen}
+          />
+        </div>
       </div>
     </div>
   );

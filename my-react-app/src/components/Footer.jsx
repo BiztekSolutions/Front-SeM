@@ -17,19 +17,22 @@ const Footer = () => {
       );
     }
   }
-
+  const HeaderHeight = 112;
   return (
     <div className="bg-customOrange flex flex-col">
-      <div className="flex justify-between  p-8">
-        <div className="w-1/4">
-          <h1 className="text-3xl w-3/4 text-black font-bold pt-10">
+      <div className="flex justify-between p-8 wrapper-footer container1-footer">
+        <div className="w-1/4 text-footer">
+          <h1 className="text-3xl w-3/4 text-black font-bold pt-10 ">
             CONTACTA CON NOSOTROS
           </h1>
         </div>
-        <div className="w-1/4 text-left">
-          <h3 className="text-stone-950 mb-10 font-bold">SOBRE NOSOTROS</h3>
+        <div className="w-1/4 text-left container-footer">
+          <h3 className="text-stone-950 mb-10 font-bold tittle-footer">
+            SOBRE NOSOTROS
+          </h3>
           <Link
-            className=" hover:text-green-500 transition-colors duration-300 cursor-pointer"
+            offset={-HeaderHeight}
+            className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to="nosotras"
             smooth={true}
             duration={1000}
@@ -38,7 +41,8 @@ const Footer = () => {
           </Link>
           <br />
           <Link
-            className=" hover:text-green-500 transition-colors duration-300 cursor-pointer"
+            offset={-HeaderHeight}
+            className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
             to="sedes"
             smooth={true}
             duration={1000}
@@ -46,20 +50,22 @@ const Footer = () => {
             ¿Donde encontrarnos?
           </Link>
         </div>
-        <div className="w-1/4 text-left">
-          <h3 className="text-stone-950 mb-10 font-bold">QUE HACEMOS?</h3>
+        <div className="w-1/4 text-left container-footer">
+          <h3 className="text-stone-950 mb-10 font-bold tittle-footer">
+            QUE HACEMOS?
+          </h3>
           <Link
-            className=" hover:text-green-500 transition-colors duration-300 cursor-pointer"
-            to="sedes"
+            className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
+            to=""
             smooth={true}
             duration={1000}
           >
-            Entrenamiento Semipersonalizado
+            Semipersonalizado
           </Link>
           <br />
           <Link
-            className="font-light  hover:text-green-500 transition-colors duration-300 cursor-pointer"
-            to="sedes"
+            className="text-white font-light  hover:text-black transition-colors duration-300 cursor-pointer"
+            to=""
             smooth={true}
             duration={1000}
           >
@@ -67,45 +73,48 @@ const Footer = () => {
           </Link>
           <br />
           <Link
-            className=" hover:text-green-500 transition-colors duration-300 cursor-pointer"
-            to="sedes"
+            className="text-white font-light hover:text-black transition-colors duration-300 cursor-pointer"
+            to=""
             smooth={true}
             duration={1000}
           >
             Indumentaria
           </Link>
         </div>
-        <div className="w-1/4 text-left">
-          <h3 className="text-stone-950 mb-10 font-bold">CONTACTO</h3>
-          <p>Contacta con nosotros</p>
+
+        <div className="w-1/4 text-left container-footer">
+          <h3 className="text-stone-950 mb-10 font-bold tittle-footer">
+            PRIVACIDAD
+          </h3>
           <p>Políticas de privacidad</p>
           <p>Términos y condiciones</p>
           <p>FAQs</p>
         </div>
       </div>
-      <div className="bg-black h-16 flex justify-between items-center p-8">
+      <div className="bg-black h-24 flex justify-between items-center p-8">
         <div className="flex items-center ">
           <div onClick={redirectToWhatsapp}>
             <img
               src={wppLogo}
               alt="whatsapp"
-              className="w-12 h-12 mb-12 cursor-pointer"
+              className="w-12 h-12 mb-12 cursor-pointer fawpp"
             />
           </div>
-          <p className="ml-11">
-            Salud en <span className="text-green-500">MOVIMIENTO.</span>
+          <p className="ml-11 text-customOrange sem">
+            Salud en movimeinto
+            <span className="text-green-500"> GIMNASIO.</span>
           </p>
         </div>
         <a
           href="https://lefelink.com/bizteksolutions/"
-          className=""
+          className="derechos"
           target="_blank"
           rel="noopener noreferrer"
         >
           Todos los derechos reservados | Biztek Solutions
         </a>
         <Link
-          className="h-12 w-12 mb-20 cursor-pointer"
+          className="h-12 w-12 mb-40 ic-up cursor-pointer"
           to="inicio"
           smooth={true}
           duration={1000}

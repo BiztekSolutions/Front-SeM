@@ -3,11 +3,12 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import googleLogo from "../assets/googleLogin.png";
 import {
   clearUserMessage,
+  createUser,
   // googleLoginSlice,
   loginUser,
 } from "../features/user/userSlice";
 // import { useGoogleLogin } from "@react-oauth/google";
-
+import { TailSpin } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "primereact/toast";
 import { GlobalContext } from "../context/globalContext";
@@ -15,8 +16,11 @@ import { GlobalContext } from "../context/globalContext";
 import { useNavigate } from "react-router-dom";
 
 const credentialsInitialState = {
-  credential: "",
   password: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  repeatPassword: "",
 };
 // eslint-disable-next-line react/prop-types
 function Register({ isRegisterOpen, setRegisterOpen }) {
@@ -25,7 +29,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const { message: userMessage, user } = state.users;
+  const { message, user, isLoading } = state.users;
   // const [token, setToken] = useState(null);
   const refToast = useRef();
 
@@ -37,7 +41,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const globalContext = useContext(GlobalContext);
   const { setShowLoginModal, setLogged } = globalContext;
   const [credentials, setCredentials] = useState(credentialsInitialState);
-
+  const [error, setError] = useState("");
   const handleCredentials = (e) => {
     setCredentials({
       ...credentials,
@@ -75,7 +79,18 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser(credentials));
+
+    if (isRegisterOpen) {
+      if (credentials.password !== credentials.repeatPassword) {
+        setError("Las contraseñas no coinciden");
+      } else {
+        console.log("credentials", credentials);
+        dispatch(createUser(credentials));
+      }
+    } else {
+      dispatch(loginUser(credentials));
+    }
+    setError("");
   };
   const repeatPasswordVisibility = () => {
     setShowRepeatPassword(!showRepeatPassword);
@@ -96,7 +111,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   useEffect(() => {
     // GOOGLE AUTH RESPONSE
 
-    if (userMessage === "Google user logged") {
+    if (message === "Google user logged") {
       // Setear LS con userID encriptado
       if (user && user.encodedId) {
         localStorage.setItem(
@@ -123,7 +138,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
         setShowLoginModal(false);
       }, 2100);
     }
-    if (userMessage === "Google user created") {
+    if (message === "Google user created") {
       // Setear LS con userID encriptado
       // Setear LS con userID encriptado
       if (user && user.encodedId) {
@@ -153,8 +168,21 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     }
 
     // LOGIN MANUALLY RESPONSE
+    if (message === "User registered successfully") {
+      refToast.current.show({
+        life: 3000,
+        severity: "success",
+        summary: "Welcome",
+        detail: `It's a pleasure to have you with us!`,
+      });
+      setTimeout(() => {
+        dispatch(clearUserMessage());
+        // Clear message state & close Login modal
+        setRegisterOpen(false);
+      }, 2100);
+    }
 
-    if (userMessage === "Email Incorrect") {
+    if (message === "Email Incorrect") {
       refToast.current.show({
         life: 3000,
         severity: "info",
@@ -163,53 +191,68 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       });
       dispatch(clearUserMessage());
     }
-    if (userMessage === "Username Incorrect") {
+
+    if (message === "User already exists") {
       refToast.current.show({
         life: 3000,
         severity: "info",
         summary: "We're sorry",
-        detail: "We couldn't find any account associated with that username",
+        detail: message,
       });
-      dispatch(clearUserMessage());
     }
-    if (userMessage === "Password Incorrect") {
+    if (message === "Password Incorrect") {
       refToast.current.show({
         life: 3000,
         severity: "info",
         summary: "We're sorry",
-        detail: userMessage,
+        detail: message,
       });
-      dispatch(clearUserMessage());
     }
-    if (userMessage === "User logged") {
+    if (message === "User logged") {
       // Setear LS con userID encriptado
-      if (user && user.encodedId) {
+      console.log("-------------------------------", user.token);
+
+      if (user && user.userId) {
         localStorage.setItem(
-          "nerdyUser",
-          JSON.stringify({ userId: user.encodedId })
+          "User",
+          JSON.stringify({ userId: user.userId, token: user.token })
         );
       }
 
       // setLogged to allow functionalities
       setLogged({
-        userId: user.encodedId,
+        userId: user.userId,
       });
 
       refToast.current.show({
         sticky: 2000,
         severity: "success",
         summary: "Welcome",
-        detail: `Hi ${user?.userName}! It's good to see you!`,
+        detail: `Hi It's good to see you!`,
       });
 
       setTimeout(() => {
         // Clear message state & close Login modal
         dispatch(clearUserMessage());
-        setShowLoginModal(false);
-        navigate("/home");
+        navigate("/coach");
       }, 2100);
     }
-  }, [userMessage, user]);
+  }, [message, user, isLoading]);
+
+  if (isLoading) {
+    return (
+      <TailSpin
+        height="20"
+        width="20"
+        color="#4fa94d"
+        ariaLabel="tail-spin-loading"
+        radius="1"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />
+    );
+  }
 
   return (
     <section>
@@ -223,6 +266,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                   <input
                     type="text"
                     id="form3Example1m"
+                    name="firstName"
+                    onChange={handleCredentials}
+                    value={credentials.firstName}
                     className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example1m">
@@ -235,6 +281,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                   <input
                     type="text"
                     id="form3Example1n"
+                    name="lastName"
+                    onChange={handleCredentials}
+                    value={credentials.lastName}
                     className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example1n">
@@ -247,9 +296,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
           <div className="mb-4">
             <input
               type="text"
-              name="credential"
+              name="email"
               onChange={handleCredentials}
-              value={credentials.credential}
+              value={credentials.email}
               id="email"
               className="form-control w-full px-3 py-2 border border-gray-300 rounded"
             />
@@ -289,6 +338,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                   <input
                     type={showRepeatPassword ? "text" : "password"}
                     id="password-input"
+                    name="repeatPassword"
+                    onChange={handleCredentials}
+                    value={credentials.repeatPassword}
                     className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example4cd">
@@ -318,6 +370,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
             >
               ENVIAR
             </button>
+            <div>{error && <p className="text-red-500">{error}</p>}</div>
           </div>
           <button
             onClick={handleRegister}

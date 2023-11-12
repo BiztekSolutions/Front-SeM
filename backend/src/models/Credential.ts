@@ -1,29 +1,26 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, UUIDV4 } from 'sequelize';
 import sequelize from '../db';
 
-class UserModel extends Model {
-  public idUser!: number;
-  public name!: string;
-  public lastname!: string;
-  public rol!: string;
+class Credential extends Model {
+  public idCredential!: number;
+  public email!: string;
+  public password!: string;
   public created_date!: Date;
   public updated_date!: Date;
 }
 
-UserModel.init(
+Credential.init(
   {
-    idUser: {
+    idCredential: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    email: {
       type: DataTypes.STRING,
+      unique: true,
     },
-    lastname: {
-      type: DataTypes.STRING,
-    },
-    rol: {
+    password: {
       type: DataTypes.STRING,
     },
     created_date: {
@@ -35,9 +32,9 @@ UserModel.init(
   },
   {
     sequelize,
-    modelName: 'UserModel',
+    modelName: 'Credential',
     timestamps: false,
   }
 );
 
-export default UserModel;
+export default Credential;

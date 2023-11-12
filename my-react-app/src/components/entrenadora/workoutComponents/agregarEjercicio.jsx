@@ -30,7 +30,7 @@ function AgregarEjercicio() {
 
   async function postExercise() {
     try {
-      const response = await fetch("http://localhost:3000/exercises", {
+      const response = await fetch("http://localhost:3001/exercises", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -2,11 +2,11 @@ import express from 'express';
 import { getUsers, getUser, getUserRoutines } from '../../../controllers/UserController';
 import { authenticateToken } from '../../../utils/validateToken';
 
-const router = express.Router();
+const userRouter = express.Router();
 
-router.put('/:userId', authenticateToken, getUser);
-router.get('/:userId/routines', authenticateToken, getUserRoutines);
-router.get('/:userId', authenticateToken, getUser);
-router.get('/', authenticateToken, getUsers);
+userRouter.put('/:userId', authenticateToken, getUser);
+userRouter.get('/:userId/routines', authenticateToken, getUserRoutines);
+userRouter.get('/:userId', authenticateToken, getUser);
+userRouter.get('/', authenticateToken, getUsers);
 
-export { router as userRouter };
+export default userRouter;

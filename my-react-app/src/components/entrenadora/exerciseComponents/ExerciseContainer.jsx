@@ -18,7 +18,7 @@ function ExerciseContainer({ exercises, setExercises }) {
   async function handleEditExercise(exercise, data) {
     try {
       const response = await axios.patch(
-        `http://localhost:3000/exercises/${exercise.id}`,
+        `http://localhost:3001/exercises/${exercise.id}`,
         data
       );
       const updatedExercises = exercises.map((exercise) => {
@@ -34,7 +34,7 @@ function ExerciseContainer({ exercises, setExercises }) {
   async function handlePostExercise(data) {
     try {
       const response = await axios.post(
-        `http://localhost:3000/exercises`,
+        `http://localhost:3001/exercises`,
         data
       );
       setExercises([...exercises, response.data]);

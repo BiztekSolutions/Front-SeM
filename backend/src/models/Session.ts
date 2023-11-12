@@ -1,8 +1,36 @@
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../db';
+
 class Session extends Model {
-  public id!: number;
+  public idSession!: number;
   public token!: string;
-  public userId!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public created_date!: Date;
+  public updated_date!: Date;
 }
 
+Session.init(
+  {
+    idSession: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    token: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    created_date: {
+      type: DataTypes.DATE,
+    },
+    updated_date: {
+      type: DataTypes.DATE,
+    },
+  },
+  {
+    sequelize,
+    modelName: 'Session',
+    timestamps: false,
+  }
+);
+
+export default Session;

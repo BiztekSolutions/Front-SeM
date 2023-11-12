@@ -62,15 +62,13 @@ const UserCalendar = () => {
     const events = [];
     const startDateObject = new Date(createdAt);
     const endDateObject = new Date(expiredAt);
-    console.log("startDateObject", startDateObject);
-    console.log("e", endDateObject);
+
     let currentDate = new Date(startDateObject);
     while (currentDate < endDateObject) {
       const dayOfWeek1 = currentDate.getUTCDay();
       const dayOfWeek = dayOfWeek1; // Domingo: 0, Lunes: 1, ..., Sábado: 6
       for (let i = 0; i < exerciseGroups.length; i++) {
         if (dayOfWeek === exerciseGroups[i].day) {
-     
           exerciseGroups[i].exercises.forEach((exercise) => {
             const cardComponent = (
               <div
@@ -78,17 +76,15 @@ const UserCalendar = () => {
                 onClick={() => handleCardClick(exercise)}
               >
                 <div className="card-body flex flex-col ">
-         
-                    <div className="flex flex-col ml-5 gap-1 border-black">
-                      <b className="text-black ml-2 text-xs">Nombre</b>
-                      <div className="flex ">
-                        <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1"/>
-                        <h5 className="card-title   w-full">{exercise.name}</h5>
-                      </div>
+                  <div className="flex flex-col ml-5 gap-1 border-black">
+                    <b className="text-black ml-2 text-xs">Nombre</b>
+                    <div className="flex ">
+                      <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
+                      <h5 className="card-title   w-full">{exercise.name}</h5>
                     </div>
-              
-           
-                    {/* <div className="flex flex-col ml-5 gap-1 border-black">
+                  </div>
+
+                  {/* <div className="flex flex-col ml-5 gap-1 border-black">
                       <b className="text-black ml-2 text-lg">Tipo</b>
                       <div className="flex ">
                         <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1"/>
@@ -97,7 +93,9 @@ const UserCalendar = () => {
                     </div> */}
                 </div>
                 <div className="card-body">
-                  <h5 className="card-title text-center">3x10</h5>
+                  <h5 className="card-title text-center">
+                    {exercise.series}x{exercise.repeticiones}
+                  </h5>
                 </div>
               </div>
             );
@@ -129,42 +127,39 @@ const UserCalendar = () => {
 
   return (
     <div>
-<div>
-  <div className="w-full min-h-screen mt-24 text-2xl">
-    <FullCalendar
-      plugins={[dayGridPlugin]}
-      initialView="dayGridWeek"
-      className="calendar-container"
-      events={events} 
-      eventContent={(arg) => {
-        console.log(arg.event.start);
-        return (
-          <div>
-            <b>{arg.timeText}</b>
-            {arg.event.extendedProps &&
-              arg.event.extendedProps.cardComponent}
-          </div>
-        );
-      }}
-      headerToolbar={{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,dayGridWeek,timeGridDay',
-      }}
-      dayHeaderContent={(arg) => {
-        return arg.date.toLocaleDateString('en-US', { weekday: 'long' });
-      }}
-      hiddenDays={[0]} 
-      height="80vh" 
-      contentHeight="auto" 
-    />
-  </div>
-</div>
+      <div>
+        <div className="w-full min-h-screen mt-24 text-2xl">
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridWeek"
+            className="calendar-container"
+            events={events}
+            eventContent={(arg) => {
+              console.log(arg.event.start);
+              return (
+                <div>
+                  <b>{arg.timeText}</b>
+                  {arg.event.extendedProps &&
+                    arg.event.extendedProps.cardComponent}
+                </div>
+              );
+            }}
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,dayGridWeek,timeGridDay",
+            }}
+            dayHeaderContent={(arg) => {
+              return arg.date.toLocaleDateString("en-US", { weekday: "long" });
+            }}
+            hiddenDays={[0]}
+            height="80vh"
+            contentHeight="auto"
+          />
+        </div>
+      </div>
       {showModal ? (
-        <ExerciseModal
-          exercise={selectedExercise}
-          closeModal={closeModal}
-        />
+        <ExerciseModal exercise={selectedExercise} closeModal={closeModal} />
       ) : null}
     </div>
   );

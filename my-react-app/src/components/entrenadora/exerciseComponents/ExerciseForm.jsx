@@ -7,16 +7,20 @@ function ExerciseForm({ exercise, onSubmit }) {
         description: exercise.description,
         video: exercise.video,
         type: exercise.type,
+        series: exercise.series,
+        repeticiones: exercise.repeticiones,
       }
     : {
         name: "",
         description: "",
         video: "",
-        type: "Strength Training",
+        type: "",
+        series: "",
+        repeticiones: "",
       };
 
   const [formData, setFormData] = useState(initialState);
-
+  console.log(exercise.repeticiones);
   function handleChange(event) {
     const name = event.target.name;
     let value = event.target.value;
@@ -29,28 +33,17 @@ function ExerciseForm({ exercise, onSubmit }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-
-    if (
-      formData.name.length > 0 &&
-      formData.description.length > 0 &&
-      formData.video.includes("v=")
-    ) {
-      exercise ? onSubmit(exercise, formData) : onSubmit(formData);
-      if (!exercise) setFormData(initialState);
-    }
   }
   return (
     <form
       className="py-5 w-1/2 m-auto rounded-lg flex flex-wrap justify-center gap-5"
       onSubmit={handleSubmit}
     >
- 
-
       <div className="form-group mx-4 my-2 flex gap-5">
         <div>
           <p>Series</p>
-    
-            <textarea
+
+          <textarea
             className="form-control"
             name="series"
             placeholder="Series"
@@ -65,7 +58,7 @@ function ExerciseForm({ exercise, onSubmit }) {
             name="reps"
             placeholder="Reps"
             onChange={handleChange}
-            value={formData.reps}
+            value={formData.repeticiones}
           />
         </div>
       </div>

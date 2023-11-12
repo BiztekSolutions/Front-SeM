@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:arian@localhost:5432/salud-en-movimiento?schema=public"
+  url      = "postgresql://postgres:arian@localhost:5173/salud-en-movimiento?schema=public"
 }
 
 // Model for User

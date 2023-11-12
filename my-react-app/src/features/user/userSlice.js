@@ -62,9 +62,14 @@ export const getUser = createAsyncThunk("getUser", async (data, thunkAPI) => {
   }
 });
 
-export const getUsers = createAsyncThunk("getUsers", async (data, thunkAPI) => {
+export const getUsers = createAsyncThunk("getUsers", async (_, thunkAPI) => {
   try {
-    return await userService.getUsers(data);
+    const userString = localStorage.getItem("User");
+
+    const user = JSON.parse(userString);
+
+    const token = user.token;
+    return await userService.getUsers(token);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -93,38 +98,45 @@ export const userSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
         state.message = "Logging in user";
+        console.log("entre");
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log("entre bien");
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.msg;
-        state.user = action.payload.data;
+
+        state.message = action.payload.message;
+        state.user = action.payload.session;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.message = action.payload.msg;
+        state.message = action.payload.response.data.message;
+        console.log("entre mal");
         state.user = null;
       })
       // GET USERS
       .addCase(getUsers.pending, (state) => {
         state.isLoading = true;
         state.message = "Getting users";
+        console.log("gettin userssssssssssssssss", state.user);
       })
       .addCase(getUsers.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.msg;
+        console.log(action.payload);
+        state.message = action.payload.message;
         state.users = action.payload;
       })
       .addCase(getUsers.rejected, (state, action) => {
         state.isLoading = false;
+        console.log("failed", action.payload);
         state.isSuccess = false;
         state.isError = true;
-        state.message = action.payload.msg;
+        state.message = action.payload.message;
         state.users = null;
       })
 
@@ -137,14 +149,14 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.msg;
+        state.message = action.payload.message;
         state.user = action.payload;
       })
-      .addCase(getUser.rejected, (state) => {
+      .addCase(getUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.message = "User not found";
+        state.message = action.payload.message;
         state.user = null;
       })
       // CREATE USER
@@ -156,14 +168,14 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.msg;
-        state.user = action.payload.data;
+        state.message = action.payload.message;
+        state.user = action.payload.newUser;
       })
       .addCase(createUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.message = action.payload.msg;
+        state.message = action.payload.message;
         state.user = null;
       })
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Input, Space } from "antd";
 import Highlighter from "react-highlight-words";
@@ -15,7 +15,7 @@ function ListaUsuarios() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { users } = state.users;
-
+  console.log(users);
   const handleDelete = (userName, userId) => {
     Swal.fire({
       color: "whitesmoke",
@@ -176,7 +176,7 @@ function ListaUsuarios() {
       dataIndex: "firstName",
       key: "firstName",
       defaultSortOrder: "ascend",
-      className: "text-3xl",       
+      className: "text-3xl",
       sorter: (a, b) => {
         if (a.firstName < b.firstName) {
           return -1;
@@ -193,7 +193,7 @@ function ListaUsuarios() {
       dataIndex: "lastName",
       key: "lastName",
       defaultSortOrder: "ascend",
-      className: "text-3xl",       
+      className: "text-3xl",
 
       sorter: (a, b) => {
         if (a.lastName < b.lastName) {
@@ -211,7 +211,7 @@ function ListaUsuarios() {
       dataIndex: "email",
       key: "email",
       defaultSortOrder: "ascend",
-      className: "text-3xl",       
+      className: "text-3xl",
 
       sorter: (a, b) => {
         if (a.email < b.email) {
@@ -228,48 +228,50 @@ function ListaUsuarios() {
       title: "Acciones",
       dataIndex: "actions",
       key: "actions",
-      className: "text-3xl",       
-
+      className: "text-3xl",
     },
   ];
 
   const dataSource = [];
-  if (users.length > 0) {
+  if (users?.length > 0) {
     for (let i = 0; i < users.length; i++) {
-      dataSource.push({
-        key: i,
-        firstName: users[i].firstName,
-        lastName: users[i].lastName,
-        email: users[i].email,
-        actions: (
-          <div className="flex align-items-center gap-3">
-            <FcInfo
-              size={19}
-              className="userInfo h-9 w-9"
-              onClick={() => navigate(`./user/${users[i].id}`)}
-            />
-            <FcFullTrash
-              size={19}
-              className="userDelete h-9 w-9"
-              onClick={() => handleDelete(users[i].userName, users[i].id)}
-            />
-          </div>
-        ),
-      });
+      if (!users[i].entrenador) {
+        dataSource.push({
+          key: i,
+          firstName: users[i].firstName,
+          lastName: users[i].lastName,
+          email: users[i].email,
+          actions: (
+            <div className="flex align-items-center gap-3">
+              <FcInfo
+                size={19}
+                className="userInfo h-9 w-9"
+                onClick={() => navigate(`./user/${users[i].id}`)}
+              />
+              <FcFullTrash
+                size={19}
+                className="userDelete h-9 w-9"
+                onClick={() => handleDelete(users[i].userName, users[i].id)}
+              />
+            </div>
+          ),
+        });
+      }
     }
   }
 
   return (
-    <div className={`${styles.wrapper}`} style={{"backgroundColor":"#202932"}}>
+    <div className={`${styles.wrapper}`} style={{ backgroundColor: "#202932" }}>
       <div>
         <h3 className="text-5xl">Lista de Usuarios</h3>
       </div>
-<Table
-  dataSource={dataSource}
-  columns={columns}
-  className="text-white text-xl"
-  rowClassName="h-12"
-/>    </div>
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        className="text-white text-xl"
+        rowClassName="h-12"
+      />{" "}
+    </div>
   );
 }
 

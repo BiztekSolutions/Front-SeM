@@ -6,7 +6,7 @@ import ListaUsuarios from "./Views/Coach/ListaUsuarios";
 import Grupos from "./Views/Coach/Grupos";
 import ListaRutinas from "./Views/Coach/ListaRutinas";
 import AgregarRutina from "./Views/Coach/AgregarRutina";
-import Mensajeria from "./Views/Coach/Mensajeria";
+import Mensajeria from "./Views/Coach/Mensajerias";
 import SingleUser from "./Views/Coach/SingleUser/SingleUser";
 // import User from "./Views/User/User";
 import ExerciseContainer from "./components/entrenadora/exerciseComponents/ExerciseContainer";
@@ -29,10 +29,10 @@ const Router = () => {
     const fetchData = async () => {
       try {
         const exercisesResponse = await axios.get(
-          "http://localhost:3000/exercises"
+          "http://localhost:3001/exercises"
         );
         const workoutsResponse = await axios.get(
-          "http://localhost:3000/workouts"
+          "http://localhost:3001/workouts"
         );
 
         setExercises(exercisesResponse.data);
@@ -50,7 +50,7 @@ const Router = () => {
         {/* outside */}
         <Route exact path="/" element={<Home />} />
         {/* inside COACH */}
-        <Route path="/coach" element={<Coach />}>
+        <Route path="/coach/" element={<Coach />}>
           <Route index element={<ListaUsuarios />} />
           <Route path="user/:id" element={<SingleUser />}>
             <Route path="ejercicios" element={<UserCalendar />} />

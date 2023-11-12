@@ -8,12 +8,12 @@ import {
 } from '../../../controllers/RoutineController';
 import { authenticateToken } from '../../../utils/validateToken';
 
-const router = express.Router();
+const routineRouter = express.Router();
 
-router.post('/', authenticateToken, createRoutine);
-router.put('/:routineId', authenticateToken, updateRoutine);
-router.get('/:routineId/exercises', authenticateToken, getRoutineExercises);
-router.get('/:routineId', authenticateToken, getRoutine);
-router.get('/', authenticateToken, getRoutines);
+routineRouter.post('/', authenticateToken, createRoutine);
+routineRouter.put('/:routineId', authenticateToken, updateRoutine);
+routineRouter.get('/:routineId/exercises', authenticateToken, getRoutineExercises);
+routineRouter.get('/:routineId', authenticateToken, getRoutine);
+routineRouter.get('/', authenticateToken, getRoutines);
 
-export { router as routineRouter };
+export default routineRouter;

@@ -30,7 +30,8 @@ export const register = async (req: Request, res: Response) => {
     const newUser = await UserModel.create({
       name: req.body.firstName,
       lastname: req.body.lastName,
-      rol: 'entrenador',
+      email: email,
+      rol: 'user',
       created_date: new Date(),
       updated_date: new Date(),
     });

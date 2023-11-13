@@ -23,6 +23,10 @@ UserModel.init(
     lastname: {
       type: DataTypes.STRING,
     },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
     rol: {
       type: DataTypes.STRING,
     },

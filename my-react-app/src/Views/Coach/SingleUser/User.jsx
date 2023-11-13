@@ -16,7 +16,7 @@ export default function User() {
   const { user, message } = state.users;
   const { id } = useParams();
   const userId = id;
-
+  console.log(id, user, "-------------------------------------------");
   const handleDelete = (userName, userId) => {
     Swal.fire({
       color: "gray",
@@ -53,34 +53,6 @@ export default function User() {
     });
   };
 
-  const columns = [
-    {
-      title: "First Name",
-      dataIndex: "firstName",
-      key: "firstName",
-    },
-    {
-      title: "Last Name",
-      dataIndex: "lastName",
-      key: "lastName",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-    },
-    {
-      title: "Grupo",
-      dataIndex: "grupo",
-      key: "grupo",
-    },
-  ];
-
   useEffect(() => {
     if (userId) {
       dispatch(getUser(userId));
@@ -90,8 +62,8 @@ export default function User() {
   const dataSource = [
     {
       key: 1,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      firstName: user.name,
+      lastName: user.lastname,
       email: user.email,
       status: (
         <div className="userStatusSpan ">

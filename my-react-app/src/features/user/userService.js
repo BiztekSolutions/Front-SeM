@@ -40,8 +40,12 @@ const deleteUser = async (userId) => {
   return response.data;
 };
 
-const getUser = async (userId) => {
-  const response = await axios(`http://localhost:3001/users/${userId}`);
+const getUser = async (token, userId) => {
+  const response = await axios(`http://localhost:3000/api/v1/users/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const userData = response.data;
   return userData;
 };

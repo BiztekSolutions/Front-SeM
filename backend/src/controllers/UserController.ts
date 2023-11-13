@@ -14,6 +14,8 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId as string);
+    console.log(userId);
+
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
     const user = await UserModel.findByPk(userId);

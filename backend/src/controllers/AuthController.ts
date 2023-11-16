@@ -3,10 +3,8 @@ dotenv.config();
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import UserModel from '../models/User';
-import Credential from '../models/Credential';
-import Session from '../models/Session';
-
+import { isRegistered, create } from '../services/AuthService';
+import { create as createSession, get, remove, find } from '../services/SessionService';
 const { SECRET_KEY } = process.env;
 
 export const register = async (req: Request, res: Response) => {
@@ -16,7 +14,7 @@ export const register = async (req: Request, res: Response) => {
     }
 
     const { email, password } = req.body;
-    const existingUser = await Credential.findOne({ where: { email } });
+    const existingUser = await isRegistered(email);
 
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
@@ -24,24 +22,9 @@ export const register = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await UserModel.create({
-      name: req.body.firstName,
-      lastname: req.body.lastName,
-      email: email,
-      rol: 'user',
-      created_date: new Date(),
-      updated_date: new Date(),
-    });
+    const newUser = await create(email, hashedPassword, req.body.name, req.body.lastname);
 
-    const newCredential = await Credential.create({
-      email,
-      password: hashedPassword,
-      created_date: new Date(),
-      updated_date: new Date(),
-      idUser: newUser.idUser,
-    });
-
-    if (newUser && newCredential) {
+    if (newUser) {
       return res.status(201).json({ message: 'User registered successfully', newUser });
     }
   } catch (error: any) {
@@ -53,7 +36,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const user = await Credential.findOne({ where: { email } });
+    const user = await isRegistered(email);
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -64,9 +47,11 @@ export const login = async (req: Request, res: Response) => {
       return res.status(403).json({ message: 'Invalid credentials' });
     }
 
-    const existingSession = await Session.findOne({ where: { idCredential: user.idCredential } });
+    const existingSession = await find(user.idCredential);
 
     if (existingSession) {
+      console.log('EXISTINGSESSION', existingSession);
+
       return res.status(200).json({
         message: 'User logged',
         session: {
@@ -77,12 +62,8 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign({ userId: user.idCredential }, SECRET_KEY || '', { expiresIn: '24h' });
-    const newSession = await Session.create({
-      token,
-      created_date: new Date(),
-      updated_date: new Date(),
-      idCredential: user.idCredential,
-    });
+    const newSession = await createSession(token, user.idCredential);
+    console.log('NEWSESSION', newSession);
 
     return res.status(200).json({
       message: 'User logged',
@@ -104,7 +85,7 @@ export const logout = async (req: Request, res: Response) => {
 
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
-    const rowsAffected = await Session.destroy({ where: { token } });
+    const rowsAffected = await remove(token);
 
     if (!rowsAffected) return res.status(401).json({ message: 'Unauthorized' });
 

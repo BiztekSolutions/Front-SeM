@@ -1,15 +1,7 @@
 import { Request, Response } from 'express';
 import UserModel from '../models/User';
 import Routine from '../models/Routine';
-
-export const getUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await UserModel.findAll();
-    return res.status(200).json({ users });
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
-  }
-};
+import { get, list, getRoutines } from '../services/UserService';
 
 export const getUser = async (req: Request, res: Response) => {
   try {
@@ -17,8 +9,17 @@ export const getUser = async (req: Request, res: Response) => {
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
-    const user = await UserModel.findByPk(userId);
+    const user = await get(userId);
     return res.status(200).json({ user });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = list();
+    return res.status(200).json({ users });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
@@ -29,19 +30,12 @@ export const getUserRoutines = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
-    const user = await UserModel.findByPk(userId, {
-      include: [
-        {
-          model: Routine,
-          as: 'routines',
-        },
-      ],
-    });
+    const userRoutines = await getRoutines(userId);
+    console.log(userRoutines);
+    
+    if (!userRoutines) return res.status(400).json({ message: 'Routines not found' });
 
-    if (!user) return res.status(400).json({ message: 'User not found' });
-
-    const routines = user;
-    return res.status(200).json({ routines });
+    return res.status(200).json({ userRoutines });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

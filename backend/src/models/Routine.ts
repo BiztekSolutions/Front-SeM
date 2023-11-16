@@ -1,8 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db';
-import RoutineHasExercise from './RoutineHasExercise';
-import RoutineConfiguration from './RoutineConfiguration';
-import Exercise from './Exercise';
 
 class Routine extends Model {
   public idRoutine!: number;
@@ -10,6 +7,7 @@ class Routine extends Model {
   public expiration_date?: Date;
   public objective?: string;
   public observation?: string;
+
 }
 
 Routine.init(

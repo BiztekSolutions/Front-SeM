@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db';
 
@@ -5,6 +6,7 @@ class User extends Model {
   public idUser!: number;
   public name!: string;
   public lastname!: string;
+
 }
 
 User.init(

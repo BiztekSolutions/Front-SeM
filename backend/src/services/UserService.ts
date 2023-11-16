@@ -1,12 +1,10 @@
-import { prisma } from './db_client';
+import User from '../models/User';
+import Routine from '../models/Routine';
+import Client from '../models/Client';
 
-/*
- * if you need to make calls to additional tables, data stores (Redis, for example),
- * or call an external endpoint as part of creating the blogpost, add them to this service
- */
 export const list = async () => {
   try {
-    return await prisma.user.findMany();
+    return await User.findAll();
   } catch (e: any) {
     throw new Error(e.message);
   }
@@ -14,36 +12,28 @@ export const list = async () => {
 
 export const get = async (idUser: number) => {
   try {
-    return await prisma.user.findUnique({
-      where: {
-        idUser: idUser,
-      },
+    return await User.findByPk(idUser);
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
+
+export const getRoutines = async (idUser: number) => {
+  try {
+    return await Client.findByPk(idUser, {
+      include: [
+        {
+          model: Routine,
+        },
+      ],
     });
   } catch (e: any) {
     throw new Error(e.message);
   }
 };
 
-export const getRoutinesId = async (idUser: number) => {
-  try {
-    return await prisma.user.findUnique({
-      where: {
-        idUser: idUser,
-      },
-      select: {
-        routines_has_user: {
-          select: {
-            idRoutine: true,
-          },
-        },
-      },
-    });
-  } catch (e: any) {
-    throw new Error(e.message);
-  }
-};
 module.exports = {
   list,
   get,
-  getRoutinesId,
+  getRoutines,
 };

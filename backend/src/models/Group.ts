@@ -4,6 +4,7 @@ import sequelize from '../db';
 class Group extends Model {
   public idGroup!: number;
   public name?: string;
+
 }
 
 Group.init(

@@ -7,6 +7,7 @@ class RoutineConfiguration extends Model {
   public weight?: number;
   public repetitions?: number;
   public restTime?: number;
+
 }
 
 RoutineConfiguration.init(

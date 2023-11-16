@@ -1,14 +1,12 @@
-import { prisma } from './db_client';
+import Session from '../models/Session';
 
 export const create = async (jwt: string, idCredential: number) => {
   try {
-    return await prisma.session.create({
-      data: {
-        token: jwt,
-        created_date: new Date(),
-        updated_date: new Date(),
-        idCredential: idCredential,
-      },
+    return await Session.create({
+      token: jwt,
+      created_date: new Date(),
+      updated_date: new Date(),
+      idCredential: idCredential,
     });
   } catch (e: any) {
     throw new Error(e.message);
@@ -17,35 +15,23 @@ export const create = async (jwt: string, idCredential: number) => {
 
 export const get = async (idCredential: number) => {
   try {
-    return await prisma.session.findFirst({
-      where: {
-        idCredential: idCredential,
-      },
-    });
+    return await Session.findOne({ where: { idCredential: idCredential } });
   } catch (e: any) {
     throw new Error(e.message);
   }
 };
 
-export const remove = async (idSession: number) => {
+export const remove = async (token: string) => {
   try {
-    return await prisma.session.delete({
-      where: {
-        idSession: idSession,
-      },
-    });
+    return await Session.destroy({ where: { token } });
   } catch (e: any) {
     throw new Error(e.message);
   }
 };
 
-export const find = async (token: string) => {
+export const find = async (idCredential: number) => {
   try {
-    return await prisma.session.findFirst({
-      where: {
-        token: token,
-      },
-    });
+    return await Session.findOne({ where: { idCredential: idCredential } });
   } catch (e: any) {
     throw new Error(e.message);
   }

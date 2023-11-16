@@ -1,4 +1,4 @@
-import { DataTypes, Model, UUIDV4 } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db';
 
 class Credential extends Model {
@@ -7,6 +7,7 @@ class Credential extends Model {
   public password!: string;
   public created_date!: Date;
   public updated_date!: Date;
+
 }
 
 Credential.init(

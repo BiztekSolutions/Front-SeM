@@ -1,37 +1,33 @@
-import { prisma } from './db_client';
+import Credential from '../models/Credential';
+import User from '../models/User';
 
-/*
- * if you need to make calls to additional tables, data stores (Redis, for example),
- * or call an external endpoint as part of creating the blogpost, add them to this service
- */
 export const isRegistered = async (email: string) => {
   try {
-    return await prisma.credential.findUnique({
-      where: {
-        email,
-      },
-    });
+    return await Credential.findOne({ where: { email } });
   } catch (e: any) {
     throw new Error(e.message);
   }
 };
 
-export const create = async (email: string, password: string) => {
+export const create = async (email: string, password: string, name: string, lastname: string) => {
   try {
-    return await prisma.credential.create({
-      data: {
-        email,
-        password,
+    return await Credential.create(
+      {
+        email: email,
+        password: password,
         created_date: new Date(),
         updated_date: new Date(),
-        user: {
-          create: {
-            created_date: new Date(),
-            updated_date: new Date(),
-          },
+        User: {
+          name: name,
+          lastname: lastname,
+          created_date: new Date(),
+          updated_date: new Date(),
         },
       },
-    });
+      {
+        include: [User],
+      }
+    );
   } catch (e: any) {
     throw new Error(e.message);
   }

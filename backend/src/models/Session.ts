@@ -6,6 +6,7 @@ class Session extends Model {
   public token!: string;
   public created_date!: Date;
   public updated_date!: Date;
+
 }
 
 Session.init(

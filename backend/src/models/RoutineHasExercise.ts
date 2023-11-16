@@ -5,6 +5,7 @@ class RoutineHasExercise extends Model {
   public Routine_idRoutine!: number;
   public Exercise_idExercise!: number;
   public weekDay?: Date;
+
 }
 
 RoutineHasExercise.init(

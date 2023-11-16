@@ -4,6 +4,8 @@ import sequelize from '../db';
 class Exercise extends Model {
   public idExercise!: number;
   public name?: string;
+
+
 }
 
 Exercise.init(

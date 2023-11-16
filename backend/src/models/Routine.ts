@@ -1,17 +1,18 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db';
+import RoutineHasExercise from './RoutineHasExercise';
+import RoutineConfiguration from './RoutineConfiguration';
+import Exercise from './Exercise';
 
-class RoutineModel extends Model {
+class Routine extends Model {
   public idRoutine!: number;
   public name?: string;
-  public created_date?: Date;
-  public updated_date?: Date;
   public expiration_date?: Date;
   public objective?: string;
   public observation?: string;
 }
 
-RoutineModel.init(
+Routine.init(
   {
     idRoutine: {
       type: DataTypes.INTEGER,
@@ -20,12 +21,6 @@ RoutineModel.init(
     },
     name: {
       type: DataTypes.STRING,
-    },
-    created_date: {
-      type: DataTypes.DATE,
-    },
-    updated_date: {
-      type: DataTypes.DATE,
     },
     expiration_date: {
       type: DataTypes.DATE,
@@ -39,9 +34,8 @@ RoutineModel.init(
   },
   {
     sequelize,
-    modelName: 'RoutineModel',
-    timestamps: false,
+    modelName: 'Routine',
   }
 );
 
-export default RoutineModel;
+export default Routine;

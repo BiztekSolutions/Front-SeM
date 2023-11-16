@@ -5,7 +5,18 @@ import bodyParser from 'body-parser';
 import sequelize from './db';
 import router from './routes/api/v1/mainRouter';
 
-import { Credential, Session, UserModel } from './models/Relations';
+import {
+  User,
+  Session,
+  Credential,
+  Client,
+  Coach,
+  Group,
+  Routine,
+  Exercise,
+  RoutineHasExercise,
+  RoutineConfiguration,
+} from './models/Relations';
 
 const app: Application = express();
 const PORT: number = 3000;
@@ -19,12 +30,37 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
-UserModel.hasMany(Credential, { foreignKey: 'idUser' });
-Credential.belongsTo(UserModel, { foreignKey: 'idUser' });
+
+// USER RELATIONS
+User.hasMany(Credential, { foreignKey: 'idUser' });
+Credential.belongsTo(User, { foreignKey: 'idUser' });
 
 Session.belongsTo(Credential, { foreignKey: 'idCredential' });
 Credential.hasMany(Session, { foreignKey: 'idCredential' });
-// sequelize
+
+User.hasOne(Client, { foreignKey: 'idUser' });
+Client.belongsTo(User, { foreignKey: 'idUser' });
+
+User.hasOne(Coach, { foreignKey: 'idUser' });
+Coach.belongsTo(User, { foreignKey: 'idUser' });
+
+// CLIENT RELATIONS
+Client.belongsTo(Group, { foreignKey: 'idClient' });
+Group.hasMany(Client, { foreignKey: 'idClient' });
+
+Client.belongsToMany(Routine, { through: 'ClientHasRoutine' });
+Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
+
+// GROUP RELATIONS
+Group.hasOne(Routine);
+Routine.belongsTo(Group);
+
+// ROUTINE RELATIONS
+Routine.belongsToMany(Exercise, { through: RoutineHasExercise });
+Exercise.belongsToMany(Routine, { through: RoutineHasExercise });
+RoutineHasExercise.hasOne(RoutineConfiguration);
+RoutineConfiguration.belongsTo(RoutineHasExercise);
+
 sequelize
   .sync({ force: false })
   .then(() => {

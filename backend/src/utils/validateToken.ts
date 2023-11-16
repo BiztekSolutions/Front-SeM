@@ -8,7 +8,6 @@ const { SECRET_KEY } = process.env;
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  console.log(token);
 
   if (!token) return res.status(401).json({ message: 'Unauthorized: Token missing' });
 

@@ -1,12 +1,12 @@
-// authController.ts
 import dotenv from 'dotenv';
 dotenv.config();
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import e, { Request, Response } from 'express';
-import UserModel from '../models/UserModel';
+import { Request, Response } from 'express';
+import UserModel from '../models/User';
 import Credential from '../models/Credential';
 import Session from '../models/Session';
+
 const { SECRET_KEY } = process.env;
 
 export const register = async (req: Request, res: Response) => {
@@ -24,9 +24,6 @@ export const register = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user with its associated credentials
-    console.log(req.body);
-
     const newUser = await UserModel.create({
       name: req.body.firstName,
       lastname: req.body.lastName,
@@ -35,6 +32,7 @@ export const register = async (req: Request, res: Response) => {
       created_date: new Date(),
       updated_date: new Date(),
     });
+
     const newCredential = await Credential.create({
       email,
       password: hashedPassword,
@@ -43,7 +41,7 @@ export const register = async (req: Request, res: Response) => {
       idUser: newUser.idUser,
     });
 
-    if (newUser) {
+    if (newUser && newCredential) {
       return res.status(201).json({ message: 'User registered successfully', newUser });
     }
   } catch (error: any) {
@@ -55,22 +53,17 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    // Buscar el usuario por su correo electrónico
     const user = await Credential.findOne({ where: { email } });
-    console.log(user);
 
-    // Verificar si el usuario existe
     if (!user) {
-      return res.status(401).json({ message: 'Email Incorrect' });
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Verificar la contraseña
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      return res.status(403).json({ message: 'Password Incorrect' });
+      return res.status(403).json({ message: 'Invalid credentials' });
     }
 
-    // Verificar si hay una sesión existente
     const existingSession = await Session.findOne({ where: { idCredential: user.idCredential } });
 
     if (existingSession) {
@@ -83,8 +76,7 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
-    // Crear un nuevo token JWT y sesión
-    const token = jwt.sign({ userId: user.idCredential }, SECRET_KEY || '', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.idCredential }, SECRET_KEY || '', { expiresIn: '24h' });
     const newSession = await Session.create({
       token,
       created_date: new Date(),

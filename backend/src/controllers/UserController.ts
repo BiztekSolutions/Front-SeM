@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import UserModel from '../models/UserModel';
-import RoutineModel from '../models/Routine';
+import UserModel from '../models/User';
+import Routine from '../models/Routine';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -14,7 +14,6 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId as string);
-    console.log(userId);
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
@@ -33,7 +32,7 @@ export const getUserRoutines = async (req: Request, res: Response) => {
     const user = await UserModel.findByPk(userId, {
       include: [
         {
-          model: RoutineModel,
+          model: Routine,
           as: 'routines',
         },
       ],
@@ -53,7 +52,6 @@ export const updateUser = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
-    // Assuming you have some logic to update the user based on the request body
     const updatedUser = await UserModel.update(req.body, {
       where: { idUser: userId },
     });

@@ -1,16 +1,13 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db';
 
-class UserModel extends Model {
+class User extends Model {
   public idUser!: number;
   public name!: string;
   public lastname!: string;
-  public rol!: string;
-  public created_date!: Date;
-  public updated_date!: Date;
 }
 
-UserModel.init(
+User.init(
   {
     idUser: {
       type: DataTypes.INTEGER,
@@ -23,25 +20,12 @@ UserModel.init(
     lastname: {
       type: DataTypes.STRING,
     },
-    email: {
-      type: DataTypes.STRING,
-      unique: true,
-    },
-    rol: {
-      type: DataTypes.STRING,
-    },
-    created_date: {
-      type: DataTypes.DATE,
-    },
-    updated_date: {
-      type: DataTypes.DATE,
-    },
   },
   {
     sequelize,
-    modelName: 'UserModel',
+    modelName: 'User',
     timestamps: false,
   }
 );
 
-export default UserModel;
+export default User;

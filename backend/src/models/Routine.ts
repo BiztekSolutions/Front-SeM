@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class Routine extends Model {
   public idRoutine!: number;
@@ -7,7 +7,12 @@ class Routine extends Model {
   public expiration_date?: Date;
   public objective?: string;
   public observation?: string;
+  public weekDay?: number;
 
+  // static associate(models: any) {
+  //   this.belongsToMany(models.Exercise, { through: models.RoutineHasExercise });
+  //   this.hasOne(models.Group);
+  // }
 }
 
 Routine.init(
@@ -29,10 +34,14 @@ Routine.init(
     observation: {
       type: DataTypes.STRING,
     },
+    weekDay: {
+      type: DataTypes.INTEGER,
+    },
   },
   {
     sequelize,
     modelName: 'Routine',
+    
   }
 );
 

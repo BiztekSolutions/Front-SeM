@@ -1,12 +1,11 @@
-import { prisma } from './db_client';
-
+import { Routine, Exercise, RoutineHasExercise, RoutineConfiguration } from '../models/Relations';
 /*
  * if you need to make calls to additional tables, data stores (Redis, for example),
  * or call an external endpoint as part of creating the blogpost, add them to this service
  */
 export const list = async () => {
   try {
-    return await prisma.routine.findMany();
+    return await Routine.findAll();
   } catch (e: any) {
     throw new Error(e.message);
   }
@@ -14,10 +13,23 @@ export const list = async () => {
 
 export const get = async (idRoutine: number) => {
   try {
-    return await prisma.routine.findUnique({
-      where: {
-        idRoutine: idRoutine,
-      },
+    return await Routine.findOne({
+      where: { idRoutine },
+      include: [
+        {
+          model: RoutineHasExercise,
+          foreignKey: 'idRoutine',
+          attributes: { exclude: ['idRoutine', 'createdAt', 'updatedAt'] },
+          include: [
+            {
+              model: Exercise,
+            },
+            {
+              model: RoutineConfiguration,
+            },
+          ],
+        },
+      ],
     });
   } catch (e: any) {
     throw new Error(e.message);
@@ -26,17 +38,11 @@ export const get = async (idRoutine: number) => {
 
 export const getExercisesId = async (idRoutine: number) => {
   try {
-    return await prisma.routine.findUnique({
+    return await RoutineHasExercise.findAll({
       where: {
         idRoutine: idRoutine,
       },
-      select: {
-        exerciseGroups: {
-          select: {
-            idExerciseGroup: true,
-          },
-        },
-      },
+      attributes: ['ExerciseIdExercise'],
     });
   } catch (e: any) {
     throw new Error(e.message);

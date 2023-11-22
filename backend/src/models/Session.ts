@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class Session extends Model {
   public idSession!: number;
@@ -31,6 +31,7 @@ Session.init(
     sequelize,
     modelName: 'Session',
     timestamps: false,
+    
   }
 );
 

@@ -23,19 +23,19 @@ export const getRoutine = async (req: Request, res: Response) => {
   }
 };
 
-export const getRoutineExercises = async (req: Request, res: Response) => {
-  try {
-    const routineId = parseInt(req.params.routineId as string);
-    if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
-    const routine = await getExercisesId(routineId);
-    if (!routine) return res.status(400).json({ message: 'Routine not found' });
-    const exercisesId = routine.exerciseGroups.map((group) => group.idExerciseGroup);
-    const exercises = await Promise.all(exercisesId.map((id) => getExercise(id)));
-    return res.status(200).json({ exercises });
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
-  }
-};
+// export const getRoutineExercises = async (req: Request, res: Response) => {
+//   try {
+//     const routineId = parseInt(req.params.routineId as string);
+//     if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
+//     const routine = await getExercisesId(routineId);
+//     if (!routine) return res.status(400).json({ message: 'Routine not found' });
+//     const exercisesId = routine.exerciseGroups.map((group) => group.idExerciseGroup);
+//     const exercises = await Promise.all(exercisesId.map((id) => getExercise(id)));
+//     return res.status(200).json({ exercises });
+//   } catch (error: any) {
+//     return res.status(500).json({ error: error.message });
+//   }
+// };
 
 export const updateRoutine = async (req: Request, res: Response) => {
   try {
@@ -55,4 +55,4 @@ export const createRoutine = async (req: Request, res: Response) => {
   }
 };
 
-module.exports = { getRoutines, getRoutine, getRoutineExercises, updateRoutine, createRoutine };
+module.exports = { getRoutines, getRoutine, updateRoutine, createRoutine };

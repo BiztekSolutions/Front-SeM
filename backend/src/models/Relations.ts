@@ -16,10 +16,10 @@ Credential.belongsTo(User, { foreignKey: 'idUser' });
 Session.belongsTo(Credential, { foreignKey: 'idCredential' });
 Credential.hasMany(Session, { foreignKey: 'idCredential' });
 
-User.hasOne(Client, { foreignKey: 'idUser' });
+//User.hasOne(Client, { foreignKey: 'idUser' });
 Client.belongsTo(User, { foreignKey: 'idUser' });
 
-User.hasOne(Coach, { foreignKey: 'idUser' });
+//User.hasOne(Coach, { foreignKey: 'idUser' });
 Coach.belongsTo(User, { foreignKey: 'idUser' });
 
 // CLIENT RELATIONS
@@ -30,13 +30,13 @@ Client.belongsToMany(Routine, { through: 'ClientHasRoutine' });
 Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
 
 // GROUP RELATIONS
-Group.hasOne(Routine);
-Routine.belongsTo(Group);
+//Group.hasOne(Routine);
+Routine.hasOne(Group);
 
 // ROUTINE RELATIONS
 Routine.belongsToMany(Exercise, { through: RoutineHasExercise });
 Exercise.belongsToMany(Routine, { through: RoutineHasExercise });
-RoutineHasExercise.hasOne(RoutineConfiguration);
-RoutineConfiguration.belongsTo(RoutineHasExercise);
+RoutineHasExercise.belongsTo(RoutineConfiguration);
+//RoutineConfiguration.belongsTo(RoutineHasExercise);
 
 export { User, Session, Credential, Client, Coach, Group, Routine, Exercise, RoutineHasExercise, RoutineConfiguration };

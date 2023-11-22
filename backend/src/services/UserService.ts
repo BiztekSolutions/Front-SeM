@@ -1,18 +1,30 @@
 import User from '../models/User';
 import Routine from '../models/Routine';
 import Client from '../models/Client';
+import Credential from '../models/Credential';
 
-export const list = async () => {
+export const get = async (idUser: number) => {
   try {
-    return await User.findAll();
+    return await User.findByPk(idUser, {
+      include: [
+        {
+          model: Credential,
+          attributes: {
+            exclude: ['password', 'idUser'],
+          },
+        },
+      ],
+    });
   } catch (e: any) {
     throw new Error(e.message);
   }
 };
 
-export const get = async (idUser: number) => {
+export const list = async () => {
   try {
-    return await User.findByPk(idUser);
+    return await User.findAll({
+      include: [{ model: Credential, attributes: { exclude: ['password', 'idUser', 'created_date', 'updated_date'] } }],
+    });
   } catch (e: any) {
     throw new Error(e.message);
   }
@@ -30,10 +42,4 @@ export const getRoutines = async (idUser: number) => {
   } catch (e: any) {
     throw new Error(e.message);
   }
-};
-
-module.exports = {
-  list,
-  get,
-  getRoutines,
 };

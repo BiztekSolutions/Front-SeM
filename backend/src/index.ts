@@ -2,21 +2,18 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import sequelize from './db';
+import sequelize from './configs/db';
 import router from './routes/api/v1/mainRouter';
-
-import {
-  User,
-  Session,
-  Credential,
-  Client,
-  Coach,
-  Group,
-  Routine,
-  Exercise,
-  RoutineHasExercise,
-  RoutineConfiguration,
-} from './models/Relations';
+import User from './models/User';
+import Credential from './models/Credential';
+import Session from './models/Session';
+import Client from './models/Client';
+import Coach from './models/Coach';
+import Group from './models/Group';
+import Routine from './models/Routine';
+import Exercise from './models/Exercise';
+import RoutineHasExercise from './models/RoutineHasExercise';
+import RoutineConfiguration from './models/RoutineConfiguration';
 
 const app: Application = express();
 const PORT: number = 3000;
@@ -38,31 +35,35 @@ Credential.belongsTo(User, { foreignKey: 'idUser' });
 Session.belongsTo(Credential, { foreignKey: 'idCredential' });
 Credential.hasMany(Session, { foreignKey: 'idCredential' });
 
-User.hasOne(Client, { foreignKey: 'idUser' });
+//User.hasOne(Client, { foreignKey: 'idUser' });
 Client.belongsTo(User, { foreignKey: 'idUser' });
 
-User.hasOne(Coach, { foreignKey: 'idUser' });
+//User.hasOne(Coach, { foreignKey: 'idUser' });
 Coach.belongsTo(User, { foreignKey: 'idUser' });
 
 // CLIENT RELATIONS
-Client.belongsTo(Group, { foreignKey: 'idClient' });
-Group.hasMany(Client, { foreignKey: 'idClient' });
+Client.belongsTo(Group, { foreignKey: 'idGroup' });
+Group.hasMany(Client, { foreignKey: 'idGroup' });
 
 Client.belongsToMany(Routine, { through: 'ClientHasRoutine' });
 Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
 
 // GROUP RELATIONS
-Group.hasOne(Routine);
-Routine.belongsTo(Group);
+//Group.hasOne(Routine);
+Routine.hasOne(Group);
 
 // ROUTINE RELATIONS
-Routine.belongsToMany(Exercise, { through: RoutineHasExercise });
-Exercise.belongsToMany(Routine, { through: RoutineHasExercise });
-RoutineHasExercise.hasOne(RoutineConfiguration);
-RoutineConfiguration.belongsTo(RoutineHasExercise);
+Routine.hasMany(RoutineHasExercise, { foreignKey: 'RoutineIdRoutine' });
+RoutineHasExercise.belongsTo(Routine, { foreignKey: 'RoutineIdRoutine' });
+
+Exercise.hasMany(RoutineHasExercise, { foreignKey: 'ExerciseIdExercise' });
+RoutineHasExercise.belongsTo(Exercise, { foreignKey: 'ExerciseIdExercise' });
+
+RoutineConfiguration.hasMany(RoutineHasExercise, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
+RoutineHasExercise.belongsTo(RoutineConfiguration, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
 
 sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Database & tables created!`);

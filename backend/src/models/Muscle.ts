@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class MuscleModel extends Model {
   public idMuscle!: number;
@@ -21,6 +21,7 @@ MuscleModel.init(
   {
     sequelize,
     modelName: 'MuscleModel',
+    
   }
 );
 

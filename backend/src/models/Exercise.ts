@@ -1,11 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class Exercise extends Model {
   public idExercise!: number;
   public name?: string;
-
-
 }
 
 Exercise.init(
@@ -23,6 +21,8 @@ Exercise.init(
   {
     sequelize,
     modelName: 'Exercise',
+    timestamps: false,
+    
   }
 );
 

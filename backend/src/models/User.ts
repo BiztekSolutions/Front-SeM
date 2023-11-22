@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class User extends Model {
   public idUser!: number;
@@ -27,6 +27,7 @@ User.init(
     sequelize,
     modelName: 'User',
     timestamps: false,
+    
   }
 );
 

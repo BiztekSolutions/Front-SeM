@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class RoutineConfiguration extends Model {
   public idRoutineConfiguration!: number;
@@ -7,7 +7,6 @@ class RoutineConfiguration extends Model {
   public weight?: number;
   public repetitions?: number;
   public restTime?: number;
-
 }
 
 RoutineConfiguration.init(
@@ -34,6 +33,8 @@ RoutineConfiguration.init(
   {
     sequelize,
     modelName: 'RoutineConfiguration',
+    timestamps: false,
+    
   }
 );
 

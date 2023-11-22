@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class Client extends Model {
   public idClient!: number;
@@ -17,6 +17,7 @@ Client.init(
     sequelize,
     modelName: 'Client',
     timestamps: false,
+    
   }
 );
 

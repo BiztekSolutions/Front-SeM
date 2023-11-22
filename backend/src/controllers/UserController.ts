@@ -10,6 +10,9 @@ export const getUser = async (req: Request, res: Response) => {
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
     const user = await get(userId);
+
+    if (!user) return res.status(400).json({ message: 'User not found' });
+
     return res.status(200).json({ user });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
@@ -18,7 +21,9 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = list();
+    const users = await list();
+    console.log(users);
+    
     return res.status(200).json({ users });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
@@ -32,7 +37,7 @@ export const getUserRoutines = async (req: Request, res: Response) => {
 
     const userRoutines = await getRoutines(userId);
     console.log(userRoutines);
-    
+
     if (!userRoutines) return res.status(400).json({ message: 'Routines not found' });
 
     return res.status(200).json({ userRoutines });

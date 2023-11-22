@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class Group extends Model {
   public idGroup!: number;
@@ -22,6 +22,7 @@ Group.init(
   {
     sequelize,
     modelName: 'Group',
+    
   }
 );
 

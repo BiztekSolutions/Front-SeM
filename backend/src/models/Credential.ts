@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../configs/db';
 
 class Credential extends Model {
   public idCredential!: number;
@@ -35,6 +35,7 @@ Credential.init(
     sequelize,
     modelName: 'Credential',
     timestamps: false,
+    
   }
 );
 

@@ -20,6 +20,7 @@ export const getRoutine = async (req: Request, res: Response) => {
     if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
 
     const routine = await get(routineId);
+    if (!routine) return res.status(404).json({ message: 'Routine not found' });
     return res.status(200).json({ routine });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });

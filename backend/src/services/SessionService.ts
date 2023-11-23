@@ -13,14 +13,6 @@ export const create = async (jwt: string, idCredential: number) => {
   }
 };
 
-export const get = async (idCredential: number) => {
-  try {
-    return await Session.findOne({ where: { idCredential: idCredential } });
-  } catch (e: any) {
-    throw new Error(e.message);
-  }
-};
-
 export const remove = async (token: string) => {
   try {
     return await Session.destroy({ where: { token } });
@@ -39,7 +31,6 @@ export const find = async (idCredential: number) => {
 
 module.exports = {
   create,
-  get,
   remove,
   find,
 };

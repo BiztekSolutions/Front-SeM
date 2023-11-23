@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { isRegistered, create } from '../services/AuthService';
-import { create as createSession, get, remove, find } from '../services/SessionService';
+import { create as createSession, remove, find } from '../services/SessionService';
 const { SECRET_KEY } = process.env;
 
 export const register = async (req: Request, res: Response) => {
@@ -22,10 +22,10 @@ export const register = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await create(email, hashedPassword, req.body.name, req.body.lastname);
+    const user = await create(email, hashedPassword, req.body.name, req.body.lastname);
 
-    if (newUser) {
-      return res.status(201).json({ message: 'User registered successfully', newUser });
+    if (user) {
+      return res.status(201).json({ message: 'User registered successfully', user });
     }
   } catch (error: any) {
     return res.status(500).json({ error: error.message });

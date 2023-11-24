@@ -8,7 +8,7 @@ import ListaRutinas from "./Views/Coach/ListaRutinas";
 import AgregarRutina from "./Views/Coach/AgregarRutina";
 import Mensajeria from "./Views/Coach/Mensajerias";
 import SingleUser from "./Views/Coach/SingleUser/SingleUser";
-// import User from "./Views/User/User";
+import User from "./Views/User/User";
 import ExerciseContainer from "./components/entrenadora/exerciseComponents/ExerciseContainer";
 import Workout from "./components/entrenadora/workoutComponents/Workout";
 import WorkoutContainer from "./components/entrenadora/workoutComponents/WorkoutContainer";
@@ -91,7 +91,7 @@ const Router = () => {
           <Route path="changePassword/:id" element={<ChangePassword />} />
         </Route>
 
-        {/* <Route path="/user" element={<User />}>
+        <Route path="/user" element={<User />}>
           <Route index element={<ListaUsuarios />} />
           <Route exact path="user/:id" element={<SingleUser />} />
           <Route path="noticias" element={<Noticias />} />
@@ -99,7 +99,7 @@ const Router = () => {
           <Route path="listaDeRutinas" element={<ListaRutinas />} />
           <Route path="agregarRutina" element={<AgregarRutina />} />
           <Route path="mensajeria" element={<Mensajeria />} />
-        </Route> */}
+        </Route>
         {/* inside CLIENT */}
       </Routes>
     </BrowserRouter>

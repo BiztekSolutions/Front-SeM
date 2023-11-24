@@ -84,7 +84,6 @@ const Coach = () => {
         collapsible
         collapsed={collapsed}
       >
-        {" "}
         <div className="logo flex items-center justify-center">
           {collapsed ? (
             <div>

@@ -5,6 +5,8 @@ const initialState = {
   isSidebarOpen: false,
   isLoading: false,
   isError: false,
+  isWarning: false,
+  isInfo: false,
   isSuccess: false,
   message: "",
 };
@@ -20,6 +22,8 @@ export const showSuccessNotification =
     dispatch(
       layoutSlice.actions.setNotification({
         isError: false,
+        isWarning: false,
+        isInfo: false,
         isSuccess: true,
         message,
       })
@@ -27,16 +31,61 @@ export const showSuccessNotification =
   };
 
 // Action Creator para mostrar notificación de error
-export const showErrorNotification = (message) => (dispatch) => {
-  console.log("showErrorNotification", message);
-  dispatch(
-    layoutSlice.actions.setNotification({
-      isError: true,
-      isSuccess: false,
+export const showErrorNotification =
+  (api, message, description) => (dispatch) => {
+    console.log("showSuccessNotification", message);
+    api["error"]({
       message,
-    })
-  );
-};
+      description,
+    });
+    dispatch(
+      layoutSlice.actions.setNotification({
+        isError: true,
+        isWarning: false,
+        isInfo: false,
+        isSuccess: false,
+        message,
+      })
+    );
+  };
+
+// Action Creator para mostrar notificación de error
+export const showWarningNotification =
+  (api, message, description) => (dispatch) => {
+    console.log("showSuccessNotification", message);
+    api["warning"]({
+      message,
+      description,
+    });
+    dispatch(
+      layoutSlice.actions.setNotification({
+        isError: false,
+        isWarning: true,
+        isInfo: false,
+        isSuccess: false,
+        message,
+      })
+    );
+  };
+
+// Action Creator para mostrar notificación de error
+export const showInfoNotification =
+  (api, message, description) => (dispatch) => {
+    console.log("showSuccessNotification", message);
+    api["info"]({
+      message,
+      description,
+    });
+    dispatch(
+      layoutSlice.actions.setNotification({
+        isError: false,
+        isWarning: false,
+        isInfo: true,
+        isSuccess: false,
+        message,
+      })
+    );
+  };
 
 export const layoutSlice = createSlice({
   name: "layout",
@@ -52,6 +101,8 @@ export const layoutSlice = createSlice({
       console.log("PENE");
       state.isError = action.payload.isError;
       state.isSuccess = action.payload.isSuccess;
+      state.isWarning = action.payload.isWarning;
+      state.isInfo = action.payload.isInfo;
       state.message = action.payload.message;
     },
   },

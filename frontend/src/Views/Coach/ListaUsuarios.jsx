@@ -231,32 +231,31 @@ function ListaUsuarios() {
       className: "text-3xl",
     },
   ];
-
+  console.log("users", users);
+  console.log(users);
   const dataSource = [];
   if (users?.length > 0) {
     for (let i = 0; i < users.length; i++) {
-      if (users[i].rol === "user") {
-        dataSource.push({
-          key: i,
-          firstName: users[i].name,
-          lastName: users[i].lastname,
-          email: users[i].email,
-          actions: (
-            <div className="flex align-items-center gap-3">
-              <FcInfo
-                size={19}
-                className="userInfo h-9 w-9"
-                onClick={() => navigate(`./user/${users[i].idUser}`)}
-              />
-              <FcFullTrash
-                size={19}
-                className="userDelete h-9 w-9"
-                onClick={() => handleDelete(users[i].userName, users[i].id)}
-              />
-            </div>
-          ),
-        });
-      }
+      dataSource.push({
+        key: i,
+        firstName: users[i].name,
+        lastName: users[i].lastname,
+        email: users[i].Credentials[0].email,
+        actions: (
+          <div className="flex align-items-center gap-3">
+            <FcInfo
+              size={19}
+              className="userInfo h-9 w-9"
+              onClick={() => navigate(`../user/${users[i].idUser}`)}
+            />
+            <FcFullTrash
+              size={19}
+              className="userDelete h-9 w-9"
+              onClick={() => handleDelete(users[i].userName, users[i].id)}
+            />
+          </div>
+        ),
+      });
     }
   }
 

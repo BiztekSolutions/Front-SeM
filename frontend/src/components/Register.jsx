@@ -3,10 +3,9 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import googleLogo from "../assets/googleLogin.png";
 import {
   clearUserMessage,
-  createUser,
-  // googleLoginSlice,
+  register,
   loginUser,
-} from "../features/user/userSlice";
+} from "../features/auth/authSlice";
 // import { useGoogleLogin } from "@react-oauth/google";
 import { TailSpin } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,8 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 const credentialsInitialState = {
   password: "",
-  firstName: "",
-  lastName: "",
+  name: "",
+  lastname: "",
   email: "",
   repeatPassword: "",
 };
@@ -29,13 +28,10 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const { message, user, isLoading } = state.users;
-  // const [token, setToken] = useState(null);
-  const refToast = useRef();
+  console.log(state, "state");
+  const { message, token, user, userId, isLoading } = state.auths;
 
-  // const login = useGoogleLogin({
-  //   onSuccess: (tokenResponse) => setToken(tokenResponse.access_token),
-  // });
+  const refToast = useRef();
 
   // CONTEXT API
   const globalContext = useContext(GlobalContext);
@@ -49,34 +45,6 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     });
   };
 
-  // useEffect(() => {
-  //   // FOR GOOGLE LOGIN
-  //   (async () => {
-  //     if (token) {
-  //       const getData = await axios(
-  //         "https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,birthdays,genders",
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //
-  //             Accept: "application/json",
-  //           },
-  //         }
-  //       );
-
-  //       // PETITION TO GOOGLE AUTH CONTROLLER IN THE BACK
-  //       dispatch(
-  //         googleLoginSlice({
-  //           email: getData.data.emailAddresses[0].value,
-  //           userName: getData.data.names[0].givenName,
-  //           firstName: getData.data.names[0].givenName,
-  //           lastName: getData.data.names[0].familyName,
-  //         })
-  //       );
-  //     }
-  //   })();
-  // }, [token]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -85,7 +53,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
         setError("Las contraseñas no coinciden");
       } else {
         console.log("credentials", credentials);
-        dispatch(createUser(credentials));
+        dispatch(register(credentials));
       }
     } else {
       dispatch(loginUser(credentials));
@@ -109,71 +77,13 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   };
 
   useEffect(() => {
-    // GOOGLE AUTH RESPONSE
-
-    if (message === "Google user logged") {
-      // Setear LS con userID encriptado
-      if (user && user.encodedId) {
-        localStorage.setItem(
-          "nerdyUser",
-          JSON.stringify({ userId: user.encodedId })
-        );
-      }
-
-      // setLogged to allow functionalities
-      setLogged({
-        userId: user.encodedId,
-      });
-
-      refToast.current.show({
-        sticky: 2000,
-        severity: "success",
-        summary: "Welcome",
-        detail: `Hi ${user?.userName}! It's good to see you!`,
-      });
-
-      setTimeout(() => {
-        // Clear message state & close Login modal
-        dispatch(clearUserMessage());
-        setShowLoginModal(false);
-      }, 2100);
-    }
-    if (message === "Google user created") {
-      // Setear LS con userID encriptado
-      // Setear LS con userID encriptado
-      if (user && user.encodedId) {
-        localStorage.setItem(
-          "nerdyUser",
-          JSON.stringify({ userId: user.encodedId })
-        );
-      }
-
-      // setLogged to allow functionalities
-      setLogged({
-        userId: user.encodedId,
-      });
-
-      refToast.current.show({
-        sticky: 2000,
-        severity: "success",
-        summary: "Welcome",
-        detail: `It's a pleasure to have you with us ${user?.userName}!`,
-      });
-
-      setTimeout(() => {
-        // Clear message state & close Login modal
-        dispatch(clearUserMessage());
-        setShowLoginModal(false);
-      }, 2100);
-    }
-
     // LOGIN MANUALLY RESPONSE
     if (message === "User registered successfully") {
       refToast.current.show({
         life: 3000,
         severity: "success",
-        summary: "Welcome",
-        detail: `It's a pleasure to have you with us!`,
+        summary: "Bienvenido!",
+        detail: `Es un gusto tenerlo con nosotros!`,
       });
       setTimeout(() => {
         dispatch(clearUserMessage());
@@ -182,12 +92,13 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       }, 2100);
     }
 
-    if (message === "Email Incorrect") {
+    if (message === "Email Incorrect" || message === "Password Incorrect") {
       refToast.current.show({
         life: 3000,
         severity: "info",
-        summary: "We're sorry",
-        detail: "We couldn't find any account associated with that email",
+        summary: "Lo sentimos!",
+        detail:
+          "No pudimos encontrar ninguna cuenta asociada con esas credenciales",
       });
       dispatch(clearUserMessage());
     }
@@ -196,26 +107,18 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       refToast.current.show({
         life: 3000,
         severity: "info",
-        summary: "We're sorry",
-        detail: message,
+        summary: "Lo sentimos!",
+        detail: "El usuario ya existe",
       });
     }
-    if (message === "Password Incorrect") {
-      refToast.current.show({
-        life: 3000,
-        severity: "info",
-        summary: "We're sorry",
-        detail: message,
-      });
-    }
+
     if (message === "User logged") {
       // Setear LS con userID encriptado
-      console.log("-------------------------------", user.token);
 
-      if (user && user.userId) {
+      if (token && userId) {
         localStorage.setItem(
           "User",
-          JSON.stringify({ userId: user.userId, token: user.token })
+          JSON.stringify({ user: userId, token: token })
         );
       }
 
@@ -266,9 +169,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                   <input
                     type="text"
                     id="form3Example1m"
-                    name="firstName"
+                    name="name"
                     onChange={handleCredentials}
-                    value={credentials.firstName}
+                    value={credentials.name}
                     className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example1m">
@@ -281,9 +184,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                   <input
                     type="text"
                     id="form3Example1n"
-                    name="lastName"
+                    name="lastname"
                     onChange={handleCredentials}
-                    value={credentials.lastName}
+                    value={credentials.lastname}
                     className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example1n">

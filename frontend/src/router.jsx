@@ -51,7 +51,7 @@ const Router = () => {
         <Route exact path="/" element={<Home />} />
         {/* inside COACH */}
         <Route path="/coach/" element={<Coach />}>
-          <Route index element={<ListaUsuarios />} />
+          <Route index element={<Noticias />} />
           <Route path="user/:id" element={<SingleUser />}>
             <Route path="ejercicios" element={<UserCalendar />} />
 
@@ -85,7 +85,7 @@ const Router = () => {
             path="agregarEjercicios"
             element={<AgregarEjercicio exercises={exercises} />}
           />
-          <Route path="noticias" element={<Noticias />} />
+          <Route path="listaDeUsuarios" element={<ListaUsuarios />} />
           <Route path="grupos" element={<Grupos />} />
           <Route path="mensajeria" element={<Mensajeria />} />
           <Route path="changePassword/:id" element={<ChangePassword />} />

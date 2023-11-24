@@ -37,9 +37,12 @@ const CustomLayout = ({ items }) => {
   const menu = (
     <Menu>
       <Menu.Item key="1">
+        <Link to={`./profile/${user.userId}`}>Perfil</Link>
+      </Menu.Item>
+      <Menu.Item key="2">
         <Link to={`./changePassword/${user.userId}`}>Cambiar contraseña</Link>
       </Menu.Item>
-      <Menu.Item key="2" onClick={() => handleLogout()}>
+      <Menu.Item key="3" onClick={() => handleLogout()}>
         Salir
       </Menu.Item>
     </Menu>
@@ -97,7 +100,6 @@ const CustomLayout = ({ items }) => {
               padding: 0,
               backgroundColor: layout.isDarkMode ? "#001529" : "white",
               borderBottom: "1px solid #ffff",
-              marginBottom: "1rem",
             }}
           >
             <div className="flex items-center">
@@ -175,7 +177,10 @@ const CustomLayout = ({ items }) => {
               </div>
             </div>
           </Header>
-          <Content className="p-24 pt-0 mt-0 min-h-screen">
+          <Content
+            className="p-12 min-h-screen"
+            style={{ backgroundColor: layout.isDarkMode ? "#141414" : "white" }}
+          >
             <Outlet />
           </Content>
         </AntLayout>

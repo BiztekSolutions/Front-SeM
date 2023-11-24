@@ -243,10 +243,7 @@ function Mensajeria() {
   };
 
   return (
-    <div
-      className="wrapper flex flex-col"
-      style={{ backgroundColor: "#202932" }}
-    >
+    <div className="wrapper flex flex-col">
       <div>
         <h3 className="text-5xl">Mensajeria</h3>
       </div>

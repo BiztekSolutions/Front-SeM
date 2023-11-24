@@ -260,7 +260,7 @@ function ListaUsuarios() {
   }
 
   return (
-    <div className={`${styles.wrapper}`} style={{ backgroundColor: "#202932" }}>
+    <div className={`${styles.wrapper}`}>
       <div>
         <h3 className="text-5xl">Lista de Usuarios</h3>
       </div>

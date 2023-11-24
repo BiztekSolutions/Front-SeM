@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isDarkMode: false,
-  isSidebarOpen: false,
+  isSidebarCollapsed: false,
   isLoading: false,
   isError: false,
   isWarning: false,
@@ -18,6 +18,7 @@ export const showSuccessNotification =
     api["success"]({
       message,
       description,
+      placement: "bottomRight",
     });
     dispatch(
       layoutSlice.actions.setNotification({
@@ -87,6 +88,17 @@ export const showInfoNotification =
     );
   };
 
+// Action para hacer toggle del sidebar
+export const toggleSidebar = () => (dispatch) => {
+  console.log("toggleSidebar");
+  dispatch(layoutSlice.actions.toggleSidebar());
+};
+
+//Action para hacer toggle del modo oscuro
+export const toggleDarkMode = () => (dispatch) => {
+  dispatch(layoutSlice.actions.toggleDarkMode());
+};
+
 export const layoutSlice = createSlice({
   name: "layout",
   initialState,
@@ -95,10 +107,10 @@ export const layoutSlice = createSlice({
       state.isDarkMode = !state.isDarkMode;
     },
     toggleSidebar: (state) => {
-      state.isSidebarOpen = !state.isSidebarOpen;
+      console.log("toggleSidebar en layoutSlice");
+      state.isSidebarCollapsed = !state.isSidebarCollapsed;
     },
     setNotification: (state, action) => {
-      console.log("PENE");
       state.isError = action.payload.isError;
       state.isSuccess = action.payload.isSuccess;
       state.isWarning = action.payload.isWarning;

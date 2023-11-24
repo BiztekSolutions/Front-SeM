@@ -10,12 +10,6 @@ const loginUser = async (user) => {
   return response.data;
 };
 
-const googleLogin = async (googleUser) => {
-  const response = await axios.post(`${base_url}/user/googleAuth`, googleUser);
-
-  return response.data;
-};
-
 const updateUser = async (data) => {
   const response = await axios.put(`${base_url}/user/update/${data.userId}`, {
     newUser: data.newUser,
@@ -34,12 +28,6 @@ const getUsers = async (token) => {
   return response.data;
 };
 
-const deleteUser = async (userId) => {
-  const response = await axios.delete(`${base_url}/user/delete/${userId}`);
-
-  return response.data;
-};
-
 const getUser = async (token, userId) => {
   const response = await axios(`http://localhost:3000/api/v1/users/${userId}`, {
     headers: {
@@ -50,9 +38,9 @@ const getUser = async (token, userId) => {
   return userData;
 };
 
-const createUser = async (data) => {
+const deleteUser = async (data) => {
   const response = await axios.post(
-    `http://localhost:3000/api/v1/auth/register`,
+    `http://localhost:3000/api/v1/user/delete/${data.userId}`,
     data
   );
 
@@ -62,9 +50,7 @@ const createUser = async (data) => {
 export const userService = {
   loginUser,
   updateUser,
-  deleteUser,
-  googleLogin,
   getUser,
   getUsers,
-  createUser,
+  deleteUser,
 };

@@ -9,10 +9,12 @@ import { deleteUser, getUser } from "../../../features/user/userSlice";
 import { TailSpin } from "react-loader-spinner";
 import Swal from "sweetalert2";
 import { MdOutlinePerson2 } from "react-icons/md";
+
 export default function User() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const state = useSelector((state) => state);
+  console.log(state, "state");
   const { user, message } = state.users;
   const { id } = useParams();
   const userId = id;
@@ -54,21 +56,23 @@ export default function User() {
   };
 
   useEffect(() => {
+    console.log(user, "userlfkasdnofjbasndfobasdeu");
     if (userId) {
       dispatch(getUser(userId));
     }
-  }, []);
+  }, [userId, dispatch]);
 
+  console.log(user, "useasdasdasdadsar");
   const dataSource = [
     {
       key: 1,
-      firstName: user.name,
-      lastName: user.lastname,
-      email: user.email,
+      firstName: user?.name,
+      lastName: user?.lastname,
+      email: user?.Credentials[0].email,
       status: (
         <div className="userStatusSpan ">
-          <span className={`${user.logged ? "online" : "offline"}`}></span>
-          {user.logged ? "Online" : "Offline"}
+          <span className={`${user?.logged ? "online" : "offline"}`}></span>
+          {user?.logged ? "Online" : "Offline"}
         </div>
       ),
       actions: (
@@ -76,9 +80,9 @@ export default function User() {
           <FcFullTrash
             size={19}
             className="userDelete"
-            onClick={() => handleDelete(user.firstName, user.id)}
+            onClick={() => handleDelete(user?.name, user?.idUser)}
           />
-          {message === `ban updating ${user.id}` ? (
+          {message === `ban updating ${user?.id}` ? (
             <TailSpin
               height="20"
               width="20"
@@ -90,7 +94,7 @@ export default function User() {
               visible={true}
             />
           ) : (
-            user.disabled
+            user?.disabled
           )}
         </div>
       ),
@@ -110,10 +114,7 @@ export default function User() {
         >
           <div className="ml-5 text-4xl font-bold font-barlow-regular flex gap-4">
             <MdOutlinePerson2 className="bg-gray-500 rounded-full h-15 w-15" />
-            <h3 className="text-black text-center">
-              {" "}
-              Perfil de {user.firstName}
-            </h3>
+            <h3 className="text-black text-center"> Perfil de {user?.name}</h3>
           </div>
         </div>
       </div>

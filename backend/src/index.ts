@@ -63,7 +63,7 @@ RoutineConfiguration.hasMany(RoutineHasExercise, { foreignKey: 'RoutineConfigura
 RoutineHasExercise.belongsTo(RoutineConfiguration, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Database & tables created!`);

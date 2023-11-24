@@ -1,19 +1,19 @@
 import { useState, useContext } from "react";
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  // DownOutlined,
-} from "@ant-design/icons";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Layout as AntLayout, Button } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Flag from "react-world-flags";
 import { CgProfile } from "react-icons/cg";
 import logo from "../assets/logo.png";
 import { GlobalContext } from "../context/globalContext";
+import { useSelector } from "react-redux";
 
 const { Header, Sider, Content } = AntLayout;
 
 const CustomLayout = ({ items }) => {
+  const user = useSelector((state) => state.auths.user);
+
+  console.log("USUARIO", user);
   const handleLogout = () => {
     setLogged(false);
     navigate("/");
@@ -24,10 +24,10 @@ const CustomLayout = ({ items }) => {
   const menu = (
     <Menu>
       <Menu.Item key="1">
-        <Link to={`./changePassword/${userId}`}>Change Password</Link>
+        <Link to={`./changePassword/${userId}`}>Cambiar contraseña</Link>
       </Menu.Item>
       <Menu.Item key="2" onClick={() => handleLogout()}>
-        Logout
+        Salir
       </Menu.Item>
     </Menu>
   );
@@ -54,7 +54,6 @@ const CustomLayout = ({ items }) => {
         collapsible
         collapsed={collapsed}
       >
-        {" "}
         <div className="logo flex items-center justify-center">
           {collapsed ? (
             <div>
@@ -98,8 +97,8 @@ const CustomLayout = ({ items }) => {
             />
           </div>
 
+          {/* @TODO: Esta flag no se ve */}
           <div className="flex gap-5 items-center">
-            {/* FLAG */}
             <div>
               <Flag code={"arg"} height={"15"} />
             </div>
@@ -114,7 +113,9 @@ const CustomLayout = ({ items }) => {
               ></div>
               {/* User Details */}
               <div className="d-flex flex-column userData pr-10">
-                <span style={{ marginTop: "-3rem" }}>User Name</span>
+                <span style={{ marginTop: "-3rem" }}>
+                  {user.name} {user.lastname}
+                </span>
               </div>
               <div>
                 <Dropdown overlay={menu} trigger={["click"]}>

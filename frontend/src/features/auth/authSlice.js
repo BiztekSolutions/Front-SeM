@@ -1,5 +1,6 @@
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { authService } from "./authService";
+import { userService } from "../user/userService";
 
 const initialState = {
   user: {},
@@ -15,7 +16,15 @@ export const loginUser = createAsyncThunk(
   "loginUser",
   async (data, thunkAPI) => {
     try {
-      return await authService.loginUser(data);
+      const userCredentials = await authService.login(data);
+      if (userCredentials.message === "User not found") {
+        return thunkAPI.rejectWithValue(userCredentials);
+      }
+      const user = await userService.getUser(
+        userCredentials.session.token,
+        userCredentials.session.userId
+      );
+      return { ...userCredentials, ...user };
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -35,7 +44,8 @@ export const logout = createAsyncThunk("logout", async (data, thunkAPI) => {
 
 export const register = createAsyncThunk("register", async (data, thunkAPI) => {
   try {
-    return await authService.createUser(data);
+    console.log(authService, "authService");
+    return await authService.register(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -56,7 +66,7 @@ export const authSlice = createSlice({
         console.log("entre");
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log("entre bien");
+        console.log("entre bien", action);
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
@@ -64,6 +74,8 @@ export const authSlice = createSlice({
         state.message = action.payload.message;
         state.token = action.payload.session.token;
         state.userId = action.payload.session.userId;
+        state.user = { ...action.payload.user };
+        console.log("salgo de fulfiled", state);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;

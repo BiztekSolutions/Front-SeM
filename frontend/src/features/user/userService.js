@@ -1,15 +1,6 @@
 import axios from "axios";
 import { base_url } from "../../utils/utilities";
 
-const loginUser = async (user) => {
-  const response = await axios.post(
-    `http://localhost:3000/api/v1/auth/login`,
-    user
-  );
-
-  return response.data;
-};
-
 const updateUser = async (data) => {
   const response = await axios.put(`${base_url}/user/update/${data.userId}`, {
     newUser: data.newUser,
@@ -48,7 +39,6 @@ const deleteUser = async (data) => {
 };
 
 export const userService = {
-  loginUser,
   updateUser,
   getUser,
   getUsers,

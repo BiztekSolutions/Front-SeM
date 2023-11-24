@@ -6,12 +6,10 @@ import {
   register,
   loginUser,
 } from "../features/auth/authSlice";
-// import { useGoogleLogin } from "@react-oauth/google";
 import { TailSpin } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "primereact/toast";
 import { GlobalContext } from "../context/globalContext";
-// import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const credentialsInitialState = {
@@ -21,7 +19,7 @@ const credentialsInitialState = {
   email: "",
   repeatPassword: "",
 };
-// eslint-disable-next-line react/prop-types
+
 function Register({ isRegisterOpen, setRegisterOpen }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -77,6 +75,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   };
 
   useEffect(() => {
+    console.log(state.auths, "state.auths");
     // LOGIN MANUALLY RESPONSE
     if (message === "User registered successfully") {
       refToast.current.show({

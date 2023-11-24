@@ -1,12 +1,16 @@
 import dotenv from 'dotenv';
-import { Sequelize } from 'sequelize';
-
 dotenv.config();
 
-const DB_DEPLOY = process.env.DB_DEPLOY;
+import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize(DB_DEPLOY!, {
-  dialect: 'postgres', // Asegúrate de especificar el dialecto correcto (puede ser 'mysql', 'sqlite', 'mssql', etc.)
+const database = "salud-en-movimiento";
+const username = "postgres";
+const password = "arian";
+const host = "localhost";
+
+const sequelize = new Sequelize(database, username, password, {
+  host: host,
+  dialect: 'postgres',
 });
 
 export default sequelize;

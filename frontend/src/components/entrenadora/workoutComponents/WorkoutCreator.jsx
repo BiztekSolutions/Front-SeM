@@ -1,4 +1,4 @@
-import WorkoutForm from "./WorkoutForm";
+import WorkoutForm from "./WorkoutForm2";
 function WorkoutCreator({ exercises, workouts, setWorkouts }) {
   async function postWorkout(data, id) {
     try {

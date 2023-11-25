@@ -147,8 +147,22 @@ function ListaUsuarios() {
         }}
       />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => {
+      // Imprime en la consola los valores relevantes para la depuración
+      console.log(record, "record");
+      console.log(value, "value");
+
+      // Convierte el valor de la columna y el valor del filtro a minúsculas
+      const columnValue = record[dataIndex].toString().toLowerCase();
+      const filterValue = value.toLowerCase();
+
+      // Comprueba si el valor de la columna incluye el valor del filtro
+      const isMatch = columnValue.includes(filterValue);
+
+      // Devuelve true si hay coincidencia, de lo contrario, false
+      return isMatch;
+    },
+
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
@@ -231,8 +245,7 @@ function ListaUsuarios() {
       className: "text-3xl",
     },
   ];
-  console.log("users", users);
-  console.log(users);
+
   const dataSource = [];
   if (users?.length > 0) {
     for (let i = 0; i < users.length; i++) {

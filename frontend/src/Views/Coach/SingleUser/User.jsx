@@ -29,7 +29,7 @@ export default function User() {
       title: `<p>Wow wow!</p>`,
       html: `
       <p>
-        Are you sure you want to delete the user <b>${userName}</b>?
+        Seguro quieres eliminar este usuario <b>${userName}</b>?
       </p>
       `,
       showConfirmButton: true,
@@ -68,7 +68,7 @@ export default function User() {
       key: 1,
       firstName: user?.name,
       lastName: user?.lastname,
-      email: user?.Credentials[0].email,
+      email: user.Credentials ? user.Credentials[0].email : null,
       status: (
         <div className="userStatusSpan ">
           <span className={`${user?.logged ? "online" : "offline"}`}></span>

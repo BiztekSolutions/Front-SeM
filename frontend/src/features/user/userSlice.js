@@ -24,9 +24,7 @@ export const updateUser = createAsyncThunk(
 export const getUser = createAsyncThunk("getUser", async (data, thunkAPI) => {
   try {
     const userString = localStorage.getItem("User");
-
     const user = JSON.parse(userString);
-    console.log("asojldnfpkasnd");
     const token = user.token;
     return await userService.getUser(token, data);
   } catch (error) {
@@ -107,6 +105,7 @@ export const userSlice = createSlice({
         state.isError = false;
         console.log(action.payload);
         state.user = action.payload.user;
+        console.log("STATE USER", state.user);
       })
       .addCase(getUser.rejected, (state, action) => {
         state.isLoading = false;

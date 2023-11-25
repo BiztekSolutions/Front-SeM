@@ -3,16 +3,12 @@ import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-import { useSelector } from "react-redux";
-
 const SingleUser = () => {
-  // CONTEXT API
   const activeStyle = {
     fontWeight: "bold",
     color: "white",
     fontSize: "1.7rem",
   };
-  const { user } = useSelector((state) => state.users);
   const location = useLocation();
   const isExerciseRoute = location.pathname.endsWith("/ejercicios");
   const isRoutineRoute = location.pathname.endsWith("/agregarRutina");
@@ -56,8 +52,7 @@ const SingleUser = () => {
         isRoutineRoute ||
         isAddExerciseRoute ||
         isModRoute
-      ) &&
-        user && <User />}{" "}
+      ) && <User />}
       <Outlet />
     </div>
   );

@@ -1,56 +1,20 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Button, Input, Space } from "antd";
+import { Table, Button, Input, Space, Typography } from "antd";
 import Highlighter from "react-highlight-words";
 import { FcFullTrash, FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import styles from "./Users.module.css";
 import { deleteUser, getUsers } from "../../features/user/userSlice";
-
-//import "@sweetalert2/themes/dark/dark.css";
 
 function ListaUsuarios() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { users } = state.users;
 
-  const handleDelete = (userName, userId) => {
-    Swal.fire({
-      color: "whitesmoke",
-      icon: "warning",
-      iconColor: "white",
-      background: "#1f1f1f",
-      buttonsStyling: false,
-      title: `<p>Wow wow!</p>`,
-      html: `
-      <p>
-        Are you sure you want to delete the user <b>${userName}</b>?
-      </p>
-      `,
-      showConfirmButton: true,
-      confirmButtonText: "Yes",
-      confirmButtonColor: "#1f1f1f",
-      showDenyButton: true,
-      denyButtonText: "No",
-      denyButtonColor: "grey",
-      denyButtonAriaLabel: "black",
-      toast: true,
-      customClass: {
-        confirmButton: "confirmSwalCheckout",
-        denyButton: "denySwalCheckout",
-        title: "swalTitle",
-        htmlContainer: "swalHtml",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(deleteUser(userId));
-      } else if (result.isDenied) {
-        return;
-      }
-    });
-  };
+  const handleDelete = (userName, userId) => {};
+
   useEffect(() => {
     dispatch(getUsers());
   }, []);
@@ -262,14 +226,14 @@ function ListaUsuarios() {
   return (
     <div className={`${styles.wrapper}`}>
       <div>
-        <h3 className="text-5xl">Lista de Usuarios</h3>
+        <Typography className="text-5xl">Lista de Usuarios</Typography>
       </div>
       <Table
         dataSource={dataSource}
         columns={columns}
         className="text-white text-xl"
         rowClassName="h-12"
-      />{" "}
+      />
     </div>
   );
 }

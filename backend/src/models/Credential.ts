@@ -7,7 +7,7 @@ class Credential extends Model {
   public password!: string;
   public created_date!: Date;
   public updated_date!: Date;
-
+  public idUser!: number;
 }
 
 Credential.init(

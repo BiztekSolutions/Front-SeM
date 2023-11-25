@@ -184,151 +184,169 @@ function WorkoutForm({ exercises, postWorkout }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-full mx-auto p-6 flex flex-col"
-    >
-      <div className="form-group my-2 mx-4">
-        <input
-          type="text"
-          className="form-control"
-          name="name"
-          placeholder="Nombre de la rutina"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="flex justify-center py-2">
-        <div className="form-group my-2 mx-4 flex flex-col">
-          <label>Inicio:</label>
-          <DatePicker
-            onChange={handleDateChange}
-            defaultValue={moment(startDate, "YYYY-MM-DD")}
-            format="YYYY-MM-DD"
-            dropdownMode="top"
-          />
-        </div>
-        <div className="form-group my-2 mx-4 flex flex-col">
-          <label>Semanas:</label>
-          <input
-            type="number"
-            className="form-control"
-            onChange={handleDurationChange}
-            value={durationInWeeks}
-            required
-          />
-        </div>
-      </div>
-      {/* Parte izquierda (1/4 de ancho) */}
-      <div className="flex">
-        <div className="w-1/4 p-4 overflow-y-auto max-h-screen">
-          <h2 className="text-lg font-semibold mb-2">Lista de Ejercicios</h2>
-          <div>
-            {exercises.slice(0, visibleExercises).map((exercise) => (
-              <div
-                key={exercise.name}
-                className="mb-2 p-2 border border-gray-300 rounded cursor-move"
-                draggable
-                onDragStart={(evt) => startDrag(evt, exercise)}
-              >
-                <img
-                  className="w-24 rounded-full"
-                  src={exercise.photo}
-                  alt={exercise.name}
-                />
-                <p className="text-orange-500">{exercise.name}</p>
-              </div>
-            ))}
-          </div>
-          {visibleExercises < exercises.length && (
-            <button className="btn btn-primary mt-2" onClick={handleLoadMore}>
-              Cargar más
-            </button>
-          )}
-        </div>
-
-        {/* Parte derecha (3/4 de ancho) */}
+    <>
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-full mx-auto p-6 flex flex-col"
+      >
         <div
-          className="flex-1 p-4 overflow-y-auto max-h-screen"
-          ref={daySectionRef}
-          onScroll={handleDaySectionScroll}
+          id="addRutine"
+          className="flex border-gray-500 border-2 rounded-full flex-col"
         >
-          {/* Tablas para cada día de la semana */}
-          <div className="flex flex-wrap flex-col">
-            {/* Tablas para cada día de la semana */}
-            {Object.entries(exercisesByDay).map(([day, exercises]) => (
-              <div
-                key={day}
-                className={`w-1/7 p-2`}
-                onDragOver={(evt) => onDragOver(evt)}
-                onDrop={(evt) => onDrop(evt, day)}
-              >
-                <div className="mb-2 p-2 border border-gray-300 rounded cursor-move">
-                  <h3 className="text-lg text-orange-500 font-semibold mb-2">
-                    {day}
-                  </h3>
-                  {exercises.map((exercise, index) => (
-                    <div key={index}>
-                      <div key={index}>
-                        {console.log(exercise, "segunda")}
-                        <img src={exercise.photo} alt={exercise.name} />
-                        <p className="text-orange-500">{exercise.name}</p>
-                        {/* ...otros elementos... */}
-                      </div>
-                      <p className="text-orange-500">{exercise.name}</p>
-                      <div className="bg-gray-100 rounded p-2 py-10">
-                        <ul>
-                          <li className="mb-2 px-2 border border-gray-300 rounded flex justify-between items-center">
-                            <div>
-                              <p className="text-gray-800">
-                                Nombre: {exercise.name}
-                              </p>
-                              <div className="form-group my-2 mx-4">
-                                <input
-                                  type="number"
-                                  className="form-control"
-                                  name="series"
-                                  placeholder="Series"
-                                  inputMode="numeric"
-                                  value={series}
-                                  onChange={handleSeries}
-                                />
-                              </div>
-                              <div className="form-group my-2 mx-4">
-                                <input
-                                  type="number"
-                                  className="form-control"
-                                  name="repeticiones"
-                                  placeholder="Repeticiones"
-                                  inputMode="numeric"
-                                  value={repeticiones}
-                                  onChange={handleRepeticiones}
-                                />
-                              </div>
-                            </div>
-                            <button
-                              className="text-red-500"
-                              onClick={() => removeExercise(day, index)}
-                            >
-                              &#10006;
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          <h1 className="text-center crearRutina border-2 rounded-t-none rounded-full w-4/6 m-auto border-gray-600 text-customOrangeAdmin p-4">
+            Crear rutina
+          </h1>
+          <div className="flex justify-center py-5">
+            <div className="form-group my-2 mx-4 w-3/6">
+              <input
+                type="text"
+                className="form-control p-2 border border-gray-300 rounded-full"
+                name="name"
+                placeholder="Nombre de la rutina"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex justify-center py-2">
+              <div className="form-group my-2 mx-4 flex flex-col">
+                <label className="text-customOrangeAdmin">Inicio:</label>
+                <DatePicker
+                  onChange={handleDateChange}
+                  defaultValue={moment(startDate, "YYYY-MM-DD")}
+                  format="YYYY-MM-DD"
+                  dropdownMode="top"
+                />
               </div>
-            ))}
+              <div className="form-group my-2 mx-4 flex flex-col">
+                <label className="text-customOrangeAdmin">Semanas:</label>
+                <input
+                  type="number"
+                  className="form-control p-2 border border-gray-300 rounded-full"
+                  onChange={handleDurationChange}
+                  value={durationInWeeks}
+                  required
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      {/* Botón para guardar el workout */}
-      <button type="submit" className="btn btn-primary my-1 mx-5">
-        Save Workout
-      </button>
-    </form>
+        {/* Parte izquierda (1/4 de ancho) */}
+        <div className="flex mt-5">
+          <div className="w-1/4 p-4 overflow-y-auto max-h-screen ">
+            <h2 className="text-lg font-semibold mb-2">Lista de Ejercicios</h2>
+            <div>
+              {exercises.slice(0, visibleExercises).map((exercise) => (
+                <div
+                  key={exercise.name}
+                  className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center"
+                  draggable
+                  onDragStart={(evt) => startDrag(evt, exercise)}
+                >
+                  <img
+                    className="w-10 h-10 rounded-full mr-2"
+                    src={exercise.photo}
+                    alt={exercise.name}
+                  />
+                  <p className="text-orange-500">{exercise.name}</p>
+                </div>
+              ))}
+            </div>
+            {visibleExercises < exercises.length && (
+              <button
+                className="btn btn-primary mt-2 rounded-full"
+                onClick={handleLoadMore}
+              >
+                Cargar más
+              </button>
+            )}
+          </div>
+
+          {/* Parte derecha (3/4 de ancho) */}
+          <div
+            className="flex-1 p-4 overflow-y-auto max-h-screen"
+            ref={daySectionRef}
+            onScroll={handleDaySectionScroll}
+          >
+            {/* Tablas para cada día de la semana */}
+            <div className="flex flex-wrap flex-col">
+              {/* Tablas para cada día de la semana */}
+              {Object.entries(exercisesByDay).map(([day, exercises]) => (
+                <div
+                  key={day}
+                  className={`w-1/7 p-2`}
+                  onDragOver={(evt) => onDragOver(evt)}
+                  onDrop={(evt) => onDrop(evt, day)}
+                >
+                  <div className="mb-2 p-2 border border-gray-300 rounded-full cursor-move">
+                    <h3 className="text-lg text-customOrangeAdmin font-semibold mb-2">
+                      {day}
+                    </h3>
+                    {exercises.map((exercise, index) => (
+                      <div key={index}>
+                        <div className=" rounded p-2 py-10">
+                          <ul>
+                            <li className="mb-2 px-2 border border-gray-300 rounded flex justify-between items-center">
+                              <div>
+                                <div key={index}>
+                                  <img
+                                    className="w-20 h-20 rounded-full mb-2"
+                                    src={exercise.photo}
+                                    alt={exercise.name}
+                                  />
+                                </div>
+                                <p className="text-gray-800">{exercise.name}</p>
+                                <div className="flex">
+                                  <div className="form-group my-2 mx-4">
+                                    <input
+                                      type="number"
+                                      className="form-control p-2 border border-gray-300 rounded-full"
+                                      name="series"
+                                      placeholder="Series"
+                                      inputMode="numeric"
+                                      value={series}
+                                      onChange={handleSeries}
+                                    />
+                                  </div>
+                                  <div className="form-group my-2 mx-4">
+                                    <input
+                                      type="number"
+                                      className="form-control p-2 border border-gray-300 rounded-full"
+                                      name="repeticiones"
+                                      placeholder="Repeticiones"
+                                      inputMode="numeric"
+                                      value={repeticiones}
+                                      onChange={handleRepeticiones}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <button
+                                className="text-red-500"
+                                onClick={() => removeExercise(day, index)}
+                              >
+                                &#10006;
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* Botón para guardar el workout */}
+        <button
+          type="submit"
+          className="btn btn-primary my-4 mx-auto rounded-full"
+        >
+          Save Workout
+        </button>
+      </form>
+    </>
   );
 }
 

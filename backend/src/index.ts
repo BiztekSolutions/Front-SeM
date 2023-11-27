@@ -14,7 +14,8 @@ import Routine from './models/Routine';
 import Exercise from './models/Exercise';
 import RoutineHasExercise from './models/RoutineHasExercise';
 import RoutineConfiguration from './models/RoutineConfiguration';
-
+import Post from './models/Post';
+import Comment from './models/Comment';
 const app: Application = express();
 const PORT: number = 3000;
 
@@ -61,6 +62,11 @@ RoutineHasExercise.belongsTo(Exercise, { foreignKey: 'ExerciseIdExercise' });
 
 RoutineConfiguration.hasMany(RoutineHasExercise, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
 RoutineHasExercise.belongsTo(RoutineConfiguration, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
+
+//Post relations
+Post.hasMany(Comment, { foreignKey: 'postId', as: 'Comments' });
+
+Comment.belongsTo(Post);
 
 sequelize
   .sync({ force: false })

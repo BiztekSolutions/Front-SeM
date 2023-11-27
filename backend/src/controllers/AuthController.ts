@@ -36,18 +36,20 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const user = await isRegistered(email);
+    const userCredentials = await isRegistered(email);
 
-    if (!user) {
+    if (!userCredentials) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    console.log('Usuario', userCredentials);
+
+    const isValidPassword = await bcrypt.compare(password, userCredentials.password);
     if (!isValidPassword) {
       return res.status(403).json({ message: 'Invalid credentials' });
     }
 
-    const existingSession = await find(user.idCredential);
+    const existingSession = await find(userCredentials.idCredential);
 
     if (existingSession) {
       console.log('EXISTINGSESSION', existingSession);
@@ -56,20 +58,20 @@ export const login = async (req: Request, res: Response) => {
         message: 'User logged',
         session: {
           token: existingSession.token,
-          userId: user.idCredential,
+          userId: userCredentials.idUser,
         },
       });
     }
 
-    const token = jwt.sign({ userId: user.idCredential }, SECRET_KEY || '', { expiresIn: '24h' });
-    const newSession = await createSession(token, user.idCredential);
+    const token = jwt.sign({ userId: userCredentials.idCredential }, SECRET_KEY || '', { expiresIn: '24h' });
+    const newSession = await createSession(token, userCredentials.idCredential);
     console.log('NEWSESSION', newSession);
 
     return res.status(200).json({
       message: 'User logged',
       session: {
         token: newSession.token,
-        userId: user.idCredential,
+        userId: userCredentials.idUser,
       },
     });
   } catch (error: any) {

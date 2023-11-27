@@ -18,7 +18,6 @@ RoutineHasExercise.init(
     sequelize,
     modelName: 'RoutineHasExercise',
     timestamps: false,
-    
   }
 );
 

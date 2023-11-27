@@ -179,7 +179,7 @@ const CustomLayout = ({ items }) => {
           </Header>
           <Content
             className="p-12 min-h-screen"
-            style={{ backgroundColor: layout.isDarkMode ? "#141414" : "white" }}
+            style={{ backgroundColor: layout.isDarkMode ? "#111821" : "white" }}
           >
             <Outlet />
           </Content>

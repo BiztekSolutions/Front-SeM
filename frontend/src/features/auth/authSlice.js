@@ -63,14 +63,11 @@ export const authSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
         state.message = "Logging in user";
-        console.log("entre");
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log("entre bien", action);
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log(action.payload);
         state.message = action.payload.message;
         state.token = action.payload.session.token;
         state.userId = action.payload.session.userId;
@@ -82,7 +79,7 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
         console.log(action.payload);
-        state.message = action.payload.response.data.message;
+        state.message = action.payload.message;
         state.user = null;
       })
 

@@ -25,11 +25,11 @@ const items = [
   ]),
 ];
 
-const Coach = () => {
+const User = () => {
   return (
     <div>
       <CustomLayout items={items} />
     </div>
   );
 };
-export default Coach;
+export default User;

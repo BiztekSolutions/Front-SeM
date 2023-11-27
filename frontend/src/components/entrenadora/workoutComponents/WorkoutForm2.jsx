@@ -3,6 +3,7 @@ import WorkoutFormRadio from "./WorkoutFormRadio";
 import { useParams } from "react-router-dom";
 import { DatePicker } from "antd";
 import moment from "moment";
+import { MdDelete } from "react-icons/md";
 
 function WorkoutForm({ exercises, postWorkout }) {
   const initialState = {
@@ -158,6 +159,7 @@ function WorkoutForm({ exercises, postWorkout }) {
       name: exercise1.name,
       series: series,
       repeticiones: repeticiones,
+      photo: exercise1.photo,
     };
     console.log("asdasdasdasdasexercise", exerciseDrop);
     setExercisesByDay((prevState) => ({
@@ -187,13 +189,10 @@ function WorkoutForm({ exercises, postWorkout }) {
     <>
       <form
         onSubmit={handleSubmit}
-        className="max-w-full mx-auto p-6 flex flex-col"
+        className="max-w-full mx-auto p-6 flex flex-col formRutines"
       >
-        <div
-          id="addRutine"
-          className="flex border-gray-500 border-2 rounded-full flex-col"
-        >
-          <h1 className="text-center crearRutina border-2 rounded-t-none rounded-full w-4/6 m-auto border-gray-600 text-customOrangeAdmin p-4">
+        <div id="addRutine" className="flex  flex-col">
+          <h1 className="text-center crearRutina border-2 rounded-t-none rounded-full w-4/6 m-auto text-black font-bold p-4">
             Crear rutina
           </h1>
           <div className="flex justify-center py-5">
@@ -231,20 +230,23 @@ function WorkoutForm({ exercises, postWorkout }) {
             </div>
           </div>
         </div>
+        <h2 className="description-add-rutine bg-orange-200 text-black">
+          Arrastrá los ejercicios al dia que quieras
+        </h2>
         {/* Parte izquierda (1/4 de ancho) */}
         <div className="flex mt-5">
-          <div className="w-1/4 p-4 overflow-y-auto max-h-screen ">
+          <div className="w-1/4 p-4 overflow-y-auto max-h-screen exercise-list">
             <h2 className="text-lg font-semibold mb-2">Lista de Ejercicios</h2>
             <div>
               {exercises.slice(0, visibleExercises).map((exercise) => (
                 <div
                   key={exercise.name}
-                  className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center"
+                  className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center bg-orange-200"
                   draggable
                   onDragStart={(evt) => startDrag(evt, exercise)}
                 >
                   <img
-                    className="w-10 h-10 rounded-full mr-2"
+                    className="w-16 h-16 rounded-full mr-2"
                     src={exercise.photo}
                     alt={exercise.name}
                   />
@@ -278,24 +280,27 @@ function WorkoutForm({ exercises, postWorkout }) {
                   onDragOver={(evt) => onDragOver(evt)}
                   onDrop={(evt) => onDrop(evt, day)}
                 >
-                  <div className="mb-2 p-2 border border-gray-300 rounded-full cursor-move">
+                  <div className="mb-2 p-2 border card-day border-gray-300  cursor-move">
                     <h3 className="text-lg text-customOrangeAdmin font-semibold mb-2">
                       {day}
                     </h3>
                     {exercises.map((exercise, index) => (
-                      <div key={index}>
-                        <div className=" rounded p-2 py-10">
+                      <div key={index} className="">
+                        <div className="p-2">
                           <ul>
-                            <li className="mb-2 px-2 border border-gray-300 rounded flex justify-between items-center">
+                            <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200">
+                              {console.log("exercise", exercise)}
+                              {exercise.photo && (
+                                <img
+                                  className="w-28 h-28 rounded-full mr-2"
+                                  src={exercise.photo}
+                                  alt={exercise.name}
+                                />
+                              )}
                               <div>
-                                <div key={index}>
-                                  <img
-                                    className="w-20 h-20 rounded-full mb-2"
-                                    src={exercise.photo}
-                                    alt={exercise.name}
-                                  />
-                                </div>
-                                <p className="text-gray-800">{exercise.name}</p>
+                                <p className="text-gray-800 text-card-drop">
+                                  {exercise.name}
+                                </p>
                                 <div className="flex">
                                   <div className="form-group my-2 mx-4">
                                     <input
@@ -321,12 +326,10 @@ function WorkoutForm({ exercises, postWorkout }) {
                                   </div>
                                 </div>
                               </div>
-                              <button
-                                className="text-red-500"
+                              <MdDelete
+                                className="text-red-500 w-10 h-10 cursor-pointer"
                                 onClick={() => removeExercise(day, index)}
-                              >
-                                &#10006;
-                              </button>
+                              />
                             </li>
                           </ul>
                         </div>
@@ -341,7 +344,7 @@ function WorkoutForm({ exercises, postWorkout }) {
         {/* Botón para guardar el workout */}
         <button
           type="submit"
-          className="btn btn-primary my-4 mx-auto rounded-full"
+          className="btn btn-primary my-4 mx-auto btn-save-rutine"
         >
           Save Workout
         </button>

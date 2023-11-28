@@ -10,7 +10,6 @@ function PostList({ posts, onPostSelect }) {
     // Dispatch de la acción addCommentToPost
     dispatch(addCommentToPost({ postId, comment }));
   };
-  console.log(posts, "posts");
   return (
     <div>
       <h2>Publicaciones</h2>

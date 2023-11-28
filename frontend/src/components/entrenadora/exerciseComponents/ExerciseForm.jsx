@@ -20,7 +20,6 @@ function ExerciseForm({ exercise, onSubmit }) {
       };
 
   const [formData, setFormData] = useState(initialState);
-  console.log(exercise.repeticiones);
   function handleChange(event) {
     const name = event.target.name;
     let value = event.target.value;

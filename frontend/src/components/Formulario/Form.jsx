@@ -7,9 +7,7 @@ function ContactForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
+  const onSubmit = (data) => {};
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto py-20">

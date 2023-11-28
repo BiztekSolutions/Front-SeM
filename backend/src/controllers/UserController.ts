@@ -5,7 +5,6 @@ import Client from '../models/Client';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
-    console.log('getClientssadnasd');
 
     const clients = await Client.findAll();
 
@@ -77,7 +76,6 @@ export const getUserRoutines = async (req: Request, res: Response) => {
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
     const userRoutines = await getRoutines(userId);
-    console.log(userRoutines);
 
     if (!userRoutines) return res.status(400).json({ message: 'Routines not found' });
 

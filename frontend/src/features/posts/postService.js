@@ -14,7 +14,6 @@ const postService = {
   },
   addCommentToPost: async (postId, comment, token) => {
     try {
-      console.log(token);
       const response = await axios.post(
         `http://localhost:3000/api/v1/comments/${postId}`,
         {

@@ -359,7 +359,7 @@ const ListaUsuarios = () => {
             <FcFullTrash
               size={19}
               className="userDelete"
-              onClick={() => console.log()}
+              // onClick={@TODO: Implementar si corresponde}
             />
             {message === `ban updating` ? (
               <TailSpin
@@ -375,14 +375,14 @@ const ListaUsuarios = () => {
             ) : users ? (
               <FcApproval
                 // data-activate={users[i].id}
-                onClick={() => console.log("activate")}
+                // onClick={@TODO: Implementar si corresponde}
                 size={19}
                 className={styles.activate}
               />
             ) : (
               <FcCancel
                 // data-disable={users[i].id}
-                onClick={() => console.log("disable")}
+                // onClick={@TODO: Implementar si corresponde}
                 size={19}
                 className="userBan"
               />
@@ -395,8 +395,6 @@ const ListaUsuarios = () => {
   };
 
   const dataSource = generateDummyData(10);
-  console.log(dataSource);
-
   return (
     <div className={styles.wrapper}>
       <div>

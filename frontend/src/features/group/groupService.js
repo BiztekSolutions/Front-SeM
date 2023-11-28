@@ -11,8 +11,8 @@ const createGroup = async (token, groupData) => {
   return response.data;
 };
 
-const getGroup = async (token, groupId) => {
-  const response = await axios.get(`${base_url}/groups/${groupId}`, {
+const getGroup = async (token, idGroup) => {
+  const response = await axios.get(`${base_url}/groups/${idGroup}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

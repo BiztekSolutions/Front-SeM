@@ -43,15 +43,15 @@ Client.belongsTo(User, { foreignKey: 'idUser' });
 Coach.belongsTo(User, { foreignKey: 'idUser' });
 
 // CLIENT RELATIONS
-Client.belongsTo(Group, { foreignKey: 'groupId' });
-Group.hasMany(Client, { foreignKey: 'groupId' });
+Client.belongsTo(Group, { foreignKey: 'idGroup' });
+Group.hasMany(Client, { foreignKey: 'idGroup' });
 
 Client.belongsToMany(Routine, { through: 'ClientHasRoutine' });
 Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
 
 // GROUP RELATIONS
-Group.hasMany(Routine, { foreignKey: 'groupId' });
-Routine.belongsTo(Group, { foreignKey: 'groupId' });
+Group.hasMany(Routine, { foreignKey: 'idGroup' });
+Routine.belongsTo(Group, { foreignKey: 'idGroup' });
 
 // ROUTINE RELATIONS
 Routine.hasMany(RoutineHasExercise, { foreignKey: 'RoutineIdRoutine' });
@@ -76,7 +76,7 @@ sequelize
     });
   })
   .catch((err: Error) => {
-    console.log(err);
+    console.error(err);
   });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

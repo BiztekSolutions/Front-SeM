@@ -110,19 +110,16 @@ export const userSlice = createSlice({
       .addCase(getUsers.pending, (state) => {
         state.isLoading = true;
         state.message = "Getting users";
-        console.log("gettin userssssssssssssssss", state.user);
       })
       .addCase(getUsers.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log(action.payload);
         state.message = action.payload.message;
         state.users = action.payload.users;
       })
       .addCase(getUsers.rejected, (state, action) => {
         state.isLoading = false;
-        console.log("failed", action.payload);
         state.isSuccess = false;
         state.isError = true;
         state.message = action.payload.message;
@@ -137,13 +134,11 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log(action.payload);
         state.message = action.payload.message;
         state.clients = action.payload.clients;
       })
       .addCase(getClients.rejected, (state, action) => {
         state.isLoading = false;
-        console.log("failed", action.payload);
         state.isSuccess = false;
         state.isError = true;
         state.message = action.payload.error;
@@ -159,9 +154,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log(action.payload);
         state.user = action.payload.user;
-        console.log("STATE USER", state.user);
       })
       .addCase(getUser.rejected, (state, action) => {
         state.isLoading = false;

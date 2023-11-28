@@ -132,13 +132,11 @@ const UserCalendar = ({ userId }) => {
           // Encuentra el ejercicio correspondiente en la lista de ejercicios
           let clickedExercise;
           for (let routine of routines) {
-            console.log(routine.exercises);
             clickedExercise = routine.exercises.find(
               (exercise) => exercise.id === eventId
             );
             if (clickedExercise) break;
           }
-          console.log(clickedExercise);
 
           setSelectedExercise(clickedExercise);
 

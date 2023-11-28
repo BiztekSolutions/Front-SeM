@@ -11,7 +11,6 @@ function ClientList() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { clients } = state.users;
-  console.log(clients);
   useEffect(() => {
     dispatch(getClients());
   }, []);

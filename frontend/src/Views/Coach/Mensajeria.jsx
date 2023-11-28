@@ -238,7 +238,6 @@ function Mensajeria() {
 
   const handleSendMessage = (userId, message) => {
     // Lógica para manejar el envío de mensajes desde el frontend
-    console.log(`Enviando mensaje a ${userId}: ${message}`);
     // Puedes realizar operaciones de Redux aquí si es necesario
   };
 

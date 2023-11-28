@@ -40,7 +40,6 @@ function ChangePassword() {
     );
   };
   const handleSendResetEmail = () => {
-    console.log("send reset email");
   };
   return (
     <div>

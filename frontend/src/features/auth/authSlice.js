@@ -44,7 +44,6 @@ export const logout = createAsyncThunk("logout", async (data, thunkAPI) => {
 
 export const register = createAsyncThunk("register", async (data, thunkAPI) => {
   try {
-    console.log(authService, "authService");
     return await authService.register(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -77,7 +76,6 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        console.log(action.payload);
         state.message = "Email Incorrect";
         state.user = null;
       })

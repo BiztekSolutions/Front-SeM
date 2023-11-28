@@ -12,10 +12,6 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
         },
       ],
     });
-    console.log(
-      posts,
-      'POSTSASDASDASSD---------------------------------------------------------------------------------------------------------------------------------------------'
-    );
 
     return res.json(posts);
   } catch (error) {

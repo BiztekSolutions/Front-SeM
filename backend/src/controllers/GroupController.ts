@@ -30,9 +30,9 @@ export const createGroup = async (req: Request, res: Response) => {
 // Obtener un grupo con todos los clientes
 export const getGroup = async (req: Request, res: Response) => {
   try {
-    const groupId = parseInt(req.params.groupId, 10);
+    const idGroup = parseInt(req.params.idGroup, 10);
 
-    const group = await Group.findByPk(groupId, {
+    const group = await Group.findByPk(idGroup, {
       include: [
         { model: Routine, as: 'Routine' },
         { model: Client, as: 'Clients' },
@@ -70,10 +70,10 @@ export const getGroups = async (req: Request, res: Response) => {
 // Agregar una rutina a un grupo existente
 export const setRoutineGroup = async (req: Request, res: Response) => {
   try {
-    const groupId = parseInt(req.params.groupId, 10);
+    const idGroup = parseInt(req.params.idGroup, 10);
     const { routineId } = req.body;
 
-    const group = await Group.findByPk(groupId);
+    const group = await Group.findByPk(idGroup);
     const routine = await Routine.findByPk(routineId);
 
     if (!group || !routine) {

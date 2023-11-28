@@ -135,7 +135,6 @@ const UserCalendar = () => {
             className="calendar-container"
             events={events}
             eventContent={(arg) => {
-              console.log(arg.event.start);
               return (
                 <div>
                   <b>{arg.timeText}</b>

@@ -49,7 +49,6 @@ function AgregarEjercicio() {
       }
 
       const data = await response.json();
-      console.log("Nuevo ejercicio creado:", data);
       // Aquí puedes hacer cualquier acción necesaria después de la creación exitosa del ejercicio
     } catch (error) {
       console.error("Error al crear el ejercicio:", error);

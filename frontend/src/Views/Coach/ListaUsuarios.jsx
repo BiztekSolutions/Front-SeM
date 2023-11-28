@@ -150,10 +150,6 @@ function ListaUsuarios({ dataSource }) {
       />
     ),
     onFilter: (value, record) => {
-      // Imprime en la consola los valores relevantes para la depuración
-      console.log(record, "record");
-      console.log(value, "value");
-
       // Convierte el valor de la columna y el valor del filtro a minúsculas
       const columnValue = record[dataIndex].toString().toLowerCase();
       const filterValue = value.toLowerCase();

@@ -25,8 +25,6 @@ const CustomLayout = ({ items }) => {
   const layout = useSelector((state) => state.layout);
 
   const { defaultAlgorithm, darkAlgorithm } = theme;
-  console.log("USUARIO", user);
-  console.log("Layout", layout);
 
   const handleLogout = () => {
     setLogged(false);
@@ -179,7 +177,9 @@ const CustomLayout = ({ items }) => {
           </Header>
           <Content
             className="p-12 min-h-screen"
-            style={{ backgroundColor: layout.isDarkMode ? "#111821" : "white" }}
+            style={{
+              backgroundColor: layout.isDarkMode ? "#111821" : "white",
+            }}
           >
             <Outlet />
           </Content>

@@ -1,9 +1,7 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
-import { Translate } from "react-auto-translate";
-
 import {
   clearUserMessage,
   googleLoginSlice,
@@ -11,11 +9,17 @@ import {
 } from "../../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { GlobalContext } from "../../context/globalContext";
-import { Toast } from "primereact/toast";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css"; //core css
 import "primeicons/primeicons.css";
 import { useNavigate } from "react-router-dom";
+
+import {
+  showSuccessNotification,
+  showInfoNotification,
+  showWarningNotification,
+  showErrorNotification,
+} from "@/features/layout/layoutSlice";
 
 const credentialsInitialState = {
   credential: "",
@@ -23,7 +27,6 @@ const credentialsInitialState = {
 };
 
 const LoginModalN = () => {
-  const refToast = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const state = useSelector((state) => state);
@@ -84,90 +87,32 @@ const LoginModalN = () => {
   }, [token]);
 
   useEffect(() => {
-    // GOOGLE AUTH RESPONSE
-
-    if (userMessage === "Google user logged") {
-      // Setear LS con userID encriptado
-      if (user && user.encodedId) {
-        localStorage.setItem(
-          "nerdyUser",
-          JSON.stringify({ userId: user.encodedId })
-        );
-      }
-
-      // setLogged to allow functionalities
-      setLogged({
-        userId: user.encodedId,
-      });
-
-      refToast.current.show({
-        sticky: 2000,
-        severity: "success",
-        summary: "Welcome",
-        detail: `Hi ${user?.userName}! It's good to see you!`,
-      });
-
-      setTimeout(() => {
-        // Clear message state & close Login modal
-        dispatch(clearUserMessage());
-        setShowLoginModal(false);
-      }, 2100);
-    }
-    if (userMessage === "Google user created") {
-      // Setear LS con userID encriptado
-      // Setear LS con userID encriptado
-      if (user && user.encodedId) {
-        localStorage.setItem(
-          "nerdyUser",
-          JSON.stringify({ userId: user.encodedId })
-        );
-      }
-
-      // setLogged to allow functionalities
-      setLogged({
-        userId: user.encodedId,
-      });
-
-      refToast.current.show({
-        sticky: 2000,
-        severity: "success",
-        summary: "Welcome",
-        detail: `It's a pleasure to have you with us ${user?.userName}!`,
-      });
-
-      setTimeout(() => {
-        // Clear message state & close Login modal
-        dispatch(clearUserMessage());
-        setShowLoginModal(false);
-      }, 2100);
-    }
-
     // LOGIN MANUALLY RESPONSE
     if (userMessage === "Email Incorrect") {
-      refToast.current.show({
-        life: 3000,
-        severity: "info",
-        summary: "We're sorry",
-        detail: "We couldn't find any account associated with that email",
-      });
+      dispatch(
+        showErrorNotification(
+          "Error",
+          "El email o la contraseña son incorrectos"
+        )
+      );
       dispatch(clearUserMessage());
     }
     if (userMessage === "Username Incorrect") {
-      refToast.current.show({
-        life: 3000,
-        severity: "info",
-        summary: "We're sorry",
-        detail: "We couldn't find any account associated with that username",
-      });
+      dispatch(
+        showErrorNotification(
+          "Error",
+          "El email o la contraseña son incorrectos"
+        )
+      );
       dispatch(clearUserMessage());
     }
     if (userMessage === "Password Incorrect") {
-      refToast.current.show({
-        life: 3000,
-        severity: "info",
-        summary: "We're sorry",
-        detail: userMessage,
-      });
+      dispatch(
+        showErrorNotification(
+          "Error",
+          "El email o la contraseña son incorrectos"
+        )
+      );
       dispatch(clearUserMessage());
     }
     if (userMessage === "User logged") {
@@ -184,12 +129,12 @@ const LoginModalN = () => {
         userId: user.encodedId,
       });
 
-      refToast.current.show({
-        sticky: 2000,
-        severity: "success",
-        summary: "Welcome",
-        detail: `Hi ${user?.userName}! It's good to see you!`,
-      });
+      dispatch(
+        showSuccessNotification(
+          "Hola",
+          `Bienvenido de vuelta ${user?.userName}!`
+        )
+      );
 
       setTimeout(() => {
         // Clear message state & close Login modal
@@ -202,11 +147,10 @@ const LoginModalN = () => {
 
   return (
     <article
-    id="menuToggleRegister"
+      id="menuToggleRegister"
       className={`${styles.article} loginModalUtil menuToggleRegister`}
       style={{ right: showLoginModal ? "0" : "-1500px" }}
     >
-      <Toast ref={refToast} position="top-left"></Toast>
       <div className={styles.div}>
         <div className={`${styles.article} menuToggleRegister`}>
           {/* LOGIN */}
@@ -219,16 +163,13 @@ const LoginModalN = () => {
                 ></i>
               </div>
             </div>
-
-            {/* <h6>I already have an account</h6> */}
-
             {/* Login Options */}
             <div className={styles.loginOptions}>
               {/* Manual Login */}
               <form className={styles.loginForm} onSubmit={handleSubmit}>
                 <div className={styles.loginInput}>
                   <span>
-                    <Translate>Email or Username</Translate>
+                    <label>Correo Electronico</label>
                   </span>
                   <input
                     type="text"
@@ -239,7 +180,7 @@ const LoginModalN = () => {
                 </div>
                 <div className={`${styles.loginInput} mt-3`}>
                   <span>
-                    <Translate>Password</Translate>
+                    <label>Contraseña</label>
                   </span>
                   <input
                     type="password"
@@ -250,11 +191,11 @@ const LoginModalN = () => {
                 </div>
 
                 <span className={styles.forgotPassword}>
-                  <Translate>Forgot your password?</Translate>
+                  <label>Olvidaste tu contraseña?</label>
                 </span>
 
                 <button type="submit" className={styles.loginButton}>
-                  <Translate>Log in</Translate>
+                  <label>Ingresar</label>
                 </button>
               </form>
 
@@ -262,37 +203,27 @@ const LoginModalN = () => {
               <div className={styles.or}>
                 <span></span>
                 <span className={styles.orSpan}>
-                  <Translate>Or</Translate>
+                  <label>Or</label>
                 </span>
                 <span></span>
-              </div>
-
-              {/* Socials */}
-              <div className={styles.loginButtons}>
-                <button className={styles.googleLogin} onClick={googleLogin}>
-                  <img src="/images/googleLogo.svg" alt="abc" width={20} />
-                  <span>
-                    <Translate>Login with Google</Translate>
-                  </span>
-                </button>
               </div>
             </div>
           </div>
           <div className={styles.register}>
             <h6>
-              <Translate>I do not have an account</Translate>
+              <label>I do not have an account</label>
             </h6>
             <span className={styles.benefits}>
-              <Translate>
+              <label>
                 Enjoy additional benefits and a more intense experience by
                 creating a personal account.
-              </Translate>
+              </label>
             </span>
             <button
               className={styles.createAccount}
               onClick={() => navigate("/signUp")}
             >
-              <Translate>Create an account</Translate>
+              <label>Create an account</label>
             </button>
           </div>
         </div>

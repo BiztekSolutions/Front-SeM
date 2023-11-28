@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import googleLogo from "../assets/googleLogin.png";
 import {
@@ -8,9 +8,12 @@ import {
 } from "../features/auth/authSlice";
 import { TailSpin } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { Toast } from "primereact/toast";
 import { GlobalContext } from "../context/globalContext";
 import { useNavigate } from "react-router-dom";
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from "@/features/layout/layoutSlice";
 
 const credentialsInitialState = {
   password: "",
@@ -26,10 +29,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  console.log(state, "state");
   const { message, token, user, userId, isLoading } = state.auths;
-  console.log(userId, "sdasdasdsaadacs");
-  const refToast = useRef();
 
   // CONTEXT API
   const globalContext = useContext(GlobalContext);
@@ -50,7 +50,6 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       if (credentials.password !== credentials.repeatPassword) {
         setError("Las contraseñas no coinciden");
       } else {
-        console.log("credentials", credentials);
         dispatch(register(credentials));
       }
     } else {
@@ -75,15 +74,14 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   };
 
   useEffect(() => {
-    console.log(state.auths, "state.auths");
     // LOGIN MANUALLY RESPONSE
     if (message === "User registered successfully") {
-      refToast.current.show({
-        life: 3000,
-        severity: "success",
-        summary: "Bienvenido!",
-        detail: `Es un gusto tenerlo con nosotros!`,
-      });
+      dispatch(
+        showSuccessNotification(
+          "Bienvenido",
+          "Es un gusto tenerte con nosotros!"
+        )
+      );
       setTimeout(() => {
         dispatch(clearUserMessage());
         // Clear message state & close Login modal
@@ -92,23 +90,18 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     }
 
     if (message === "Email Incorrect" || message === "Password Incorrect") {
-      refToast.current.show({
-        life: 3000,
-        severity: "info",
-        summary: "Lo sentimos!",
-        detail:
-          "No pudimos encontrar ninguna cuenta asociada con esas credenciales",
-      });
+      dispatch(
+        showErrorNotification(
+          "Error",
+          "El email o la contraseña son incorrectos"
+        )
+      );
       dispatch(clearUserMessage());
     }
 
     if (message === "User already exists") {
-      refToast.current.show({
-        life: 3000,
-        severity: "info",
-        summary: "Lo sentimos!",
-        detail: "El usuario ya existe",
-      });
+      dispatch(showErrorNotification("Error", "El email de usuario ya existe"));
+      dispatch(clearUserMessage());
     }
 
     if (message === "User logged") {
@@ -126,12 +119,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
         userId: user.userId,
       });
 
-      refToast.current.show({
-        sticky: 2000,
-        severity: "success",
-        summary: "Welcome",
-        detail: `Hi It's good to see you!`,
-      });
+      dispatch(showSuccessNotification("Hola", `Bienvenido de vuelta!`));
 
       setTimeout(() => {
         // Clear message state & close Login modal
@@ -158,7 +146,6 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
 
   return (
     <section>
-      <Toast ref={refToast} position="top-left"></Toast>
       <div>
         <div className="bg-white md:p-8 w-full ">
           {isRegisterOpen ? (
@@ -174,7 +161,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example1m">
-                    First name
+                    Nombre
                   </label>
                 </div>
               </div>
@@ -189,7 +176,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example1n">
-                    Last name
+                    Apellido
                   </label>
                 </div>
               </div>
@@ -205,7 +192,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
               className="form-control w-full px-3 py-2 border border-gray-300 rounded"
             />
             <label className="text-gray-700" htmlFor="email">
-              {isRegisterOpen ? "EMAIL" : "EMAIL O NOMBRE DE USUARIO"}
+              Correo electronico
             </label>
           </div>
           <div className="flex flex-col ">
@@ -219,7 +206,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                   className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                 />
                 <label className="text-gray-700" htmlFor="form3Example4c">
-                  contraseña
+                  Contraseña
                 </label>
                 {showPassword ? (
                   <MdVisibilityOff
@@ -246,7 +233,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     className="form-control w-full px-3 py-2 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example4cd">
-                    Repeti tu contraseña
+                    Repita su contraseña
                   </label>
                   {showRepeatPassword ? (
                     <MdVisibilityOff
@@ -283,19 +270,6 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
               ? "CAMBIAR A INICIAR SESION"
               : "CAMBIAR A CREAR CUENTA"}
           </button>
-
-          <div className="text-center mt-10">
-            <p>
-              {isRegisterOpen
-                ? "Crear cuenta con Google:"
-                : "Iniciar Sesion con Google:"}
-            </p>
-            <div className="boxLog">
-              <button className="container-login " /*</div>onClick={login}*/>
-                <img className="loginGoogle" src={googleLogo} alt="Google" />
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </section>

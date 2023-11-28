@@ -21,6 +21,8 @@ import Hoy from "./Views/User/Hoy";
 import EditarRutinas from "./components/entrenadora/workoutComponents/editarRutinas.jsx";
 import ChangePassword from "./Views/Coach/ChangePassword/ChangePassword.jsx";
 import Rutinas from "./Views/User/Rutinas";
+import NotificationCenter from "@/shared/components/notification/NotificationCenter";
+
 const Router = () => {
   const [exercises, setExercises] = useState(null);
   const [workouts, setWorkouts] = useState(null);
@@ -54,7 +56,6 @@ const Router = () => {
           <Route index element={<Noticias />} />
           <Route path="user/:id" element={<SingleUser />}>
             <Route path="ejercicios" element={<UserCalendar />} />
-
             <Route path="hoy" element={<WorkoutContainer />} />
             <Route
               path="agregarRutina"
@@ -90,7 +91,6 @@ const Router = () => {
           <Route path="mensajeria" element={<Mensajeria />} />
           <Route path="changePassword/:id" element={<ChangePassword />} />
         </Route>
-
         <Route path="/user/:id" element={<User />}>
           <Route index element={<Noticias />} />
           <Route exact path=":id" element={<Profile />} />

@@ -16,8 +16,6 @@ import { useNavigate } from "react-router-dom";
 
 import {
   showSuccessNotification,
-  showInfoNotification,
-  showWarningNotification,
   showErrorNotification,
 } from "@/features/layout/layoutSlice";
 
@@ -87,34 +85,6 @@ const LoginModalN = () => {
   }, [token]);
 
   useEffect(() => {
-    // LOGIN MANUALLY RESPONSE
-    if (userMessage === "Email Incorrect") {
-      dispatch(
-        showErrorNotification(
-          "Error",
-          "El email o la contraseña son incorrectos"
-        )
-      );
-      dispatch(clearUserMessage());
-    }
-    if (userMessage === "Username Incorrect") {
-      dispatch(
-        showErrorNotification(
-          "Error",
-          "El email o la contraseña son incorrectos"
-        )
-      );
-      dispatch(clearUserMessage());
-    }
-    if (userMessage === "Password Incorrect") {
-      dispatch(
-        showErrorNotification(
-          "Error",
-          "El email o la contraseña son incorrectos"
-        )
-      );
-      dispatch(clearUserMessage());
-    }
     if (userMessage === "User logged") {
       // Setear LS con userID encriptado
       if (user && user.encodedId) {
@@ -142,6 +112,14 @@ const LoginModalN = () => {
         setShowLoginModal(false);
         navigate("/home");
       }, 2100);
+    } else {
+      dispatch(
+        showErrorNotification(
+          "Error",
+          "El email o la contraseña son incorrectos"
+        )
+      );
+      dispatch(clearUserMessage());
     }
   }, [userMessage, user]);
 
@@ -198,33 +176,7 @@ const LoginModalN = () => {
                   <label>Ingresar</label>
                 </button>
               </form>
-
-              {/* Or */}
-              <div className={styles.or}>
-                <span></span>
-                <span className={styles.orSpan}>
-                  <label>Or</label>
-                </span>
-                <span></span>
-              </div>
             </div>
-          </div>
-          <div className={styles.register}>
-            <h6>
-              <label>I do not have an account</label>
-            </h6>
-            <span className={styles.benefits}>
-              <label>
-                Enjoy additional benefits and a more intense experience by
-                creating a personal account.
-              </label>
-            </span>
-            <button
-              className={styles.createAccount}
-              onClick={() => navigate("/signUp")}
-            >
-              <label>Create an account</label>
-            </button>
           </div>
         </div>
       </div>

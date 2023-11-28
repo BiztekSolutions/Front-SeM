@@ -1,5 +1,9 @@
 import CustomLayout from "../CustomLayout";
-import { FcConferenceCall } from "react-icons/fc";
+import {
+  DribbbleOutlined,
+  HomeOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -11,15 +15,15 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem("General", "sub1", <FcConferenceCall size={20} />, [
+  getItem("General", "sub1", <HomeOutlined style={{ fontSize: 24 }} />, [
     getItem("Noticias", "noticias"),
     getItem("Mensajeria", "mensajeria"),
   ]),
-  getItem("Usuarios", "sub2", <FcConferenceCall size={20} />, [
+  getItem("Usuarios", "sub2", <UserOutlined style={{ fontSize: 24 }} />, [
     getItem("Lista de usuarios", "listaDeUsuarios"),
     getItem("Grupos", "grupos"),
   ]),
-  getItem("Ejercicios", "sub3", <FcConferenceCall size={20} />, [
+  getItem("Ejercicios", "sub3", <DribbbleOutlined style={{ fontSize: 24 }} />, [
     getItem("Agregar ejercicios", "agregarEjercicios"),
   ]),
 ];

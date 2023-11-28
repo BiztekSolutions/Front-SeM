@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import googleLogo from "../assets/googleLogin.png";
 import {
   clearUserMessage,
   register,

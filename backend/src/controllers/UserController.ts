@@ -2,6 +2,49 @@ import { Request, Response } from 'express';
 import UserModel from '../models/User';
 import Routine from '../models/Routine';
 import { get, list, getRoutines } from '../services/UserService';
+import Client from '../models/Client';
+
+export const getClients = async (req: Request, res: Response) => {
+  try {
+    const clients = await Client.findAll();
+
+    const userIds = clients.map((client) => client.idUser);
+
+    const users = await UserModel.findAll({
+      where: { idUser: userIds },
+    });
+
+    return res.status(200).json({ clients: users });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const createClient = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User id is required in the request body' });
+    }
+
+    // Verificar si el usuario ya tiene un cliente asociado
+    const existingClient = await Client.findOne({ where: { idUser: userId } });
+    if (existingClient) {
+      return res.status(400).json({ message: 'Client already exists for this user' });
+    }
+
+    // Crea un nuevo cliente con el userId proporcionado
+    const newClient = await Client.create({
+      idUser: userId,
+      // Puedes agregar más campos según tus necesidades
+    });
+
+    return res.status(201).json({ message: 'Client created successfully', newClient });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
 export const getUser = async (req: Request, res: Response) => {
   try {
@@ -23,7 +66,7 @@ export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await list();
     console.log(users);
-    
+
     return res.status(200).json({ users });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });

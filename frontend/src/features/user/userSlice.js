@@ -10,6 +10,25 @@ const initialState = {
   message: "",
 };
 
+export const addUserToClients = createAsyncThunk(
+  "addUserToClients",
+  async (userId, thunkAPI) => {
+    try {
+      const userString = localStorage.getItem("User");
+      const user = JSON.parse(userString);
+      const token = user.token;
+
+      // Llamada a la función o servicio para agregar el usuario a la lista de clientes
+      const response = await userService.addUserToClients(token, userId);
+
+      // Puedes devolver la respuesta si necesitas más información en el frontend
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const updateUser = createAsyncThunk(
   "updateUser",
   async (newUser, thunkAPI) => {
@@ -21,6 +40,21 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const getClients = createAsyncThunk(
+  "getClients",
+  async (_, thunkAPI) => {
+    try {
+      const userString = localStorage.getItem("User");
+
+      const user = JSON.parse(userString);
+
+      const token = user.token;
+      return await userService.getClients(token);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const getUser = createAsyncThunk("getUser", async (data, thunkAPI) => {
   try {
     const userString = localStorage.getItem("User");
@@ -115,7 +149,25 @@ export const userSlice = createSlice({
         state.message = action.payload.message;
         state.user = null;
       })
-
+      // ADD USER TO CLIENTS
+      .addCase(addUserToClients.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Adding user to clients";
+      })
+      .addCase(addUserToClients.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.message = "User added to clients successfully";
+        // Actualiza el estado según sea necesario, por ejemplo, actualizar la lista de usuarios o clientes
+        // state.users = [...state.users, action.payload.user];
+      })
+      .addCase(addUserToClients.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = "Failed to add user to clients";
+      })
       // UPDATE USER
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;

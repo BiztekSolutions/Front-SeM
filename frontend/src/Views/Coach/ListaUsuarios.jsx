@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Button, Input, Space } from "antd";
+import { Table, Button, Input, Space, Typography } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ import { deleteUser, getUsers } from "../../features/user/userSlice";
 
 //import "@sweetalert2/themes/dark/dark.css";
 
-function ListaUsuarios() {
+function ListaUsuarios({ dataSource }) {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { users } = state.users;

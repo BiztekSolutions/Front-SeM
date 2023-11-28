@@ -10,6 +10,7 @@ import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 import styles from "./SingleUser.module.css";
 
 export default function User() {
+  //@TODO: Queda agregar el icono que al switchear modo dark no se ve.
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
   const { id } = useParams();
@@ -39,55 +40,52 @@ export default function User() {
               </Typography.Title>
             </div>
           </div>
-          <div className="w-full">
-            <div
-              key={1}
-              className={styles.customDiv + "p-4 rounded-lg shadow mb-4 ml-5"}
-            >
-              <div className="mb-2 w-fit flex gap-5">
-                <Typography.Title level={3} className="text-left">
-                  Nombre:
-                </Typography.Title>
-                <b className="text-left text-3xl font-bold">{user.name}</b>
-              </div>
-              <div className="mb-2 w-fit flex gap-5">
-                <Typography.Title level={3} className="text-left ">
-                  Apellido:
-                </Typography.Title>
-                <b className="text-left text-3xl font-bold">{user.lastname}</b>
-              </div>
-              <div className="mb-2 w-fit flex gap-5">
-                <Typography.Title level={3} className="text-left">
-                  Email:
-                </Typography.Title>
-                <b className="text-left text-3xl font-bold">
-                  {user.Credentials[0].email}
-                </b>
-              </div>
-              <div className="mb-2 w-fit flex gap-5">
-                <Typography.Title level={3} className="text-left text-3xl">
-                  Grupo:
-                </Typography.Title>
-                <b className="text-left text-3xl font-bold">Grupo</b>
-              </div>
-              <div className="mb-2 w-fit flex gap-5">
-                <Typography.Title level={3} className="text-left text-3xl">
-                  Status:
-                </Typography.Title>
-                <b className="text-left text-3xl font-bold">Estatus</b>
-              </div>
-              <div className="mb-2 w-fit flex gap-5">
-                <Typography.Title level={3} className="text-left text-3xl">
-                  Eliminar:
-                </Typography.Title>
-                <b className="text-left text-3xl font-bold mt-2 cursor-pointer ">
-                  <FcFullTrash
-                    size={20}
-                    className="userDelete"
-                    onClick={() => handleDelete(user?.name, user?.idUser)}
-                  />
-                </b>
-              </div>
+          <div className="w-full flex flex-col gap-6">
+            <div className="w-fit flex gap-6 items-center">
+              <Typography.Text className="text-left text-2xl font-bold">
+                Nombre:
+              </Typography.Text>
+              <Typography.Text className="text-xl">{user.name}</Typography.Text>
+            </div>
+            <div className="w-fit flex gap-6 items-center">
+              <Typography.Text className="text-left text-2xl font-bold">
+                Apellido:
+              </Typography.Text>
+              <Typography.Text className="text-xl">
+                {user.lastname}
+              </Typography.Text>
+            </div>
+            <div className="w-fit flex gap-6 items-center">
+              <Typography.Text className="text-left text-2xl font-bold">
+                Email:
+              </Typography.Text>
+              <Typography.Text className="text-xl">
+                {user.Credentials[0].email}
+              </Typography.Text>
+            </div>
+            <div className="w-fit flex gap-6 items-center">
+              <Typography.Text className="text-left text-2xl font-bold">
+                Grupo:
+              </Typography.Text>
+              <Typography.Text className="text-xl">Grupo</Typography.Text>
+            </div>
+            <div className="w-fit flex gap-6 items-center">
+              <Typography.Text className="text-left text-2xl font-bold">
+                Status:
+              </Typography.Text>
+              <Typography.Text className="text-xl">Estatus</Typography.Text>
+            </div>
+            <div className="w-fit flex gap-6 items-center">
+              <Typography.Text className="text-left text-2xl font-bold">
+                Eliminar:
+              </Typography.Text>
+              <Typography.Text className="text-left text-3xl mt-2 cursor-pointer ">
+                <FcFullTrash
+                  size={20}
+                  className="userDelete"
+                  onClick={() => handleDelete(user?.name, user?.idUser)}
+                />
+              </Typography.Text>
             </div>
           </div>
         </div>

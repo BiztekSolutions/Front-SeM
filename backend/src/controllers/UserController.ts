@@ -1,20 +1,19 @@
 import { Request, Response } from 'express';
-import UserModel from '../models/User';
-import Routine from '../models/Routine';
-import { get, list, getRoutines } from '../services/UserService';
+import User from '../models/User';
+import { get, list, getRoutines, list2 } from '../services/UserService';
 import Client from '../models/Client';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
+    console.log('getClientssadnasd');
+
     const clients = await Client.findAll();
 
     const userIds = clients.map((client) => client.idUser);
 
-    const users = await UserModel.findAll({
-      where: { idUser: userIds },
-    });
+    const users = await list2(userIds);
 
-    return res.status(200).json({ clients: users });
+    return res.status(200).json({ message: 'all clients', clients: users });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
@@ -65,7 +64,6 @@ export const getUser = async (req: Request, res: Response) => {
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await list();
-    console.log(users);
 
     return res.status(200).json({ users });
   } catch (error: any) {
@@ -94,7 +92,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
-    const updatedUser = await UserModel.update(req.body, {
+    const updatedUser = await User.update(req.body, {
       where: { idUser: userId },
     });
 

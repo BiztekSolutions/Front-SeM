@@ -29,6 +29,16 @@ export const list = async () => {
     throw new Error(e.message);
   }
 };
+export const list2 = async (userIds: any) => {
+  try {
+    return await User.findAll({
+      where: { idUser: userIds },
+      include: [{ model: Credential, attributes: { exclude: ['password', 'idUser', 'created_date', 'updated_date'] } }],
+    });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
 
 export const getRoutines = async (idUser: number) => {
   try {

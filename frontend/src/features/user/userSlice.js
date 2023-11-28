@@ -4,6 +4,7 @@ import { userService } from "./userService";
 const initialState = {
   user: {},
   users: [],
+  clients: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -128,6 +129,27 @@ export const userSlice = createSlice({
         state.isError = true;
         state.message = action.payload.message;
         state.users = null;
+      })
+      // GET CLIENTS
+      .addCase(getClients.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Getting clients";
+      })
+      .addCase(getClients.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        console.log(action.payload);
+        state.message = action.payload.message;
+        state.clients = action.payload.clients;
+      })
+      .addCase(getClients.rejected, (state, action) => {
+        state.isLoading = false;
+        console.log("failed", action.payload);
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload.error;
+        state.cliens = null;
       })
 
       // GET USER

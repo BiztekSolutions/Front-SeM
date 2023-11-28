@@ -1,4 +1,4 @@
-import { deleteUser, getUsers } from "../../features/user/userSlice";
+import { deleteUser, getClients } from "../../features/user/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { FcFullTrash, FcInfo } from "react-icons/fc";
@@ -10,10 +10,10 @@ function ClientList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const { users } = state.users;
-  console.log(users);
+  const { clients } = state.users;
+  console.log(clients);
   useEffect(() => {
-    dispatch(getUsers());
+    dispatch(getClients());
   }, []);
 
   const handleDelete = (userName, userId) => {
@@ -53,24 +53,24 @@ function ClientList() {
   };
 
   const dataSource = [];
-  if (users?.length > 0) {
-    for (let i = 0; i < users.length; i++) {
+  if (clients?.length > 0) {
+    for (let i = 0; i < clients.length; i++) {
       dataSource.push({
         key: i,
-        firstName: users[i].name,
-        lastName: users[i].lastname,
-        email: users[i].Credentials[0].email,
+        firstName: clients[i].name,
+        lastName: clients[i].lastname,
+        email: clients[i].Credentials[0].email,
         actions: (
           <div className="flex align-items-center gap-3">
             <FcInfo
               size={19}
               className="userInfo h-9 w-9"
-              onClick={() => navigate(`../user/${users[i].idUser}`)}
+              onClick={() => navigate(`../user/${clients[i].idUser}`)}
             />
             <FcFullTrash
               size={19}
               className="userDelete h-9 w-9"
-              onClick={() => handleDelete(users[i].userName, users[i].id)}
+              onClick={() => handleDelete(clients[i].userName, clients[i].id)}
             />
           </div>
         ),

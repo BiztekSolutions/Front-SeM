@@ -19,7 +19,7 @@ const getUsers = async (token) => {
   return response.data;
 };
 const getClients = async (token) => {
-  const response = await axios.get(`${base_url}/users/clients`, {
+  const response = await axios.get(`${base_url}/users/allClients`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

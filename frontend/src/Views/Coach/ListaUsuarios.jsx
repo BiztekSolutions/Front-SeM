@@ -85,7 +85,7 @@ function ListaUsuarios({ dataSource }) {
       >
         <Input
           ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Buscar ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -106,7 +106,7 @@ function ListaUsuarios({ dataSource }) {
               width: 90,
             }}
           >
-            Search
+            Buscar
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
@@ -115,7 +115,7 @@ function ListaUsuarios({ dataSource }) {
               width: 90,
             }}
           >
-            Reset
+            Reiniciar
           </Button>
           <Button
             type="link"
@@ -128,7 +128,7 @@ function ListaUsuarios({ dataSource }) {
               setSearchedColumn(dataIndex);
             }}
           >
-            Filter
+            Filtrar
           </Button>
           <Button
             type="link"
@@ -137,7 +137,7 @@ function ListaUsuarios({ dataSource }) {
               close();
             }}
           >
-            close
+            Cerrar
           </Button>
         </Space>
       </div>

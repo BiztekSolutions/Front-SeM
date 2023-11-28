@@ -18,6 +18,7 @@ const items = [
   getItem("General", "sub1", <CgHome size={20} />, [
     getItem("Noticias", "noticias"),
     getItem("Mensajeria", "mensajeria"),
+    // getItem("Tablero de control", "tablero de control"),
   ]),
   getItem("Usuarios", "sub2", <FaUser size={20} />, [
     getItem("Lista de usuarios", "listaDeUsuarios"),
@@ -27,7 +28,7 @@ const items = [
     getItem("Grupos", "grupos"),
     getItem("Crear Grupos", "creargrupos"),
   ]),
-  getItem("Ejercicios", "sub3", <FaDumbbell size={20} />, [
+  getItem("Ejercicios", "sub4", <FaDumbbell size={20} />, [
     getItem("Agregar ejercicios", "agregarEjercicios"),
   ]),
 ];

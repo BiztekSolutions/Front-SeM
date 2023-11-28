@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Views/Home/Home";
 import Coach from "./Views/Coach/Coach";
 import Noticias from "./Views/Coach/Noticias";
-import ListaUsuarios from "./Views/Coach/ListaUsuarios";
+
 import Grupos from "./Views/Coach/Grupos";
 import Profile from "./Views/User/SingleUser/Profile";
 import Mensajeria from "./Views/Coach/Mensajerias";
@@ -17,11 +17,14 @@ import { useState, useEffect } from "react";
 import UserCalendar from "./Views/Coach/SingleUser/UserCalendar";
 import AgregarEjercicio from "./components/entrenadora/workoutComponents/agregarEjercicio.jsx";
 import Hoy from "./Views/User/Hoy";
-
+import CrearGrupos from "./Views/Coach/CrearGrupos";
 import EditarRutinas from "./components/entrenadora/workoutComponents/editarRutinas.jsx";
 import ChangePassword from "./Views/Coach/ChangePassword/ChangePassword.jsx";
 import Rutinas from "./Views/User/Rutinas";
 import NotificationCenter from "@/shared/components/notification/NotificationCenter";
+
+import UserList from "./Views/Coach/UserList";
+import ClientList from "./Views/Coach/ClientList";
 
 const Router = () => {
   const [exercises, setExercises] = useState(null);
@@ -86,8 +89,10 @@ const Router = () => {
             path="agregarEjercicios"
             element={<AgregarEjercicio exercises={exercises} />}
           />
-          <Route path="listaDeUsuarios" element={<ListaUsuarios />} />
+          <Route path="listaDeUsuarios" element={<UserList />} />
+          <Route path="listaDeClientes" element={<ClientList />} />
           <Route path="grupos" element={<Grupos />} />
+          <Route path="creargrupos" element={<CrearGrupos />} />
           <Route path="mensajeria" element={<Mensajeria />} />
           <Route path="changePassword/:id" element={<ChangePassword />} />
         </Route>

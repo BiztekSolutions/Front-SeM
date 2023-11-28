@@ -3,6 +3,7 @@ import sequelize from '../configs/db';
 
 class Client extends Model {
   public idClient!: number;
+  public idUser!: number;
 }
 
 Client.init(
@@ -17,7 +18,6 @@ Client.init(
     sequelize,
     modelName: 'Client',
     timestamps: false,
-    
   }
 );
 

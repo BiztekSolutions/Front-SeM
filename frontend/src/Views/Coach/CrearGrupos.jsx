@@ -1,74 +1,56 @@
 import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Table, Button, Input, Space } from "antd";
+
+import { Table, Button, Input, Space, Form } from "antd";
 import Highlighter from "react-highlight-words";
+
 import { SearchOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
-import Swal from "sweetalert2";
-import styles from "./Users.module.css";
-import { deleteUser, getUsers } from "../../features/user/userSlice";
 
+import styles from "./Users.module.css";
+import { getUsers } from "../../features/user/userSlice";
+import { createGroup } from "../../features/group/groupSlice";
 //import "@sweetalert2/themes/dark/dark.css";
 
-function ListaUsuarios() {
+function CrearGrupos() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { users } = state.users;
-
-  const handleDelete = (userName, userId) => {
-    Swal.fire({
-      color: "whitesmoke",
-      icon: "warning",
-      iconColor: "white",
-      background: "#1f1f1f",
-      buttonsStyling: false,
-      title: `<p>Wow wow!</p>`,
-      html: `
-      <p>
-        Are you sure you want to delete the user <b>${userName}</b>?
-      </p>
-      `,
-      showConfirmButton: true,
-      confirmButtonText: "Yes",
-      confirmButtonColor: "#1f1f1f",
-      showDenyButton: true,
-      denyButtonText: "No",
-      denyButtonColor: "grey",
-      denyButtonAriaLabel: "black",
-      toast: true,
-      customClass: {
-        confirmButton: "confirmSwalCheckout",
-        denyButton: "denySwalCheckout",
-        title: "swalTitle",
-        htmlContainer: "swalHtml",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(deleteUser(userId));
-      } else if (result.isDenied) {
-        return;
-      }
-    });
-  };
-  useEffect(() => {
-    dispatch(getUsers());
-  }, []);
-  const navigate = useNavigate();
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [form] = Form.useForm();
+  const [groupName, setGroupName] = useState("");
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
   };
 
+  const handleUserSelect = (index) => {
+    setSelectedUsers((prevSelectedUsers) => {
+      if (prevSelectedUsers.includes(index)) {
+        return prevSelectedUsers.filter((userIndex) => userIndex !== index);
+      } else {
+        return [...prevSelectedUsers, index];
+      }
+    });
+  };
+
+  const handleSubmit = () => {
+    console.log("Nombre del grupo:", groupName);
+    console.log("Usuarios seleccionados:", selectedUsers);
+    dispatch(createGroup({ groupName, selectedUsers }));
+  };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -247,20 +229,54 @@ function ListaUsuarios() {
       className: "text-3xl",
     },
   ];
+  console.log(selectedUsers, "selectedUsers");
+  const dataSource = [];
+  if (users?.length > 0) {
+    for (let i = 0; i < users.length; i++) {
+      dataSource.push({
+        key: i,
+        firstName: users[i].name,
+        lastName: users[i].lastname,
+        email: users[i].Credentials[0].email,
+        actions: (
+          <div className="flex align-items-center gap-3">
+            <input
+              type="checkbox"
+              checked={selectedUsers.includes(i)}
+              onChange={() => handleUserSelect(i)}
+            />
+          </div>
+        ),
+      });
+    }
+  }
 
   return (
     <div className={`${styles.wrapper}`}>
       <div>
-        <Typography className="text-5xl">Lista de Usuarios</Typography>
+        <h3 className="text-5xl">Crear grupos</h3>
       </div>
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        className="text-white text-xl"
-        rowClassName="h-12"
-      />
+      <Form form={form} onFinish={handleSubmit}>
+        <Form.Item label="Nombre del grupo" name="groupName">
+          <Input
+            placeholder="Ingrese el nombre del grupo"
+            onChange={(e) => setGroupName(e.target.value)}
+          />
+        </Form.Item>
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          className="text-white text-xl"
+          rowClassName="h-12"
+        />
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Crear Grupo
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 }
 
-export default ListaUsuarios;
+export default CrearGrupos;

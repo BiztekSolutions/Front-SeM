@@ -42,7 +42,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, userCredentials.password);
     if (!isValidPassword) {
       return res.status(403).json({ message: 'Invalid credentials' });
     }
@@ -56,21 +56,21 @@ export const login = async (req: Request, res: Response) => {
       return res.status(200).json({
         message: 'User logged',
         session: {
-          token: existingSession.token,
-          userId: user.idCredential,
+          token: newSession.token,
+          userId: userCredentials.idCredential,
         },
       });
     }
 
-    const token = jwt.sign({ userId: user.idCredential }, SECRET_KEY || '', { expiresIn: '24h' });
-    const newSession = await createSession(token, user.idCredential);
+    const token = jwt.sign({ userId: userCredentials.idCredential }, SECRET_KEY || '', { expiresIn: '24h' });
+    const newSession = await createSession(token, userCredentials.idCredential);
     console.log('NEWSESSION', newSession);
 
     return res.status(200).json({
       message: 'User logged',
       session: {
         token: newSession.token,
-        userId: user.idCredential,
+        userId: userCredentials.idCredential,
       },
     });
   } catch (error: any) {

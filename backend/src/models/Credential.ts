@@ -35,7 +35,6 @@ Credential.init(
     sequelize,
     modelName: 'Credential',
     timestamps: false,
-    
   }
 );
 

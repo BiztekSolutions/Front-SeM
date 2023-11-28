@@ -9,12 +9,15 @@ const login = async (user) => {
   return response.data;
 };
 
-const logout = async (userId) => {
-  const response = await axios.get("http://localhost:3000/api/v1/logout", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+const logout = async (userId, token) => {
+  const response = await axios.get(
+    `http://localhost:3000/api/v1/logout/${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 

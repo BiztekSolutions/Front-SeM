@@ -8,6 +8,7 @@ module.exports = {
       },
       colors: {
         customOrange: "#FF914D",
+        customOrangeAdmin: "#ffa500",
       },
     },
   },

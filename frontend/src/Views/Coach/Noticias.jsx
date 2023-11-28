@@ -6,6 +6,7 @@ import {
   showSuccessNotification,
   showErrorNotification,
 } from "@/features/layout/layoutSlice";
+import Foro from "../User/Noticias";
 
 const Noticias = () => {
   const [api, contextHolder] = notification.useNotification();
@@ -34,6 +35,7 @@ const Noticias = () => {
         Warning
       </Button>
       <Button onClick={() => openNotificationWithIcon("error")}>Error</Button>
+      <Foro />
     </div>
   );
 };

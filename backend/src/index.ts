@@ -14,7 +14,8 @@ import Routine from './models/Routine';
 import Exercise from './models/Exercise';
 import RoutineHasExercise from './models/RoutineHasExercise';
 import RoutineConfiguration from './models/RoutineConfiguration';
-
+import Post from './models/Post';
+import Comment from './models/Comment';
 const app: Application = express();
 const PORT: number = 3000;
 
@@ -42,15 +43,15 @@ Client.belongsTo(User, { foreignKey: 'idUser' });
 Coach.belongsTo(User, { foreignKey: 'idUser' });
 
 // CLIENT RELATIONS
-Client.belongsTo(Group, { foreignKey: 'idGroup' });
-Group.hasMany(Client, { foreignKey: 'idGroup' });
+Client.belongsTo(Group, { foreignKey: 'groupId' });
+Group.hasMany(Client, { foreignKey: 'groupId' });
 
 Client.belongsToMany(Routine, { through: 'ClientHasRoutine' });
 Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
 
 // GROUP RELATIONS
-//Group.hasOne(Routine);
-Routine.hasOne(Group);
+Group.hasMany(Routine, { foreignKey: 'groupId' });
+Routine.belongsTo(Group, { foreignKey: 'groupId' });
 
 // ROUTINE RELATIONS
 Routine.hasMany(RoutineHasExercise, { foreignKey: 'RoutineIdRoutine' });
@@ -61,6 +62,10 @@ RoutineHasExercise.belongsTo(Exercise, { foreignKey: 'ExerciseIdExercise' });
 
 RoutineConfiguration.hasMany(RoutineHasExercise, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
 RoutineHasExercise.belongsTo(RoutineConfiguration, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
+
+//Post relations
+Post.hasMany(Comment, { foreignKey: 'postId', as: 'Comments' });
+Comment.belongsTo(Post);
 
 sequelize
   .sync({ force: false })

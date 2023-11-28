@@ -1,6 +1,9 @@
 import CustomLayout from "../CustomLayout";
-import { FcConferenceCall } from "react-icons/fc";
 
+import { FaUser } from "react-icons/fa";
+import { FaCogs } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
+import { FaDumbbell } from "react-icons/fa";
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -11,15 +14,19 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem("General", "sub1", <FcConferenceCall size={20} />, [
+  getItem("General", "sub1", <FaCogs size={20} />, [
     getItem("Noticias", "noticias"),
     getItem("Mensajeria", "mensajeria"),
   ]),
-  getItem("Usuarios", "sub2", <FcConferenceCall size={20} />, [
+  getItem("Usuarios", "sub2", <FaUser size={20} />, [
     getItem("Lista de usuarios", "listaDeUsuarios"),
-    getItem("Grupos", "grupos"),
+    getItem("Lista de clientes", "listaDeClientes"),
   ]),
-  getItem("Ejercicios", "sub3", <FcConferenceCall size={20} />, [
+  getItem("Grupos", "sub3", <FaUsers size={20} />, [
+    getItem("Grupos", "grupos"),
+    getItem("Crear Grupos", "creargrupos"),
+  ]),
+  getItem("Ejercicios", "sub4", <FaDumbbell size={20} />, [
     getItem("Agregar ejercicios", "agregarEjercicios"),
   ]),
 ];

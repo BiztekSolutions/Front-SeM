@@ -1,4 +1,4 @@
-import WorkoutForm from "./WorkoutForm";
+import WorkoutForm from "./WorkoutForm2";
 function WorkoutCreator({ exercises, workouts, setWorkouts }) {
   async function postWorkout(data, id) {
     try {
@@ -28,7 +28,6 @@ function WorkoutCreator({ exercises, workouts, setWorkouts }) {
 
   return (
     <div>
-      <h1 className="text-center">Crear rutina</h1>
       <WorkoutForm exercises={exercises} postWorkout={postWorkout} />
     </div>
   );

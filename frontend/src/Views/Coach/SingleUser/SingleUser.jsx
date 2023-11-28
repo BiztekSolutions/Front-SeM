@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 const SingleUser = () => {
   const activeStyle = {
     fontWeight: "bold",
-    color: "white",
+    color: "orange",
     fontSize: "1.7rem",
   };
   const location = useLocation();
@@ -18,15 +18,15 @@ const SingleUser = () => {
   return (
     <div>
       <nav className="row navbar mx-1 border-t-2 mb-3 ">
-        <ul className="flex gap-3 text-white justify-center content-center mt-2">
+        <ul className="flex gap-3 justify-center content-center mt-2">
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./" style={activeStyle}>
-              USUARIO
+              Usuario
             </NavLink>
           </li>
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./ejercicios" style={activeStyle}>
-              EJERCICIOS
+              Ejercicios
             </NavLink>
           </li>
           {/* <li>
@@ -36,13 +36,13 @@ const SingleUser = () => {
           </li> */}
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./agregarRutina" style={activeStyle}>
-              AGREGAR RUTINA
+              Agregar rutina
             </NavLink>
           </li>
 
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink to="./editarRutinas" style={activeStyle}>
-              EDITAR RUTINAS
+              Editar rutina
             </NavLink>
           </li>
         </ul>

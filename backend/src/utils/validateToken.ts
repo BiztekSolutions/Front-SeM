@@ -10,6 +10,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) return res.status(401).json({ message: 'Unauthorized: Token missing' });
+  console.log(token);
 
   console.log('SECRET_KEY: ', SECRET_KEY);
   jwt.verify(token, SECRET_KEY || '', (err: any, user: any) => {

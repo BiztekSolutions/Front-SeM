@@ -28,12 +28,12 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const state = useSelector((state) => state);
   console.log(state, "state");
   const { message, token, user, userId, isLoading } = state.auths;
-
+  console.log(userId, "sdasdasdsaadacs");
   const refToast = useRef();
 
   // CONTEXT API
   const globalContext = useContext(GlobalContext);
-  const { setShowLoginModal, setLogged } = globalContext;
+  const { setLogged } = globalContext;
   const [credentials, setCredentials] = useState(credentialsInitialState);
   const [error, setError] = useState("");
   const handleCredentials = (e) => {

@@ -1,14 +1,10 @@
-import CustomLayout from "../CustomLayout";
-import {
-  DribbbleOutlined,
-  HomeOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-
+import { CgHome } from "react-icons/cg";
 import { FaUser } from "react-icons/fa";
-import { FaCogs } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { FaDumbbell } from "react-icons/fa";
+
+import CustomLayout from "../CustomLayout";
+
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -19,11 +15,11 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem("General", "sub1", <HomeOutlined style={{ fontSize: 24 }} />, [
+  getItem("General", "sub1", <CgHome size={20} />, [
     getItem("Noticias", "noticias"),
     getItem("Mensajeria", "mensajeria"),
   ]),
-  getItem("Usuarios", "sub2", <UserOutlined style={{ fontSize: 24 }} />, [
+  getItem("Usuarios", "sub2", <FaUser size={20} />, [
     getItem("Lista de usuarios", "listaDeUsuarios"),
     getItem("Lista de clientes", "listaDeClientes"),
   ]),
@@ -31,7 +27,7 @@ const items = [
     getItem("Grupos", "grupos"),
     getItem("Crear Grupos", "creargrupos"),
   ]),
-  getItem("Ejercicios", "sub3", <DribbbleOutlined style={{ fontSize: 24 }} />, [
+  getItem("Ejercicios", "sub3", <FaDumbbell size={20} />, [
     getItem("Agregar ejercicios", "agregarEjercicios"),
   ]),
 ];

@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from "./Users.module.css";
 import { getUsers } from "../../features/user/userSlice";
 import { createGroup } from "../../features/group/groupSlice";
-//import "@sweetalert2/themes/dark/dark.css";
 
 function CrearGrupos() {
   const dispatch = useDispatch();

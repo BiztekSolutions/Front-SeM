@@ -8,9 +8,7 @@ import { FcFullTrash, FcApproval, FcCancel, FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
 // import { useDispatch, useSelector } from "react-redux";
 // import { deleteUser, updateUser } from "../../features/user/userSlice";
-// import Swal from "sweetalert2";
 import { faker } from "@faker-js/faker";
-// import "@sweetalert2/themes/dark/dark.css";
 
 const ListaUsuarios = () => {
   // const dispatch = useDispatch();
@@ -42,6 +40,7 @@ const ListaUsuarios = () => {
   };*/
 
   /*const handleDelete = (userName, userId) => {
+    //@TODO: Reemplazar el Swal
     Swal.fire({
       color: "whitesmoke",
       icon: "warning",

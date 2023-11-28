@@ -14,7 +14,6 @@
     "@fullcalendar/daygrid": "^6.1.9",
     "@fullcalendar/react": "^6.1.9",
     "@reduxjs/toolkit": "^1.9.7",
-    "@sweetalert2/themes": "^5.0.15",
     "antd": "^5.10.3",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
@@ -35,7 +34,6 @@
     "react-world-flags": "^1.6.0",
     "stream-chat": "^8.14.1",
     "stream-chat-react": "^10.18.0",
-    "sweetalert2": "^11.9.0",
     "typewriter-effect": "^2.21.0",
     "uuid": "^9.0.1",
     "web-vitals": "^3.5.0"

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function AgregarEjercicio() {
+function AgregarEjercicio({exercises = []}) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",

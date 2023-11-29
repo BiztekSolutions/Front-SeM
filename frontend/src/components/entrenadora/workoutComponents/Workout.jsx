@@ -3,7 +3,7 @@ import axios from "axios";
 import AddedExerciseContainer from "./AddedExerciseContainer";
 import WorkoutEditForm from "./WorkoutEditForm";
 import { useParams } from "react-router-dom";
-function Workout({ exercises, workouts, setWorkouts }) {
+function Workout({ exercises = {}, workouts = {}, setWorkouts = {} }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [workout, setWorkout] = useState({ exercises: [] });
 

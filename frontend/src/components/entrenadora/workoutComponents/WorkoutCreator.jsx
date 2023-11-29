@@ -1,5 +1,5 @@
 import WorkoutForm from "./WorkoutForm2";
-function WorkoutCreator({ exercises, workouts, setWorkouts }) {
+function WorkoutCreator({ exercises=[], workouts=[], setWorkouts=[] }) {
   async function postWorkout(data, id) {
     try {
       const configObj = {

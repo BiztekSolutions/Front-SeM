@@ -7,7 +7,7 @@ import {
 import WorkoutFormRadio from "./WorkoutFormRadio";
 import { useParams } from "react-router-dom";
 
-const EditarRutinas = ({ exercises }) => {
+const EditarRutinas = ({ exercises = [] }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { rutinas } = state.rutinas;

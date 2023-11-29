@@ -1,4 +1,6 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+
 import Home from "./Views/Home/Home";
 import Coach from "./Views/Coach/Coach";
 import Noticias from "./Views/Coach/Noticias";
@@ -13,7 +15,6 @@ import Workout from "./components/entrenadora/workoutComponents/Workout";
 import WorkoutContainer from "./components/entrenadora/workoutComponents/WorkoutContainer";
 import WorkoutCreator from "./components/entrenadora/workoutComponents/WorkoutCreator.jsx";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import UserCalendar from "./Views/Coach/SingleUser/UserCalendar";
 import AgregarEjercicio from "./components/entrenadora/workoutComponents/agregarEjercicio.jsx";
 import Hoy from "./Views/User/Hoy";
@@ -21,74 +22,35 @@ import CrearGrupos from "./Views/Coach/CrearGrupos";
 import EditarRutinas from "./components/entrenadora/workoutComponents/editarRutinas.jsx";
 import ChangePassword from "./Views/Coach/ChangePassword/ChangePassword.jsx";
 import Rutinas from "./Views/User/Rutinas";
-import NotificationCenter from "@/shared/components/notification/NotificationCenter";
-
 import UserList from "./Views/Coach/UserList";
 import ClientList from "./Views/Coach/ClientList";
+import { useSelector } from "react-redux";
 
 const Router = () => {
-  const [exercises, setExercises] = useState(null);
-  const [workouts, setWorkouts] = useState(null);
+  //@TODO: Arreglar idioma de las rutas. O español o ingles.
+  const auth = useSelector((state) => state.auths);
+  const isAdmin = auth.user && auth.user.isAdmin;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const exercisesResponse = await axios.get(
-          "http://localhost:3001/exercises"
-        );
-        const workoutsResponse = await axios.get(
-          "http://localhost:3001/workouts"
-        );
-
-        setExercises(exercisesResponse.data);
-        setWorkouts(workoutsResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
-
+  console.log("auth", auth.token);
   return (
     <BrowserRouter>
       <Routes>
         {/* outside */}
         <Route exact path="/" element={<Home />} />
         {/* inside COACH */}
-        <Route path="/coach/" element={<Coach />}>
+        <Route
+          path="/coach/*"
+          element={auth.token !== "" ? <Coach /> : <Navigate to="/" />}
+        >
           <Route index element={<Noticias />} />
           <Route path="user/:id" element={<SingleUser />}>
             <Route path="ejercicios" element={<UserCalendar />} />
             <Route path="hoy" element={<WorkoutContainer />} />
-            <Route
-              path="agregarRutina"
-              element={
-                <WorkoutCreator
-                  exercises={exercises}
-                  workouts={workouts}
-                  setWorkouts={setWorkouts}
-                />
-              }
-            />
-            <Route
-              path="editarRutinas"
-              element={<EditarRutinas exercises={exercises} />}
-            />
-            <Route
-              path="workouts/:id"
-              element={
-                <Workout
-                  exercises={exercises}
-                  workouts={workouts}
-                  setWorkouts={setWorkouts}
-                />
-              }
-            />
+            <Route path="agregarRutina" element={<WorkoutCreator />} />
+            <Route path="editarRutinas" element={<EditarRutinas />} />
+            <Route path="workouts/:id" element={<Workout />} />
           </Route>
-          <Route
-            path="agregarEjercicios"
-            element={<AgregarEjercicio exercises={exercises} />}
-          />
+          <Route path="agregarEjercicios" element={<AgregarEjercicio />} />
           <Route path="listaDeUsuarios" element={<UserList />} />
           <Route path="listaDeClientes" element={<ClientList />} />
           <Route path="grupos" element={<Grupos />} />
@@ -96,7 +58,10 @@ const Router = () => {
           <Route path="mensajeria" element={<Mensajeria />} />
           <Route path="changePassword/:id" element={<ChangePassword />} />
         </Route>
-        <Route path="/user/:id" element={<User />}>
+        <Route
+          path="/user/:id"
+          element={auth.token !== "" ? <User /> : <Navigate to="/" />}
+        >
           <Route index element={<Noticias />} />
           <Route exact path=":id" element={<Profile />} />
           <Route path="hoy" element={<Hoy />} />
@@ -104,7 +69,7 @@ const Router = () => {
           <Route path="cronometro" element={<Cronometro />} />
           <Route path="mensajeria" element={<Mensajeria />} />
         </Route>
-        {/* inside CLIENT */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );

@@ -9,8 +9,8 @@ import {
   getUser,
   updateUser,
 } from "../../../features/user/userSlice";
-import { TailSpin } from "react-loader-spinner";
 import UserCalendar from "./UserCalendar";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 const SingleUser = () => {
   // CONTEXT API
@@ -178,16 +178,7 @@ const SingleUser = () => {
             onClick={() => handleDelete(user.userName, user.id)}
           />
           {message === `ban updating ${user.id}` ? (
-            <TailSpin
-              height="20"
-              width="20"
-              color="#4fa94d"
-              ariaLabel="tail-spin-loading"
-              radius="1"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
+            <LoadingSpinner />
           ) : user.disabled ? (
             <FcApproval
               data-activate={user.id}

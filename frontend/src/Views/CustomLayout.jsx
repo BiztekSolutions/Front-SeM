@@ -10,7 +10,6 @@ import {
   Typography,
 } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import Flag from "react-world-flags";
 import { CgProfile } from "react-icons/cg";
 import logo from "../assets/logo.png";
 import { GlobalContext } from "../context/globalContext";
@@ -121,7 +120,8 @@ const CustomLayout = ({ items }) => {
             {/* @TODO: Esta flag no se ve */}
             <div className="flex gap-5 items-center">
               <div>
-                <Flag code={"arg"} height={"15"} />
+                {/* @TODO: Implementar icono con la bandera */}
+                {/* <Flag code={"arg"} height={"15"} /> */}
               </div>
               <div className="flex gap-3 items-center justify-center dropdown">
                 <div

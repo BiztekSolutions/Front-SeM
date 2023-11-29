@@ -2,13 +2,13 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Input, Space } from "antd";
 import styles from "./Users.module.css";
-import { TailSpin } from "react-loader-spinner";
 import Highlighter from "react-highlight-words";
 import { FcFullTrash, FcApproval, FcCancel, FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
 // import { useDispatch, useSelector } from "react-redux";
 // import { deleteUser, updateUser } from "../../features/user/userSlice";
 import { faker } from "@faker-js/faker";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 const ListaUsuarios = () => {
   // const dispatch = useDispatch();
@@ -361,16 +361,7 @@ const ListaUsuarios = () => {
               // onClick={@TODO: Implementar si corresponde}
             />
             {message === `ban updating` ? (
-              <TailSpin
-                height="20"
-                width="20"
-                color="#4fa94d"
-                ariaLabel="tail-spin-loading"
-                radius="1"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
+              <LoadingSpinner />
             ) : users ? (
               <FcApproval
                 // data-activate={users[i].id}

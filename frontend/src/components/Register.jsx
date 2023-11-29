@@ -5,7 +5,6 @@ import {
   register,
   loginUser,
 } from "../features/auth/authSlice";
-import { TailSpin } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { GlobalContext } from "../context/globalContext";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +12,7 @@ import {
   showSuccessNotification,
   showErrorNotification,
 } from "@/features/layout/layoutSlice";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 const credentialsInitialState = {
   password: "",
@@ -120,27 +120,13 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
 
       dispatch(showSuccessNotification("Hola", `Bienvenido de vuelta!`));
 
-      setTimeout(() => {
-        // Clear message state & close Login modal
-        dispatch(clearUserMessage());
-        navigate("/coach");
-      }, 2100);
+      //@TODO: Aca debo redirigir a donde sea. Si es usuario va a ser a /user. Si es coach va a ser a /coach.
+      navigate("/coach");
     }
   }, [message, user, isLoading]);
 
   if (isLoading) {
-    return (
-      <TailSpin
-        height="20"
-        width="20"
-        color="#4fa94d"
-        ariaLabel="tail-spin-loading"
-        radius="1"
-        wrapperStyle={{}}
-        wrapperClass=""
-        visible={true}
-      />
-    );
+    return <LoadingSpinner />;
   }
 
   return (

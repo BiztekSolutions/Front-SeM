@@ -9,9 +9,6 @@ import {
 } from "../../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { GlobalContext } from "../../context/globalContext";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css"; //core css
-import "primeicons/primeicons.css";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -106,12 +103,7 @@ const LoginModalN = () => {
         )
       );
 
-      setTimeout(() => {
-        // Clear message state & close Login modal
-        dispatch(clearUserMessage());
-        setShowLoginModal(false);
-        navigate("/home");
-      }, 2100);
+      navigate("/home");
     } else {
       dispatch(
         showErrorNotification(

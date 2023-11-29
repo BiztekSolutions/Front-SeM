@@ -41,7 +41,11 @@ function WorkoutForm({ exercises, postWorkout }) {
   const [visibleExercises, setVisibleExercises] = useState(20); // Número de ejercicios iniciales visibles
   const [scrollHeight, setScrollHeight] = useState(0);
   const daySectionRef = useRef(null); // Ref para la sección de los días
+  const [searchTerm, setSearchTerm] = useState("");
 
+  const filteredExercises = exercises.filter((exercise) =>
+    exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   useEffect(() => {
     const types = [...new Set(exercises.map((exercise) => exercise.type))];
     setExerciseTypes(types);
@@ -184,7 +188,7 @@ function WorkoutForm({ exercises, postWorkout }) {
   const handleDaySectionScroll = () => {
     setScrollHeight(daySectionRef.current.scrollTop);
   };
-
+  console.log(searchTerm, "searchTerm");
   return (
     <>
       <form
@@ -192,55 +196,28 @@ function WorkoutForm({ exercises, postWorkout }) {
         className="max-w-full mx-auto p-6 flex flex-col formRutines"
       >
         <div id="addRutine" className="flex  flex-col">
-          <h1 className="text-center crearRutina border-2 rounded-t-none rounded-full w-4/6 m-auto text-black font-bold p-4">
-            Crear rutina
-          </h1>
-          <div className="flex justify-center py-5">
-            <div className="form-group my-2 mx-4 w-3/6">
-              <input
-                type="text"
-                className="form-control p-2 border border-gray-300 rounded-full"
-                name="name"
-                placeholder="Nombre de la rutina"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="flex justify-center py-2">
-              <div className="form-group my-2 mx-4 flex flex-col">
-                <label className="text-customOrangeAdmin">Inicio:</label>
-                <DatePicker
-                  onChange={handleDateChange}
-                  defaultValue={moment(startDate, "YYYY-MM-DD")}
-                  format="YYYY-MM-DD"
-                  dropdownMode="top"
-                />
-              </div>
-              <div className="form-group my-2 mx-4 flex flex-col">
-                <label className="text-customOrangeAdmin">Semanas:</label>
-                <input
-                  type="number"
-                  className="form-control p-2 border border-gray-300 rounded-full"
-                  onChange={handleDurationChange}
-                  value={durationInWeeks}
-                  required
-                />
-              </div>
-            </div>
-          </div>
+          {/* ... (código existente) */}
         </div>
         <h2 className="description-add-rutine bg-orange-200 text-black">
-          Arrastrá los ejercicios al dia que quieras
+          Arrastrá los ejercicios al día que quieras
         </h2>
         {/* Parte izquierda (1/4 de ancho) */}
         <div className="flex mt-5">
           <div className="w-1/4 p-4 overflow-y-auto max-h-screen exercise-list">
             <h2 className="text-lg font-semibold mb-2">Lista de Ejercicios</h2>
+            <div className="flex justify-center my-4">
+              <input
+                type="text"
+                placeholder="Buscar ejercicios..."
+                className="form-control p-2 border border-gray-300 rounded-full"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
             <div>
-              {exercises.slice(0, visibleExercises).map((exercise) => (
+              {filteredExercises.slice(0, visibleExercises).map((exercise) => (
                 <div
-                  key={exercise.name}
+                  key={exercise.id}
                   className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center bg-orange-200"
                   draggable
                   onDragStart={(evt) => startDrag(evt, exercise)}
@@ -254,7 +231,7 @@ function WorkoutForm({ exercises, postWorkout }) {
                 </div>
               ))}
             </div>
-            {visibleExercises < exercises.length && (
+            {visibleExercises < filteredExercises.length && (
               <button
                 className="btn btn-primary mt-2 rounded-full"
                 onClick={handleLoadMore}

@@ -33,10 +33,10 @@ export const createClient = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Client already exists for this user' });
     }
 
-    // Crea un nuevo cliente con el userId proporcionado
+    console.log('userId', userId);
+
     const newClient = await Client.create({
       idUser: userId,
-      // Puedes agregar más campos según tus necesidades
     });
 
     return res.status(201).json({ message: 'Client created successfully', newClient });
@@ -102,4 +102,4 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { getUsers, getUser, getUserRoutines, updateUser };
+export default { getUsers, getUser, getUserRoutines, updateUser, getClients, createClient };

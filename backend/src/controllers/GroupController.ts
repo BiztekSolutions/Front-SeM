@@ -3,26 +3,49 @@ import { Request, Response } from 'express';
 import Group from '../models/Group';
 import Routine from '../models/Routine';
 import Client from '../models/Client';
-
+import sequelize from '../configs/db';
+import ClientGroup from '../models/ClientGroup';
+import User from '../models/User';
+import { get, list } from '../services/GroupService';
 // Crear un grupo con clientes asignados
+// controllers/groupController.js
+
+//@TODO: Migrar el contenido de este controller a un Service.
 export const createGroup = async (req: Request, res: Response) => {
   try {
-    const { name, clientIds } = req.body;
-
-    // Crear el grupo
-    const group = await Group.create({ name });
-
-    // Asociar clientes al grupo
-    if (clientIds && clientIds.length > 0) {
-      const clients = await Client.findAll({ where: { id: clientIds } });
-      for (const client of clients) {
-        await group.addClient(client);
+    const transaction = await sequelize.transaction();
+    try {
+      const { groupName, selectedUsers } = req.body;
+      if (!groupName) {
+        return res.status(400).json({ message: 'Group name is required in the request body' });
       }
-    }
 
-    return res.status(201).json({ message: 'Group created successfully', group });
-  } catch (error) {
-    console.error(error);
+      if (!selectedUsers || selectedUsers.length === 0) {
+        return res.status(400).json({ message: 'At least one user must be selected' });
+      }
+
+      const name = groupName;
+
+      const group = await Group.create({ name }, { transaction: transaction });
+
+      // Asociar clientes al grupo
+      for (const clientId of selectedUsers) {
+        await ClientGroup.create({ idGroup: group.idGroup, idClient: clientId }, { transaction: transaction });
+      }
+
+      // Commit de la transacción
+      await transaction.commit();
+
+      return res.status(201).json({ message: 'Group created successfully', group });
+    } catch (error) {
+      // Revertir la transacción en caso de error
+      console.error(error);
+      await transaction.rollback();
+
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  } catch (err) {
+    console.error(err);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -32,12 +55,7 @@ export const getGroup = async (req: Request, res: Response) => {
   try {
     const idGroup = parseInt(req.params.idGroup, 10);
 
-    const group = await Group.findByPk(idGroup, {
-      include: [
-        { model: Routine, as: 'Routine' },
-        { model: Client, as: 'Clients' },
-      ],
-    });
+    const group = await get(groupId);
 
     if (!group) {
       return res.status(404).json({ message: 'Group not found' });
@@ -53,12 +71,7 @@ export const getGroup = async (req: Request, res: Response) => {
 // Obtener todos los grupos con sus clientes
 export const getGroups = async (req: Request, res: Response) => {
   try {
-    const groups = await Group.findAll({
-      include: [
-        { model: Routine, as: 'Routine' },
-        { model: Client, as: 'Clients' },
-      ],
-    });
+    const groups = await list();
 
     return res.status(200).json({ groups });
   } catch (error) {
@@ -67,7 +80,7 @@ export const getGroups = async (req: Request, res: Response) => {
   }
 };
 
-// Agregar una rutina a un grupo existente
+//@TODO: Migrar el contenido de este controller a un Service.
 export const setRoutineGroup = async (req: Request, res: Response) => {
   try {
     const idGroup = parseInt(req.params.idGroup, 10);

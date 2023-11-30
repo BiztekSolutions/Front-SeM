@@ -16,6 +16,8 @@ import RoutineHasExercise from './models/RoutineHasExercise';
 import RoutineConfiguration from './models/RoutineConfiguration';
 import Post from './models/Post';
 import Comment from './models/Comment';
+import ClientGroup from './models/ClientGroup';
+
 const app: Application = express();
 const PORT: number = 3000;
 
@@ -43,15 +45,19 @@ Client.belongsTo(User, { foreignKey: 'idUser' });
 Coach.belongsTo(User, { foreignKey: 'idUser' });
 
 // CLIENT RELATIONS
-Client.belongsTo(Group, { foreignKey: 'idGroup' });
-Group.hasMany(Client, { foreignKey: 'idGroup' });
+Group.hasMany(ClientGroup, { foreignKey: 'idGroup' });
+ClientGroup.belongsTo(Group, { foreignKey: 'idClient' });
+
+Client.hasMany(ClientGroup, { foreignKey: 'idClient' });
+ClientGroup.belongsTo(Client, { foreignKey: 'idClient' });
 
 Client.belongsToMany(Routine, { through: 'ClientHasRoutine' });
 Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
 
 // GROUP RELATIONS
-Group.hasMany(Routine, { foreignKey: 'idGroup' });
-Routine.belongsTo(Group, { foreignKey: 'idGroup' });
+Group.hasMany(Routine, { foreignKey: 'groupId' });
+
+Routine.belongsTo(Group, { foreignKey: 'groupId' });
 
 // ROUTINE RELATIONS
 Routine.hasMany(RoutineHasExercise, { foreignKey: 'RoutineIdRoutine' });

@@ -19,7 +19,6 @@ class Group extends Model {
   public getClients!: BelongsToManyGetAssociationsMixin<Client>;
   public addClient!: BelongsToManyAddAssociationMixin<Client, number>;
 
-  // Definir la relación con Routine
   public getRoutine!: HasOneGetAssociationMixin<Routine>;
   public setRoutine!: HasOneSetAssociationMixin<Routine, number>;
 }

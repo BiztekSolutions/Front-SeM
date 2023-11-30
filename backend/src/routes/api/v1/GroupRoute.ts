@@ -5,7 +5,7 @@ const groupRouter = express.Router();
 
 groupRouter.post('/', createGroup);
 groupRouter.get('/:idGroup', getGroup);
-groupRouter.get('/:idGroup', setRoutineGroup);
+groupRouter.post('/:idGroup', setRoutineGroup);
 groupRouter.get('/', getGroups);
 
 export default groupRouter;

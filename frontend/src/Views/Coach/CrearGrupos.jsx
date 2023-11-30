@@ -7,13 +7,15 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 
 import styles from "./Users.module.css";
-import { getUsers } from "../../features/user/userSlice";
+import { getClients } from "../../features/user/userSlice";
 import { createGroup } from "../../features/group/groupSlice";
+import { id } from "date-fns/locale";
+//import "@sweetalert2/themes/dark/dark.css";
 
 function CrearGrupos() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const { users } = state.users;
+  const { clients } = state.users;
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [form] = Form.useForm();
   const [groupName, setGroupName] = useState("");
@@ -22,7 +24,7 @@ function CrearGrupos() {
   const searchInput = useRef(null);
 
   useEffect(() => {
-    dispatch(getUsers());
+    dispatch(getClients());
   }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -35,12 +37,14 @@ function CrearGrupos() {
     setSearchText("");
   };
 
-  const handleUserSelect = (index) => {
+  const handleUserSelect = (idUser) => {
     setSelectedUsers((prevSelectedUsers) => {
-      if (prevSelectedUsers.includes(index)) {
-        return prevSelectedUsers.filter((userIndex) => userIndex !== index);
+      if (prevSelectedUsers.includes(idUser)) {
+        // Si el usuario ya está seleccionado, lo filtramos
+        return prevSelectedUsers.filter((userId) => userId !== idUser);
       } else {
-        return [...prevSelectedUsers, index];
+        // Si el usuario no está seleccionado, lo agregamos
+        return [...prevSelectedUsers, idUser];
       }
     });
   };
@@ -225,19 +229,19 @@ function CrearGrupos() {
     },
   ];
   const dataSource = [];
-  if (users?.length > 0) {
-    for (let i = 0; i < users.length; i++) {
+  if (clients?.length > 0) {
+    for (let i = 0; i < clients.length; i++) {
       dataSource.push({
         key: i,
-        firstName: users[i].name,
-        lastName: users[i].lastname,
-        email: users[i].Credentials[0].email,
+        firstName: clients[i].name,
+        lastName: clients[i].lastname,
+        email: clients[i].Credentials[0].email,
         actions: (
           <div className="flex align-items-center gap-3">
             <input
               type="checkbox"
-              checked={selectedUsers.includes(i)}
-              onChange={() => handleUserSelect(i)}
+              checked={selectedUsers.includes(clients[i].idUser)}
+              onChange={() => handleUserSelect(clients[i].idUser)}
             />
           </div>
         ),

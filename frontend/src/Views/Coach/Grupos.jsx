@@ -1,47 +1,24 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Input, Space } from "antd";
 import styles from "./Users.module.css";
-import { TailSpin } from "react-loader-spinner";
 import Highlighter from "react-highlight-words";
-import { FcFullTrash, FcApproval, FcCancel, FcInfo } from "react-icons/fc";
+import { FcFullTrash, FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
-// import { useDispatch, useSelector } from "react-redux";
-// import { deleteUser, updateUser } from "../../features/user/userSlice";
-// import Swal from "sweetalert2";
-import { faker } from "@faker-js/faker";
-// import "@sweetalert2/themes/dark/dark.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getGroups, deleteGroup } from "../../features/group/groupSlice";
+import Swal from "sweetalert2";
 
-const ListaUsuarios = () => {
-  // const dispatch = useDispatch();
-  // const state = useSelector((state) => state);
-  // const { users, message } = state.users;
+const Groups = () => {
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const { groups } = state.groups;
+  console.log(groups);
+  useEffect(() => {
+    dispatch(getGroups());
+  }, [dispatch]);
 
-  /*const handleUpdateUser = (info, userId) => {
-    if (info === "activate") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            disabled: false,
-          },
-          action: `ban updating ${userId}`,
-        })
-      );
-    } else {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            disabled: true,
-          },
-          action: `ban updating ${userId}`,
-        })
-      );
-    }
-  };*/
-
-  /*const handleDelete = (userName, userId) => {
+  const handleDelete = (userName, userId) => {
     Swal.fire({
       color: "whitesmoke",
       icon: "warning",
@@ -70,17 +47,18 @@ const ListaUsuarios = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteUser(userId));
+        dispatch(deleteGroup(userId));
       } else if (result.isDenied) {
         return;
       }
     });
-  }; */
+  };
 
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -195,25 +173,9 @@ const ListaUsuarios = () => {
 
   const columns = [
     {
-      title: "Username",
-      dataIndex: "userName",
-      key: "userName",
-      defaultSortOrder: "ascend",
-      sorter: (a, b) => {
-        if (a.userName < b.userName) {
-          return -1;
-        }
-        if (a.userName > b.userName) {
-          return 1;
-        }
-        return 0;
-      },
-      ...getColumnSearchProps("userName"),
-    },
-    {
-      title: "First Name",
-      dataIndex: "firstName",
-      key: "firstName",
+      title: "Group Name",
+      dataIndex: "groupName",
+      key: "groupName",
       defaultSortOrder: "ascend",
       sorter: (a, b) => {
         if (a.firstName < b.firstName) {
@@ -227,175 +189,36 @@ const ListaUsuarios = () => {
       ...getColumnSearchProps("firstName"),
     },
     {
-      title: "Last Name",
-      dataIndex: "lastName",
-      key: "lastName",
-      defaultSortOrder: "ascend",
-      sorter: (a, b) => {
-        if (a.lastName < b.lastName) {
-          return -1;
-        }
-        if (a.lastName > b.lastName) {
-          return 1;
-        }
-        return 0;
-      },
-      ...getColumnSearchProps("lastName"),
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      defaultSortOrder: "ascend",
-      sorter: (a, b) => {
-        if (a.email < b.email) {
-          return -1;
-        }
-        if (a.email > b.email) {
-          return 1;
-        }
-        return 0;
-      },
-      ...getColumnSearchProps("email"),
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
-    {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
     },
   ];
 
-  /* if (users.length > 0) {
-    for (let i = 0; i < users.length; i++) {
+  const dataSource = [];
+  if (groups.length > 0) {
+    for (let i = 0; i < groups.length; i++) {
       dataSource.push({
         key: i,
-        userName: users[i].userName,
-        firstName: users[i].firstName,
-        lastName: users[i].lastName,
-        email: users[i].email,
-        status: (
-          <div className="userStatusSpan">
-            <span
-              className={`${users[i].logged ? "online" : "offline"}`}
-            ></span>
-            {users[i].logged ? "Online" : "Offline"}
-          </div>
-        ),
+        userName: groups[i].name,
+
         actions: (
           <div className="d-flex align-items-center gap-3">
             <FcInfo
               size={19}
               className="userInfo"
-              onClick={() => navigate(`user/${users[i].id}`)}
+              onClick={() => navigate(`group/${groups[i].id}`)}
             />
             <FcFullTrash
               size={19}
               className="userDelete"
-              onClick={() => handleDelete(users[i].userName, users[i].id)}
+              onClick={() => handleDelete(groups[i].userName, groups[i].id)}
             />
-            {message === `ban updating ${users[i].id}` ? (
-              <TailSpin
-                height="20"
-                width="20"
-                color="#4fa94d"
-                ariaLabel="tail-spin-loading"
-                radius="1"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            ) : users[i].disabled ? (
-              <FcApproval
-                data-activate={users[i].id}
-                onClick={() => handleUpdateUser("activate", users[i].id)}
-                size={19}
-                className={styles.activate}
-              />
-            ) : (
-              <FcCancel
-                data-disable={users[i].id}
-                onClick={() => handleUpdateUser("disable", users[i].id)}
-                size={19}
-                className="userBan"
-              />
-            )}
           </div>
         ),
       });
     }
-*/
-  const message = "";
-  const generateDummyData = (count) => {
-    const users = [];
-    for (let i = 0; i < count; i++) {
-      const logged = faker.datatype.boolean();
-      const disabled = faker.datatype.boolean();
-      users.push({
-        key: i,
-        userName: faker.internet.userName(),
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        email: faker.internet.email(),
-        logged: logged,
-        disabled: disabled,
-        status: (
-          <div className="userStatusSpan">
-            <span className={`${logged ? "online" : "offline"}`}></span>
-            {logged ? "Online" : "Offline"}
-          </div>
-        ),
-        actions: (
-          <div className="flex align-middle gap-3">
-            <FcInfo
-              size={19}
-              className="userInfo"
-              onClick={() => navigate(`/`)}
-            />
-            <FcFullTrash
-              size={19}
-              className="userDelete"
-              onClick={() => console.log()}
-            />
-            {message === `ban updating` ? (
-              <TailSpin
-                height="20"
-                width="20"
-                color="#4fa94d"
-                ariaLabel="tail-spin-loading"
-                radius="1"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            ) : users ? (
-              <FcApproval
-                // data-activate={users[i].id}
-                onClick={() => console.log("activate")}
-                size={19}
-                className={styles.activate}
-              />
-            ) : (
-              <FcCancel
-                // data-disable={users[i].id}
-                onClick={() => console.log("disable")}
-                size={19}
-                className="userBan"
-              />
-            )}
-          </div>
-        ),
-      });
-    }
-    return users;
-  };
-
-  const dataSource = generateDummyData(10);
-  console.log(dataSource);
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -407,4 +230,4 @@ const ListaUsuarios = () => {
   );
 };
 
-export default ListaUsuarios;
+export default Groups;

@@ -19,6 +19,14 @@ const getGroup = async (token, groupId) => {
   });
   return response.data;
 };
+const deleteGroup = async (token, groupId) => {
+  const response = await axios.put(`${base_url}/groups/${groupId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 
 const getGroups = async () => {
   const response = await axios.get(`${base_url}/groups`);
@@ -39,4 +47,5 @@ export const groupService = {
   getGroup,
   getGroups,
   setRoutineGroup,
+  deleteGroup,
 };

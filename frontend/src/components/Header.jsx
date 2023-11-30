@@ -141,7 +141,7 @@ const Header = () => {
               id="nosotras"
             >
               <a className="block a-header" href="#nosotras">
-                SOBRE NOSOTRAS
+                NUESTRO EQUIPO
               </a>
             </Link>
           </li>

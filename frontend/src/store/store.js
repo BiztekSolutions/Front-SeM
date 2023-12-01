@@ -4,6 +4,7 @@ import { rutinasSlice } from "../features/rutinas/rutinasSlice";
 import { authSlice } from "../features/auth/authSlice";
 import { layoutSlice } from "@/features/layout/layoutSlice";
 import { postsSlice } from "@/features/posts/postsSlice";
+import { exerciseSlice } from "@/features/exercises/exerciseSlice";
 import { groupSlice } from "@/features/group/groupSlice";
 export const store = configureStore({
   reducer: {
@@ -13,5 +14,6 @@ export const store = configureStore({
     layout: layoutSlice.reducer,
     posts: postsSlice.reducer,
     groups: groupSlice.reducer,
+    exercises: exerciseSlice.reducer,
   },
 });

@@ -23,7 +23,7 @@ import ChangePassword from "./Views/Coach/ChangePassword/ChangePassword.jsx";
 import Rutinas from "./Views/User/Rutinas";
 import UserList from "./Views/Coach/UserList";
 import ClientList from "./Views/Coach/ClientList";
-
+import EditarEjercicio from "./components/entrenadora/workoutComponents/editarEjercicio.jsx";
 const Router = () => {
   const [exercises, setExercises] = useState(null);
   const [workouts, setWorkouts] = useState(null);
@@ -87,6 +87,10 @@ const Router = () => {
           <Route
             path="agregarEjercicios"
             element={<AgregarEjercicio exercises={exercises} />}
+          />
+          <Route
+            path="editarEjercicio"
+            element={<EditarEjercicio exercises={exercises} />}
           />
           <Route path="listaDeUsuarios" element={<UserList />} />
           <Route path="listaDeClientes" element={<ClientList />} />

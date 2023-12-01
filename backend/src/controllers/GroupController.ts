@@ -5,7 +5,7 @@ import Routine from '../models/Routine';
 import Client from '../models/Client';
 import sequelize from '../configs/db';
 import ClientGroup from '../models/ClientGroup';
-import User from '../models/User';
+
 import { get, list } from '../services/GroupService';
 // Crear un grupo con clientes asignados
 // controllers/groupController.js
@@ -27,11 +27,13 @@ export const createGroup = async (req: Request, res: Response) => {
       const name = groupName;
 
       const group = await Group.create({ name }, { transaction: transaction });
+      console.log(group, 'group');
 
       // Asociar clientes al grupo
       for (const clientId of selectedUsers) {
         await ClientGroup.create({ idGroup: group.idGroup, idClient: clientId }, { transaction: transaction });
       }
+      console.log(group, 'group');
 
       // Commit de la transacción
       await transaction.commit();

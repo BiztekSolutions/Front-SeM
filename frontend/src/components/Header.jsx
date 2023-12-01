@@ -164,7 +164,7 @@ const Header = () => {
             <div
               ref={closeRef}
               onClick={toggleMenu}
-              className="menu-toggle-landing hover:text-customOrange"
+              className="menu-toggle-landing hover:text-customOrange hover:cursor-pointer"
             >
               {isMenuOpen ? "Close" : "LOGIN"}
             </div>

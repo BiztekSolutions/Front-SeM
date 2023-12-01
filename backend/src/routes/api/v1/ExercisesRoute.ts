@@ -1,10 +1,12 @@
 import express from 'express';
-import { getExercises, getExercise, createExercise } from '../../../controllers/ExerciseController';
+import { getExercises, getExercise, createExercise, updateExercise } from '../../../controllers/ExerciseController';
+import { authenticateToken } from '../../../utils/validateToken';
 
 const exerciseRouter = express.Router();
 
-exerciseRouter.post('/:exerciseId', createExercise);
+exerciseRouter.post('/', createExercise);
 exerciseRouter.get('/:exerciseId', getExercise);
 exerciseRouter.get('/', getExercises);
+exerciseRouter.put('/:exerciseId', updateExercise);
 
 export default exerciseRouter;

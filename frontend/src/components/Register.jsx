@@ -129,8 +129,8 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       refToast.current.show({
         sticky: 2000,
         severity: "success",
-        summary: "Welcome",
-        detail: `Hi It's good to see you!`,
+        summary: "Bienvenido",
+        detail: `Hola que bueno verte devuelta!`,
       });
 
       setTimeout(() => {
@@ -144,21 +144,30 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   if (isLoading) {
     return (
       <TailSpin
-        height="20"
-        width="20"
+        height="50"
+        width="50"
         color="#4fa94d"
         ariaLabel="tail-spin-loading"
         radius="1"
         wrapperStyle={{}}
         wrapperClass=""
         visible={true}
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
       />
     );
   }
 
   return (
     <section>
-      <Toast ref={refToast} position="top-left"></Toast>
+      <Toast
+        ref={refToast}
+        className="absolute left-0 top-0 bg-orange-500"
+      ></Toast>
       <div>
         <div className="bg-white md:p-8 w-full ">
           {isRegisterOpen ? (

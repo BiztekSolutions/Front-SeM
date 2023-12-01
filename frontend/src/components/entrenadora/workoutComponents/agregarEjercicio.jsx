@@ -1,12 +1,15 @@
 import { useState } from "react";
-
+import { useDispatch } from "react-redux";
+import { createExercise } from "@/features/exercises/exerciseSlice";
 function AgregarEjercicio() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     video: "",
+    image1: "", // Nueva propiedad para la primera imagen
+    image2: "", // Nueva propiedad para la segunda imagen
   });
-
+  const dispatch = useDispatch();
   const [exerciseTypes, setExerciseTypes] = useState([
     "Strength Training",
     "Aerobic",
@@ -29,31 +32,19 @@ function AgregarEjercicio() {
   }
 
   async function postExercise() {
-    try {
-      const response = await fetch("http://localhost:3001/exercises", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: Math.floor(Math.random() * 100) + 1,
-          name: formData.name,
-          description: formData.description,
-          video: formData.video,
-          type: selectedExerciseType,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al crear el ejercicio");
-      }
-
-      const data = await response.json();
-      console.log("Nuevo ejercicio creado:", data);
-      // Aquí puedes hacer cualquier acción necesaria después de la creación exitosa del ejercicio
-    } catch (error) {
-      console.error("Error al crear el ejercicio:", error);
-    }
+    // Formatear datos para enviar al backend
+    const formattedData = {
+      name: formData.name,
+      description: formData.description,
+      video: formData.video,
+      image1: formData.image1,
+      image2: formData.image2,
+      type: selectedExerciseType,
+    };
+    // Dispatch de la acción utilizando Redux Toolkit
+    dispatch(createExercise(formattedData));
+    // Lógica adicional después de la creación exitosa del ejercicio
+    console.log("Nuevo ejercicio creado:", formattedData);
   }
 
   return (
@@ -64,19 +55,19 @@ function AgregarEjercicio() {
           type="text"
           className="form-control"
           name="name"
-          placeholder="Nombre de la Rutina"
+          placeholder="Nombre de Ejercicio"
           value={formData.name}
           onChange={handleChange}
           required
         />
       </div>
       <div className="form-group my-2 mx-4">
-        <label>Description:</label>
+        <label>Descripción:</label>
         <input
           type="text"
           className="form-control"
           name="description"
-          placeholder="Description"
+          placeholder="Descripción"
           value={formData.description}
           onChange={handleChange}
           required
@@ -92,6 +83,28 @@ function AgregarEjercicio() {
           value={formData.video}
           onChange={handleChange}
           required
+        />
+      </div>
+      <div className="form-group my-2 mx-4">
+        <label>Imagen 1:</label>
+        <input
+          type="text"
+          className="form-control"
+          name="image1"
+          placeholder="URL de la imagen 1"
+          value={formData.image1}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="form-group my-2 mx-4">
+        <label>Imagen 2:</label>
+        <input
+          type="text"
+          className="form-control"
+          name="image2"
+          placeholder="URL de la imagen 2"
+          value={formData.image2}
+          onChange={handleChange}
         />
       </div>
       <div className="form-group my-2 mx-4">

@@ -2,7 +2,10 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import { get, list, getRoutines, list2 } from '../services/UserService';
 import Client from '../models/Client';
-
+import Routine from '../models/Routine';
+import Exercise from '../models/Exercise';
+import RoutineConfiguration from '../models/RoutineConfiguration';
+import RoutineHasExercise from '../models/RoutineHasExercise';
 export const getClients = async (req: Request, res: Response) => {
   try {
     console.log('getClientssadnasd');
@@ -76,12 +79,22 @@ export const getUserRoutines = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
-    const userRoutines = await getRoutines(userId);
-    console.log(userRoutines);
+    // Recuperar el usuario con las rutinas asociadas
+    const client = await Client.findByPk(userId, {
+      include: [
+        {
+          model: Routine,
+        },
+      ],
+    });
 
-    if (!userRoutines) return res.status(400).json({ message: 'Routines not found' });
+    if (!client) {
+      return res.status(400).json({ message: 'Client not found' });
+    }
 
-    return res.status(200).json({ userRoutines });
+    const routines = await client.getRoutines();
+
+    return res.status(200).json({ routines });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

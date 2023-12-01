@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-
 import ExerciseModal from "../../../components/entrenadora/exerciseComponents/ExerciseModal";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -16,23 +15,25 @@ const UserCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const state = useSelector((state) => state);
+
   const { rutinas, isLoading } = state.rutinas;
-  const rutina = rutinas[0];
+
   useEffect(() => {
     const fetchRoutines = async () => {
       await dispatch(getRutines(id));
     };
     fetchRoutines();
   }, []);
-
+  console.log(rutinas[0]);
   useEffect(() => {
-    if (rutinas.length !== 0) {
-      const updatedEvents = generateEvents(rutina);
+    if (rutinas && rutinas.length !== 0) {
+      const updatedEvents = generateEvents(rutinas[0]); // Accede a rutinas[0] directamente
       setEvents(updatedEvents);
     }
   }, [rutinas, setEvents]);
 
   function handleCardClick(exercise) {
+    console.log(exercise, "ejercicio");
     setSelectedExercise(exercise);
     setShowModal(true);
   }
@@ -40,77 +41,71 @@ const UserCalendar = () => {
   if (isLoading) {
     return <div>Loading...</div>; // Renderiza un indicador de carga mientras se están obteniendo los eventos
   }
-
-  // async function handleEditExercise(exercise, data) {
-  //   try {
-  //     const response = await axios.patch(
-  //       `http://localhost:3000/exercises/${exercise.id}`,
-  //       data
-  //     );
-  //     const updatedExercises = exercises.map((exercise) => {
-  //       if (exercise.id === response.data.id) return response.data;
-  //       return exercise;
-  //     });
-  //     setExercises(updatedExercises);
-  //   } catch (error) {
-  //     console.error("Error updating exercise:", error);
-  //   }
-  // }
+  const getDayOfWeekString = (dayOfWeek) => {
+    const daysOfWeek = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    return daysOfWeek[dayOfWeek];
+  };
 
   const generateEvents = (routine) => {
-    const { createdAt, expiredAt, exerciseGroups } = routine;
+    const { startDate, endDate, RoutineHasExercises } = routine.routine;
     const events = [];
-    const startDateObject = new Date(createdAt);
-    const endDateObject = new Date(expiredAt);
+    console.log(startDate, endDate, RoutineHasExercises);
+    let currentDate = new Date(startDate);
+    const endDateObject = new Date(endDate);
 
-    let currentDate = new Date(startDateObject);
     while (currentDate < endDateObject) {
       const dayOfWeek1 = currentDate.getUTCDay();
       const dayOfWeek = dayOfWeek1; // Domingo: 0, Lunes: 1, ..., Sábado: 6
-      for (let i = 0; i < exerciseGroups.length; i++) {
-        if (dayOfWeek === exerciseGroups[i].day) {
-          exerciseGroups[i].exercises.forEach((exercise) => {
-            const cardComponent = (
-              <div
-                className="card-calendar highlight shadow flex flex-col justify-around border-b-4"
-                onClick={() => handleCardClick(exercise)}
-              >
-                <div className="card-body flex flex-col ">
-                  <div className="flex flex-col ml-5 gap-1 border-black">
-                    <b className="text-black ml-2 text-xs">Nombre</b>
-                    <div className="flex ">
-                      <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
-                      <h5 className="card-title   w-full">{exercise.name}</h5>
-                    </div>
-                  </div>
 
-                  {/* <div className="flex flex-col ml-5 gap-1 border-black">
-                      <b className="text-black ml-2 text-lg">Tipo</b>
-                      <div className="flex ">
-                        <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1"/>
-                        <h5 className="card-title   w-full">{exercise.type}</h5>
-                      </div>
-                    </div> */}
-                </div>
-                <div className="card-body">
-                  <h5 className="card-title text-center">
-                    {exercise.series}x{exercise.repeticiones}
-                  </h5>
+      for (let i = 0; i < RoutineHasExercises.length; i++) {
+        const exercise = RoutineHasExercises[i];
+        const configDay = exercise.RoutineConfiguration.day.toLowerCase();
+        console.log(exercise);
+        if (getDayOfWeekString(dayOfWeek) === configDay) {
+          const cardComponent = (
+            <div
+              className="card-calendar highlight shadow flex flex-col justify-around border-b-4"
+              onClick={() => handleCardClick(exercise)}
+            >
+              <div className="card-body flex flex-col ">
+                <div className="flex flex-col ml-5 gap-1 border-black">
+                  <b className="text-black ml-2 text-xs">Nombre</b>
+                  <div className="flex ">
+                    <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
+                    <h5 className="card-title   w-full">
+                      {exercise.Exercise.name}
+                    </h5>
+                  </div>
                 </div>
               </div>
-            );
-            events.push({
-              start: currentDate.toISOString().split("T")[0],
-
-              description: exercise.description,
-              id: exercise.id,
-              extendedProps: {
-                cardComponent: cardComponent,
-              },
-            });
+              <div className="card-body">
+                <h5 className="card-title text-center">
+                  {exercise.RoutineConfiguration.series}x
+                  {exercise.RoutineConfiguration.repetitions}
+                </h5>
+              </div>
+            </div>
+          );
+          console.log(currentDate.toISOString().split("T")[0], "currentDate");
+          events.push({
+            start: currentDate.toISOString().split("T")[0],
+            description: exercise.Exercise.description,
+            id: exercise.idRoutineHasExercise,
+            extendedProps: {
+              cardComponent: cardComponent,
+            },
           });
         }
       }
+
       currentDate = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
@@ -135,7 +130,6 @@ const UserCalendar = () => {
             className="calendar-container"
             events={events}
             eventContent={(arg) => {
-              console.log(arg.event.start);
               return (
                 <div>
                   <b>{arg.timeText}</b>

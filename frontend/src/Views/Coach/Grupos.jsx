@@ -196,7 +196,7 @@ const Groups = () => {
   ];
 
   const dataSource = [];
-  if (groups.length > 0) {
+  if (groups && groups.length > 0) {
     for (let i = 0; i < groups.length; i++) {
       dataSource.push({
         key: i,

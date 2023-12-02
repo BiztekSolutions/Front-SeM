@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { rutinasService } from "./rutinasService";
 
 const initialState = {
-  rutinas: [],
+  rutinas: null,
   isLoading: false,
   isError: false,
   isSuccess: false,

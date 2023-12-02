@@ -18,6 +18,8 @@ Revisiones:
 "Duracion" input de agregar rutina, pones un numero y agrega de a 1 las semanas.
 "Calendar" por defecto pone una fecha cualquiera (Creo que agrega infinitamente fechas).
 "Editar rutina" si no existe, rompe.
+View profile no existe
+Scroll a veces no funciona (generalmente en "Agregar rutina")
 
 Roadmap:
 Hacer que los estados se guarden en el store (Done, testear bien igual)

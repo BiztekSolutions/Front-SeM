@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { getRutines } from "../../../features/rutinas/rutinasSlice";
 import { SiSendinblue } from "react-icons/si";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+import { Typography } from "antd";
 
 const UserCalendar = () => {
   const { id } = useParams();
@@ -20,10 +21,13 @@ const UserCalendar = () => {
   const { rutinas, isLoading } = state.rutinas;
 
   useEffect(() => {
+    console.log(rutinas);
     if (!rutinas) {
+      console.log("NO TENGO RUTINAS ENTONCES DIPSATCHEO");
       dispatch(getRutines(id));
     }
     if (rutinas && rutinas.length !== 0) {
+      console.log("AHORA SI", rutinas);
       const updatedEvents = generateEvents(rutinas[0]);
       setEvents(updatedEvents);
     }
@@ -146,7 +150,11 @@ const UserCalendar = () => {
           </div>
         </div>
       ) : (
-        <div>Este usuario aun no posee ninguna rutina!</div>
+        <div>
+          <Typography.Text className="text-xl">
+            Este usuario aun no posee ninguna rutina!
+          </Typography.Text>
+        </div>
       )}
       {showModal ? (
         <ExerciseModal

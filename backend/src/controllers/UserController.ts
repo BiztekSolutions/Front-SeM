@@ -75,9 +75,22 @@ export const getUserRoutines = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
-    const userRoutines = await getRoutines(userId);
+    // Recuperar el usuario con las rutinas asociadas
+    const client = await Client.findByPk(userId, {
+      include: [
+        {
+          model: Routine,
+        },
+      ],
+    });
 
-    return res.status(200).json({ userRoutines });
+    if (!client) {
+      return res.status(400).json({ message: 'Client not found' });
+    }
+
+    const routines = await client.getRoutines();
+
+    return res.status(200).json({ routines });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

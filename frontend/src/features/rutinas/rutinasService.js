@@ -8,9 +8,9 @@ const getRutines = async (userId, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    const user = response.data;
+    const userRoutines = response.data;
     // Obtener un array de promesas para las solicitudes de rutinas individuales
-    const routinePromises = user.routines.map(async (routine) => {
+    const routinePromises = userRoutines.routines.map(async (routine) => {
       const routineResponse = await axios.get(
         `${base_url}/routines/${routine.idRoutine}`,
         {
@@ -24,7 +24,6 @@ const getRutines = async (userId, token) => {
 
     // Esperar a que todas las solicitudes se completen
     const routinesDetails = await Promise.all(routinePromises);
-
     return routinesDetails;
   } catch (error) {
     // Manejar errores aquí

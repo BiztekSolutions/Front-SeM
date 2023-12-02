@@ -8,10 +8,6 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroups, deleteGroup } from "../../features/group/groupSlice";
 import Swal from "sweetalert2";
-// import { useDispatch, useSelector } from "react-redux";
-// import { deleteUser, updateUser } from "../../features/user/userSlice";
-import { faker } from "@faker-js/faker";
-import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 const Groups = () => {
   const dispatch = useDispatch();

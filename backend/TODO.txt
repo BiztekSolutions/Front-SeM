@@ -1,3 +1,11 @@
 Exercises:
 create
 update
+
+Groups:
+create
+update
+
+Rotuine:
+create
+update

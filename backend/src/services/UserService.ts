@@ -29,7 +29,8 @@ export const list = async () => {
     throw new Error(e.message);
   }
 };
-export const list2 = async (userIds: any) => {
+
+export const listClients = async (userIds: any) => {
   try {
     return await User.findAll({
       where: { idUser: userIds },

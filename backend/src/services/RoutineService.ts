@@ -33,7 +33,12 @@ export const get = async (idRoutine: number) => {
   }
 };
 
+export const create = async () => {};
+
+export const update = async () => {};
 module.exports = {
   list,
   get,
+  create,
+  update,
 };

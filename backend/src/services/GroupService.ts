@@ -33,7 +33,13 @@ export const get = async (idGroup: number) => {
   }
 };
 
+export const create = async (idGroup: number) => {};
+
+export const update = async (idGroup: number) => {};
+
 module.exports = {
   list,
   get,
+  create,
+  update,
 };

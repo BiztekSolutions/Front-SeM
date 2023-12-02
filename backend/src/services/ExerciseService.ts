@@ -16,21 +16,10 @@ export const get = async (idExercise: number) => {
   }
 };
 
-export const create = async (idExercise: number) => {
-  try {
-    return await Exercise.findByPk(idExercise);
-  } catch (e: any) {
-    throw new Error(e.message);
-  }
-};
+export const create = async () => {};
 
-export const update = async (idExercise: number) => {
-  try {
-    return await Exercise.findByPk(idExercise);
-  } catch (e: any) {
-    throw new Error(e.message);
-  }
-};
+export const update = async () => {};
+
 module.exports = {
   list,
   get,

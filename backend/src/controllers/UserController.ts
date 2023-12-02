@@ -1,16 +1,15 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
-import { get, list, getRoutines, list2 } from '../services/UserService';
+import { get, list, getRoutines, listClients } from '../services/UserService';
 import Client from '../models/Client';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
-
     const clients = await Client.findAll();
 
     const userIds = clients.map((client) => client.idUser);
 
-    const users = await list2(userIds);
+    const users = await listClients(userIds);
 
     return res.status(200).json({ message: 'all clients', clients: users });
   } catch (error: any) {

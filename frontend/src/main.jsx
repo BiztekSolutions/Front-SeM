@@ -8,13 +8,16 @@ import reportWebVitals from "./reportWebVitals";
 
 import "./index.css";
 import "tailwindcss/tailwind.css";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <GlobalProvider>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
+      <App />
+      <PersistGate
+        loading={<LoadingSpinner />}
+        persistor={persistor}
+      ></PersistGate>
     </GlobalProvider>
   </Provider>
 );

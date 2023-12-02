@@ -13,7 +13,6 @@ import storage from "redux-persist/lib/storage";
 const authPersistConfig = {
   key: "auth",
   storage: storage,
-  whitelist: ["user"], // Solo persistir el subestado "user" de auth
 };
 
 const rootReducer = {

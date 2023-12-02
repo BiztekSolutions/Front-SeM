@@ -9,3 +9,17 @@ update
 Rotuine:
 create
 update
+
+ABM USUARIOS ---> Done
+
+
+Revisiones:
+"Ejercicios" pestaña de user, si no tiene nada se rompe (Fixed)
+"Duracion" input de agregar rutina, pones un numero y agrega de a 1 las semanas.
+"Calendar" por defecto pone una fecha cualquiera (Creo que agrega infinitamente fechas).
+"Editar rutina" si no existe, rompe.
+
+Roadmap:
+Hacer que los estados se guarden en el store (Done, testear bien igual)
+Que no redireccione cada vez que refresco la pagina (Done, testear bien igual)
+Que mantenga el nombre en el header (Done, testear bien igual)

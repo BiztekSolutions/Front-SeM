@@ -2,7 +2,10 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import { get, list, getRoutines, listClients } from '../services/UserService';
 import Client from '../models/Client';
-
+import Routine from '../models/Routine';
+import Exercise from '../models/Exercise';
+import RoutineConfiguration from '../models/RoutineConfiguration';
+import RoutineHasExercise from '../models/RoutineHasExercise';
 export const getClients = async (req: Request, res: Response) => {
   try {
     const clients = await Client.findAll();
@@ -76,9 +79,13 @@ export const getUserRoutines = async (req: Request, res: Response) => {
 
     const userRoutines = await getRoutines(userId);
 
-    if (!userRoutines) return res.status(400).json({ message: 'Routines not found' });
+    if (!client) {
+      return res.status(400).json({ message: 'Client not found' });
+    }
 
-    return res.status(200).json({ userRoutines });
+    const routines = await client.getRoutines();
+
+    return res.status(200).json({ routines });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

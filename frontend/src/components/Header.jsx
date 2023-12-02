@@ -141,7 +141,7 @@ const Header = () => {
               id="nosotras"
             >
               <a className="block a-header" href="#nosotras">
-                SOBRE NOSOTRAS
+                NUESTRO EQUIPO
               </a>
             </Link>
           </li>
@@ -164,7 +164,7 @@ const Header = () => {
             <div
               ref={closeRef}
               onClick={toggleMenu}
-              className="menu-toggle-landing hover:text-customOrange"
+              className="menu-toggle-landing hover:text-customOrange hover:cursor-pointer"
             >
               {isMenuOpen ? "Close" : "LOGIN"}
             </div>

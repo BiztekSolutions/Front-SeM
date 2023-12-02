@@ -4,7 +4,8 @@ import sequelize from '../configs/db';
 class Routine extends Model {
   public idRoutine!: number;
   public name?: string;
-  public expiration_date?: Date;
+  public startDate?: Date;
+  public endDate?: Date;
   public objective?: string;
   public observation?: string;
   public weekDay?: number;
@@ -25,7 +26,10 @@ Routine.init(
     name: {
       type: DataTypes.STRING,
     },
-    expiration_date: {
+    startDate: {
+      type: DataTypes.DATE,
+    },
+    endDate: {
       type: DataTypes.DATE,
     },
     objective: {
@@ -34,14 +38,10 @@ Routine.init(
     observation: {
       type: DataTypes.STRING,
     },
-    weekDay: {
-      type: DataTypes.INTEGER,
-    },
   },
   {
     sequelize,
     modelName: 'Routine',
-    
   }
 );
 

@@ -13,7 +13,9 @@ export const getRutines = createAsyncThunk(
   "getRutines",
   async (data, thunkAPI) => {
     try {
-      return await rutinasService.getRutines(data);
+      const user = JSON.parse(localStorage.getItem("User"));
+      const { token } = user;
+      return await rutinasService.getRutines(data, token);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -41,6 +43,19 @@ export const getAllRutines = createAsyncThunk(
   }
 );
 
+export const createRutine = createAsyncThunk(
+  "createRutine",
+  async (data, thunkAPI) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("User"));
+      const { token } = user;
+      return await rutinasService.createRutine(data, token);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const rutinasSlice = createSlice({
   name: "rutinas",
   initialState,
@@ -53,13 +68,17 @@ export const rutinasSlice = createSlice({
         state.message = "Getting rutines";
       })
       .addCase(getRutines.fulfilled, (state, action) => {
+        console.log("succesfull gettin rutines");
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
+        console.log(action.payload);
+
         state.message = action.payload.msg;
         state.rutinas = action.payload;
       })
       .addCase(getRutines.rejected, (state, action) => {
+        console.log("error gettin rutines");
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
@@ -85,6 +104,24 @@ export const rutinasSlice = createSlice({
         state.message = action.payload.msg;
         state.rutinas = null;
       })
+      // create rutines
+      .addCase(createRutine.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Creating rutines";
+      })
+      .addCase(createRutine.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.message = action.payload.message;
+      })
+      .addCase(createRutine.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload.msg;
+      })
+
       // update rutines
       .addCase(updateRutines.pending, (state) => {
         state.isLoading = true;

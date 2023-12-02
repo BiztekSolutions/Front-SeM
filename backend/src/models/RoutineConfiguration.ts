@@ -4,6 +4,7 @@ import sequelize from '../configs/db';
 class RoutineConfiguration extends Model {
   public idRoutineConfiguration!: number;
   public series?: number;
+  public day?: String;
   public weight?: number;
   public repetitions?: number;
   public restTime?: number;
@@ -15,8 +16,11 @@ RoutineConfiguration.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      allowNull: false,
     },
+    day: {
+      type: DataTypes.STRING,
+    },
+
     series: {
       type: DataTypes.INTEGER,
     },
@@ -34,7 +38,6 @@ RoutineConfiguration.init(
     sequelize,
     modelName: 'RoutineConfiguration',
     timestamps: false,
-    
   }
 );
 

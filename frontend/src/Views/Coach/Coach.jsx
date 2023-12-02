@@ -30,6 +30,7 @@ const items = [
   ]),
   getItem("Ejercicios", "sub4", <FaDumbbell size={20} />, [
     getItem("Agregar ejercicios", "agregarEjercicios"),
+    getItem("Editar ejercicios", "editarEjercicio"),
   ]),
 ];
 

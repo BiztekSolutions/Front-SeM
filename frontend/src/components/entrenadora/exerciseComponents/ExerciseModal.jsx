@@ -4,6 +4,7 @@ import VideoEmbed from "./VideoEmbed";
 
 // eslint-disable-next-line react/prop-types
 function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
+  console.log(exercise, "ejerciciomodal");
   return (
     <div
       className="modal show border-8 absolute z-10 border-white top-1/2 left-1/4 rounded-3xl bg-blue-600 w-1/2"
@@ -13,7 +14,7 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
         <div className="modal-content">
           <div className="modal-header relative">
             <h5 className="modal-title text-3xl text-white p-5">
-              {exercise.name}
+              {exercise.Exercise.name}
             </h5>
             <button
               type="button"
@@ -29,13 +30,17 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
             style={{ maxWidth: "100%" }}
           >
             <div className="mb-4 " style={{ maxWidth: "90%" }}>
-              <p style={{ marginLeft: "5%" }}>{exercise.description}</p>
+              <p style={{ marginLeft: "5%" }}>
+                {exercise.Exercise.description}
+              </p>
             </div>
             <div
               className="flex items-center justify-center max-w-0"
               style={{ marginLeft: "5%", maxWidth: "90%" }}
             >
-              <VideoEmbed youtubeLink={exercise.video} />
+              {exercise.Exercise.video ? (
+                <VideoEmbed youtubeLink={exercise.Exercise.video} />
+              ) : null}
             </div>
           </div>
 

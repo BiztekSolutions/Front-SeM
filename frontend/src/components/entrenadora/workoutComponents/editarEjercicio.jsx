@@ -13,7 +13,6 @@ function EditarEjercicio() {
   const [searchTerm, setSearchTerm] = useState("");
   const [visibleExercises, setVisibleExercises] = useState(20);
 
-  console.log(exercises, "ejercicios");
   useEffect(() => {
     dispatch(getAllExercises());
   }, []);

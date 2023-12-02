@@ -68,17 +68,14 @@ export const rutinasSlice = createSlice({
         state.message = "Getting rutines";
       })
       .addCase(getRutines.fulfilled, (state, action) => {
-        console.log("succesfull gettin rutines");
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log(action.payload);
 
         state.message = action.payload.msg;
         state.rutinas = action.payload;
       })
       .addCase(getRutines.rejected, (state, action) => {
-        console.log("error gettin rutines");
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;

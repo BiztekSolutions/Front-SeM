@@ -28,7 +28,6 @@ function WorkoutForm({}) {
   };
 
   const { exercises } = useSelector((state) => state.exercises);
-  console.log(exercises, "ejercicios");
   const dispatch = useDispatch();
   const id = useParams().id;
   const [formData, setFormData] = useState(initialState);
@@ -63,7 +62,6 @@ function WorkoutForm({}) {
   const filteredExercises = exercises.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  console.log(formData, "formData");
   useEffect(() => {
     dispatch(getAllExercises());
   }, []);
@@ -120,7 +118,6 @@ function WorkoutForm({}) {
       startDate: moment(dateString).format("YYYY-MM-DD"),
     });
   };
-  console.log(id, "id");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -156,7 +153,6 @@ function WorkoutForm({}) {
       objective: formData.objective,
       exercises: formattedExercises,
     };
-    console.log(formattedData, "formattedData");
     dispatch(createRutine(formattedData));
   };
 
@@ -212,7 +208,6 @@ function WorkoutForm({}) {
       },
     }));
   };
-  console.log(exerciseDetails, "exercisesByDay");
   const handleSeries = (event, day, exerciseId) => {
     const value = event.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {
@@ -253,7 +248,6 @@ function WorkoutForm({}) {
   const handleDaySectionScroll = () => {
     setScrollHeight(daySectionRef.current.scrollTop);
   };
-  console.log(searchTerm, "searchTerm");
   return (
     <>
       <form
@@ -362,7 +356,6 @@ function WorkoutForm({}) {
                         <div className="p-2">
                           <ul>
                             <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200">
-                              {console.log("exercise", exercise)}
                               {exercise.image1 && (
                                 <img
                                   className="w-28 h-28 rounded-full mr-2"

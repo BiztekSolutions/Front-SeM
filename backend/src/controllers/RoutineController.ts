@@ -5,7 +5,6 @@ import Routine from '../models/Routine';
 import RoutineHasExercise from '../models/RoutineHasExercise';
 import RoutineConfiguration from '../models/RoutineConfiguration';
 import Client from '../models/Client';
-import { ro } from 'date-fns/locale';
 
 export const createRoutine = async (req: Request, res: Response) => {
   try {
@@ -18,12 +17,8 @@ export const createRoutine = async (req: Request, res: Response) => {
       const client = await Client.findByPk(id);
 
       for (const exercise of exercises) {
-        console.log(`Processing exercise ${exercise.id}`);
-
         if (exercise.configuration && exercise.configuration.length > 0) {
           for (const config of exercise.configuration) {
-            console.log(`Processing configuration for exercise ${exercise.id}`);
-
             const routineConfiguration = await RoutineConfiguration.create({ ...config }, { transaction });
 
             const existingAssociation = await RoutineHasExercise.findOne({

@@ -9,7 +9,6 @@ const getRutines = async (userId, token) => {
       },
     });
     const user = response.data;
-    console.log(user, "ansdoansdonasodnas");
     // Obtener un array de promesas para las solicitudes de rutinas individuales
     const routinePromises = user.routines.map(async (routine) => {
       const routineResponse = await axios.get(
@@ -50,8 +49,6 @@ const updateRutines = async (data) => {
 
 const createRutine = async (data, token) => {
   try {
-    console.log("data", data);
-    console.log("token", token);
     const response = await axios.post(`${base_url}/routines`, data, {
       headers: {
         Authorization: `Bearer ${token}`,

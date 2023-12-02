@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getRutines } from "../../../features/rutinas/rutinasSlice";
 import { SiSendinblue } from "react-icons/si";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 const UserCalendar = () => {
   const { id } = useParams();
@@ -19,28 +20,20 @@ const UserCalendar = () => {
   const { rutinas, isLoading } = state.rutinas;
 
   useEffect(() => {
-    const fetchRoutines = async () => {
-      await dispatch(getRutines(id));
-    };
-    fetchRoutines();
-  }, []);
-  console.log(rutinas[0]);
-  useEffect(() => {
+    if (!rutinas) {
+      dispatch(getRutines(id));
+    }
     if (rutinas && rutinas.length !== 0) {
-      const updatedEvents = generateEvents(rutinas[0]); // Accede a rutinas[0] directamente
+      const updatedEvents = generateEvents(rutinas[0]);
       setEvents(updatedEvents);
     }
-  }, [rutinas, setEvents]);
+  }, [rutinas]);
 
   function handleCardClick(exercise) {
-    console.log(exercise, "ejercicio");
     setSelectedExercise(exercise);
     setShowModal(true);
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Renderiza un indicador de carga mientras se están obteniendo los eventos
-  }
   const getDayOfWeekString = (dayOfWeek) => {
     const daysOfWeek = [
       "sunday",
@@ -57,7 +50,6 @@ const UserCalendar = () => {
   const generateEvents = (routine) => {
     const { startDate, endDate, RoutineHasExercises } = routine.routine;
     const events = [];
-    console.log(startDate, endDate, RoutineHasExercises);
     let currentDate = new Date(startDate);
     const endDateObject = new Date(endDate);
 
@@ -68,7 +60,6 @@ const UserCalendar = () => {
       for (let i = 0; i < RoutineHasExercises.length; i++) {
         const exercise = RoutineHasExercises[i];
         const configDay = exercise.RoutineConfiguration.day.toLowerCase();
-        console.log(exercise);
         if (getDayOfWeekString(dayOfWeek) === configDay) {
           const cardComponent = (
             <div
@@ -94,7 +85,6 @@ const UserCalendar = () => {
               </div>
             </div>
           );
-          console.log(currentDate.toISOString().split("T")[0], "currentDate");
           events.push({
             start: currentDate.toISOString().split("T")[0],
             description: exercise.Exercise.description,
@@ -116,44 +106,53 @@ const UserCalendar = () => {
     return events;
   };
 
-  function closeModal() {
-    setShowModal(false);
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (
     <div>
-      <div>
-        <div className="w-full min-h-screen mt-24 text-2xl">
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridWeek"
-            className="calendar-container"
-            events={events}
-            eventContent={(arg) => {
-              return (
-                <div>
-                  <b>{arg.timeText}</b>
-                  {arg.event.extendedProps &&
-                    arg.event.extendedProps.cardComponent}
-                </div>
-              );
-            }}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,dayGridWeek,timeGridDay",
-            }}
-            dayHeaderContent={(arg) => {
-              return arg.date.toLocaleDateString("en-US", { weekday: "long" });
-            }}
-            hiddenDays={[0]}
-            height="80vh"
-            contentHeight="auto"
-          />
+      {rutinas && rutinas.length !== 0 ? (
+        <div>
+          <div className="w-full min-h-screen mt-24 text-2xl">
+            <FullCalendar
+              plugins={[dayGridPlugin]}
+              initialView="dayGridWeek"
+              className="calendar-container"
+              events={events}
+              eventContent={(arg) => {
+                return (
+                  <div>
+                    <b>{arg.timeText}</b>
+                    {arg.event.extendedProps &&
+                      arg.event.extendedProps.cardComponent}
+                  </div>
+                );
+              }}
+              headerToolbar={{
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,dayGridWeek,timeGridDay",
+              }}
+              dayHeaderContent={(arg) => {
+                return arg.date.toLocaleDateString("en-US", {
+                  weekday: "long",
+                });
+              }}
+              hiddenDays={[0]}
+              height="80vh"
+              contentHeight="auto"
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div>Este usuario aun no posee ninguna rutina!</div>
+      )}
       {showModal ? (
-        <ExerciseModal exercise={selectedExercise} closeModal={closeModal} />
+        <ExerciseModal
+          exercise={selectedExercise}
+          closeModal={() => setShowModal(false)}
+        />
       ) : null}
     </div>
   );

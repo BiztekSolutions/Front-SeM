@@ -34,8 +34,6 @@ export const createClient = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Client already exists for this user' });
     }
 
-    console.log('userId', userId);
-
     const newClient = await Client.create({
       idUser: userId,
     });
@@ -79,13 +77,7 @@ export const getUserRoutines = async (req: Request, res: Response) => {
 
     const userRoutines = await getRoutines(userId);
 
-    if (!client) {
-      return res.status(400).json({ message: 'Client not found' });
-    }
-
-    const routines = await client.getRoutines();
-
-    return res.status(200).json({ routines });
+    return res.status(200).json({ userRoutines });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

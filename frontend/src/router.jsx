@@ -31,7 +31,6 @@ const Router = () => {
   const auth = useSelector((state) => state.auths);
   const isAdmin = auth.user && auth.user.isAdmin;
 
-  console.log("auth", auth.token);
   return (
     <BrowserRouter>
       <Routes>
@@ -51,10 +50,7 @@ const Router = () => {
             <Route path="workouts/:id" element={<Workout />} />
           </Route>
           <Route path="agregarEjercicios" element={<AgregarEjercicio />} />
-          <Route
-            path="editarEjercicio"
-            element={<EditarEjercicio exercises={exercises} />}
-          />
+          <Route path="editarEjercicio" element={<EditarEjercicio />} />
           <Route path="listaDeUsuarios" element={<UserList />} />
           <Route path="listaDeClientes" element={<ClientList />} />
           <Route path="grupos" element={<Grupos />} />

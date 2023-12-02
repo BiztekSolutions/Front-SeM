@@ -27,13 +27,11 @@ export const createGroup = async (req: Request, res: Response) => {
       const name = groupName;
 
       const group = await Group.create({ name }, { transaction: transaction });
-      console.log(group, 'group');
 
       // Asociar clientes al grupo
       for (const clientId of selectedUsers) {
         await ClientGroup.create({ idGroup: group.idGroup, idClient: clientId }, { transaction: transaction });
       }
-      console.log(group, 'group');
 
       // Commit de la transacción
       await transaction.commit();
@@ -57,7 +55,7 @@ export const getGroup = async (req: Request, res: Response) => {
   try {
     const idGroup = parseInt(req.params.idGroup, 10);
 
-    const group = await get(groupId);
+    const group = await get(idGroup);
 
     if (!group) {
       return res.status(404).json({ message: 'Group not found' });

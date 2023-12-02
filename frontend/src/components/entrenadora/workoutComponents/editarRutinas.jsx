@@ -81,7 +81,6 @@ function EditarRutinas({ exercises, postWorkout }) {
   };
 
   const startDrag = (event, exercise) => {
-    console.log("mostrame el exercise gil", exercise);
     event.dataTransfer.setData("exercise", JSON.stringify(exercise));
   };
 
@@ -179,14 +178,12 @@ function EditarRutinas({ exercises, postWorkout }) {
     const exercise1String = event.dataTransfer.getData("exercise");
     const exercise1 = JSON.parse(exercise1String);
 
-    console.log("exerciseaaaaaaaaaaaaaa", exercise1);
     const exerciseDrop = {
       name: exercise1.name,
       series: series,
       repeticiones: repeticiones,
       photo: exercise1.photo,
     };
-    console.log("asdasdasdasdasexercise", exerciseDrop);
     setExercisesByDay((prevState) => ({
       ...prevState,
       [day]: [...(prevState[day] || []), exerciseDrop],
@@ -209,7 +206,6 @@ function EditarRutinas({ exercises, postWorkout }) {
   const handleDaySectionScroll = () => {
     setScrollHeight(daySectionRef.current.scrollTop);
   };
-  console.log(searchTerm, "searchTerm");
   return (
     <>
       <form
@@ -287,7 +283,6 @@ function EditarRutinas({ exercises, postWorkout }) {
                         <div className="p-2">
                           <ul>
                             <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200">
-                              {console.log("exercise", exercise)}
                               {exercise.photo && (
                                 <img
                                   className="w-28 h-28 rounded-full mr-2"

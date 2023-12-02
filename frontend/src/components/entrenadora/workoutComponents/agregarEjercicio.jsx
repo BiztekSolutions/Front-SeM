@@ -44,7 +44,6 @@ function AgregarEjercicio() {
     // Dispatch de la acción utilizando Redux Toolkit
     dispatch(createExercise(formattedData));
     // Lógica adicional después de la creación exitosa del ejercicio
-    console.log("Nuevo ejercicio creado:", formattedData);
   }
 
   return (

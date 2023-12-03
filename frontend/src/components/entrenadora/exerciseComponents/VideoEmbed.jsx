@@ -1,5 +1,6 @@
 function VideoEmbed({ youtubeLink }) {
   function getYoutubeId() {
+    console.log(youtubeLink, "youtubeLink");
     let youtubeId = youtubeLink.split("v=")[1];
     const endIndex = youtubeId.indexOf("&");
     if (endIndex !== -1) {

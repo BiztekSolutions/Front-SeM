@@ -58,6 +58,7 @@ export const updateExercise = async (req: Request, res: Response) => {
 export const createExercise = async (req: Request, res: Response) => {
   try {
     const { name, description, video, image1, image2, type } = req.body;
+    console.log(video, 'video');
 
     const newExercise = await Exercise.create({
       name,

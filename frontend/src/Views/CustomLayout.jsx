@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import {
   Dropdown,
@@ -33,6 +33,12 @@ const CustomLayout = ({ items }) => {
     navigate("/");
   };
   const { setLogged } = useContext(GlobalContext);
+
+  useEffect(() => {
+    if (window.innerWidth < 1000) {
+      dispatch(toggleSidebar(true));
+    }
+  }, [dispatch]);
 
   const menu = (
     <Menu>
@@ -72,8 +78,9 @@ const CustomLayout = ({ items }) => {
           collapsible
           collapsed={layout.isSidebarCollapsed}
           theme={layout.isDarkMode ? "dark" : "light"}
+          className="asdasd"
         >
-          <div className="logo flex items-center justify-center">
+          <div className="logo flex items-center justify-center asdasda">
             {layout.isSidebarCollapsed ? (
               <div>
                 <img src={logo} alt="abc" width={30} className="mt-2" />
@@ -107,9 +114,9 @@ const CustomLayout = ({ items }) => {
                 type="text"
                 icon={
                   layout.isSidebarCollapsed ? (
-                    <MenuUnfoldOutlined />
-                  ) : (
                     <MenuFoldOutlined />
+                  ) : (
+                    <MenuUnfoldOutlined />
                   )
                 }
                 onClick={() => dispatch(toggleSidebar())}
@@ -178,7 +185,7 @@ const CustomLayout = ({ items }) => {
             </div>
           </Header>
           <Content
-            className="p-12 min-h-screen"
+            className="p-12 min-h-screen customLayout"
             style={{ backgroundColor: layout.isDarkMode ? "#111821" : "white" }}
           >
             <Outlet />

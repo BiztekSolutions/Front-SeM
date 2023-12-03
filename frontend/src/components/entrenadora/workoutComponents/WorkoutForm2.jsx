@@ -195,6 +195,7 @@ function WorkoutForm({}) {
       series: exerciseDetailsForDrop.series,
       repeticiones: exerciseDetailsForDrop.repeticiones,
       image1: exercise1.image1,
+      image2: exercise1.image2,
     };
 
     console.log(exerciseDrop, "exerciseDrop");
@@ -301,7 +302,7 @@ function WorkoutForm({}) {
         </h2>
         {/* Parte izquierda (1/4 de ancho) */}
         <div className="flex mt-5">
-          <div className="w-1/4 p-4 overflow-y-auto max-h-screen exercise-list">
+          <div className="w-1/4 p-4 overflow-y-auto max-h-screen exercise-list text-orange-400">
             <h2 className="text-lg font-semibold mb-2">Lista de Ejercicios</h2>
             <div className="flex justify-center my-4">
               <input
@@ -316,16 +317,23 @@ function WorkoutForm({}) {
               {filteredExercises.slice(0, visibleExercises).map((exercise) => (
                 <div
                   key={exercise.idExercise}
-                  className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center bg-orange-200"
+                  className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center ejercicio"
                   draggable
                   onDragStart={(evt) => startDrag(evt, exercise)}
                 >
-                  <img
-                    className="w-16 h-16 rounded-full mr-2"
-                    src={exercise.image1}
-                    alt={exercise.name}
-                  />
-                  <p className="text-orange-500">{exercise.name}</p>
+                  <div className="flex imgs-exercise-list">
+                    <img
+                      className="w-16 h-16 rounded-full mr-1 img1-exercise-list"
+                      src={exercise.image1}
+                      alt={exercise.name}
+                    />
+                    <img
+                      className="w-16 h-16 rounded-full mr-2 img2-exercise-list"
+                      src={exercise.image2}
+                      alt={exercise.name}
+                    />
+                    <p className="text-orange-500">{exercise.name}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -363,24 +371,31 @@ function WorkoutForm({}) {
                       <div key={index} className="">
                         <div className="p-2">
                           <ul>
-                            <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200">
+                            <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200 exercise-in-day ">
                               {console.log("exercise", exercise)}
                               {exercise.image1 && (
-                                <img
-                                  className="w-28 h-28 rounded-full mr-2"
-                                  src={exercise.image1}
-                                  alt={exercise.name}
-                                />
+                                <div className="flex imgs-exercise-day">
+                                  <img
+                                    className="w-28 h-28 img1-exercise-day"
+                                    src={exercise.image1}
+                                    alt={exercise.name}
+                                  />
+                                  <img
+                                    className="w-28 h-28 img2-exercise-day"
+                                    src={exercise.image2}
+                                    alt={exercise.name}
+                                  />
+                                </div>
                               )}
                               <div>
                                 <p className="text-gray-800 text-card-drop">
                                   {exercise.name}
                                 </p>
-                                <div className="flex">
-                                  <div className="form-group my-2 mx-4">
+                                <div className="flex series-reps">
+                                  <div className="form-group">
                                     <input
                                       type="number"
-                                      className="form-control p-2 border border-gray-300 rounded-full"
+                                      className="form-control border border-gray-300 rounded-full input-series-reps"
                                       name="series"
                                       placeholder="Series"
                                       inputMode="numeric"
@@ -402,12 +417,12 @@ function WorkoutForm({}) {
                                       }
                                     />
                                   </div>
-                                  <div className="form-group my-2 mx-4">
+                                  <div className="form-group">
                                     <input
                                       type="number"
-                                      className="form-control p-2 border border-gray-300 rounded-full"
+                                      className="form-control border border-gray-300 rounded-full input2-series-reps"
                                       name="repeticiones"
-                                      placeholder="Repeticiones"
+                                      placeholder="Reps"
                                       inputMode="numeric"
                                       value={
                                         exerciseDetails[day]?.[

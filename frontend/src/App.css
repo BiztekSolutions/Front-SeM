@@ -978,3 +978,293 @@ input[type="text"] {
   font-size: 1.2rem;
   font-family: poppins;
 }
+
+.modal-exercise {
+  height: auto !important;
+  width: 40% !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(12, 100, 4);
+  z-index: 1000;
+  overflow-y: auto; /* Añadido para permitir desplazamiento si el contenido es largo */
+}
+
+.imgs-exercise-list > img {
+  width: 55px;
+  height: 55px;
+}
+
+.imgs-exercise-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img1-exercise-list {
+  border-top-right-radius: 0% !important;
+  border-bottom-right-radius: 0% !important;
+}
+
+.img2-exercise-list {
+  border-top-left-radius: 0% !important;
+  border-bottom-left-radius: 0% !important;
+}
+
+.img2-exercise-day {
+  border-radius: none;
+}
+
+.img1-exercise-day {
+  border-radius: none;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  border-right: 1px solid gray;
+}
+
+/* -------------- Query -------------- */
+
+@media screen and (max-width: 1350px) {
+  .description-add-rutine {
+    display: none;
+  }
+
+  .formRutines {
+    padding: 0% !important;
+  }
+
+  .customLayout {
+    padding: 2px !important;
+  }
+
+  #addRutine {
+    margin: 0 auto !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  .exercise-list {
+    width: 30% !important;
+  }
+
+  .img1-exercise-day {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  .img2-exercise-day {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .input-series-reps {
+    border-top-right-radius: 0% !important;
+    border-bottom-right-radius: 0% !important;
+  }
+  .input2-series-reps {
+    border-top-left-radius: 0% !important;
+    border-bottom-left-radius: 0% !important;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .img1-exercise-day {
+    width: 90px !important;
+    height: 90px !important;
+  }
+  .img2-exercise-day {
+    width: 90px !important;
+    height: 90px !important;
+  }
+  .input-series-reps {
+    width: 130px !important;
+    font-size: 0.8rem !important;
+  }
+  .input2-series-reps {
+    width: 130px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .card-day {
+    border-radius: 1rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .exercise-list {
+    width: 35% !important;
+    font-size: 1rem !important;
+  }
+  .ejercicio {
+    border-radius: 1.5rem !important;
+  }
+
+  .input-series-reps {
+    width: 100px !important;
+  }
+  .input2-series-reps {
+    width: 100px !important;
+  }
+
+  .img1-exercise-day {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  .img2-exercise-day {
+    width: 70px !important;
+    height: 70px !important;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .card-drop {
+    max-width: 100% !important;
+  }
+
+  .series-reps {
+    font-size: 0.5rem !important;
+  }
+  .exercise-in-day {
+    border-radius: 1.5rem !important;
+  }
+
+  .header-client {
+    font-size: 0.5rem !important;
+  }
+  .link-header-client {
+    font-size: 1.2rem !important;
+  }
+  .exercise-list {
+    width: 35% !important;
+    font-size: 1rem !important;
+  }
+  .ejercicio {
+    border-radius: 1.5rem !important;
+  }
+
+  .input-series-reps {
+    width: 80px !important;
+  }
+  .input2-series-reps {
+    width: 80px !important;
+  }
+
+  .img1-exercise-day {
+    border-radius: 0.4rem !important;
+    border: none;
+    margin-left: 1rem;
+    padding: 0.2rem;
+  }
+  .img2-exercise-day {
+    border-radius: 0.4rem !important;
+    padding: 0.2rem;
+  }
+  .exercise-list {
+    padding: 0% !important;
+    margin: 0% !important;
+    font-size: 0.9rem !important;
+  }
+
+  .img1-exercise-list {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .img2-exercise-list {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .input-series-reps {
+    width: 60px !important;
+  }
+  .input2-series-reps {
+    width: 60px !important;
+  }
+  .img1-exercise-day {
+    border-radius: 0.4rem !important;
+    border: none;
+    margin-left: 0px;
+    padding: 0rem;
+  }
+  .img2-exercise-day {
+    border-radius: 0rem !important;
+    padding: 0rem;
+  }
+  #addRutine {
+    border: none;
+    border-radius: 0%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .exercise-list {
+    width: 40% !important;
+    font-size: 0.8rem !important;
+  }
+  .ejercicio {
+    border-radius: 1.5rem !important;
+  }
+
+  .input-series-reps {
+    width: 60px !important;
+  }
+  .input2-series-reps {
+    width: 60px !important;
+  }
+
+  .img1-exercise-day {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .img2-exercise-day {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .exercise-list {
+    width: 40% !important;
+    font-size: 0.8rem !important;
+  }
+  .ejercicio {
+    border-radius: 1.5rem !important;
+  }
+
+  .input-series-reps {
+    width: 60px !important;
+  }
+  .input2-series-reps {
+    width: 60px !important;
+  }
+
+  .img1-exercise-day {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .img2-exercise-day {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .header-client {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .link-header-client {
+    font-size: 1rem !important;
+    padding: 0.1rem !important;
+  }
+
+  .header-client > li {
+    padding: 2px !important;
+  }
+  .asdasd {
+    position: absolute !important;
+    top: 15%;
+    z-index: 1000;
+  }
+}

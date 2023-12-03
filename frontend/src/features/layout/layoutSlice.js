@@ -90,7 +90,7 @@ export const showInfoNotification =
 
 // Action para hacer toggle del sidebar
 export const toggleSidebar = () => (dispatch) => {
-  console.log("toggleSidebar");
+  console.log("toggleSidebar en layoutSlice");
   dispatch(layoutSlice.actions.toggleSidebar());
 };
 

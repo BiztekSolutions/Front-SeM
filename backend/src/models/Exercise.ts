@@ -28,7 +28,7 @@ Exercise.init(
     name: {
       type: DataTypes.STRING,
     },
-    videoUrl: {
+    video: {
       type: DataTypes.STRING, // Puedes ajustar el tipo según tus necesidades
     },
     image1: {

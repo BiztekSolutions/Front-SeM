@@ -33,6 +33,7 @@ function AgregarEjercicio() {
 
   async function postExercise() {
     // Formatear datos para enviar al backend
+    console.log("Form data:", formData);
     const formattedData = {
       name: formData.name,
       description: formData.description,

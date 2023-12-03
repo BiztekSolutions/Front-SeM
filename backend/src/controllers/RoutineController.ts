@@ -5,7 +5,6 @@ import Routine from '../models/Routine';
 import RoutineHasExercise from '../models/RoutineHasExercise';
 import RoutineConfiguration from '../models/RoutineConfiguration';
 import Client from '../models/Client';
-import { ro } from 'date-fns/locale';
 
 export const createRoutine = async (req: Request, res: Response) => {
   try {

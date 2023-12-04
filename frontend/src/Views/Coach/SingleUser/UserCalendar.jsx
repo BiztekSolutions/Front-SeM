@@ -55,61 +55,61 @@ const UserCalendar = () => {
   };
 
   const generateEvents = (routine) => {
-    const { startDate, endDate, RoutineHasExercises } = routine.routine;
+    const { startDate, endDate, GroupExercises } = routine.routine;
     const events = [];
-    console.log(startDate, endDate, RoutineHasExercises);
     let currentDate = new Date(startDate);
     const endDateObject = new Date(endDate);
 
     while (currentDate < endDateObject) {
-      const dayOfWeek1 = currentDate.getUTCDay();
-      const dayOfWeek = dayOfWeek1; // Domingo: 0, Lunes: 1, ..., Sábado: 6
+      const dayOfWeek = currentDate.getUTCDay();
+      const dayOfWeekString = getDayOfWeekString(dayOfWeek);
 
-      for (let i = 0; i < RoutineHasExercises.length; i++) {
-        const exercise = RoutineHasExercises[i];
-        const configDay = exercise.RoutineConfiguration.day.toLowerCase();
-        console.log(exercise);
-        if (getDayOfWeekString(dayOfWeek) === configDay) {
-          const cardComponent = (
-            <div
-              className="card-calendar highlight shadow flex flex-col justify-around border-b-4"
-              onClick={() => handleCardClick(exercise)}
-            >
-              <div className="card-body flex flex-col ">
-                <div className="flex flex-col ml-5 gap-1 border-black">
-                  <b className="text-black ml-2 text-xs">Nombre</b>
-                  <div className="flex ">
-                    <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
-                    <h5 className="card-title   w-full">
-                      {exercise.Exercise.name}
-                    </h5>
+      console.log(dayOfWeekString, "dia");
+      for (const groupExercise of GroupExercises) {
+        const configDay = groupExercise.day.toLowerCase();
+
+        if (dayOfWeekString === configDay) {
+          for (const exercise of groupExercise.Exercises) {
+            console.log(exercise, "ejercicio");
+            const cardComponent = (
+              <div
+                className="card-calendar highlight shadow flex flex-col justify-around border-b-4"
+                onClick={() => handleCardClick(exercise)}
+              >
+                <div className="card-body flex flex-col ">
+                  <div className="flex flex-col ml-5 gap-1 border-black">
+                    <b className="text-black ml-2 text-xs">Nombre</b>
+                    <div className="flex ">
+                      <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
+                      <h5 className="card-title   w-full">{exercise.name}</h5>
+                    </div>
                   </div>
                 </div>
+                <div className="card-body">
+                  <h5 className="card-title text-center">
+                    {exercise.ExerciseConfigurations[0].series}x
+                    {exercise.ExerciseConfigurations[0].repetitions}
+                  </h5>
+                </div>
               </div>
-              <div className="card-body">
-                <h5 className="card-title text-center">
-                  {exercise.RoutineConfiguration.series}x
-                  {exercise.RoutineConfiguration.repetitions}
-                </h5>
-              </div>
-            </div>
-          );
-          console.log(currentDate.toISOString().split("T")[0], "currentDate");
-          events.push({
-            start: currentDate.toISOString().split("T")[0],
-            description: exercise.Exercise.description,
-            id: exercise.idRoutineHasExercise,
-            extendedProps: {
-              cardComponent: cardComponent,
-            },
-          });
+            );
+
+            events.push({
+              start: currentDate.toISOString().split("T")[0],
+              description: exercise.description,
+              id: exercise.idExercise,
+              extendedProps: {
+                cardComponent: cardComponent,
+              },
+            });
+          }
         }
       }
-
+      console.log(currentDate.getUTCDate(), "fecha");
       currentDate = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
-        currentDate.getDate() + 1
+        currentDate.getUTCDate() + 1
       );
     }
 

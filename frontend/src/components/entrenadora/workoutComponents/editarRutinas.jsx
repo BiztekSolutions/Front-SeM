@@ -5,12 +5,14 @@ import { DatePicker } from "antd";
 import moment from "moment";
 import { MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { createRutine } from "@/features/rutinas/rutinasSlice";
+import { createRutine, getRutines } from "@/features/rutinas/rutinasSlice";
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
-import { getRutines } from "@/features/rutinas/rutinasSlice";
 import { useSelector } from "react-redux";
 
-function editarRutinas() {
+function EditarRutinas() {
+  const state = useSelector((state) => state);
+
+  const { rutinas } = state.rutinas;
   const initialState = {
     name: "",
     startDate: moment().format("YYYY-MM-DD"),
@@ -28,8 +30,7 @@ function editarRutinas() {
   };
 
   const { exercises } = useSelector((state) => state.exercises);
-  const { rutinas } = useSelector((state) => state.rutinas);
-
+  console.log(exercises, "ejercicios");
   const dispatch = useDispatch();
   const id = useParams().id;
   const [formData, setFormData] = useState(initialState);
@@ -47,20 +48,28 @@ function editarRutinas() {
     Saturday: [],
   });
 
-  const [exerciseDetails, setExerciseDetails] = useState({
+  const initialExerciseDetails = {
     Monday: {},
     Tuesday: {},
     Wednesday: {},
     Thursday: {},
     Friday: {},
     Saturday: {},
-  });
+  };
+
+  const [exerciseDetails, setExerciseDetails] = useState(
+    initialExerciseDetails
+  );
 
   const [visibleExercises, setVisibleExercises] = useState(20); // Número de ejercicios iniciales visibles
   const [scrollHeight, setScrollHeight] = useState(0);
   const daySectionRef = useRef(null); // Ref para la sección de los días
   const [searchTerm, setSearchTerm] = useState("");
 
+  const filteredExercises = exercises.filter((exercise) =>
+    exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  console.log(formData, "formData");
   useEffect(() => {
     dispatch(getAllExercises());
     dispatch(getRutines(id));
@@ -68,119 +77,57 @@ function editarRutinas() {
 
   useEffect(() => {
     if (rutinas && rutinas.length > 0) {
-      const newExercisesByDay = {};
-
-      rutinas?.forEach((rutina) => {
-        console.log(rutina, "rutina");
-        rutina.routine.RoutineHasExercises?.forEach((routineExercise) => {
-          const { Exercise, RoutineConfiguration } = routineExercise;
-          const { day } = RoutineConfiguration;
-          console.log(day, "dayyyyyyyyyy");
-          if (day in newExercisesByDay) {
-            newExercisesByDay[day] = [
-              ...newExercisesByDay[day],
-              {
-                id: Exercise.idExercise,
-                name: Exercise.name,
-                series: RoutineConfiguration.series,
-                repeticiones: RoutineConfiguration.repetitions,
-              },
-            ];
-          } else {
-            newExercisesByDay[day] = [
-              {
-                id: Exercise.idExercise,
-                name: Exercise.name,
-                series: RoutineConfiguration.series,
-                repeticiones: RoutineConfiguration.repetitions,
-              },
-            ];
-          }
-
-          // Actualizar exerciseDetails para cada ejercicio
-          setExerciseDetails((prevDetails) => ({
-            ...prevDetails,
-            [day]: {
-              ...(prevDetails[day] || {}),
-              [Exercise.idExercise]: {
-                series: RoutineConfiguration.series,
-                repeticiones: RoutineConfiguration.repetitions,
-              },
-            },
+      const editedRutina = rutinas[0].routine;
+      const newExercises = editedRutina.GroupExercises.flatMap(
+        (groupExercise) => {
+          return groupExercise.Exercises.map((exercise) => ({
+            day: groupExercise.day,
+            exercise: exercise,
+            routineConfiguration: exercise.ExerciseConfigurations[0],
           }));
-        });
+        }
+      );
+      setFormData({
+        name: editedRutina.name,
+        startDate: moment(editedRutina.startDate).format("YYYY-MM-DD"),
+        endDate: moment(editedRutina.endDate).format("YYYY-MM-DD"),
+        exercises: newExercises,
+        objective: editedRutina.objective || "",
+        observation: editedRutina.observation || "",
       });
-
-      setExercisesByDay(newExercisesByDay);
     }
-  }, [rutinas]);
 
-  const filteredExercises = exercises.filter((exercise) =>
-    exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  console.log(formData, "formData");
+    const updatedExercisesByDay = {
+      Monday: [],
+      Tuesday: [],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
+      Saturday: [],
+    };
+
+    Object.entries(formData.exercises).forEach(([day, exerciseIds]) => {
+      exerciseIds.forEach((exerciseData) => {
+        const { exercise, routineConfiguration } = exerciseData;
+        const exerciseDrop = {
+          idExercise: exercise.idExercise,
+          name: exercise.name,
+          series: routineConfiguration.series,
+          repeticiones: routineConfiguration.repetitions,
+          image1: exercise.image1,
+        };
+
+        updatedExercisesByDay[day].push(exerciseDrop);
+      });
+    });
+
+    setExercisesByDay(updatedExercisesByDay);
+  }, [rutinas]);
 
   useEffect(() => {
-    if (rutinas && rutinas.length > 0) {
-      const newExercisesByDay = {
-        Monday: [],
-        Tuesday: [],
-        Wednesday: [],
-        Thursday: [],
-        Friday: [],
-        Saturday: [],
-      };
-
-      const newExerciseDetails = {
-        Monday: {},
-        Tuesday: {},
-        Wednesday: {},
-        Thursday: {},
-        Friday: {},
-        Saturday: {},
-      };
-
-      rutinas?.forEach((rutina) => {
-        console.log(rutina, "dayyyyyyyyyy");
-        rutina.routine.RoutineHasExercises?.forEach((routineExercise) => {
-          const { Exercise, RoutineConfiguration } = routineExercise;
-          const { day } = RoutineConfiguration;
-          // Acumular ejercicios en newExercisesByDay
-          newExercisesByDay[day] = [
-            ...newExercisesByDay[day],
-            {
-              id: Exercise.idExercise,
-              name: Exercise.name,
-              series: RoutineConfiguration.series,
-              repeticiones: RoutineConfiguration.repetitions,
-              image1: Exercise.image1,
-            },
-          ];
-
-          // Acumular detalles de ejercicios en newExerciseDetails
-          setExercisesByDay((prevState) => ({
-            ...prevState,
-            [day]: prevState[day].map((prevExercise) =>
-              prevExercise.id === Exercise.idExercise
-                ? {
-                    ...prevExercise,
-                    series: exerciseDetails[day]?.[Exercise.idExercise]?.series,
-                    repeticiones:
-                      exerciseDetails[day]?.[Exercise.idExercise]
-                        ?.RoutineConfiguration.repeticiones,
-                  }
-                : prevExercise
-            ),
-          }));
-          console.log(exerciseDetails, "exerciseDetails");
-          console.log(exercisesByDay, "exercisesByDay");
-        });
-      });
-
-      setExercisesByDay(newExercisesByDay);
-      setExerciseDetails(newExerciseDetails);
-    }
-  }, [rutinas]);
+    const types = [...new Set(exercises.map((exercise) => exercise.type))];
+    setExerciseTypes(types);
+  }, [exercises]);
 
   const allowDrop = (event) => {
     event.preventDefault();
@@ -192,13 +139,14 @@ function editarRutinas() {
 
   const startDrag = (event, exercise) => {
     event.dataTransfer.setData("exercise", JSON.stringify(exercise));
-    setExerciseDetails({
-      ...exerciseDetails,
+
+    setExerciseDetails((prevDetails) => ({
+      ...prevDetails,
       [exercise.idExercise]: {
         series: series,
         repeticiones: repeticiones,
       },
-    });
+    }));
   };
 
   const handleDurationChange = (e) => {
@@ -323,7 +271,7 @@ function editarRutinas() {
       },
     }));
   };
-
+  console.log(exerciseDetails, "exercisesByDay");
   const handleSeries = (event, day, exerciseId) => {
     const value = event.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {
@@ -364,7 +312,7 @@ function editarRutinas() {
   const handleDaySectionScroll = () => {
     setScrollHeight(daySectionRef.current.scrollTop);
   };
-
+  console.log(searchTerm, "searchTerm");
   return (
     <>
       <form
@@ -565,4 +513,4 @@ function editarRutinas() {
   );
 }
 
-export default editarRutinas;
+export default EditarRutinas;

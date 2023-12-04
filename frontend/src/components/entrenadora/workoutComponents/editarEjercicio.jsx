@@ -4,6 +4,7 @@ import {
   getAllExercises,
   updateExercises,
 } from "../../../features/exercises/exerciseSlice";
+import { Button, Input, Modal, Typography } from "antd";
 
 function EditarEjercicio() {
   const dispatch = useDispatch();
@@ -43,11 +44,11 @@ function EditarEjercicio() {
 
   return (
     <div>
-      <h2>Editar Ejercicio</h2>
+      <Typography.Title level={2}>Editar Ejercicio</Typography.Title>
       <div>
-        <h3>Lista de Ejercicios</h3>
+        <Typography.Title level={3}>Lista de Ejercicios</Typography.Title>
         <div>
-          <input
+          <Input
             type="text"
             placeholder="Buscar ejercicios..."
             value={searchTerm}
@@ -74,68 +75,23 @@ function EditarEjercicio() {
           ))}
         </ul>
         {filteredExercises?.length > visibleExercises && (
-          <button
-            onClick={handleLoadMore}
-            className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-          >
+          <button onClick={handleLoadMore} className="mt-4 p-2 rounded">
             Cargar más
           </button>
         )}
       </div>
       {selectedExercise && (
-        <div className="modal fixed w-full h-full top-0 left-0 flex items-center justify-center">
-          <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-
-          <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-            <div className="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
-              <button
-                className="text-white hover:text-gray-400"
-                onClick={() => setSelectedExercise(null)}
-              >
-                <svg
-                  className="fill-current text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 18 18"
-                  height="18px"
-                >
-                  <path
-                    d="M1 1l6.364 6.364m0 0L13 1"
-                    stroke="#64748B"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className="modal-content py-4 text-left px-6">
-              <div className="flex justify-between items-center pb-3">
-                <p className="text-2xl font-bold">Detalles del Ejercicio</p>
-                <div className="modal-close cursor-pointer z-50">
-                  <button onClick={() => setSelectedExercise(null)}>
-                    <svg
-                      className="fill-current text-black"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 18 18"
-                      height="18px"
-                    >
-                      <path
-                        d="M1 1l6.364 6.364m0 0L13 1"
-                        stroke="#64748B"
-                        strokeWidth="2"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
+        <Modal
+          title="Detalles del Ejercicio"
+          open={Boolean(selectedExercise !== null)}
+          onOk={handleSave}
+          onCancel={() => setSelectedExercise(null)}
+        >
+          <div className="">
+            <div className="">
               <div>
                 <label>Nombre:</label>
-                <input
+                <Input
                   type="text"
                   value={selectedExercise.name || ""}
                   onChange={(e) =>
@@ -148,7 +104,7 @@ function EditarEjercicio() {
               </div>
               <div>
                 <label>Descripción:</label>
-                <input
+                <Input
                   type="text"
                   value={selectedExercise.description || ""}
                   onChange={(e) =>
@@ -161,7 +117,7 @@ function EditarEjercicio() {
               </div>
               <div>
                 <label>Video:</label>
-                <input
+                <Input
                   type="text"
                   value={selectedExercise.video || ""}
                   onChange={(e) =>
@@ -174,7 +130,7 @@ function EditarEjercicio() {
               </div>
               <div>
                 <label>Imagen 1:</label>
-                <input
+                <Input
                   type="text"
                   value={selectedExercise.image1 || ""}
                   onChange={(e) =>
@@ -187,7 +143,7 @@ function EditarEjercicio() {
               </div>
               <div>
                 <label>Imagen 2:</label>
-                <input
+                <Input
                   type="text"
                   value={selectedExercise.image2 || ""}
                   onChange={(e) =>
@@ -198,15 +154,9 @@ function EditarEjercicio() {
                   }
                 />
               </div>
-              <button
-                onClick={handleSave}
-                className="bg-green-500 text-white p-2 rounded mt-4 hover:bg-green-700"
-              >
-                Guardar
-              </button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

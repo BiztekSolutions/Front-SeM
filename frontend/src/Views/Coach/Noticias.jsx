@@ -1,20 +1,10 @@
 import React from "react";
-import { Button } from "antd";
-import { useDispatch } from "react-redux";
-import {
-  showSuccessNotification,
-  showInfoNotification,
-  showWarningNotification,
-  showErrorNotification,
-} from "@/features/layout/layoutSlice";
 import Foro from "../User/Noticias";
 
 const Noticias = () => {
-  const dispatch = useDispatch();
-
   return (
     <div>
-      <Button
+      {/* <Button
         onClick={() => dispatch(showSuccessNotification("title", "desc"))}
       >
         Success
@@ -29,7 +19,7 @@ const Noticias = () => {
       </Button>
       <Button onClick={() => dispatch(showErrorNotification("title", "desc"))}>
         Error
-      </Button>
+      </Button> */}
       <Foro />
     </div>
   );

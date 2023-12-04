@@ -45,21 +45,25 @@ function WorkoutForm({}) {
     Saturday: [],
   });
 
-  const [exerciseDetails, setExerciseDetails] = useState({
+  const initialExerciseDetails = {
     Monday: {},
     Tuesday: {},
     Wednesday: {},
     Thursday: {},
     Friday: {},
     Saturday: {},
-  });
+  };
+
+  const [exerciseDetails, setExerciseDetails] = useState(
+    initialExerciseDetails
+  );
 
   const [visibleExercises, setVisibleExercises] = useState(20); // Número de ejercicios iniciales visibles
   const [scrollHeight, setScrollHeight] = useState(0);
   const daySectionRef = useRef(null); // Ref para la sección de los días
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredExercises = exercises.filter((exercise) =>
+  const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   useEffect(() => {
@@ -67,7 +71,7 @@ function WorkoutForm({}) {
   }, []);
 
   useEffect(() => {
-    const types = [...new Set(exercises.map((exercise) => exercise.type))];
+    const types = [...new Set(exercises?.map((exercise) => exercise.type))];
     setExerciseTypes(types);
   }, [exercises]);
 
@@ -81,13 +85,14 @@ function WorkoutForm({}) {
 
   const startDrag = (event, exercise) => {
     event.dataTransfer.setData("exercise", JSON.stringify(exercise));
-    setExerciseDetails({
-      ...exerciseDetails,
+
+    setExerciseDetails((prevDetails) => ({
+      ...prevDetails,
       [exercise.idExercise]: {
         series: series,
         repeticiones: repeticiones,
       },
-    });
+    }));
   };
 
   const handleDurationChange = (e) => {
@@ -129,7 +134,7 @@ function WorkoutForm({}) {
           exerciseDetails[day]?.[exerciseId];
 
         if (exerciseDetailsForDayAndExercise) {
-          formattedExercises.push({
+          formattedExercises?.push({
             id: exerciseId,
             configuration: [
               {
@@ -305,7 +310,7 @@ function WorkoutForm({}) {
               />
             </div>
             <div>
-              {filteredExercises.slice(0, visibleExercises).map((exercise) => (
+              {filteredExercises?.slice(0, visibleExercises).map((exercise) => (
                 <div
                   key={exercise.idExercise}
                   className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center bg-orange-200"
@@ -321,7 +326,7 @@ function WorkoutForm({}) {
                 </div>
               ))}
             </div>
-            {visibleExercises < filteredExercises.length && (
+            {visibleExercises < filteredExercises?.length && (
               <button
                 className="btn btn-primary mt-2 rounded-full"
                 onClick={handleLoadMore}
@@ -351,7 +356,7 @@ function WorkoutForm({}) {
                     <h3 className="text-lg text-customOrangeAdmin font-semibold mb-2">
                       {day}
                     </h3>
-                    {exercises.map((exercise, index) => (
+                    {exercises?.map((exercise, index) => (
                       <div key={index} className="">
                         <div className="p-2">
                           <ul>

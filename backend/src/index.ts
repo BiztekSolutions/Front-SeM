@@ -12,12 +12,12 @@ import Coach from './models/Coach';
 import Group from './models/Group';
 import Routine from './models/Routine';
 import Exercise from './models/Exercise';
-import RoutineHasExercise from './models/RoutineHasExercise';
-import RoutineConfiguration from './models/RoutineConfiguration';
+
 import Post from './models/Post';
 import Comment from './models/Comment';
 import ClientGroup from './models/ClientGroup';
-
+import GroupExercise from './models/GroupExercise';
+import ExerciseConfiguration from './models/ExerciseConfiguration';
 const app: Application = express();
 const PORT: number = 3000;
 
@@ -56,18 +56,17 @@ Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
 
 // GROUP RELATIONS
 Group.hasMany(Routine, { foreignKey: 'groupId' });
-
 Routine.belongsTo(Group, { foreignKey: 'groupId' });
 
 // ROUTINE RELATIONS
-Routine.hasMany(RoutineHasExercise, { foreignKey: 'RoutineIdRoutine' });
-RoutineHasExercise.belongsTo(Routine, { foreignKey: 'RoutineIdRoutine' });
+Routine.belongsToMany(GroupExercise, { through: 'RoutineHasGroupExercise' });
+GroupExercise.belongsToMany(Routine, { through: 'RoutineHasGroupExercise' });
 
-Exercise.hasMany(RoutineHasExercise, { foreignKey: 'ExerciseIdExercise' });
-RoutineHasExercise.belongsTo(Exercise, { foreignKey: 'ExerciseIdExercise' });
+Exercise.belongsToMany(GroupExercise, { through: 'GroupExerciseHasExercise' });
+GroupExercise.belongsToMany(Exercise, { through: 'GroupExerciseHasExercise' });
 
-RoutineConfiguration.hasMany(RoutineHasExercise, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
-RoutineHasExercise.belongsTo(RoutineConfiguration, { foreignKey: 'RoutineConfigurationIdRoutineConfiguration' });
+Exercise.belongsToMany(ExerciseConfiguration, { through: 'ExerciseHasConfiguration' });
+ExerciseConfiguration.belongsToMany(Exercise, { through: 'ExerciseHasConfiguration' });
 
 //Post relations
 Post.hasMany(Comment, { foreignKey: 'postId', as: 'Comments' });

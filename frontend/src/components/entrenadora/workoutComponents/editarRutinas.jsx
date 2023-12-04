@@ -1,16 +1,23 @@
 import { useState, useEffect, useRef } from "react";
-import WorkoutFormRadio from "./WorkoutFormRadio";
+
 import { useParams } from "react-router-dom";
 import { DatePicker } from "antd";
 import moment from "moment";
 import { MdDelete } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { createRutine, getRutines } from "@/features/rutinas/rutinasSlice";
+import { getAllExercises } from "@/features/exercises/exerciseSlice";
 import { useSelector } from "react-redux";
-function EditarRutinas({ exercises, postWorkout }) {
+
+function EditarRutinas() {
+  const state = useSelector((state) => state);
+
+  const { rutinas } = state.rutinas;
   const initialState = {
     name: "",
-    fechaDeInicio: "",
-    fechaDeFin: "",
-    exercisesByDay: {
+    startDate: moment().format("YYYY-MM-DD"),
+    endDate: moment().add(1, "weeks").format("YYYY-MM-DD"),
+    exercises: {
       Monday: [],
       Tuesday: [],
       Wednesday: [],
@@ -18,20 +25,20 @@ function EditarRutinas({ exercises, postWorkout }) {
       Friday: [],
       Saturday: [],
     },
+    objective: "",
+    observation: "",
   };
 
-  const { id } = useParams();
+  const { exercises } = useSelector((state) => state.exercises);
+  console.log(exercises, "ejercicios");
+  const dispatch = useDispatch();
+  const id = useParams().id;
   const [formData, setFormData] = useState(initialState);
-  const [chosenExercise, setChosenExercise] = useState("");
   const [series, setSeries] = useState("");
   const [repeticiones, setRepeticiones] = useState("");
-  const [typeFilter, setTypeFilter] = useState("All");
   const [startDate, setStartDate] = useState(moment());
   const [durationInWeeks, setDurationInWeeks] = useState(1);
-  const [selectedDay, setSelectedDay] = useState("");
   const [exerciseTypes, setExerciseTypes] = useState([]);
-  const state = useSelector((state) => state);
-  const { rutinas } = state.rutinas;
   const [exercisesByDay, setExercisesByDay] = useState({
     Monday: [],
     Tuesday: [],
@@ -40,6 +47,20 @@ function EditarRutinas({ exercises, postWorkout }) {
     Friday: [],
     Saturday: [],
   });
+
+  const initialExerciseDetails = {
+    Monday: {},
+    Tuesday: {},
+    Wednesday: {},
+    Thursday: {},
+    Friday: {},
+    Saturday: {},
+  };
+
+  const [exerciseDetails, setExerciseDetails] = useState(
+    initialExerciseDetails
+  );
+
   const [visibleExercises, setVisibleExercises] = useState(20); // Número de ejercicios iniciales visibles
   const [scrollHeight, setScrollHeight] = useState(0);
   const daySectionRef = useRef(null); // Ref para la sección de los días
@@ -48,29 +69,65 @@ function EditarRutinas({ exercises, postWorkout }) {
   const filteredExercises = exercises.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  console.log(formData, "formData");
+  useEffect(() => {
+    dispatch(getAllExercises());
+    dispatch(getRutines(id));
+  }, []);
+
+  useEffect(() => {
+    if (rutinas && rutinas.length > 0) {
+      const editedRutina = rutinas[0].routine;
+      const newExercises = editedRutina.GroupExercises.flatMap(
+        (groupExercise) => {
+          return groupExercise.Exercises.map((exercise) => ({
+            day: groupExercise.day,
+            exercise: exercise,
+            routineConfiguration: exercise.ExerciseConfigurations[0],
+          }));
+        }
+      );
+      setFormData({
+        name: editedRutina.name,
+        startDate: moment(editedRutina.startDate).format("YYYY-MM-DD"),
+        endDate: moment(editedRutina.endDate).format("YYYY-MM-DD"),
+        exercises: newExercises,
+        objective: editedRutina.objective || "",
+        observation: editedRutina.observation || "",
+      });
+    }
+
+    const updatedExercisesByDay = {
+      Monday: [],
+      Tuesday: [],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
+      Saturday: [],
+    };
+
+    Object.entries(formData.exercises).forEach(([day, exerciseIds]) => {
+      exerciseIds.forEach((exerciseData) => {
+        const { exercise, routineConfiguration } = exerciseData;
+        const exerciseDrop = {
+          idExercise: exercise.idExercise,
+          name: exercise.name,
+          series: routineConfiguration.series,
+          repeticiones: routineConfiguration.repetitions,
+          image1: exercise.image1,
+        };
+
+        updatedExercisesByDay[day].push(exerciseDrop);
+      });
+    });
+
+    setExercisesByDay(updatedExercisesByDay);
+  }, [rutinas]);
+
   useEffect(() => {
     const types = [...new Set(exercises.map((exercise) => exercise.type))];
     setExerciseTypes(types);
   }, [exercises]);
-
-  useEffect(() => {
-    if (rutinas.length > 0) {
-      const newExercisesByDay = {};
-      rutinas.forEach((rutina) => {
-        rutina.exerciseGroups.forEach((group) => {
-          if (group.day in newExercisesByDay) {
-            newExercisesByDay[group.day] = [
-              ...newExercisesByDay[group.day],
-              ...group.exercises,
-            ];
-          } else {
-            newExercisesByDay[group.day] = group.exercises;
-          }
-        });
-      });
-      setExercisesByDay(newExercisesByDay);
-    }
-  }, [rutinas]);
 
   const allowDrop = (event) => {
     event.preventDefault();
@@ -82,14 +139,25 @@ function EditarRutinas({ exercises, postWorkout }) {
 
   const startDrag = (event, exercise) => {
     event.dataTransfer.setData("exercise", JSON.stringify(exercise));
+
+    setExerciseDetails((prevDetails) => ({
+      ...prevDetails,
+      [exercise.idExercise]: {
+        series: series,
+        repeticiones: repeticiones,
+      },
+    }));
   };
 
   const handleDurationChange = (e) => {
     setDurationInWeeks(parseInt(e.target.value));
-  };
-
-  const handleDayChange = (event) => {
-    setSelectedDay(event.target.value);
+    const formattedEndDate = moment(startDate)
+      .add(e.target.value, "weeks")
+      .format("YYYY-MM-DD");
+    setFormData({
+      ...formData,
+      endDate: formattedEndDate,
+    });
   };
 
   const handleChange = (event) => {
@@ -102,65 +170,51 @@ function EditarRutinas({ exercises, postWorkout }) {
     });
   };
 
-  const handleExerciseChange = (event) => {
-    setChosenExercise(event.target.value);
-  };
-
-  const handleRadioChange = (event) => {
-    if (event.target.checked) {
-      setTypeFilter(event.target.value);
-    }
-  };
-
   const handleDateChange = (date, dateString) => {
-    setStartDate(moment(dateString));
+    setStartDate(moment(dateString).format("YYYY-MM-DD"));
+    setFormData({
+      ...formData,
+      startDate: moment(dateString).format("YYYY-MM-DD"),
+    });
   };
-
-  const addExerciseClick = (event) => {
-    event.preventDefault();
-    if (chosenExercise !== "" && selectedDay !== "") {
-      const exerciseId = parseInt(chosenExercise, 10);
-      const exercise = {
-        id: exerciseId,
-        series: series,
-        repeticiones: repeticiones,
-      };
-      setExercisesByDay((prevState) => ({
-        ...prevState,
-        [selectedDay]: [...(prevState[selectedDay] || []), exercise],
-      }));
-      setChosenExercise("");
-      setSeries("");
-      setRepeticiones("");
-    }
-  };
+  console.log(id, "id");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const formattedEndDate = moment(startDate)
-      .add(durationInWeeks, "weeks")
-      .format("YYYY-MM-DD");
-    const updatedFormData = {
+
+    const formattedExercises = [];
+    Object.entries(formData.exercises).forEach(([day, exerciseIds]) => {
+      exerciseIds.forEach((exerciseId) => {
+        const exerciseDetailsForDayAndExercise =
+          exerciseDetails[day]?.[exerciseId];
+
+        if (exerciseDetailsForDayAndExercise) {
+          formattedExercises.push({
+            id: exerciseId,
+            configuration: [
+              {
+                day: day,
+                series: exerciseDetailsForDayAndExercise.series || 0,
+                repetitions: exerciseDetailsForDayAndExercise.repeticiones || 0,
+                // Agrega más configuraciones según sea necesario
+              },
+            ],
+          });
+        }
+      });
+    });
+
+    const formattedData = {
+      id: id,
       name: formData.name,
-      createdAt: moment(startDate).format("YYYY-MM-DD"),
-      expiredAt: formattedEndDate,
-      exerciseGroups: Object.entries(exercisesByDay)
-        .map(([day, exercises]) => {
-          return {
-            day: moment().day(day).isoWeekday(),
-            exercises: exercises.map((exercise) => ({
-              id: exercise.id,
-              series: exercise.series,
-              repeticiones: exercise.repeticiones,
-              name: exercises.name,
-              photo: exercises.photo,
-            })),
-          };
-        })
-        .filter((group) => group.exercises.length > 0),
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      observation: formData.observation,
+      objective: formData.objective,
+      exercises: formattedExercises,
     };
-    postWorkout([updatedFormData], id);
-    setFormData(initialState);
+    console.log(formattedData, "formattedData");
+    dispatch(createRutine(formattedData));
   };
 
   const removeExercise = (day, exerciseIndex) => {
@@ -178,24 +232,62 @@ function EditarRutinas({ exercises, postWorkout }) {
     const exercise1String = event.dataTransfer.getData("exercise");
     const exercise1 = JSON.parse(exercise1String);
 
+    console.log("exerciseaaaaaaaaaaaaaa", exercise1);
     const exerciseDrop = {
+      idExercise: exercise1.idExercise,
       name: exercise1.name,
-      series: series,
-      repeticiones: repeticiones,
-      photo: exercise1.photo,
+      series: exerciseDetailsForDrop.series,
+      repeticiones: exerciseDetailsForDrop.repeticiones,
+      image1: exercise1.image1,
     };
+    console.log("asdasdasdasdasexercise", exerciseDrop);
     setExercisesByDay((prevState) => ({
       ...prevState,
       [day]: [...(prevState[day] || []), exerciseDrop],
     }));
+
+    setExerciseDetails((prevDetails) => ({
+      ...prevDetails,
+      [day]: {
+        ...prevDetails[day],
+        [exercise1.idExercise]: {
+          series: series,
+          repeticiones: repeticiones,
+        },
+      },
+    }));
+  };
+  console.log(exerciseDetails, "exercisesByDay");
+  const handleSeries = (event, day, exerciseId) => {
+    const value = event.target.value;
+    if (!isNaN(value) && parseFloat(value) >= 0) {
+      setExerciseDetails((prevDetails) => ({
+        ...prevDetails,
+        [day]: {
+          ...(prevDetails[day] || {}),
+          [exerciseId]: {
+            ...prevDetails[day]?.[exerciseId],
+            series: value,
+          },
+        },
+      }));
+    }
   };
 
-  const handleSeries = (event) => {
-    setSeries(event.target.value);
-  };
-
-  const handleRepeticiones = (event) => {
-    setRepeticiones(event.target.value);
+  const handleRepeticiones = (event, day, exerciseId) => {
+    const value = event.target.value;
+    if (!isNaN(value) && parseFloat(value) >= 0) {
+      setExerciseDetails((prevDetails) => ({
+        ...prevDetails,
+        [day]: {
+          ...(prevDetails[day] || {}),
+          [exerciseId]: {
+            ...prevDetails[day]?.[exerciseId],
+            repeticiones: value,
+          },
+        },
+      }));
+    }
   };
 
   const handleLoadMore = () => {
@@ -213,7 +305,38 @@ function EditarRutinas({ exercises, postWorkout }) {
         className="max-w-full mx-auto p-6 flex flex-col formRutines"
       >
         <div id="addRutine" className="flex  flex-col">
-          {/* ... (código existente) */}
+          <div className="form-group my-2 mx-4">
+            <input
+              type="text"
+              className="form-control max-w-xs m-2 border rounded-full"
+              name="name"
+              placeholder="Nombre de la rutina"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="flex  justify-center py-2">
+            <div className="form-group my-2 mx-4 flex flex-col">
+              <label>Inicio:</label>
+              <DatePicker
+                onChange={handleDateChange}
+                defaultValue={moment(startDate, "YYYY-MM-DD")}
+                format="YYYY-MM-DD"
+                dropdownMode="top"
+              />
+            </div>
+            <div className="form-group my-2 mx-4 flex flex-col">
+              <label>Duración (en semanas):</label>
+              <input
+                type="number"
+                className="form-control"
+                onChange={handleDurationChange}
+                value={durationInWeeks}
+                required
+              />
+            </div>
+          </div>
         </div>
         <h2 className="description-add-rutine bg-orange-200 text-black">
           Arrastrá los ejercicios al día que quieras
@@ -234,14 +357,14 @@ function EditarRutinas({ exercises, postWorkout }) {
             <div>
               {filteredExercises.slice(0, visibleExercises).map((exercise) => (
                 <div
-                  key={exercise.id}
+                  key={exercise.idExercise}
                   className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center bg-orange-200"
                   draggable
                   onDragStart={(evt) => startDrag(evt, exercise)}
                 >
                   <img
                     className="w-16 h-16 rounded-full mr-2"
-                    src={exercise.photo}
+                    src={exercise.image1}
                     alt={exercise.name}
                   />
                   <p className="text-orange-500">{exercise.name}</p>
@@ -283,10 +406,11 @@ function EditarRutinas({ exercises, postWorkout }) {
                         <div className="p-2">
                           <ul>
                             <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200">
+                              {console.log("exercise", exercise)}
                               {exercise.photo && (
                                 <img
                                   className="w-28 h-28 rounded-full mr-2"
-                                  src={exercise.photo}
+                                  src={exercise.image1}
                                   alt={exercise.name}
                                 />
                               )}
@@ -302,8 +426,22 @@ function EditarRutinas({ exercises, postWorkout }) {
                                       name="series"
                                       placeholder="Series"
                                       inputMode="numeric"
-                                      value={series}
-                                      onChange={handleSeries}
+                                      value={
+                                        exerciseDetails[day]?.[
+                                          exercise.idExercise
+                                        ]?.series !== undefined
+                                          ? exerciseDetails[day][
+                                              exercise.idExercise
+                                            ].series
+                                          : ""
+                                      }
+                                      onChange={(e) =>
+                                        handleSeries(
+                                          e,
+                                          day,
+                                          exercise.idExercise
+                                        )
+                                      }
                                     />
                                   </div>
                                   <div className="form-group my-2 mx-4">
@@ -313,8 +451,22 @@ function EditarRutinas({ exercises, postWorkout }) {
                                       name="repeticiones"
                                       placeholder="Repeticiones"
                                       inputMode="numeric"
-                                      value={repeticiones}
-                                      onChange={handleRepeticiones}
+                                      value={
+                                        exerciseDetails[day]?.[
+                                          exercise.idExercise
+                                        ]?.repeticiones !== undefined
+                                          ? exerciseDetails[day][
+                                              exercise.idExercise
+                                            ].repeticiones
+                                          : ""
+                                      }
+                                      onChange={(e) =>
+                                        handleRepeticiones(
+                                          e,
+                                          day,
+                                          exercise.idExercise
+                                        )
+                                      }
                                     />
                                   </div>
                                 </div>

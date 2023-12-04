@@ -4,8 +4,8 @@ import { get, list, getRoutines, listClients } from '../services/UserService';
 import Client from '../models/Client';
 import Routine from '../models/Routine';
 import Exercise from '../models/Exercise';
-import RoutineConfiguration from '../models/RoutineConfiguration';
-import RoutineHasExercise from '../models/RoutineHasExercise';
+import RoutineConfiguration from '../models/ExerciseConfiguration';
+
 export const getClients = async (req: Request, res: Response) => {
   try {
     const clients = await Client.findAll();

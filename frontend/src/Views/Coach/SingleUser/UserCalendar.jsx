@@ -17,7 +17,7 @@ const UserCalendar = () => {
   const state = useSelector((state) => state);
 
   const { rutinas, isLoading } = state.rutinas;
-
+  console.log(rutinas, "rutinas");
   useEffect(() => {
     const fetchRoutines = async () => {
       await dispatch(getRutines(id));

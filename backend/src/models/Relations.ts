@@ -7,7 +7,7 @@ import Group from './Group';
 import Routine from './Routine';
 import Exercise from './Exercise';
 import RoutineHasExercise from './RoutineHasExercise';
-import RoutineConfiguration from './RoutineConfiguration';
+import RoutineConfiguration from './ExerciseConfiguration';
 
 // USER RELATIONS
 User.hasMany(Credential, { foreignKey: 'idUser' });

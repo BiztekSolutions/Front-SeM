@@ -46,14 +46,18 @@ function WorkoutForm({}) {
     Saturday: [],
   });
 
-  const [exerciseDetails, setExerciseDetails] = useState({
+  const initialExerciseDetails = {
     Monday: {},
     Tuesday: {},
     Wednesday: {},
     Thursday: {},
     Friday: {},
     Saturday: {},
-  });
+  };
+
+  const [exerciseDetails, setExerciseDetails] = useState(
+    initialExerciseDetails
+  );
 
   const [visibleExercises, setVisibleExercises] = useState(20); // Número de ejercicios iniciales visibles
   const [scrollHeight, setScrollHeight] = useState(0);
@@ -83,13 +87,14 @@ function WorkoutForm({}) {
 
   const startDrag = (event, exercise) => {
     event.dataTransfer.setData("exercise", JSON.stringify(exercise));
-    setExerciseDetails({
-      ...exerciseDetails,
+
+    setExerciseDetails((prevDetails) => ({
+      ...prevDetails,
       [exercise.idExercise]: {
         series: series,
         repeticiones: repeticiones,
       },
-    });
+    }));
   };
 
   const handleDurationChange = (e) => {

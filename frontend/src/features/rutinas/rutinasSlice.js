@@ -24,9 +24,9 @@ export const getRutines = createAsyncThunk(
 
 export const updateRutines = createAsyncThunk(
   "updateRutines",
-  async (data, thunkAPI) => {
+  async (data, idRutina, thunkAPI) => {
     try {
-      return await rutinasService.updateRutines(data);
+      return await rutinasService.updateRutines(data, idRutina);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

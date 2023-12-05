@@ -76,7 +76,7 @@ export const exerciseSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.message;
+        state.message = "Ejercicio creado correctamente";
       })
       .addCase(createExercise.rejected, (state, action) => {
         state.isLoading = false;

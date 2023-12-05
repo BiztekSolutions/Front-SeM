@@ -66,26 +66,26 @@ const UserCalendar = () => {
         const configDay = groupExercise.day.toLowerCase();
 
         if (dayOfWeekString === configDay) {
-          for (const exercise of groupExercise.Exercises) {
-            console.log(exercise, "ejercicio");
+          for (const exerciseConfiguration of groupExercise.ExerciseConfigurations) {
+            console.log(exerciseConfiguration, "ejercicio");
             const cardComponent = (
               <div
                 className="card-calendar highlight shadow flex flex-col justify-around border-b-4"
-                onClick={() => handleCardClick(exercise)}
+                onClick={() => handleCardClick(exerciseConfiguration)}
               >
                 <div className="card-body flex flex-col ">
                   <div className="flex flex-col ml-5 gap-1 border-black">
                     <b className="text-black ml-2 text-xs">Nombre</b>
                     <div className="flex ">
                       <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
-                      <h5 className="card-title   w-full">{exercise.name}</h5>
+                      <h5 className="card-title   w-full">{exerciseConfiguration.Exercise.name}</h5>
                     </div>
                   </div>
                 </div>
                 <div className="card-body">
                   <h5 className="card-title text-center">
-                    {exercise.ExerciseConfigurations[0].series}x
-                    {exercise.ExerciseConfigurations[0].repetitions}
+                    {exerciseConfiguration.series}x
+                    {exerciseConfiguration.repetitions}
                   </h5>
                 </div>
               </div>
@@ -93,8 +93,8 @@ const UserCalendar = () => {
 
             events.push({
               start: currentDate.toISOString().split("T")[0],
-              description: exercise.description,
-              id: exercise.idExercise,
+              description: exerciseConfiguration.Exercise.description,
+              id: exerciseConfiguration.idExercise,
               extendedProps: {
                 cardComponent: cardComponent,
               },

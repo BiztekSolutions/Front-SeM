@@ -53,6 +53,8 @@ export const createRoutine = async (req: Request, res: Response) => {
           );
         }
       }
+
+      //TODO: ClientHasRoutine hace falta agregar?
       await transaction.commit();
       return res.status(201).json({ message: 'Routine created successfully', routine });
     } catch (error: any) {
@@ -98,8 +100,12 @@ export const getRoutine = async (req: Request, res: Response) => {
           model: GroupExercise,
           include: [
             {
-              model: Exercise,
-              include: [ExerciseConfiguration], // Incluye configuraciones de ejercicio
+              model: ExerciseConfiguration,
+              include: [
+                {
+                  model: Exercise,
+                },
+              ],
             },
           ],
         },

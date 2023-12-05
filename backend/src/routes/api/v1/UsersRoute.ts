@@ -5,11 +5,11 @@ import { authenticateToken } from '../../../utils/validateToken';
 const userRouter = express.Router();
 
 userRouter.get('/allClients', getClients);
-userRouter.put('/:userId', authenticateToken, getUser);
-userRouter.get('/:userId/routines', authenticateToken, getUserRoutines);
+userRouter.put('/:userId', getUser);
+userRouter.get('/:userId/routines', getUserRoutines);
 userRouter.post('/:userId/remove', removeUser);
-userRouter.get('/:userId', authenticateToken, getUser);
-userRouter.get('/', authenticateToken, getUsers);
-userRouter.post('/createClient', authenticateToken, createClient);
+userRouter.get('/:userId', getUser);
+userRouter.get('/', getUsers);
+userRouter.post('/createClient', createClient);
 
 export default userRouter;

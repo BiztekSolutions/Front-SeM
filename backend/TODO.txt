@@ -10,7 +10,11 @@ Rotuine:
 create
 update
 
-ABM USUARIOS ---> Done
+AM USUARIOS ---> Done
+AM RUTINAS
+AM EJERCICIOS ---> Done
+AM GRUPOS
+
 
 
 Revisiones:
@@ -20,6 +24,7 @@ Revisiones:
 "Editar rutina" si no existe, rompe.
 View profile no existe
 Scroll a veces no funciona (generalmente en "Agregar rutina")
+Cuando tengo 2 clientes y navego de uno al otro, los ejercicios no se vuelven a querear y me muestra los del cliente anterior.
 
 Roadmap:
 Hacer que los estados se guarden en el store (Done, testear bien igual)

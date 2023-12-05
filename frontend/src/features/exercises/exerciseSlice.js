@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { exerciseService } from "./exerciseService";
 
 const initialState = {
-  exercises: [],
+  exercises: null,
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -94,7 +94,7 @@ export const exerciseSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.message;
+        state.message = "Ejercicio actualizado correctamente";
         state.exercises = action.payload.data;
       })
       .addCase(updateExercise.rejected, (state, action) => {

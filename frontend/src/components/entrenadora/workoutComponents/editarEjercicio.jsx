@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllExercises,
-  updateExercises,
+  updateExercise,
 } from "../../../features/exercises/exerciseSlice";
-import { Button, Input, Modal, Typography } from "antd";
+import { Input, Modal, Typography } from "antd";
 
 function EditarEjercicio() {
   const dispatch = useDispatch();
@@ -24,7 +24,9 @@ function EditarEjercicio() {
 
   const handleSave = () => {
     if (selectedExercise) {
-      dispatch(updateExercises(selectedExercise.idExercise, selectedExercise));
+      console.log("EJERCICIO SELECCIONADO:", selectedExercise);
+      dispatch(updateExercise(selectedExercise));
+      setSelectedExercise(null);
     }
   };
 
@@ -62,8 +64,12 @@ function EditarEjercicio() {
               onClick={() => handleExerciseSelect(exercise)}
               className="border border-gray-300 p-4 rounded cursor-pointer transition transform hover:scale-105"
             >
-              <div className="mb-2 font-bold">ID: {exercise?.idExercise}</div>
-              <div className="mb-2">{exercise?.name}</div>
+              <div className="mb-2 font-bold">
+                <Typography.Text>ID: {exercise?.idExercise}</Typography.Text>
+              </div>
+              <div className="mb-2">
+                <Typography.Text>{exercise?.name}</Typography.Text>
+              </div>
               {exercise?.image1 && (
                 <img
                   src={exercise?.image1}

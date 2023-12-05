@@ -9,11 +9,11 @@ const initialState = {
   message: "",
 };
 
-export const updateExercises = createAsyncThunk(
-  "updateExercises",
-  async (exerciseId, data, thunkAPI) => {
+export const updateExercise = createAsyncThunk(
+  "updateExercise",
+  async (data, thunkAPI) => {
     try {
-      return await exerciseService.updateExercises(data, exerciseId);
+      return await exerciseService.updateExercise(data, data.idExercise);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -86,18 +86,18 @@ export const exerciseSlice = createSlice({
       })
 
       // update exercises
-      .addCase(updateExercises.pending, (state) => {
+      .addCase(updateExercise.pending, (state) => {
         state.isLoading = true;
         state.message = "Updating exercises";
       })
-      .addCase(updateExercises.fulfilled, (state, action) => {
+      .addCase(updateExercise.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
         state.message = action.payload.message;
         state.exercises = action.payload.data;
       })
-      .addCase(updateExercises.rejected, (state, action) => {
+      .addCase(updateExercise.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;

@@ -6,10 +6,10 @@ const getAllExercises = async () => {
   return response.data;
 };
 
-const updateExercise = async (data, exerciseId) => {
+const updateExercise = async (data, idExercise) => {
   try {
     const response = await axios.put(
-      `${base_url}/exercises/:${exerciseId}`,
+      `${base_url}/exercises/${idExercise}`,
       data
     );
     return response.data;

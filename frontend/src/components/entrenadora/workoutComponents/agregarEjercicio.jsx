@@ -79,7 +79,7 @@ function AgregarEjercicio() {
   return (
     <div>
       <Form form={form} onFinish={postExercise}>
-        <Form.Item required label="Nombre:" className="form-group my-2 mx-4">
+        <Form.Item required label="Nombre:">
           <Input
             placeholder="Nombre de Ejercicio"
             name="name"
@@ -87,11 +87,7 @@ function AgregarEjercicio() {
             value={formData.name}
           />
         </Form.Item>
-        <Form.Item
-          required
-          label="Descripción:"
-          className="form-group my-2 mx-4"
-        >
+        <Form.Item required label="Descripción:">
           <Input
             placeholder="Descripción"
             name="description"

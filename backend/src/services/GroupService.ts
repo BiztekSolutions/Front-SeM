@@ -37,9 +37,17 @@ export const create = async (idGroup: number) => {};
 
 export const update = async (idGroup: number) => {};
 
+export const remove = async (idGroup: number) => {
+  try {
+    return await Group.destroy({ where: { idGroup } });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
 module.exports = {
   list,
   get,
   create,
   update,
+  remove,
 };

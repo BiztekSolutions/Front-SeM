@@ -64,6 +64,8 @@ export const login = async (req: Request, res: Response) => {
 
     const token = jwt.sign({ userId: userCredentials.idCredential }, SECRET_KEY || '', { expiresIn: '24h' });
     const newSession = await createSession(token, userCredentials.idCredential);
+    const rowsAffected = await remove(existingSession.token);
+    console.log(rowsAffected);
 
     return res.status(200).json({
       message: 'User logged',

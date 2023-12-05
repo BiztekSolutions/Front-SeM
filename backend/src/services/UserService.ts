@@ -54,3 +54,11 @@ export const getRoutines = async (idUser: number) => {
     throw new Error(e.message);
   }
 };
+
+export const remove = async (idUser: number) => {
+  try {
+    return await User.destroy({ where: { idUser } });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};

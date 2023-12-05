@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
-import { get, list, getRoutines, listClients } from '../services/UserService';
+import { get, list, getRoutines, listClients, remove } from '../services/UserService';
 import Client from '../models/Client';
 import Routine from '../models/Routine';
 import Exercise from '../models/Exercise';
@@ -111,4 +111,20 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+export const removeUser = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId as string);
+    if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
+
+    const rowsAffected = await remove(userId);
+
+    if (rowsAffected === 0) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    return res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 export default { getUsers, getUser, getUserRoutines, updateUser, getClients, createClient };

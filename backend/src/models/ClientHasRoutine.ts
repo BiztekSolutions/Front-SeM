@@ -1,28 +1,24 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../configs/db';
 
-class GroupExercise extends Model {
-  public idGroupExercise!: number;
-  public day?: string;
+class ClientHasRoutine extends Model {
+  public idClientHasRoutine!: number;
 }
 
-GroupExercise.init(
+ClientHasRoutine.init(
   {
-    idGroupExercise: {
+    idClientHasRoutine: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    day: {
-      type: DataTypes.STRING,
-    },
   },
   {
     sequelize,
-    modelName: 'GroupExercise',
+    modelName: 'ClientHasRoutine',
     timestamps: false,
   }
 );
 
-export default GroupExercise;
+export default ClientHasRoutine;

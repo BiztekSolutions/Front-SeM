@@ -14,7 +14,7 @@ const router = Router();
 
 router.use('/api/v1/auth', authRouter);
 router.use('/api/v1/groups', groupRouter);
-router.use('/api/v1/users', authenticateToken, userRouter);
+router.use('/api/v1/users', userRouter);
 router.use('/api/v1/exercises', exerciseRouter);
 router.use('/api/v1/routines', authenticateToken, routineRouter);
 router.use('/api/v1/posts', postRoutes);

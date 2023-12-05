@@ -36,9 +36,18 @@ export const get = async (idRoutine: number) => {
 export const create = async () => {};
 
 export const update = async () => {};
+
+export const remove = async (idRoutine: number) => {
+  try {
+    return await Routine.destroy({ where: { idRoutine } });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
 module.exports = {
   list,
   get,
   create,
   update,
+  remove,
 };

@@ -8,10 +8,9 @@ const getRutines = async (userId, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    const user = response.data;
-    console.log(user, "ansdoansdonasodnas");
+    const userRoutines = response.data;
     // Obtener un array de promesas para las solicitudes de rutinas individuales
-    const routinePromises = user.routines.map(async (routine) => {
+    const routinePromises = userRoutines.routines.map(async (routine) => {
       const routineResponse = await axios.get(
         `${base_url}/routines/${routine.idRoutine}`,
         {
@@ -25,7 +24,6 @@ const getRutines = async (userId, token) => {
 
     // Esperar a que todas las solicitudes se completen
     const routinesDetails = await Promise.all(routinePromises);
-
     return routinesDetails;
   } catch (error) {
     // Manejar errores aquí
@@ -39,9 +37,9 @@ const getAllRutines = async () => {
   return response.data;
 };
 
-const updateRutines = async (data, idRutina) => {
+const updateRutine = async (data) => {
   try {
-    const response = await axios.put(`${base_url}/routines/${idRutina}`, data);
+    const response = await axios.put(`${base_url}/routines/${data.idRoutine}`, data);
     return response.data;
   } catch (error) {
     throw new Error("Failed to update rutines.");
@@ -50,8 +48,6 @@ const updateRutines = async (data, idRutina) => {
 
 const createRutine = async (data, token) => {
   try {
-    console.log("data", data);
-    console.log("token", token);
     const response = await axios.post(`${base_url}/routines`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,6 +62,6 @@ const createRutine = async (data, token) => {
 export const rutinasService = {
   getRutines,
   getAllRutines,
-  updateRutines,
+  updateRutine,
   createRutine,
 };

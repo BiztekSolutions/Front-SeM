@@ -2,6 +2,7 @@ import wppLogo from "../assets/wpp-orange.png";
 import { Link } from "react-scroll";
 import iconoHaciaArriba from "../assets/iconHaciaArriba.png";
 const Footer = () => {
+  //@TODO: Optimizacion: react-scroll se puede volar y reemplazar por useRef de React directamente.
   function redirectToWhatsapp() {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 

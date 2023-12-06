@@ -7,51 +7,49 @@ import { FcFullTrash, FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroups, deleteGroup } from "../../features/group/groupSlice";
-import Swal from "sweetalert2";
 
 const Groups = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { groups } = state.groups;
-  console.log(groups);
   useEffect(() => {
     dispatch(getGroups());
   }, [dispatch]);
 
   const handleDelete = (userName, userId) => {
-    Swal.fire({
-      color: "whitesmoke",
-      icon: "warning",
-      iconColor: "white",
-      background: "#1f1f1f",
-      buttonsStyling: false,
-      title: `<p>Wow wow!</p>`,
-      html: `
-      <p>
-        Are you sure you want to delete the user <b>${userName}</b>?
-      </p>
-      `,
-      showConfirmButton: true,
-      confirmButtonText: "Yes",
-      confirmButtonColor: "#1f1f1f",
-      showDenyButton: true,
-      denyButtonText: "No",
-      denyButtonColor: "grey",
-      denyButtonAriaLabel: "black",
-      toast: true,
-      customClass: {
-        confirmButton: "confirmSwalCheckout",
-        denyButton: "denySwalCheckout",
-        title: "swalTitle",
-        htmlContainer: "swalHtml",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(deleteGroup(userId));
-      } else if (result.isDenied) {
-        return;
-      }
-    });
+    // Swal.fire({
+    //   color: "whitesmoke",
+    //   icon: "warning",
+    //   iconColor: "white",
+    //   background: "#1f1f1f",
+    //   buttonsStyling: false,
+    //   title: `<p>Wow wow!</p>`,
+    //   html: `
+    //   <p>
+    //     Are you sure you want to delete the user <b>${userName}</b>?
+    //   </p>
+    //   `,
+    //   showConfirmButton: true,
+    //   confirmButtonText: "Yes",
+    //   confirmButtonColor: "#1f1f1f",
+    //   showDenyButton: true,
+    //   denyButtonText: "No",
+    //   denyButtonColor: "grey",
+    //   denyButtonAriaLabel: "black",
+    //   toast: true,
+    //   customClass: {
+    //     confirmButton: "confirmSwalCheckout",
+    //     denyButton: "denySwalCheckout",
+    //     title: "swalTitle",
+    //     htmlContainer: "swalHtml",
+    //   },
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     dispatch(deleteGroup(userId));
+    //   } else if (result.isDenied) {
+    //     return;
+    //   }
+    // });
   };
 
   const navigate = useNavigate();

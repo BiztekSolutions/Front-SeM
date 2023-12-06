@@ -27,13 +27,11 @@ export const createGroup = async (req: Request, res: Response) => {
       const name = groupName;
 
       const group = await Group.create({ name }, { transaction: transaction });
-      console.log(group, 'group');
 
       // Asociar clientes al grupo
       for (const clientId of selectedUsers) {
         await ClientGroup.create({ idGroup: group.idGroup, idClient: clientId }, { transaction: transaction });
       }
-      console.log(group, 'group');
 
       // Commit de la transacción
       await transaction.commit();
@@ -55,9 +53,9 @@ export const createGroup = async (req: Request, res: Response) => {
 // Obtener un grupo con todos los clientes
 export const getGroup = async (req: Request, res: Response) => {
   try {
-    const groupId = parseInt(req.params.groupId, 10);
+    const idGroup = parseInt(req.params.idGroup, 10);
 
-    const group = await get(groupId);
+    const group = await get(idGroup);
 
     if (!group) {
       return res.status(404).json({ message: 'Group not found' });
@@ -85,10 +83,10 @@ export const getGroups = async (req: Request, res: Response) => {
 //@TODO: Migrar el contenido de este controller a un Service.
 export const setRoutineGroup = async (req: Request, res: Response) => {
   try {
-    const groupId = parseInt(req.params.groupId, 10);
+    const idGroup = parseInt(req.params.idGroup, 10);
     const { routineId } = req.body;
 
-    const group = await Group.findByPk(groupId);
+    const group = await Group.findByPk(idGroup);
     const routine = await Routine.findByPk(routineId);
 
     if (!group || !routine) {

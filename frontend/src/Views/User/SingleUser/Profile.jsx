@@ -9,9 +9,8 @@ import {
   getUser,
   updateUser,
 } from "../../../features/user/userSlice";
-import { TailSpin } from "react-loader-spinner";
-import Swal from "sweetalert2";
 import UserCalendar from "./UserCalendar";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 const SingleUser = () => {
   // CONTEXT API
@@ -68,39 +67,40 @@ const SingleUser = () => {
   };
 
   const handleDelete = (userName, userId) => {
-    Swal.fire({
-      color: "whitesmoke",
-      icon: "warning",
-      iconColor: "white",
-      background: "#1f1f1f",
-      buttonsStyling: false,
-      title: `<p>Wow wow!</p>`,
-      html: `
-      <p>
-        Are you sure you want to delete the user <b>${userName}</b>?
-      </p>
-      `,
-      showConfirmButton: true,
-      confirmButtonText: "Yes",
-      confirmButtonColor: "#1f1f1f",
-      showDenyButton: true,
-      denyButtonText: "No",
-      denyButtonColor: "grey",
-      denyButtonAriaLabel: "black",
-      toast: true,
-      customClass: {
-        confirmButton: "confirmSwalCheckout",
-        denyButton: "denySwalCheckout",
-        title: "swalTitle",
-        htmlContainer: "swalHtml",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(deleteUser(userId));
-      } else if (result.isDenied) {
-        return;
-      }
-    });
+    //@TODO: Reemplazar el Swal
+    // Swal.fire({
+    //   color: "whitesmoke",
+    //   icon: "warning",
+    //   iconColor: "white",
+    //   background: "#1f1f1f",
+    //   buttonsStyling: false,
+    //   title: `<p>Wow wow!</p>`,
+    //   html: `
+    //   <p>
+    //     Are you sure you want to delete the user <b>${userName}</b>?
+    //   </p>
+    //   `,
+    //   showConfirmButton: true,
+    //   confirmButtonText: "Yes",
+    //   confirmButtonColor: "#1f1f1f",
+    //   showDenyButton: true,
+    //   denyButtonText: "No",
+    //   denyButtonColor: "grey",
+    //   denyButtonAriaLabel: "black",
+    //   toast: true,
+    //   customClass: {
+    //     confirmButton: "confirmSwalCheckout",
+    //     denyButton: "denySwalCheckout",
+    //     title: "swalTitle",
+    //     htmlContainer: "swalHtml",
+    //   },
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     dispatch(deleteUser(userId));
+    //   } else if (result.isDenied) {
+    //     return;
+    //   }
+    // });
   };
 
   const columns = [
@@ -178,16 +178,7 @@ const SingleUser = () => {
             onClick={() => handleDelete(user.userName, user.id)}
           />
           {message === `ban updating ${user.id}` ? (
-            <TailSpin
-              height="20"
-              width="20"
-              color="#4fa94d"
-              ariaLabel="tail-spin-loading"
-              radius="1"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
+            <LoadingSpinner />
           ) : user.disabled ? (
             <FcApproval
               data-activate={user.id}

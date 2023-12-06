@@ -1,20 +1,19 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
-import { get, list, getRoutines, list2 } from '../services/UserService';
+import { get, list, getRoutines, listClients, remove } from '../services/UserService';
 import Client from '../models/Client';
 import Routine from '../models/Routine';
 import Exercise from '../models/Exercise';
 import RoutineConfiguration from '../models/ExerciseConfiguration';
+import GroupExercise from '../models/GroupExercise';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
-    console.log('getClientssadnasd');
-
     const clients = await Client.findAll();
 
     const userIds = clients.map((client) => client.idUser);
 
-    const users = await list2(userIds);
+    const users = await listClients(userIds);
 
     return res.status(200).json({ message: 'all clients', clients: users });
   } catch (error: any) {
@@ -35,8 +34,6 @@ export const createClient = async (req: Request, res: Response) => {
     if (existingClient) {
       return res.status(400).json({ message: 'Client already exists for this user' });
     }
-
-    console.log('userId', userId);
 
     const newClient = await Client.create({
       idUser: userId,
@@ -84,6 +81,21 @@ export const getUserRoutines = async (req: Request, res: Response) => {
       include: [
         {
           model: Routine,
+          include: [
+            {
+              model: GroupExercise,
+              include: [
+                {
+                  model: RoutineConfiguration,
+                  include: [
+                    {
+                      model: Exercise,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
     });
@@ -91,10 +103,8 @@ export const getUserRoutines = async (req: Request, res: Response) => {
     if (!client) {
       return res.status(400).json({ message: 'Client not found' });
     }
-
-    const routines = await client.getRoutines();
-
-    return res.status(200).json({ routines });
+    //@ts-ignore
+    return res.status(200).json({ routines: client.Routines });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
@@ -110,6 +120,23 @@ export const updateUser = async (req: Request, res: Response) => {
     });
 
     return res.status(200).json({ message: 'User updated successfully' });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const removeUser = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId as string);
+    if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
+
+    const rowsAffected = await remove(userId);
+
+    if (rowsAffected === 0) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    return res.status(200).json({ message: 'User deleted successfully' });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

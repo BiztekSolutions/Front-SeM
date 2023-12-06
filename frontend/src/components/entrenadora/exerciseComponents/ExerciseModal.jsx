@@ -4,7 +4,6 @@ import VideoEmbed from "./VideoEmbed";
 
 // eslint-disable-next-line react/prop-types
 function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
-  console.log(exercise, "ejerciciomodal");
   return (
     <div
       className="modal show border-8 absolute z-10 border-white top-1/2 left-1/4 rounded-3xl bg-blue-600 w-1/2"

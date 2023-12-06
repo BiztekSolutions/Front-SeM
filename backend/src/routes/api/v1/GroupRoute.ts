@@ -4,8 +4,8 @@ import { createGroup, getGroup, setRoutineGroup, getGroups } from '../../../cont
 const groupRouter = express.Router();
 
 groupRouter.post('/', createGroup);
-groupRouter.get('/:groupId', getGroup);
-groupRouter.get('/:groupId/setRoutine', setRoutineGroup);
+groupRouter.get('/:idGroup', getGroup);
+groupRouter.post('/:idGroup', setRoutineGroup);
 groupRouter.get('/', getGroups);
 
 export default groupRouter;

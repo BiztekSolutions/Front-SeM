@@ -50,9 +50,6 @@ function CrearGrupos() {
   };
 
   const handleSubmit = () => {
-    console.log("Nombre del grupo:", groupName);
-    console.log("Usuarios seleccionados:", selectedUsers);
-
     dispatch(createGroup({ groupName, selectedUsers }));
   };
   const getColumnSearchProps = (dataIndex) => ({
@@ -137,8 +134,6 @@ function CrearGrupos() {
     ),
     onFilter: (value, record) => {
       // Imprime en la consola los valores relevantes para la depuración
-      console.log(record, "record");
-      console.log(value, "value");
 
       // Convierte el valor de la columna y el valor del filtro a minúsculas
       const columnValue = record[dataIndex].toString().toLowerCase();
@@ -233,7 +228,6 @@ function CrearGrupos() {
       className: "text-3xl",
     },
   ];
-  console.log(selectedUsers, "selectedUsers");
   const dataSource = [];
   if (clients?.length > 0) {
     for (let i = 0; i < clients.length; i++) {

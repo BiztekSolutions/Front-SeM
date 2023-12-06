@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getRutines } from "../../../features/rutinas/rutinasSlice";
 import { SiSendinblue } from "react-icons/si";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+import { Typography } from "antd";
 
 const UserCalendar = () => {
   const { id } = useParams();
@@ -19,28 +21,23 @@ const UserCalendar = () => {
   const { rutinas, isLoading } = state.rutinas;
   console.log(rutinas, "rutinas");
   useEffect(() => {
-    const fetchRoutines = async () => {
-      await dispatch(getRutines(id));
-    };
-    fetchRoutines();
-  }, []);
-  console.log(rutinas[0]);
-  useEffect(() => {
+    console.log(rutinas);
+    if (!rutinas) {
+      console.log("NO TENGO RUTINAS ENTONCES DIPSATCHEO");
+      dispatch(getRutines(id));
+    }
     if (rutinas && rutinas.length !== 0) {
-      const updatedEvents = generateEvents(rutinas[0]); // Accede a rutinas[0] directamente
+      console.log("AHORA SI", rutinas);
+      const updatedEvents = generateEvents(rutinas[0]);
       setEvents(updatedEvents);
     }
-  }, [rutinas, setEvents]);
+  }, [rutinas]);
 
   function handleCardClick(exercise) {
-    console.log(exercise, "ejercicio");
     setSelectedExercise(exercise);
     setShowModal(true);
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Renderiza un indicador de carga mientras se están obteniendo los eventos
-  }
   const getDayOfWeekString = (dayOfWeek) => {
     const daysOfWeek = [
       "sunday",
@@ -69,26 +66,26 @@ const UserCalendar = () => {
         const configDay = groupExercise.day.toLowerCase();
 
         if (dayOfWeekString === configDay) {
-          for (const exercise of groupExercise.Exercises) {
-            console.log(exercise, "ejercicio");
+          for (const exerciseConfiguration of groupExercise.ExerciseConfigurations) {
+            console.log(exerciseConfiguration, "ejercicio");
             const cardComponent = (
               <div
                 className="card-calendar highlight shadow flex flex-col justify-around border-b-4"
-                onClick={() => handleCardClick(exercise)}
+                onClick={() => handleCardClick(exerciseConfiguration)}
               >
                 <div className="card-body flex flex-col ">
                   <div className="flex flex-col ml-5 gap-1 border-black">
                     <b className="text-black ml-2 text-xs">Nombre</b>
                     <div className="flex ">
                       <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
-                      <h5 className="card-title   w-full">{exercise.name}</h5>
+                      <h5 className="card-title   w-full">{exerciseConfiguration.Exercise.name}</h5>
                     </div>
                   </div>
                 </div>
                 <div className="card-body">
                   <h5 className="card-title text-center">
-                    {exercise.ExerciseConfigurations[0].series}x
-                    {exercise.ExerciseConfigurations[0].repetitions}
+                    {exerciseConfiguration.series}x
+                    {exerciseConfiguration.repetitions}
                   </h5>
                 </div>
               </div>
@@ -96,8 +93,8 @@ const UserCalendar = () => {
 
             events.push({
               start: currentDate.toISOString().split("T")[0],
-              description: exercise.description,
-              id: exercise.idExercise,
+              description: exerciseConfiguration.Exercise.description,
+              id: exerciseConfiguration.idExercise,
               extendedProps: {
                 cardComponent: cardComponent,
               },
@@ -116,44 +113,57 @@ const UserCalendar = () => {
     return events;
   };
 
-  function closeModal() {
-    setShowModal(false);
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (
     <div>
-      <div>
-        <div className="w-full min-h-screen mt-24 text-2xl">
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridWeek"
-            className="calendar-container"
-            events={events}
-            eventContent={(arg) => {
-              return (
-                <div>
-                  <b>{arg.timeText}</b>
-                  {arg.event.extendedProps &&
-                    arg.event.extendedProps.cardComponent}
-                </div>
-              );
-            }}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,dayGridWeek,timeGridDay",
-            }}
-            dayHeaderContent={(arg) => {
-              return arg.date.toLocaleDateString("en-US", { weekday: "long" });
-            }}
-            hiddenDays={[0]}
-            height="80vh"
-            contentHeight="auto"
-          />
+      {rutinas && rutinas.length !== 0 ? (
+        <div>
+          <div className="w-full min-h-screen mt-24 text-2xl">
+            <FullCalendar
+              plugins={[dayGridPlugin]}
+              initialView="dayGridWeek"
+              className="calendar-container"
+              events={events}
+              eventContent={(arg) => {
+                return (
+                  <div>
+                    <b>{arg.timeText}</b>
+                    {arg.event.extendedProps &&
+                      arg.event.extendedProps.cardComponent}
+                  </div>
+                );
+              }}
+              headerToolbar={{
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,dayGridWeek,timeGridDay",
+              }}
+              dayHeaderContent={(arg) => {
+                return arg.date.toLocaleDateString("en-US", {
+                  weekday: "long",
+                });
+              }}
+              hiddenDays={[0]}
+              height="80vh"
+              contentHeight="auto"
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <Typography.Text className="text-xl">
+            Este usuario aun no posee ninguna rutina!
+          </Typography.Text>
+        </div>
+      )}
       {showModal ? (
-        <ExerciseModal exercise={selectedExercise} closeModal={closeModal} />
+        <ExerciseModal
+          exercise={selectedExercise}
+          closeModal={() => setShowModal(false)}
+        />
       ) : null}
     </div>
   );

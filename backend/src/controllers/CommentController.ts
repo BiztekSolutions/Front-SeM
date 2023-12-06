@@ -8,7 +8,6 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
 
   try {
     const comment = await Comment.create({ content, postId });
-    console.log(comment, 'COMMENT');
 
     res.json(comment);
   } catch (error) {

@@ -18,6 +18,7 @@ import Comment from './models/Comment';
 import ClientGroup from './models/ClientGroup';
 import GroupExercise from './models/GroupExercise';
 import ExerciseConfiguration from './models/ExerciseConfiguration';
+import ClientHasRoutine from './models/ClientHasRoutine';
 const app: Application = express();
 const PORT: number = 3000;
 
@@ -33,16 +34,16 @@ app.use(bodyParser.json());
 
 // USER RELATIONS
 User.hasMany(Credential, { foreignKey: 'idUser' });
-Credential.belongsTo(User, { foreignKey: 'idUser' });
+Credential.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true });
 
-Session.belongsTo(Credential, { foreignKey: 'idCredential' });
+Session.belongsTo(Credential, { foreignKey: 'idCredential', onDelete: 'CASCADE', hooks: true });
 Credential.hasMany(Session, { foreignKey: 'idCredential' });
 
 //User.hasOne(Client, { foreignKey: 'idUser' });
-Client.belongsTo(User, { foreignKey: 'idUser' });
+Client.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true });
 
 //User.hasOne(Coach, { foreignKey: 'idUser' });
-Coach.belongsTo(User, { foreignKey: 'idUser' });
+Coach.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true });
 
 // CLIENT RELATIONS
 Group.hasMany(ClientGroup, { foreignKey: 'idGroup' });
@@ -51,22 +52,22 @@ ClientGroup.belongsTo(Group, { foreignKey: 'idClient' });
 Client.hasMany(ClientGroup, { foreignKey: 'idClient' });
 ClientGroup.belongsTo(Client, { foreignKey: 'idClient' });
 
-Client.belongsToMany(Routine, { through: 'ClientHasRoutine' });
-Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
+Client.hasMany(Routine, { foreignKey: 'idClient' });
+Routine.belongsTo(Client, { foreignKey: 'idClient', onDelete: 'CASCADE', hooks: true });
 
 // GROUP RELATIONS
 Group.hasMany(Routine, { foreignKey: 'groupId' });
 Routine.belongsTo(Group, { foreignKey: 'groupId' });
 
 // ROUTINE RELATIONS
-Routine.belongsToMany(GroupExercise, { through: 'RoutineHasGroupExercise' });
-GroupExercise.belongsToMany(Routine, { through: 'RoutineHasGroupExercise' });
+Routine.hasMany(GroupExercise, { foreignKey: 'idRoutine' });
+GroupExercise.belongsTo(Routine, { foreignKey: 'idRoutine', onDelete: 'CASCADE', hooks: true });
 
-Exercise.belongsToMany(GroupExercise, { through: 'GroupExerciseHasExercise' });
-GroupExercise.belongsToMany(Exercise, { through: 'GroupExerciseHasExercise' });
+GroupExercise.hasMany(ExerciseConfiguration, { foreignKey: 'idGroupExercise' });
+ExerciseConfiguration.belongsTo(GroupExercise, { foreignKey: 'idGroupExercise', onDelete: 'CASCADE', hooks: true });
 
-Exercise.belongsToMany(ExerciseConfiguration, { through: 'ExerciseHasConfiguration' });
-ExerciseConfiguration.belongsToMany(Exercise, { through: 'ExerciseHasConfiguration' });
+Exercise.hasMany(ExerciseConfiguration, { foreignKey: 'idExercise' });
+ExerciseConfiguration.belongsTo(Exercise, { foreignKey: 'idExercise' });
 
 //Post relations
 Post.belongsTo(Client, { foreignKey: 'clientId' });
@@ -87,7 +88,7 @@ sequelize
     });
   })
   .catch((err: Error) => {
-    console.log(err);
+    console.error(err);
   });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

@@ -16,7 +16,22 @@ export const get = async (idExercise: number) => {
   }
 };
 
+export const create = async () => {};
+
+export const update = async () => {};
+
+export const remove = async (idExercise: number) => {
+  try {
+    return await Exercise.destroy({ where: { idExercise } });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
+
 module.exports = {
   list,
   get,
+  create,
+  update,
+  remove,
 };

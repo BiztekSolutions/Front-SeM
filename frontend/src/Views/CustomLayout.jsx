@@ -10,7 +10,6 @@ import {
   Typography,
 } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import Flag from "react-world-flags";
 import { CgProfile } from "react-icons/cg";
 import logo from "../assets/logo.png";
 import { GlobalContext } from "../context/globalContext";
@@ -25,8 +24,6 @@ const CustomLayout = ({ items }) => {
   const layout = useSelector((state) => state.layout);
 
   const { defaultAlgorithm, darkAlgorithm } = theme;
-  console.log("USUARIO", user);
-  console.log("Layout", layout);
 
   const handleLogout = () => {
     setLogged(false);
@@ -123,7 +120,8 @@ const CustomLayout = ({ items }) => {
             {/* @TODO: Esta flag no se ve */}
             <div className="flex gap-5 items-center">
               <div>
-                <Flag code={"arg"} height={"15"} />
+                {/* @TODO: Implementar icono con la bandera */}
+                {/* <Flag code={"arg"} height={"15"} /> */}
               </div>
               <div className="flex gap-3 items-center justify-center dropdown">
                 <div
@@ -164,7 +162,7 @@ const CustomLayout = ({ items }) => {
                   </span>
                 </div>
                 <div>
-                  <Dropdown overlay={menu} trigger={["click"]}>
+                  <Dropdown menu={menu} trigger={["click"]}>
                     <a
                       className="ant-dropdown-link"
                       onClick={(e) => e.preventDefault()}
@@ -179,7 +177,9 @@ const CustomLayout = ({ items }) => {
           </Header>
           <Content
             className="p-12 min-h-screen"
-            style={{ backgroundColor: layout.isDarkMode ? "#111821" : "white" }}
+            style={{
+              backgroundColor: layout.isDarkMode ? "#111821" : "white",
+            }}
           >
             <Outlet />
           </Content>

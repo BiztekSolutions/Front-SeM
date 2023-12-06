@@ -29,7 +29,8 @@ export const list = async () => {
     throw new Error(e.message);
   }
 };
-export const list2 = async (userIds: any) => {
+
+export const listClients = async (userIds: any) => {
   try {
     return await User.findAll({
       where: { idUser: userIds },
@@ -49,6 +50,14 @@ export const getRoutines = async (idUser: number) => {
         },
       ],
     });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
+
+export const remove = async (idUser: number) => {
+  try {
+    return await User.destroy({ where: { idUser } });
   } catch (e: any) {
     throw new Error(e.message);
   }

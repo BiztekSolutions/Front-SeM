@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { rutinasService } from "./rutinasService";
 
 const initialState = {
-  rutinas: [],
+  rutinas: null,
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -22,11 +22,12 @@ export const getRutines = createAsyncThunk(
   }
 );
 
-export const updateRutines = createAsyncThunk(
-  "updateRutines",
-  async (data, idRutina, thunkAPI) => {
+export const updateRutine = createAsyncThunk(
+  "updateRutine",
+  async (data, thunkAPI) => {
     try {
-      return await rutinasService.updateRutines(data, idRutina);
+      console.log(data);
+      return await rutinasService.updateRutine(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -68,17 +69,14 @@ export const rutinasSlice = createSlice({
         state.message = "Getting rutines";
       })
       .addCase(getRutines.fulfilled, (state, action) => {
-        console.log("succesfull gettin rutines");
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log(action.payload);
 
         state.message = action.payload.msg;
         state.rutinas = action.payload;
       })
       .addCase(getRutines.rejected, (state, action) => {
-        console.log("error gettin rutines");
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
@@ -123,18 +121,18 @@ export const rutinasSlice = createSlice({
       })
 
       // update rutines
-      .addCase(updateRutines.pending, (state) => {
+      .addCase(updateRutine.pending, (state) => {
         state.isLoading = true;
         state.message = "Updating rutines";
       })
-      .addCase(updateRutines.fulfilled, (state, action) => {
+      .addCase(updateRutine.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
         state.message = action.payload.msg;
         state.rutinas = action.payload.data;
       })
-      .addCase(updateRutines.rejected, (state, action) => {
+      .addCase(updateRutine.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;

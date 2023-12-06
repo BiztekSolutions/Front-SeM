@@ -4,6 +4,7 @@ import "tailwindcss/tailwind.css";
 import { useEffect, useContext } from "react";
 
 import { GlobalContext } from "./context/globalContext";
+import NotificationCenter from "./shared/components/notification/NotificationCenter";
 
 function App() {
   const context = useContext(GlobalContext);
@@ -17,7 +18,9 @@ function App() {
   });
   return (
     <div>
-      <Router />
+      <NotificationCenter>
+        <Router />
+      </NotificationCenter>
     </div>
   );
 }

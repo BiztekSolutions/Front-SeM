@@ -27,12 +27,12 @@ export const createGroup = createAsyncThunk(
 
 export const getGroup = createAsyncThunk(
   "getGroup",
-  async (groupId, thunkAPI) => {
+  async (idGroup, thunkAPI) => {
     try {
       const userString = localStorage.getItem("User");
       const user = JSON.parse(userString);
       const token = user.token;
-      return await groupService.getGroup(token, groupId);
+      return await groupService.getGroup(token, idGroup);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

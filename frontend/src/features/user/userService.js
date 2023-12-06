@@ -49,8 +49,7 @@ const getUser = async (token, userId) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  const userData = response.data;
-  return userData;
+  return response.data;
 };
 
 const deleteUser = async (data) => {

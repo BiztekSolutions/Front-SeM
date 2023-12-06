@@ -134,8 +134,11 @@ function WorkoutForm({}) {
     Object.entries(formData.exercises).forEach(([day, exerciseIds]) => {
       exerciseIds.forEach((exerciseId) => {
         const exerciseDetailsForDayAndExercise =
-          exerciseDetails[day]?.[exerciseId];
-
+          exerciseDetails[day][exerciseId];
+        console.log(
+          exerciseDetailsForDayAndExercise,
+          "exerciseDetailsForDayAndExercise"
+        );
         if (exerciseDetailsForDayAndExercise) {
           formattedExercises.push({
             id: exerciseId,
@@ -219,7 +222,7 @@ function WorkoutForm({}) {
       },
     }));
   };
-  console.log(exerciseDetails, "exercisesByDay");
+
   const handleSeries = (event, day, exerciseId) => {
     const value = event.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {

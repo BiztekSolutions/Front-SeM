@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PostList from "./PostList";
 import PostForm from "./PostForm";
@@ -6,13 +6,9 @@ import { fetchPosts, addOrUpdatePost } from "../../features/posts/postsSlice";
 
 function Foro() {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts.posts);
-  const [selectedPost, setSelectedPost] = useState(null);
+  const user = localStorage.getItem("User");
 
-  useEffect(() => {
-    // Cargamos los posts al montar el componente
-    dispatch(fetchPosts());
-  }, [dispatch]);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   const handlePostSelect = (post) => {
     setSelectedPost(post);
@@ -29,7 +25,7 @@ function Foro() {
 
       <div>
         <h1></h1>
-        <PostList posts={posts} onPostSelect={handlePostSelect} />
+        <PostList onPostSelect={handlePostSelect} />
       </div>
 
       <div>

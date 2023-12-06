@@ -40,7 +40,7 @@ function Hoy() {
       const { exerciseGroups } = routine;
       exerciseGroups.forEach((group) => {
         if (group.day === currentDay) {
-          group.exercises.forEach((exercise) => {
+          group?.exercises?.forEach((exercise) => {
             const cardComponent = (
               <div
                 key={exercise.id}

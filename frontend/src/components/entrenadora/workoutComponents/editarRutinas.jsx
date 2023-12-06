@@ -30,7 +30,7 @@ function EditarRutinas() {
   };
 
   const { exercises } = useSelector((state) => state.exercises);
-  console.log(exercises, "ejercicios");
+
   const dispatch = useDispatch();
   const id = useParams().id;
   const [formData, setFormData] = useState(initialState);
@@ -69,59 +69,70 @@ function EditarRutinas() {
   const filteredExercises = exercises.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  console.log(formData, "formData");
+
   useEffect(() => {
     dispatch(getAllExercises());
     dispatch(getRutines(id));
   }, []);
-
   useEffect(() => {
     if (rutinas && rutinas.length > 0) {
-      const editedRutina = rutinas[0].routine;
-      const newExercises = editedRutina.GroupExercises.flatMap(
-        (groupExercise) => {
-          return groupExercise.Exercises.map((exercise) => ({
-            day: groupExercise.day,
-            exercise: exercise,
-            routineConfiguration: exercise.ExerciseConfigurations[0],
-          }));
-        }
-      );
-      setFormData({
-        name: editedRutina.name,
-        startDate: moment(editedRutina.startDate).format("YYYY-MM-DD"),
-        endDate: moment(editedRutina.endDate).format("YYYY-MM-DD"),
-        exercises: newExercises,
-        objective: editedRutina.objective || "",
-        observation: editedRutina.observation || "",
-      });
+      console.log(rutinas, "rutinasssss");
+      if (
+        !Object.values(exercisesByDay).some(
+          (exerciseArray) => exerciseArray.length > 0
+        )
+      ) {
+        const editedRutina = rutinas[0].routine;
+        const newExercises = editedRutina.GroupExercises.flatMap(
+          (groupExercise) => {
+            return groupExercise.Exercises.map((exercise) => ({
+              day: groupExercise.day,
+              exercise: exercise,
+              routineConfiguration: exercise.ExerciseConfigurations[0],
+            }));
+          }
+        );
+
+        // Crear una copia del estado actual
+        const updatedFormData = { ...formData };
+
+        // Iterar sobre los nuevos ejercicios y agregarlos al estado del formulario
+        newExercises.forEach((newExercise) => {
+          const { day, exercise, routineConfiguration } = newExercise;
+          console.log(routineConfiguration, "routineConfiguration");
+          exerciseDetails[day][exercise.idExercise] = {
+            series: routineConfiguration.series,
+            repeticiones: routineConfiguration.repetitions,
+          };
+          console.log(
+            exerciseDetails[day][exercise.idExercise],
+            "exerciseDetails"
+          );
+          // Verificar si el día ya existe en el estado, si no, inicializarlo
+          if (!updatedFormData.exercises[day]) {
+            updatedFormData.exercises[day] = [];
+          }
+
+          // Agregar el nuevo ejercicio al día correspondiente
+          updatedFormData.exercises[day].push({
+            idExercise: exercise.idExercise,
+            name: exercise.name,
+            series: routineConfiguration.series,
+            repeticiones: routineConfiguration.repetitions,
+            image1: exercise.image1,
+          });
+        });
+        setExercisesByDay(updatedFormData.exercises);
+        setFormData({
+          ...updatedFormData,
+          name: editedRutina.name,
+          startDate: moment(editedRutina.startDate).format("YYYY-MM-DD"),
+          endDate: moment(editedRutina.endDate).format("YYYY-MM-DD"),
+          objective: editedRutina.objective || "",
+          observation: editedRutina.observation || "",
+        });
+      }
     }
-
-    const updatedExercisesByDay = {
-      Monday: [],
-      Tuesday: [],
-      Wednesday: [],
-      Thursday: [],
-      Friday: [],
-      Saturday: [],
-    };
-
-    Object.entries(formData.exercises).forEach(([day, exerciseIds]) => {
-      exerciseIds.forEach((exerciseData) => {
-        const { exercise, routineConfiguration } = exerciseData;
-        const exerciseDrop = {
-          idExercise: exercise.idExercise,
-          name: exercise.name,
-          series: routineConfiguration.series,
-          repeticiones: routineConfiguration.repetitions,
-          image1: exercise.image1,
-        };
-
-        updatedExercisesByDay[day].push(exerciseDrop);
-      });
-    });
-
-    setExercisesByDay(updatedExercisesByDay);
   }, [rutinas]);
 
   useEffect(() => {
@@ -177,11 +188,9 @@ function EditarRutinas() {
       startDate: moment(dateString).format("YYYY-MM-DD"),
     });
   };
-  console.log(id, "id");
 
-  const handleSubmit = (event) => {
+  function handleSubmit(event) {
     event.preventDefault();
-
     const formattedExercises = [];
     Object.entries(formData.exercises).forEach(([day, exerciseIds]) => {
       exerciseIds.forEach((exerciseId) => {
@@ -196,14 +205,13 @@ function EditarRutinas() {
                 day: day,
                 series: exerciseDetailsForDayAndExercise.series || 0,
                 repetitions: exerciseDetailsForDayAndExercise.repeticiones || 0,
-                // Agrega más configuraciones según sea necesario
               },
             ],
           });
         }
       });
     });
-
+    `   `;
     const formattedData = {
       id: id,
       name: formData.name,
@@ -213,9 +221,10 @@ function EditarRutinas() {
       objective: formData.objective,
       exercises: formattedExercises,
     };
+
     console.log(formattedData, "formattedData");
     dispatch(createRutine(formattedData));
-  };
+  }
 
   const removeExercise = (day, exerciseIndex) => {
     const updatedExercises = exercisesByDay[day].filter(
@@ -271,7 +280,7 @@ function EditarRutinas() {
       },
     }));
   };
-  console.log(exerciseDetails, "exercisesByDay");
+
   const handleSeries = (event, day, exerciseId) => {
     const value = event.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {

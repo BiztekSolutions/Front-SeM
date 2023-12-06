@@ -69,8 +69,14 @@ Exercise.belongsToMany(ExerciseConfiguration, { through: 'ExerciseHasConfigurati
 ExerciseConfiguration.belongsToMany(Exercise, { through: 'ExerciseHasConfiguration' });
 
 //Post relations
+Post.belongsTo(Client, { foreignKey: 'clientId' });
+Client.hasMany(Post, { foreignKey: 'clientId' });
+
+Comment.belongsTo(Client, { foreignKey: 'clientId' });
+Client.hasMany(Comment, { foreignKey: 'clientId' });
+
 Post.hasMany(Comment, { foreignKey: 'postId', as: 'Comments' });
-Comment.belongsTo(Post);
+Comment.belongsTo(Post, { foreignKey: 'postId' });
 
 sequelize
   .sync({ force: false })

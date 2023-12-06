@@ -61,10 +61,10 @@ Routine.belongsTo(Group, { foreignKey: 'groupId' });
 
 // ROUTINE RELATIONS
 Routine.hasMany(GroupExercise, { foreignKey: 'idRoutine' });
-GroupExercise.belongsTo(Routine, { foreignKey: 'idRoutine' });
+GroupExercise.belongsTo(Routine, { foreignKey: 'idRoutine', onDelete: 'CASCADE', hooks: true });
 
 GroupExercise.hasMany(ExerciseConfiguration, { foreignKey: 'idGroupExercise' });
-ExerciseConfiguration.belongsTo(GroupExercise, { foreignKey: 'idGroupExercise' });
+ExerciseConfiguration.belongsTo(GroupExercise, { foreignKey: 'idGroupExercise', onDelete: 'CASCADE', hooks: true });
 
 Exercise.hasMany(ExerciseConfiguration, { foreignKey: 'idExercise' });
 ExerciseConfiguration.belongsTo(Exercise, { foreignKey: 'idExercise' });

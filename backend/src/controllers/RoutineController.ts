@@ -107,28 +107,73 @@ export const updateRoutine = async (req: Request, res: Response) => {
       const groups = Object.entries(exercisesGroup);
       for (const [groupKey, groupValue] of groups) {
         //En esta parte del codigo, valido si en el payload el dia me viene vacio, que no tenga ningun groupExercise para ese dia, y si los tiene, los elimino
-        console.log('GROUP VALUE', groupValue, groupKey);
-
+        //Si el payload que me viene, el dia esta vacio
         if (Object.values(groupValue).length === 0) {
-          console.log('ESTE DIA NO HAY EJERCICIOS PAPA', groupValue, 'Y EL DIA ES: ', groupKey);
+          //Busco si en la rutina que tengo en la base de datos, existe un groupExercise para ese dia
           const checkExistingGroupExercise = routine.GroupExercises.filter(
             (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
           );
-          console.log(checkExistingGroupExercise, 'ARRAY A ELIMINAR');
-
+          //Si existe un groupExercise para ese dia, los elimino
           if (checkExistingGroupExercise.length > 0) {
             for (const groupExercise of checkExistingGroupExercise) {
-              console.log(groupExercise, 'groupExercise a eliminar');
-              const test = await GroupExercise.destroy({
+              await GroupExercise.destroy({
                 where: {
                   idGroupExercise: groupExercise.idGroupExercise,
                 },
               });
-              console.log('TEST', test);
+              await ExerciseConfiguration.destroy({
+                where: {
+                  idGroupExercise: groupExercise.idGroupExercise,
+                },
+              });
             }
           }
+          //Si el payload que viene para ese dia no esta vacio, significa que tengo ejercicios para ese dia, esto puede significar:
+          //1. Que no exista el exerciseGroup para ese dia, por lo que lo creo y creo las configuraciones (Dia nuevo basicamente)
         } else {
-          console.log('WTF NO ESTA VACIOOO', groupValue, 'Y EL DIA ES: ', groupKey);
+          console.log('Tengo ejercicios en el payload para el dia:', groupKey);
+          //Busco si en la rutina que tengo en la base de datos, existe un groupExercise para ese dia
+          const checkExistingGroupExercise = routine.GroupExercises.filter(
+            (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
+          );
+          //Si no existe un groupExercise para ese dia, lo creo
+          if (checkExistingGroupExercise.length === 0) {
+            //Y creo la configuracion para ese ejercicio
+            const exercises = Object.entries(groupValue);
+            for (const [exerciseKey, exerciseValue] of exercises) {
+              console.log('No existe un groupExercise para ese dia, lo creo');
+
+              const groupExercise = await GroupExercise.create(
+                {
+                  idRoutine: routine.idRoutine,
+                  day: groupKey,
+                },
+                { transaction }
+              );
+              console.log('GroupExercise creado:', groupExercise);
+
+              const exercise = await Exercise.findByPk(exerciseKey);
+              if (!exercise) {
+                return res.status(404).json({ message: 'Exercise not found' });
+              }
+              console.log('Creo la configuracion para el ejercicio:', exerciseKey);
+              const testing = await ExerciseConfiguration.create(
+                {
+                  repetitions: exerciseValue.configuration?.repeticiones,
+                  series: exerciseValue.configuration?.series,
+                  idExercise: exercise.idExercise,
+                  idGroupExercise: groupExercise.idGroupExercise,
+                },
+                { transaction }
+              );
+              console.log('EXERCISE CONFIGURATION TESTING', testing);
+            }
+            //Si existe un groupExercise para ese dia, significa que tengo ejercicios para ese dia, esto puede significar:
+            //1. Que se agrego un ejercicio a un dia del exercisesGroup, el exerciseGroup se mantiene (porque para ese dia ya existe) pero se crea la config
+            //2. Que se elimino un ejercicio de un dia del exercisesGroup, reviso si ese dia tiene mas ejercicios, si no tiene mas ejercicios, elimino el exerciseGroup y las config
+          } else {
+            continue;
+          }
         }
         // else {
         //   //En esta seccion, se supone que los exerciseGroup que vienen del payload tienen ejercicios, por lo que deberia crearlos o actualizarlos
@@ -183,6 +228,8 @@ export const updateRoutine = async (req: Request, res: Response) => {
         //   }
         // }
       }
+      await transaction.commit();
+
       res.status(200).json({ message: 'Routine updated successfully', routine });
     } catch (error: any) {
       await transaction.rollback();

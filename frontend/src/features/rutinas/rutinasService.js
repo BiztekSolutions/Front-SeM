@@ -37,9 +37,9 @@ const getAllRutines = async () => {
   return response.data;
 };
 
-const updateRutines = async (data, idRutina) => {
+const updateRutine = async (data) => {
   try {
-    const response = await axios.put(`${base_url}/routines/${idRutina}`, data);
+    const response = await axios.put(`${base_url}/routines/${data.idRoutine}`, data);
     return response.data;
   } catch (error) {
     throw new Error("Failed to update rutines.");
@@ -62,6 +62,6 @@ const createRutine = async (data, token) => {
 export const rutinasService = {
   getRutines,
   getAllRutines,
-  updateRutines,
+  updateRutine,
   createRutine,
 };

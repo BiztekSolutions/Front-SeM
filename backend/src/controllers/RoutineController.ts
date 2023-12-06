@@ -66,7 +66,133 @@ export const createRoutine = async (req: Request, res: Response) => {
   }
 };
 
-export const updateRoutine = async (req: Request, res: Response) => {};
+export const updateRoutine = async (req: Request, res: Response) => {
+  try {
+    const routineId = parseInt(req.params.routineId as string);
+    if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
+
+    const { name, observation, objective, exercisesGroup, clientId, startDate, endDate } = req.body;
+
+    const transaction = await sequelize.transaction();
+
+    try {
+      const routine = await Routine.findByPk(routineId, {
+        transaction,
+        include: [
+          {
+            model: GroupExercise,
+            include: [
+              {
+                model: ExerciseConfiguration,
+                include: [
+                  {
+                    model: Exercise,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+
+      if (!routine) {
+        return res.status(404).json({ message: 'Routine not found' });
+      }
+      //Si solamente cambian las config de los ejercicios, el exerciseGroup se matiene pero modifico las config
+      //Si viene un dia nuevo en el exercisesGroup, lo creo y creo las config
+      //Si se elimino un dia del exercisesGroup, lo elimino y elimino las config
+      //Si se agrega un ejercicio a un dia del exercisesGroup, el exerciseGroup se mantiene (porque para ese dia ya existe) pero se crea la config
+      //Si elimino un ejercicio de un dia del exercisesGroup, reviso si ese dia tiene mas ejercicios, si no tiene mas ejercicios, elimino el exerciseGroup y las config
+
+      const groups = Object.entries(exercisesGroup);
+      for (const [groupKey, groupValue] of groups) {
+        //En esta parte del codigo, valido si en el payload el dia me viene vacio, que no tenga ningun groupExercise para ese dia, y si los tiene, los elimino
+        console.log('GROUP VALUE', groupValue, groupKey);
+
+        if (Object.values(groupValue).length === 0) {
+          console.log('ESTE DIA NO HAY EJERCICIOS PAPA', groupValue, 'Y EL DIA ES: ', groupKey);
+          const checkExistingGroupExercise = routine.GroupExercises.filter(
+            (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
+          );
+          console.log(checkExistingGroupExercise, 'ARRAY A ELIMINAR');
+
+          if (checkExistingGroupExercise.length > 0) {
+            for (const groupExercise of checkExistingGroupExercise) {
+              console.log(groupExercise, 'groupExercise a eliminar');
+              const test = await GroupExercise.destroy({
+                where: {
+                  idGroupExercise: groupExercise.idGroupExercise,
+                },
+              });
+              console.log('TEST', test);
+            }
+          }
+        } else {
+          console.log('WTF NO ESTA VACIOOO', groupValue, 'Y EL DIA ES: ', groupKey);
+        }
+        // else {
+        //   //En esta seccion, se supone que los exerciseGroup que vienen del payload tienen ejercicios, por lo que deberia crearlos o actualizarlos
+        //   const checkExistingGroupExercise = routine.GroupExercises.filter(
+        //     (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
+        //   );
+        //   if (checkExistingGroupExercise.length > 0) {
+        //     //Si ya existe el exerciseGroup para ese dia, lo actualizo
+        //     const checkExistingExerciseConfiguration = checkExistingGroupExercise[0].ExerciseConfigurations.filter(
+        //       (exerciseConfiguration) => exerciseConfiguration.idExercise === exercise.idExercise
+        //     );
+        //     if (checkExistingExerciseConfiguration.length > 0) {
+        //       //Si ya existe la configuracion para ese ejercicio, la actualizo
+        //       await checkExistingExerciseConfiguration[0].update(
+        //         {
+        //           repetitions: exerciseValue.configuration?.repeticiones,
+        //           series: exerciseValue.configuration?.series,
+        //         },
+        //         { transaction }
+        //       );
+        //     } else {
+        //       //Si no existe la configuracion para ese ejercicio, la creo
+        //       await ExerciseConfiguration.create(
+        //         {
+        //           repetitions: exerciseValue.configuration?.repeticiones,
+        //           series: exerciseValue.configuration?.series,
+        //           idExercise: exercise.idExercise,
+        //           idGroupExercise: checkExistingGroupExercise[0].idGroupExercise,
+        //         },
+        //         { transaction }
+        //       );
+        //     }
+        //   } else {
+        //     //Si no existe el exerciseGroup para ese dia, lo creo
+        //     const groupExercise = await GroupExercise.create(
+        //       {
+        //         idRoutine: routine.idRoutine,
+        //         day: groupKey,
+        //       },
+        //       { transaction }
+        //     );
+        //     //Y creo la configuracion para ese ejercicio
+        //     await ExerciseConfiguration.create(
+        //       {
+        //         repetitions: exerciseValue.configuration?.repeticiones,
+        //         series: exerciseValue.configuration?.series,
+        //         idExercise: exercise.idExercise,
+        //         idGroupExercise: groupExercise.idGroupExercise,
+        //       },
+        //       { transaction }
+        //     );
+        //   }
+        // }
+      }
+      res.status(200).json({ message: 'Routine updated successfully', routine });
+    } catch (error: any) {
+      await transaction.rollback();
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
 export const getRoutines = async (_req: Request, res: Response) => {
   try {

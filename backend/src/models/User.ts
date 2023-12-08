@@ -6,7 +6,7 @@ class User extends Model {
   public idUser!: number;
   public name!: string;
   public lastname!: string;
-
+  public avatar?: string; // Agrega el campo avatar al modelo
 }
 
 User.init(
@@ -22,12 +22,14 @@ User.init(
     lastname: {
       type: DataTypes.STRING,
     },
+    avatar: {
+      type: DataTypes.STRING, // Puedes ajustar el tipo de datos según la URL o ruta de tu avatar
+    },
   },
   {
     sequelize,
     modelName: 'User',
     timestamps: false,
-    
   }
 );
 

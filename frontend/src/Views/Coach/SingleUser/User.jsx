@@ -6,13 +6,13 @@ import { MdOutlinePerson2 } from "react-icons/md";
 import { Typography } from "antd";
 import { deleteUser, getUser } from "../../../features/user/userSlice";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
-
+import DeleteButton from "../../../components/DeleteButton/DeleteButton";
 import styles from "./SingleUser.module.css";
 
 export default function User() {
   //@TODO: Queda agregar el icono que al switchear modo dark no se ve.
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.users.user);
+  const { user } = useSelector((state) => state.users);
   const { id } = useParams();
   const userId = id;
 
@@ -21,8 +21,6 @@ export default function User() {
       dispatch(getUser(userId));
     }
   }, []);
-
-  const handleDelete = (userName, userId) => {};
 
   return (
     <div>
@@ -71,20 +69,10 @@ export default function User() {
             </div>
             <div className="w-fit flex gap-6 items-center">
               <Typography.Text className="text-left text-2xl font-bold">
-                Status:
-              </Typography.Text>
-              <Typography.Text className="text-xl">Estatus</Typography.Text>
-            </div>
-            <div className="w-fit flex gap-6 items-center">
-              <Typography.Text className="text-left text-2xl font-bold">
                 Eliminar:
               </Typography.Text>
               <Typography.Text className="text-left text-3xl mt-2 cursor-pointer ">
-                <FcFullTrash
-                  size={20}
-                  className="userDelete"
-                  onClick={() => handleDelete(user?.name, user?.idUser)}
-                />
+                <DeleteButton userName={user.name} userId={user.idUser} />
               </Typography.Text>
             </div>
           </div>

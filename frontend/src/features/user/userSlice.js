@@ -18,11 +18,7 @@ export const addUserToClients = createAsyncThunk(
       const userString = localStorage.getItem("User");
       const user = JSON.parse(userString);
       const token = user.token;
-
-      // Llamada a la función o servicio para agregar el usuario a la lista de clientes
       const response = await userService.addUserToClients(token, userId);
-
-      // Puedes devolver la respuesta si necesitas más información en el frontend
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

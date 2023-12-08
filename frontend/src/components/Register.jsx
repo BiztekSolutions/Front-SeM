@@ -14,12 +14,15 @@ import {
 } from "@/features/layout/layoutSlice";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
+import AvatarOptions from "./AvatarOptions";
+
 const credentialsInitialState = {
   password: "",
   name: "",
   lastname: "",
   email: "",
   repeatPassword: "",
+  avatar: "",
 };
 
 function Register({ isRegisterOpen, setRegisterOpen }) {
@@ -39,6 +42,12 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     setCredentials({
       ...credentials,
       [e.target.name]: e.target.value,
+    });
+  };
+  const handleSelectAvatar = (selectedAvatar) => {
+    setCredentials({
+      ...credentials,
+      avatar: selectedAvatar,
     });
   };
 
@@ -232,11 +241,14 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     />
                   )}
                 </div>
+                <div className="mb-4">
+                  <AvatarOptions onSelectAvatar={handleSelectAvatar} />
+                </div>
               </div>
             ) : null}
           </div>
 
-          <div className="flex justify-center pt-8">
+          <div className="flex justify-center ">
             <button
               onClick={handleSubmit}
               type="button"

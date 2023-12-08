@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Home from "./Views/Home/Home";
 import Coach from "./Views/Coach/Coach";
-import Noticias from "./Views/Coach/Noticias";
+import Noticias from "./Views/Foro/Noticias";
 
 import Grupos from "./Views/Coach/Grupos";
 import Profile from "./Views/User/SingleUser/Profile";
@@ -14,7 +14,7 @@ import Cronometro from "./Views/User/Cronometro";
 import Workout from "./components/entrenadora/workoutComponents/Workout";
 import WorkoutContainer from "./components/entrenadora/workoutComponents/WorkoutContainer";
 import WorkoutCreator from "./components/entrenadora/workoutComponents/WorkoutCreator.jsx";
-import axios from "axios";
+
 import UserCalendar from "./Views/Coach/SingleUser/UserCalendar";
 import AgregarEjercicio from "./components/entrenadora/workoutComponents/agregarEjercicio.jsx";
 import Hoy from "./Views/User/Hoy";
@@ -57,6 +57,7 @@ const Router = () => {
           <Route path="creargrupos" element={<CrearGrupos />} />
           <Route path="mensajeria" element={<Mensajeria />} />
           <Route path="changePassword/:id" element={<ChangePassword />} />
+          <Route path="profile/:id" element={<Profile />} />
         </Route>
         <Route
           path="/user/:id"

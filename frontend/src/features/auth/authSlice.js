@@ -46,7 +46,8 @@ export const register = createAsyncThunk("register", async (data, thunkAPI) => {
   try {
     return await authService.register(data);
   } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+    console.error(error);
+    return thunkAPI.rejectWithValue(error.message || "Error desconocido");
   }
 });
 

@@ -48,6 +48,11 @@ function EditarRutinas() {
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  useEffect(() => {
+    if (id) {
+      dispatch(getRutines(id));
+    }
+  }, [id]);
 
   useEffect(() => {
     if (!exercises) {

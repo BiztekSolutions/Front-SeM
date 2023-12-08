@@ -8,7 +8,7 @@ function ExerciseForm({ exercise, onSubmit }) {
         video: exercise.video,
         type: exercise.type,
         series: exercise.series,
-        repeticiones: exercise.repeticiones,
+        repeticiones: exercise.repetitions,
       }
     : {
         name: "",

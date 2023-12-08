@@ -15,7 +15,7 @@ import logo from "../assets/logo.png";
 import { GlobalContext } from "../context/globalContext";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode, toggleSidebar } from "@/features/layout/layoutSlice";
-
+import { persistor } from "../store/store";
 const { Header, Sider, Content } = AntLayout;
 
 const CustomLayout = ({ items }) => {
@@ -24,20 +24,25 @@ const CustomLayout = ({ items }) => {
   const layout = useSelector((state) => state.layout);
 
   const { defaultAlgorithm, darkAlgorithm } = theme;
-
+  const localUser = JSON.parse(localStorage.getItem("User"));
   const handleLogout = () => {
     setLogged(false);
+    localStorage.removeItem("User");
+    persistor.purge();
+    console.log("LocalStorage after purge:", localStorage);
     navigate("/");
   };
   const { setLogged } = useContext(GlobalContext);
-
+  console.log(localUser, "localUser");
   const menu = (
     <Menu>
       <Menu.Item key="1">
-        <Link to={`./profile/${user.userId}`}>Perfil</Link>
+        <Link to={`./profile/${localUser.user}`}>Perfil</Link>
       </Menu.Item>
       <Menu.Item key="2">
-        <Link to={`./changePassword/${user.userId}`}>Cambiar contraseña</Link>
+        <Link to={`./changePassword/${localUser.user}`}>
+          Cambiar contraseña
+        </Link>
       </Menu.Item>
       <Menu.Item key="3" onClick={() => handleLogout()}>
         Salir
@@ -162,14 +167,13 @@ const CustomLayout = ({ items }) => {
                   </span>
                 </div>
                 <div>
-                  <Dropdown menu={menu} trigger={["click"]}>
-                    <a
-                      className="ant-dropdown-link"
+                  <Dropdown overlay={menu} trigger={["click"]}>
+                    <div
+                      className="ant-dropdown-link hover:cursor-pointer"
                       onClick={(e) => e.preventDefault()}
-                      href="/#"
                     >
                       <CgProfile className="h-8 w-8 mr-20" />
-                    </a>
+                    </div>
                   </Dropdown>
                 </div>
               </div>

@@ -17,7 +17,7 @@ function getItem(label, key, icon, children, type) {
 const items = [
   getItem("General", "sub1", <CgHome size={20} />, [
     getItem("Noticias", "noticias"),
-    getItem("Mensajeria", "mensajeria"),
+    // getItem("Mensajeria", "mensajeria"),
     // getItem("Tablero de control", "tablero de control"),
   ]),
   getItem("Usuarios", "sub2", <FaUser size={20} />, [

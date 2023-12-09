@@ -104,7 +104,12 @@ function EditarRutinas() {
           objective: editRoutine.objective,
           observation: editRoutine.observation,
         };
-
+        setDurationInWeeks(
+          moment(editRoutine.endDate).diff(
+            moment(editRoutine.startDate),
+            "weeks"
+          )
+        );
         console.log("FINAL DATA", finalData);
         setFormData(finalData);
       }
@@ -286,7 +291,7 @@ function EditarRutinas() {
               <label>Inicio:</label>
               <DatePicker
                 onChange={handleDateChange}
-                defaultValue={moment()}
+                defaultValue={startDate}
                 format="YYYY-MM-DD"
                 dropdownMode="top"
               />

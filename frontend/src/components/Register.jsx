@@ -15,6 +15,7 @@ import {
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 import AvatarOptions from "./AvatarOptions";
+import { initialState } from "stream-chat-react/dist/components/Channel/channelState";
 
 const credentialsInitialState = {
   password: "",
@@ -37,7 +38,8 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const globalContext = useContext(GlobalContext);
   const { setLogged } = globalContext;
   const [credentials, setCredentials] = useState(credentialsInitialState);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState("");
   const handleCredentials = (e) => {
     setCredentials({
       ...credentials,
@@ -45,31 +47,41 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     });
   };
   const handleSelectAvatar = (selectedAvatar) => {
-    console.log(selectedAvatar, "selectedAvatar");
     setCredentials({
       ...credentials,
       avatar: selectedAvatar,
     });
-    console.log(credentials, "credentials");
   };
 
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
 
     if (isRegisterOpen) {
-      if (credentials.avatar === "") {
-        setError("Seleccione un avatar");
-      } else if (credentials.password !== credentials.repeatPassword) {
-        setError("Las contraseñas no coinciden");
-      } else {
-        dispatch(register(credentials));
+      const newErrors = {};
+      if (!credentials.avatar) newErrors.avatar = "Seleccione un avatar";
+      if (!credentials.password) newErrors.password = "Ingrese una contraseña";
+      if (!credentials.repeatPassword)
+        newErrors.repeatPassword = "Repita la contraseña";
+      if (!credentials.name) newErrors.name = "Ingrese su nombre";
+      if (!credentials.lastname) newErrors.lastname = "Ingrese su apellido";
+      if (!credentials.email) newErrors.email = "Ingrese su correo electrónico";
+      if (credentials.password !== credentials.repeatPassword)
+        newErrors.repeatPassword = "Las contraseñas no coinciden";
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
       }
+
+      dispatch(register(credentials));
     } else {
       dispatch(loginUser(credentials));
     }
-    setError("");
-  };
-  console.log(credentials);
+    setErrors({});
+    setGeneralError("");
+    setCredentials(initialState);
+  }
+
   const repeatPasswordVisibility = () => {
     setShowRepeatPassword(!showRepeatPassword);
   };
@@ -79,11 +91,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   };
 
   const handleRegister = () => {
-    if (!isRegisterOpen) {
-      setRegisterOpen(true);
-    } else {
-      setRegisterOpen(false);
-    }
+    setRegisterOpen(!isRegisterOpen);
+    setCredentials(initialState);
+    setErrors({});
   };
 
   useEffect(() => {
@@ -99,6 +109,8 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
         dispatch(clearUserMessage());
         // Clear message state & close Login modal
         setRegisterOpen(false);
+        setCredentials(initialState);
+        setErrors({});
       }, 2100);
     }
 
@@ -157,11 +169,16 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     name="name"
                     onChange={handleCredentials}
                     value={credentials.name}
-                    className="form-control w-full px-3  border border-gray-300 rounded"
+                    className={`form-control w-full px-3 border border-gray-300 rounded ${
+                      errors.name ? "border-red-500" : ""
+                    }`}
                   />
                   <label className="text-gray-700" htmlFor="form3Example1m">
                     Nombre
                   </label>
+                  {errors.name && (
+                    <p className="text-red-500 text-sm">{errors.name}</p>
+                  )}
                 </div>
               </div>
               <div className="md:w-1/2">
@@ -172,11 +189,16 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     name="lastname"
                     onChange={handleCredentials}
                     value={credentials.lastname}
-                    className="form-control w-full px-3 border border-gray-300 rounded"
+                    className={`form-control w-full px-3 border border-gray-300 rounded ${
+                      errors.lastname ? "border-red-500" : ""
+                    }`}
                   />
                   <label className="text-gray-700" htmlFor="form3Example1n">
                     Apellido
                   </label>
+                  {errors.lastname && (
+                    <p className="text-red-500 text-sm">{errors.lastname}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -188,21 +210,28 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
               onChange={handleCredentials}
               value={credentials.email}
               id="email"
-              className="form-control w-full px-3 border border-gray-300 rounded"
+              className={`form-control w-full px-3 border border-gray-300 rounded ${
+                errors.email ? "border-red-500" : ""
+              }`}
             />
             <label className="text-gray-700" htmlFor="email">
-              Correo electronico
+              Correo electrónico
             </label>
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
           <div className="flex flex-col ">
             <div className="mb-2 ">
-              <div className=" relative">
+              <div className="relative">
                 <input
                   name="password"
                   onChange={handleCredentials}
                   value={credentials.password}
                   type={showPassword ? "text" : "password"}
-                  className="form-control w-full px-3 py-2 border border-gray-300 rounded"
+                  className={`form-control w-full px-3 py-2 border border-gray-300 rounded ${
+                    errors.password ? "border-red-500" : ""
+                  }`}
                 />
                 <label className="text-gray-700" htmlFor="form3Example4c">
                   Contraseña
@@ -219,17 +248,22 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                   />
                 )}
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm">{errors.password}</p>
+              )}
             </div>
             {isRegisterOpen ? (
               <div className="mb-4 ">
-                <div className="mb-4 relative">
+                <div className="relative">
                   <input
                     type={showRepeatPassword ? "text" : "password"}
                     id="password-input"
                     name="repeatPassword"
                     onChange={handleCredentials}
                     value={credentials.repeatPassword}
-                    className="form-control w-full px-3 py-2 border border-gray-300 rounded"
+                    className={`form-control w-full px-3 py-2 border border-gray-300 rounded ${
+                      errors.repeatPassword ? "border-red-500" : ""
+                    }`}
                   />
                   <label className="text-gray-700" htmlFor="form3Example4cd">
                     Repita su contraseña
@@ -246,8 +280,16 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     />
                   )}
                 </div>
-                <div className="mb-4">
+                {errors.repeatPassword && (
+                  <p className="text-red-500 text-sm">
+                    {errors.repeatPassword}
+                  </p>
+                )}
+                <div className="">
                   <AvatarOptions onSelectAvatar={handleSelectAvatar} />
+                  {errors.avatar && (
+                    <p className="text-red-500 text-sm">{errors.avatar}</p>
+                  )}
                 </div>
               </div>
             ) : null}
@@ -257,19 +299,23 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
             <button
               onClick={handleSubmit}
               type="button"
-              className="bg-blue-500 hover:bg-black  font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-black font-bold px-4 rounded"
             >
               ENVIAR
             </button>
-            <div>{error && <p className="text-red-500">{error}</p>}</div>
+            <div>
+              {generalError && (
+                <p className="text-red-500 text-sm">{generalError}</p>
+              )}
+            </div>
           </div>
           <button
             onClick={handleRegister}
             type="button"
-            className="font-bold  rounded mt-4  hover:text-orange-700 border-none"
+            className="font-bold rounded mt-2 hover:text-orange-700 border-none"
           >
             {isRegisterOpen
-              ? "CAMBIAR A INICIAR SESION"
+              ? "CAMBIAR A INICIAR SESIÓN"
               : "CAMBIAR A CREAR CUENTA"}
           </button>
         </div>

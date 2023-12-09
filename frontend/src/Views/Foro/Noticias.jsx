@@ -18,19 +18,22 @@ import {
   addOrUpdatePost,
   addCommentToPost,
 } from "../../features/posts/postsSlice";
-
+import { getCoaches } from "../../features/user/userSlice";
 const { TextArea } = Input;
 
 function Noticias() {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.posts);
+  const { coaches } = useSelector((state) => state.users);
   const [selectedPost, setSelectedPost] = useState(null);
   const [comment, setComment] = useState("");
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
+  const user = JSON.parse(localStorage.getItem("User"));
   console.log(posts, "posts");
   useEffect(() => {
     dispatch(fetchPosts());
+    dispatch(getCoaches());
   }, [dispatch]);
 
   const handlePostSelect = (post) => {
@@ -61,7 +64,7 @@ function Noticias() {
   const closeModal = () => {
     setModalVisible(false);
   };
-
+  const isUserACoach = coaches.some((coach) => coach.idUser === user.user);
   return (
     <div>
       <h1>Foro</h1>
@@ -164,22 +167,24 @@ function Noticias() {
         )}
       </Modal>
 
-      <div>
-        <h2>Nueva Publicación</h2>
-        <Form form={form} onFinish={handlePostSubmit}>
-          <Form.Item label="Título" name="title">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Contenido" name="content">
-            <TextArea rows={4} />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Agregar
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+      {isUserACoach && (
+        <div>
+          <h2>Nueva Publicación</h2>
+          <Form form={form} onFinish={handlePostSubmit}>
+            <Form.Item label="Título" name="title">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Contenido" name="content">
+              <TextArea rows={4} />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Agregar
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      )}
     </div>
   );
 }

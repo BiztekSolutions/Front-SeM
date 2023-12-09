@@ -7,16 +7,20 @@ import {
   updateUser,
 } from "../../../features/user/userSlice";
 import { getRutines } from "../../../features/rutinas/rutinasSlice";
-import { updateUserr } from "../../../features/auth/authSlice";
+import {
+  updateUserr,
+  clearAuthMessages,
+} from "../../../features/auth/authSlice";
 import { Form, Input, Button, Modal } from "antd";
 import styles from "../../../components/Component.module.css";
 import { showSuccessNotification } from "../../../features/layout/layoutSlice";
+import { get } from "react-scroll/modules/mixins/scroller";
+import { set } from "date-fns";
 
 function Profile() {
-  const { user, clients, isSuccess, message } = useSelector(
-    (state) => state.users
-  );
+  const { user, clients, message } = useSelector((state) => state.users);
   const { rutinas } = useSelector((state) => state.rutinas);
+  // const { message} = useSelector((state) => state.auths);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(user.avatar);
   const avatar = user.avatar;
@@ -44,20 +48,22 @@ function Profile() {
       lastname: user.lastname,
       avatar: selectedAvatar,
     });
-    console.log(user.name, user.lastname, selectedAvatar, "todoooooooooo");
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (message === "Usuario actualizado") {
       dispatch(showSuccessNotification("Actualizacion exitosa!", message));
-      dispatch(
-        updateUserr({
-          name: user.name,
-          lastname: user.lastname,
-          avatar: selectedAvatar,
-        })
-      );
+      setTimeout(() => {
+        dispatch(
+          updateUserr({
+            name: user.name,
+            lastname: user.lastname,
+            avatar: selectedAvatar,
+          })
+        );
+        dispatch(clearAuthMessages());
+      }, 4000);
     }
-  }, [isSuccess]);
+  }, [user]);
 
   const handleSave = (values) => {
     dispatch(
@@ -70,6 +76,8 @@ function Profile() {
         },
       })
     );
+    dispatch(getUser(id));
+    console.log(user, "despues del get user");
     setIsEditing(false);
   };
   useEffect(() => {
@@ -85,7 +93,6 @@ function Profile() {
       dispatch(getRutines(id));
     }
   }, [clients]);
-  console.log(user, rutinas);
 
   return (
     <div>

@@ -50,6 +50,7 @@ export const register = createAsyncThunk("register", async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.message || "Error desconocido");
   }
 });
+export const updateUserr = createAction("update-user");
 
 export const clearUserMessage = createAction("create-user-message");
 
@@ -120,6 +121,9 @@ export const authSlice = createSlice({
       })
 
       // ACTIONS
+      .addCase(updateUserr, (state, action) => {
+        state.user = action.payload;
+      })
       .addCase(clearUserMessage, (state) => {
         state.message = "";
       });

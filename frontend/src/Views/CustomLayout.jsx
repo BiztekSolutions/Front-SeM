@@ -32,6 +32,7 @@ const CustomLayout = ({ items }) => {
     console.log("LocalStorage after purge:", localStorage);
     navigate("/");
   };
+  console.log(user, "user");
   const { setLogged } = useContext(GlobalContext);
   console.log(localUser, "localUser");
   const menu = (
@@ -172,7 +173,11 @@ const CustomLayout = ({ items }) => {
                       className="ant-dropdown-link hover:cursor-pointer"
                       onClick={(e) => e.preventDefault()}
                     >
-                      <CgProfile className="h-8 w-8 mr-20" />
+                      <img
+                        src={user.avatar}
+                        alt="user"
+                        className="h-10 w-10 rounded-full mr-20"
+                      />
                     </div>
                   </Dropdown>
                 </div>

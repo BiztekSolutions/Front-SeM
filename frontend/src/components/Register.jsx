@@ -45,17 +45,21 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     });
   };
   const handleSelectAvatar = (selectedAvatar) => {
+    console.log(selectedAvatar, "selectedAvatar");
     setCredentials({
       ...credentials,
       avatar: selectedAvatar,
     });
+    console.log(credentials, "credentials");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (isRegisterOpen) {
-      if (credentials.password !== credentials.repeatPassword) {
+      if (credentials.avatar === "") {
+        setError("Seleccione un avatar");
+      } else if (credentials.password !== credentials.repeatPassword) {
         setError("Las contraseñas no coinciden");
       } else {
         dispatch(register(credentials));
@@ -65,6 +69,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     }
     setError("");
   };
+  console.log(credentials);
   const repeatPasswordVisibility = () => {
     setShowRepeatPassword(!showRepeatPassword);
   };
@@ -141,18 +146,18 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   return (
     <section>
       <div>
-        <div className="bg-white md:p-8 w-full ">
+        <div className="bg-white px-3 w-full ">
           {isRegisterOpen ? (
             <div className="flex flex-col md:flex-row ">
               <div className="mb-4 md:mb-0 md:w-1/2">
-                <div className="mb-4">
+                <div>
                   <input
                     type="text"
                     id="form3Example1m"
                     name="name"
                     onChange={handleCredentials}
                     value={credentials.name}
-                    className="form-control w-full px-3 py-2 border border-gray-300 rounded"
+                    className="form-control w-full px-3  border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example1m">
                     Nombre
@@ -160,14 +165,14 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                 </div>
               </div>
               <div className="md:w-1/2">
-                <div className="mb-4">
+                <div>
                   <input
                     type="text"
                     id="form3Example1n"
                     name="lastname"
                     onChange={handleCredentials}
                     value={credentials.lastname}
-                    className="form-control w-full px-3 py-2 border border-gray-300 rounded"
+                    className="form-control w-full px-3 border border-gray-300 rounded"
                   />
                   <label className="text-gray-700" htmlFor="form3Example1n">
                     Apellido
@@ -176,21 +181,21 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
               </div>
             </div>
           ) : null}
-          <div className="mb-4">
+          <div className="mb-2">
             <input
               type="text"
               name="email"
               onChange={handleCredentials}
               value={credentials.email}
               id="email"
-              className="form-control w-full px-3 py-2 border border-gray-300 rounded"
+              className="form-control w-full px-3 border border-gray-300 rounded"
             />
             <label className="text-gray-700" htmlFor="email">
               Correo electronico
             </label>
           </div>
           <div className="flex flex-col ">
-            <div className="mb-4 ">
+            <div className="mb-2 ">
               <div className=" relative">
                 <input
                   name="password"

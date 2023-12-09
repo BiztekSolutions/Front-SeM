@@ -28,7 +28,7 @@ function Noticias() {
   const [comment, setComment] = useState("");
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
-
+  console.log(posts, "posts");
   useEffect(() => {
     dispatch(fetchPosts());
   }, [dispatch]);
@@ -90,7 +90,7 @@ function Noticias() {
             ]}
           >
             <List.Item.Meta
-              avatar={<Avatar src={post.Client.avatar} />}
+              avatar={<Avatar src={post.Client.User.avatar} />}
               title={
                 <span className="flex justify-start items-start">
                   {post.Client.User.name} {post.Client.User.lastname}

@@ -1,11 +1,19 @@
 import express from 'express';
-import { getUsers, getUser, getUserRoutines, createClient, getClients, removeUser } from '../../../controllers/UserController';
+import {
+  getUsers,
+  getUser,
+  getUserRoutines,
+  createClient,
+  updateUser,
+  getClients,
+  removeUser,
+} from '../../../controllers/UserController';
 import { authenticateToken } from '../../../utils/validateToken';
 
 const userRouter = express.Router();
 
 userRouter.get('/allClients', getClients);
-userRouter.put('/:userId', getUser);
+userRouter.put('/update/:userId', updateUser);
 userRouter.get('/:userId/routines', getUserRoutines);
 userRouter.post('/:userId/remove', removeUser);
 userRouter.get('/:userId', getUser);

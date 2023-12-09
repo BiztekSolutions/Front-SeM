@@ -28,7 +28,7 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
           include: [
             {
               model: User,
-              attributes: ['name', 'lastname'],
+              attributes: ['name', 'lastname', 'avatar'],
             },
           ],
         },

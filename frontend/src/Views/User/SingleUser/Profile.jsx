@@ -7,23 +7,57 @@ import {
   updateUser,
 } from "../../../features/user/userSlice";
 import { getRutines } from "../../../features/rutinas/rutinasSlice";
-import { Form, Input, Button } from "antd";
+import { updateUserr } from "../../../features/auth/authSlice";
+import { Form, Input, Button, Modal } from "antd";
+import styles from "../../../components/Component.module.css";
+import { showSuccessNotification } from "../../../features/layout/layoutSlice";
 
 function Profile() {
-  const { user, clients } = useSelector((state) => state.users);
+  const { user, clients, isSuccess, message } = useSelector(
+    (state) => state.users
+  );
   const { rutinas } = useSelector((state) => state.rutinas);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(user.avatar);
+  const avatar = user.avatar;
   const dispatch = useDispatch();
   const id = useParams().id;
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  useEffect(() => {
+    if (user.avatar) {
+      setSelectedAvatar(user.avatar);
+    }
+  }, [user]);
+  const handleSelectAvatar = (avatar) => {
+    setSelectedAvatar(avatar);
+    setIsModalVisible(false);
+  };
 
   const handleEditClick = () => {
     setIsEditing(true);
     form.setFieldsValue({
       name: user.name,
       lastname: user.lastname,
+      avatar: selectedAvatar,
     });
+    console.log(user.name, user.lastname, selectedAvatar, "todoooooooooo");
   };
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(showSuccessNotification("Actualizacion exitosa!", message));
+      dispatch(
+        updateUserr({
+          name: user.name,
+          lastname: user.lastname,
+          avatar: selectedAvatar,
+        })
+      );
+    }
+  }, [isSuccess]);
 
   const handleSave = (values) => {
     dispatch(
@@ -32,6 +66,7 @@ function Profile() {
         newUser: {
           name: values.name,
           lastname: values.lastname,
+          avatar: selectedAvatar,
         },
       })
     );
@@ -55,6 +90,7 @@ function Profile() {
   return (
     <div>
       <h2 className="mb-10">PERFIL</h2>
+
       {user && (
         <Form
           form={form}
@@ -65,6 +101,21 @@ function Profile() {
             email: user.Credentials && user?.Credentials[0]?.email,
           }}
         >
+          <Form.Item
+            className="flex justify-start"
+            label="Avatar"
+            name="avatar"
+          >
+            <div className="">
+              <img
+                src={selectedAvatar}
+                alt="Avatar"
+                onClick={isEditing ? showModal : null}
+                className="h-10 w-10 rounded-full mr-20"
+              />
+            </div>
+          </Form.Item>
+
           <Form.Item className="flex justify-start" label="Name" name="name">
             {isEditing ? <Input /> : <div>{user.name}</div>}
           </Form.Item>
@@ -78,13 +129,6 @@ function Profile() {
           <Form.Item className="flex justify-start" label="Email" name="email">
             <div>{user.Credentials && user?.Credentials[0]?.email}</div>
           </Form.Item>
-          {isEditing && (
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Save
-              </Button>
-            </Form.Item>
-          )}
           <Form.Item
             className="flex justify-start"
             label="Rutina"
@@ -92,6 +136,13 @@ function Profile() {
           >
             {rutinas && rutinas.length > 0 ? "Si" : "No"}
           </Form.Item>
+          {isEditing && (
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+            </Form.Item>
+          )}
         </Form>
       )}
 
@@ -100,6 +151,321 @@ function Profile() {
           Edit Profile
         </Button>
       )}
+      <Modal
+        title="Seleccionar Avatar"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+      >
+        <div className={styles.avatarContainer}>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Peanut" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Peanut"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Peanut"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Max" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Max"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Max"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Princess" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Princess"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Princess"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Coco" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Coco"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Coco"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Sassy" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Sassy"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Sassy"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Kiki" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Kiki"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Kiki"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Bear" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Bear"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Bear"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Jack" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Jack"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Jack"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Leo" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Leo"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Leo"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Abby" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Abby"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Abby"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Boots" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Boots"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Boots"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Loki" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Loki"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Loki"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Maggie" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Maggie"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Maggie"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Pepper" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Pepper"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Pepper"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Dusty" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Dusty"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Dusty"
+                )
+              }
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

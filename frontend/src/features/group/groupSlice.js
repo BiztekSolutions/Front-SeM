@@ -10,15 +10,12 @@ const initialState = {
   isSuccess: false,
   message: "",
 };
-const userString = localStorage.getItem("User");
-const user = JSON.parse(userString);
-const token = user.token;
 
 export const createGroup = createAsyncThunk(
   "createGroup",
-  async (groupData, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      return await groupService.createGroup(token, groupData);
+      return await groupService.createGroup(data.token, data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -27,9 +24,9 @@ export const createGroup = createAsyncThunk(
 
 export const getGroup = createAsyncThunk(
   "getGroup",
-  async (idGroup, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      return await groupService.getGroup(token, idGroup);
+      return await groupService.getGroup(data.token, data.idGroup);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -37,9 +34,9 @@ export const getGroup = createAsyncThunk(
 );
 export const deleteGroup = createAsyncThunk(
   "deleteGroup",
-  async (groupId, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      return await groupService.deleteGroup(token, groupId);
+      return await groupService.deleteGroup(data.token, data.groupId);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -58,7 +55,7 @@ export const setRoutineGroup = createAsyncThunk(
   "setRoutineGroup",
   async (data, thunkAPI) => {
     try {
-      return await groupService.setRoutineGroup(token, data);
+      return await groupService.setRoutineGroup(data.token, data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -69,7 +66,7 @@ export const deleteClientFromGroup = createAsyncThunk(
   "deleteClientFromGroup",
   async (data, thunkAPI) => {
     try {
-      return await groupService.deleteClientFromGroup(token, data);
+      return await groupService.deleteClientFromGroup(data.token, data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

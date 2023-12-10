@@ -1,248 +1,480 @@
-import { useEffect } from "react";
-import styles from "./SingleUser.module.css";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { FcFullTrash, FcApproval, FcCancel } from "react-icons/fc";
-import { Table } from "antd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
-  deleteUser,
   getUser,
+  getClients,
   updateUser,
 } from "../../../features/user/userSlice";
-import UserCalendar from "./UserCalendar";
-import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+import { getRutines } from "../../../features/rutinas/rutinasSlice";
+import {
+  updateUserr,
+  clearAuthMessages,
+} from "../../../features/auth/authSlice";
+import { Form, Input, Button, Modal } from "antd";
+import styles from "../../../components/Component.module.css";
+import { showSuccessNotification } from "../../../features/layout/layoutSlice";
+import { get } from "react-scroll/modules/mixins/scroller";
+import { set } from "date-fns";
 
-const SingleUser = () => {
-  // CONTEXT API
-
-  const userId = useParams().id;
+function Profile() {
+  const { user, clients, message } = useSelector((state) => state.users);
+  const { rutinas } = useSelector((state) => state.rutinas);
+  // const { message} = useSelector((state) => state.auths);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(user.avatar);
+  const avatar = user.avatar;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  // const state = useSelector((state) => state);
-  // const { user, message } = state.users;
-  const location = useLocation();
-  const userState = location.state;
-  const handleUpdateUser = (info, userId) => {
-    if (info === "activate") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            disabled: false,
-          },
-          action: `ban updating ${userId}`,
-        })
-      );
-    } else if (info === "disable") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            disabled: true,
-          },
-          action: `ban updating ${userId}`,
-        })
-      );
-    } else if (info === "admin") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            admin: true,
-          },
-          action: `admin updating ${userId}`,
-        })
-      );
-    } else if (info === "noAdmin") {
-      dispatch(
-        updateUser({
-          userId: userId,
-          data: {
-            admin: false,
-          },
-          action: `admin updating ${userId}`,
-        })
-      );
-    }
+  const id = useParams().id;
+  const [form] = Form.useForm();
+  const [isEditing, setIsEditing] = useState(false);
+  const showModal = () => {
+    setIsModalVisible(true);
   };
-
-  const handleDelete = (userName, userId) => {
-    //@TODO: Reemplazar el Swal
-    // Swal.fire({
-    //   color: "whitesmoke",
-    //   icon: "warning",
-    //   iconColor: "white",
-    //   background: "#1f1f1f",
-    //   buttonsStyling: false,
-    //   title: `<p>Wow wow!</p>`,
-    //   html: `
-    //   <p>
-    //     Are you sure you want to delete the user <b>${userName}</b>?
-    //   </p>
-    //   `,
-    //   showConfirmButton: true,
-    //   confirmButtonText: "Yes",
-    //   confirmButtonColor: "#1f1f1f",
-    //   showDenyButton: true,
-    //   denyButtonText: "No",
-    //   denyButtonColor: "grey",
-    //   denyButtonAriaLabel: "black",
-    //   toast: true,
-    //   customClass: {
-    //     confirmButton: "confirmSwalCheckout",
-    //     denyButton: "denySwalCheckout",
-    //     title: "swalTitle",
-    //     htmlContainer: "swalHtml",
-    //   },
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     dispatch(deleteUser(userId));
-    //   } else if (result.isDenied) {
-    //     return;
-    //   }
-    // });
-  };
-
-  const columns = [
-    {
-      title: "Username",
-      dataIndex: "userName",
-      key: "userName",
-    },
-    {
-      title: "First Name",
-      dataIndex: "firstName",
-      key: "firstName",
-    },
-    {
-      title: "Last Name",
-      dataIndex: "lastName",
-      key: "lastName",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-    },
-
-    {
-      title: "Rutina",
-      dataIndex: "rutina",
-      key: "rutina",
-    },
-  ];
-
   useEffect(() => {
-    if (userId) {
-      dispatch(getUser(userId));
+    if (user.avatar) {
+      setSelectedAvatar(user.avatar);
     }
-  }, []);
-  const user = {
-    key: 1,
-    userName: userState.userName,
-    firstName: userState.firstName,
-    lastName: userState.lastName,
-    email: userState.email,
-    logged: userState.logged,
-    disabled: userState.disabled,
+  }, [user]);
+  const handleSelectAvatar = (avatar) => {
+    setSelectedAvatar(avatar);
+    setIsModalVisible(false);
   };
-  const message = "";
-  const dataSource = [
-    {
-      key: 1,
-      userName: user.userName,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      status: (
-        <div className="userStatusSpan">
-          <span className={`${user.logged ? "online" : "offline"}`}></span>
-          {user.logged ? "Online" : "Offline"}
-        </div>
-      ),
-      actions: (
-        <div className="flex align-middle  gap-3">
-          <FcFullTrash
-            size={19}
-            className="userDelete"
-            onClick={() => handleDelete(user.userName, user.id)}
-          />
-          {message === `ban updating ${user.id}` ? (
-            <LoadingSpinner />
-          ) : user.disabled ? (
-            <FcApproval
-              data-activate={user.id}
-              onClick={() => handleUpdateUser("activate", user.id)}
-              size={19}
-              className="userActivate"
-            />
-          ) : (
-            <FcCancel
-              data-disable={user.id}
-              onClick={() => handleUpdateUser("disable", user.id)}
-              size={19}
-              className="userBan"
-            />
-          )}
-        </div>
-      ),
 
-      rutina: (
-        <div className="text-center">
-          <button className="border-spacing-20 bg-customOrange ">Rutina</button>
-        </div>
-      ),
-    },
-  ];
+  const handleEditClick = () => {
+    setIsEditing(true);
+    form.setFieldsValue({
+      name: user.name,
+      lastname: user.lastname,
+      avatar: selectedAvatar,
+    });
+  };
+  useEffect(() => {
+    if (message === "Usuario actualizado") {
+      dispatch(showSuccessNotification("Actualizacion exitosa!", message));
+      setTimeout(() => {
+        dispatch(
+          updateUserr({
+            name: user.name,
+            lastname: user.lastname,
+            avatar: selectedAvatar,
+          })
+        );
+        dispatch(clearAuthMessages());
+      }, 4000);
+    }
+  }, [user]);
+
+  const handleSave = (values) => {
+    dispatch(
+      updateUser({
+        userId: id,
+        newUser: {
+          name: values.name,
+          lastname: values.lastname,
+          avatar: selectedAvatar,
+        },
+      })
+    );
+    dispatch(getUser(id));
+    console.log(user, "despues del get user");
+    setIsEditing(false);
+  };
+  useEffect(() => {
+    dispatch(getUser(id));
+    dispatch(getClients());
+  }, [id]);
+
+  const isUserInClients = clients.some(
+    (client) => client.idUser === user.idUser
+  );
+  useEffect(() => {
+    if (isUserInClients) {
+      dispatch(getRutines(id));
+    }
+  }, [clients]);
 
   return (
-    <div className={`${styles.wrapper} userDetails`}>
-      {/* <UserFavsModal />
-      <UserCartModal /> */}
-      <div className={styles.title}>
-        <div
-          className={`${styles.goBack} my-4`}
-          onClick={() => navigate("/coach")}
+    <div>
+      <h2 className="mb-10">PERFIL</h2>
+
+      {user && (
+        <Form
+          form={form}
+          onFinish={handleSave}
+          initialValues={{
+            name: user.name,
+            lastname: user.lastname,
+            email: user.Credentials && user?.Credentials[0]?.email,
+          }}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 "
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+          <Form.Item
+            className="flex justify-start"
+            label="Avatar"
+            name="avatar"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            <div className="">
+              <img
+                src={selectedAvatar}
+                alt="Avatar"
+                onClick={isEditing ? showModal : null}
+                className="h-10 w-10 rounded-full mr-20"
+              />
+            </div>
+          </Form.Item>
+
+          <Form.Item className="flex justify-start" label="Name" name="name">
+            {isEditing ? <Input /> : <div>{user.name}</div>}
+          </Form.Item>
+          <Form.Item
+            className="flex justify-start"
+            label="Last Name"
+            name="lastname"
+          >
+            {isEditing ? <Input /> : <div>{user.lastname}</div>}
+          </Form.Item>
+          <Form.Item className="flex justify-start" label="Email" name="email">
+            <div>{user.Credentials && user?.Credentials[0]?.email}</div>
+          </Form.Item>
+          <Form.Item
+            className="flex justify-start"
+            label="Rutina"
+            name="Rutina"
+          >
+            {rutinas && rutinas.length > 0 ? "Si" : "No"}
+          </Form.Item>
+          {isEditing && (
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+            </Form.Item>
+          )}
+        </Form>
+      )}
+
+      {!isEditing && (
+        <Button type="link" onClick={handleEditClick}>
+          Edit Profile
+        </Button>
+      )}
+      <Modal
+        title="Seleccionar Avatar"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+      >
+        <div className={styles.avatarContainer}>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Peanut" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Peanut"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Peanut"
+                )
+              }
             />
-          </svg>
-          <div className="ml-5">
-            <h3>{userState.firstName} Info</h3>
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Max" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Max"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Max"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Princess" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Princess"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Princess"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Coco" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Coco"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Coco"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Sassy" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Sassy"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Sassy"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Kiki" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Kiki"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Kiki"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Bear" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Bear"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Bear"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Jack" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Jack"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Jack"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Leo" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Leo"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Leo"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Abby" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Abby"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Abby"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Boots" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Boots"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Boots"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Loki" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Loki"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Loki"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Maggie" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Maggie"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Maggie"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Pepper" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Pepper"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Pepper"
+                )
+              }
+            />
+          </div>
+          <div
+            className={`${styles.avatarImg} ${
+              avatar ===
+                "https://api.dicebear.com/7.x/adventurer/svg?seed=Dusty" &&
+              styles.avatarSelected
+            }`}
+          >
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=Dusty"
+              alt="abc"
+              onClick={() =>
+                handleSelectAvatar(
+                  "https://api.dicebear.com/7.x/adventurer/svg?seed=Dusty"
+                )
+              }
+            />
           </div>
         </div>
-      </div>
-      <div className={styles.container}>
-        <div className={`${styles.right} w-full`}>
-          <Table dataSource={dataSource} columns={columns} />
-        </div>
-        <div className="w-full">
-          <UserCalendar userId={userId} />
-        </div>
-      </div>
+      </Modal>
     </div>
   );
-};
+}
 
-export default SingleUser;
+export default Profile;

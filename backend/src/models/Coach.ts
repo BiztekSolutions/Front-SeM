@@ -3,6 +3,7 @@ import sequelize from '../configs/db';
 
 class Coach extends Model {
   public idCoach!: number;
+  public idUser!: number;
 }
 
 Coach.init(
@@ -12,12 +13,16 @@ Coach.init(
       primaryKey: true,
       autoIncrement: true,
     },
+    idUser: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
+
   {
     sequelize,
     modelName: 'Coach',
     timestamps: false,
-    
   }
 );
 

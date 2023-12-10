@@ -6,7 +6,7 @@ import VideoEmbed from "./VideoEmbed";
 function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
   return (
     <div
-      className="modal show border-8 absolute z-10 border-white top-1/2 left-1/4 rounded-3xl bg-blue-600 w-1/2"
+      className="modal show border-8 z-10 fixed border-white top-0 left-0 translate-x-1/2  rounded-3xl bg-orange-600 w-1/2"
       tabIndex="-1"
     >
       <div className="modal-dialog">

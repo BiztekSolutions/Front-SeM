@@ -7,6 +7,7 @@ class Post extends Model {
   public id!: number;
   public title!: string;
   public content!: string;
+  public clientId!: number;
 }
 
 Post.init(
@@ -17,6 +18,10 @@ Post.init(
     },
     content: {
       type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    clientId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },

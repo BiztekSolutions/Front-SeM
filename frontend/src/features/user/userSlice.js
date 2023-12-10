@@ -5,24 +5,34 @@ const initialState = {
   user: {},
   users: [],
   clients: [],
+  coaches: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
   message: "",
 };
 
+const userString = localStorage.getItem("User");
+const user = JSON.parse(userString);
 export const addUserToClients = createAsyncThunk(
   "addUserToClients",
   async (userId, thunkAPI) => {
     try {
-      const userString = localStorage.getItem("User");
-      const user = JSON.parse(userString);
       const token = user.token;
-
-      // Llamada a la función o servicio para agregar el usuario a la lista de clientes
       const response = await userService.addUserToClients(token, userId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
-      // Puedes devolver la respuesta si necesitas más información en el frontend
+export const getCoaches = createAsyncThunk(
+  "getCoaches",
+  async (_, thunkAPI) => {
+    try {
+      const token = user.token;
+      const response = await userService.getCoaches(token);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -45,10 +55,6 @@ export const getClients = createAsyncThunk(
   "getClients",
   async (_, thunkAPI) => {
     try {
-      const userString = localStorage.getItem("User");
-
-      const user = JSON.parse(userString);
-
       const token = user.token;
       return await userService.getClients(token);
     } catch (error) {
@@ -58,8 +64,6 @@ export const getClients = createAsyncThunk(
 );
 export const getUser = createAsyncThunk("getUser", async (data, thunkAPI) => {
   try {
-    const userString = localStorage.getItem("User");
-    const user = JSON.parse(userString);
     const token = user.token;
     return await userService.getUser(token, data);
   } catch (error) {
@@ -69,10 +73,6 @@ export const getUser = createAsyncThunk("getUser", async (data, thunkAPI) => {
 
 export const getUsers = createAsyncThunk("getUsers", async (_, thunkAPI) => {
   try {
-    const userString = localStorage.getItem("User");
-
-    const user = JSON.parse(userString);
-
     const token = user.token;
 
     return await userService.getUsers(token);
@@ -84,10 +84,6 @@ export const deleteUser = createAsyncThunk(
   "deleteUser",
   async (_, thunkAPI) => {
     try {
-      const userString = localStorage.getItem("User");
-
-      const user = JSON.parse(userString);
-
       const token = user.token;
 
       return await userService.deleteUser(token);
@@ -144,6 +140,25 @@ export const userSlice = createSlice({
         state.message = action.payload.error;
         state.cliens = null;
       })
+      // GET COACHES
+      .addCase(getCoaches.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Getting coaches";
+      })
+      .addCase(getCoaches.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.message = action.payload.message;
+        state.coaches = action.payload.coach;
+      })
+      .addCase(getCoaches.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload.error;
+        state.coaches = null;
+      })
 
       // GET USER
       .addCase(getUser.pending, (state) => {
@@ -191,7 +206,8 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.msg;
+        console.log(action.payload, "payload");
+        state.message = action.payload.message;
         state.user = action.payload.data ? action.payload.data : state.user;
       })
       .addCase(updateUser.rejected, (state) => {

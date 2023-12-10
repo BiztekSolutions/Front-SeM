@@ -61,6 +61,15 @@ const deleteUser = async (data) => {
   return response.data;
 };
 
+const getCoaches = async (token) => {
+  const response = await axios.get(`${base_url}/coach`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
 export const userService = {
   updateUser,
   addUserToClients,
@@ -68,4 +77,5 @@ export const userService = {
   getUser,
   getUsers,
   deleteUser,
+  getCoaches,
 };

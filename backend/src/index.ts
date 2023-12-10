@@ -28,7 +28,7 @@ app.use(logger('dev'));
 app.use(cors());
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/json
 app.use(bodyParser.json());
 
@@ -70,8 +70,14 @@ Exercise.hasMany(ExerciseConfiguration, { foreignKey: 'idExercise' });
 ExerciseConfiguration.belongsTo(Exercise, { foreignKey: 'idExercise' });
 
 //Post relations
+Post.belongsTo(Client, { foreignKey: 'clientId' });
+Client.hasMany(Post, { foreignKey: 'clientId' });
+
+Comment.belongsTo(Client, { foreignKey: 'clientId' });
+Client.hasMany(Comment, { foreignKey: 'clientId' });
+
 Post.hasMany(Comment, { foreignKey: 'postId', as: 'Comments' });
-Comment.belongsTo(Post);
+Comment.belongsTo(Post, { foreignKey: 'postId' });
 
 sequelize
   .sync({ force: false })

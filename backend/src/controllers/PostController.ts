@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import Post from '../models/Post';
 import Comment from '../models/Comment'; // Asegúrate de importar el modelo Comment
+import Client from '../models/Client';
+import User from '../models/User';
 
 export const getAllPosts = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   try {
@@ -8,7 +10,27 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
       include: [
         {
           model: Comment,
-          as: 'Comments', // Utiliza el mismo alias que en la definición de la relación
+          as: 'Comments',
+          include: [
+            {
+              model: Client,
+              include: [
+                {
+                  model: User, // Agrega el modelo User
+                  attributes: ['name', 'lastname'], // Puedes especificar las columnas que deseas recuperar
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: Client,
+          include: [
+            {
+              model: User,
+              attributes: ['name', 'lastname', 'avatar'],
+            },
+          ],
         },
       ],
     });
@@ -21,12 +43,20 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
 };
 
 export const createPost = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
-  const { title, content } = req.body;
+  const { title, content, userId } = req.body;
+  console.log('userId', userId);
 
   try {
+    const client = await Client.findOne({ where: { idUser: userId } });
+
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found for the user' });
+    }
+
     const newPost = await Post.create({
       title,
       content,
+      clientId: client.idClient,
     });
 
     return res.json(newPost);

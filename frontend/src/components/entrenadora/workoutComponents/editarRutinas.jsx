@@ -48,6 +48,11 @@ function EditarRutinas() {
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  useEffect(() => {
+    if (id) {
+      dispatch(getRutines(id));
+    }
+  }, [id]);
 
   useEffect(() => {
     if (!exercises) {
@@ -99,7 +104,12 @@ function EditarRutinas() {
           objective: editRoutine.objective,
           observation: editRoutine.observation,
         };
-
+        setDurationInWeeks(
+          moment(editRoutine.endDate).diff(
+            moment(editRoutine.startDate),
+            "weeks"
+          )
+        );
         console.log("FINAL DATA", finalData);
         setFormData(finalData);
       }
@@ -145,13 +155,13 @@ function EditarRutinas() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  function handleSubmit(event) {
     event.preventDefault();
     console.log(formData);
     dispatch(
       updateRutine({ ...formData, idRoutine: rutinas[0].routine.idRoutine })
     );
-  };
+  }
 
   const removeExercise = (day, exerciseIndex) => {
     console.log(day, exerciseIndex);
@@ -253,7 +263,9 @@ function EditarRutinas() {
 
   if (rutinas && rutinas.length === 0) {
     return (
-      <Typography.Text>Este usuario aun no tiene ninguna rutina creada!</Typography.Text>
+      <Typography.Text>
+        Este usuario aun no tiene ninguna rutina creada!
+      </Typography.Text>
     );
   }
   return (
@@ -279,7 +291,7 @@ function EditarRutinas() {
               <label>Inicio:</label>
               <DatePicker
                 onChange={handleDateChange}
-                defaultValue={moment()}
+                defaultValue={startDate}
                 format="YYYY-MM-DD"
                 dropdownMode="top"
               />

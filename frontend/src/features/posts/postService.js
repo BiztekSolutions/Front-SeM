@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/v1/posts";
+const user = JSON.parse(localStorage.getItem("User"));
 
 const postService = {
   getPosts: async () => {
@@ -18,6 +19,7 @@ const postService = {
         `http://localhost:3000/api/v1/comments/${postId}`,
         {
           content: comment.comment,
+          userId: user.user,
         },
         {
           headers: {
@@ -31,9 +33,21 @@ const postService = {
       throw error;
     }
   },
-  addPost: async (newPost) => {
+
+  addPost: async (newPost, token) => {
     try {
-      const response = await axios.post(API_URL, newPost);
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/posts",
+        {
+          ...newPost,
+          userId: user.user,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error adding post:", error);
@@ -50,7 +64,6 @@ const postService = {
       throw error;
     }
   },
-  // Agrega otras funciones del servicio según sea necesario
 };
 
 export default postService;

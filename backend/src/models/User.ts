@@ -6,7 +6,7 @@ class User extends Model {
   public idUser!: number;
   public name!: string;
   public lastname!: string;
-
+  public avatar?: string;
 }
 
 User.init(
@@ -22,12 +22,14 @@ User.init(
     lastname: {
       type: DataTypes.STRING,
     },
+    avatar: {
+      type: DataTypes.STRING,
+    },
   },
   {
     sequelize,
     modelName: 'User',
     timestamps: false,
-    
   }
 );
 

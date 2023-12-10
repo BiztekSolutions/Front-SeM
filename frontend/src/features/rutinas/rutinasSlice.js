@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { rutinasService } from "./rutinasService";
 
 const initialState = {
@@ -56,6 +56,7 @@ export const createRutine = createAsyncThunk(
     }
   }
 );
+export const resetRutines = createAction("reset-rutines");
 
 export const rutinasSlice = createSlice({
   name: "rutinas",
@@ -137,6 +138,13 @@ export const rutinasSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
         state.message = action.payload.msg;
+        state.rutinas = null;
+      })
+      .addCase(resetRutines, (state) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
         state.rutinas = null;
       });
   },

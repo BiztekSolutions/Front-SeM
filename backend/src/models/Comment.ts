@@ -6,6 +6,7 @@ import Post from './Post';
 class Comment extends Model {
   public id!: number;
   public content!: string;
+  public clientId!: number;
   public postId!: number; // Cambia aquí para seguir la convención
 }
 
@@ -16,7 +17,10 @@ Comment.init(
       allowNull: false,
     },
     postId: {
-      // Cambia aquí para seguir la convención
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    clientId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

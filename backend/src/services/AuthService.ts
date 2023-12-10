@@ -9,7 +9,7 @@ export const isRegistered = async (email: string) => {
   }
 };
 
-export const create = async (email: string, password: string, name: string, lastname: string) => {
+export const create = async (email: string, password: string, name: string, lastname: string, avatar: string) => {
   try {
     return await Credential.create(
       {
@@ -20,6 +20,7 @@ export const create = async (email: string, password: string, name: string, last
         User: {
           name: name,
           lastname: lastname,
+          avatar: avatar,
           created_date: new Date(),
           updated_date: new Date(),
         },

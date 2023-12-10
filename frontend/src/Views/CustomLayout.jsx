@@ -30,7 +30,7 @@ const CustomLayout = ({ items }) => {
     localStorage.removeItem("User");
     persistor.purge();
     console.log("LocalStorage after purge:", localStorage);
-    navigate("/");
+    window.location.reload();
   };
   console.log(user, "user");
   const { setLogged } = useContext(GlobalContext);

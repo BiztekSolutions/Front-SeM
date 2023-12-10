@@ -1,5 +1,5 @@
 import Client from '../models/Client';
-import ClientGroup from '../models/ClientGroup';
+
 import Exercise from '../models/Exercise';
 import Group from '../models/Group';
 import Routine from '../models/Routine';
@@ -8,7 +8,19 @@ import User from '../models/User';
 export const list = async () => {
   try {
     return await Group.findAll({
-      include: [{ model: ClientGroup, as: 'ClientGroups', include: [{ model: Client, as: 'Client' }] }],
+      include: [
+        {
+          model: Client,
+          as: 'Clients',
+          through: { attributes: [] },
+          include: [
+            {
+              model: User,
+              attributes: { exclude: ['idUser'] },
+            },
+          ],
+        },
+      ],
     });
   } catch (e: any) {
     throw new Error(e.message);
@@ -21,10 +33,15 @@ export const get = async (idGroup: number) => {
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: [
         {
-          model: ClientGroup,
-          as: 'ClientGroups',
-          attributes: { exclude: ['idGroup', 'idClient'] },
-          include: [{ model: Client, as: 'Client', include: [{ model: User, attributes: { exclude: ['idUser'] } }] }],
+          model: Client,
+          as: 'Clients', // Cambia 'ClientGroups' por 'Clients' según la relación definida
+          through: { attributes: [] }, // Evita que se incluyan las columnas de la tabla intermedia
+          include: [
+            {
+              model: User,
+              attributes: { exclude: ['idUser'] },
+            },
+          ],
         },
       ],
     });

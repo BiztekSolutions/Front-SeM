@@ -14,8 +14,6 @@ import {
 import { Form, Input, Button, Modal } from "antd";
 import styles from "../../../components/Component.module.css";
 import { showSuccessNotification } from "../../../features/layout/layoutSlice";
-import { get } from "react-scroll/modules/mixins/scroller";
-import { set } from "date-fns";
 
 function Profile() {
   const { user, clients, message } = useSelector((state) => state.users);
@@ -23,7 +21,7 @@ function Profile() {
   // const { message} = useSelector((state) => state.auths);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(user.avatar);
-  const avatar = user.avatar;
+
   const dispatch = useDispatch();
   const id = useParams().id;
   const [form] = Form.useForm();
@@ -32,7 +30,7 @@ function Profile() {
     setIsModalVisible(true);
   };
   useEffect(() => {
-    if (user.avatar) {
+    if (user && user.avatar) {
       setSelectedAvatar(user.avatar);
     }
   }, [user]);
@@ -165,13 +163,7 @@ function Profile() {
         footer={null}
       >
         <div className={styles.avatarContainer}>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Peanut" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Peanut"
               alt="abc"
@@ -182,13 +174,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Max" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Max"
               alt="abc"
@@ -199,13 +185,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight"
               alt="abc"
@@ -216,13 +196,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Princess" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Princess"
               alt="abc"
@@ -233,13 +207,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Coco" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Coco"
               alt="abc"
@@ -250,13 +218,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Sassy" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Sassy"
               alt="abc"
@@ -267,13 +229,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Kiki" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Kiki"
               alt="abc"
@@ -284,13 +240,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Bear" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Bear"
               alt="abc"
@@ -301,13 +251,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Jack" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Jack"
               alt="abc"
@@ -318,13 +262,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Leo" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Leo"
               alt="abc"
@@ -335,13 +273,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Abby" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Abby"
               alt="abc"
@@ -352,13 +284,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver"
               alt="abc"
@@ -369,13 +295,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Boots" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Boots"
               alt="abc"
@@ -386,13 +306,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Loki" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Loki"
               alt="abc"
@@ -403,13 +317,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy"
               alt="abc"
@@ -420,13 +328,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Maggie" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Maggie"
               alt="abc"
@@ -437,13 +339,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Pepper" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Pepper"
               alt="abc"
@@ -454,13 +350,7 @@ function Profile() {
               }
             />
           </div>
-          <div
-            className={`${styles.avatarImg} ${
-              avatar ===
-                "https://api.dicebear.com/7.x/adventurer/svg?seed=Dusty" &&
-              styles.avatarSelected
-            }`}
-          >
+          <div className={`${styles.avatarImg} `}>
             <img
               src="https://api.dicebear.com/7.x/adventurer/svg?seed=Dusty"
               alt="abc"

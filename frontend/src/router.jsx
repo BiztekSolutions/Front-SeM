@@ -26,6 +26,7 @@ import UserList from "./Views/Coach/UserList";
 import ClientList from "./Views/Coach/ClientList";
 import { useSelector } from "react-redux";
 import EditarEjercicio from "./components/entrenadora/workoutComponents/editarEjercicio.jsx";
+
 const Router = () => {
   //@TODO: Arreglar idioma de las rutas. O español o ingles.
   const auth = useSelector((state) => state.auths);
@@ -54,6 +55,7 @@ const Router = () => {
           <Route path="listaDeUsuarios" element={<UserList />} />
           <Route path="listaDeClientes" element={<ClientList />} />
           <Route path="grupos" element={<Grupos />} />
+          <Route path="grupos/:id" element={<SingleUser />} />
           <Route path="creargrupos" element={<CrearGrupos />} />
           <Route path="mensajeria" element={<Mensajeria />} />
           <Route path="changePassword/:id" element={<ChangePassword />} />

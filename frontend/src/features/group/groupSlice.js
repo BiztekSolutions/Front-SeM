@@ -10,14 +10,14 @@ const initialState = {
   isSuccess: false,
   message: "",
 };
+const userString = localStorage.getItem("User");
+const user = JSON.parse(userString);
+const token = user.token;
 
 export const createGroup = createAsyncThunk(
   "createGroup",
   async (groupData, thunkAPI) => {
     try {
-      const userString = localStorage.getItem("User");
-      const user = JSON.parse(userString);
-      const token = user.token;
       return await groupService.createGroup(token, groupData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -29,9 +29,6 @@ export const getGroup = createAsyncThunk(
   "getGroup",
   async (idGroup, thunkAPI) => {
     try {
-      const userString = localStorage.getItem("User");
-      const user = JSON.parse(userString);
-      const token = user.token;
       return await groupService.getGroup(token, idGroup);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -42,10 +39,7 @@ export const deleteGroup = createAsyncThunk(
   "deleteGroup",
   async (groupId, thunkAPI) => {
     try {
-      const userString = localStorage.getItem("User");
-      const user = JSON.parse(userString);
-      const token = user.token;
-      return await groupService.getGroup(token, groupId);
+      return await groupService.deleteGroup(token, groupId);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -54,7 +48,7 @@ export const deleteGroup = createAsyncThunk(
 
 export const getGroups = createAsyncThunk("getGroups", async (_, thunkAPI) => {
   try {
-    return await groupService.deleteGroup();
+    return await groupService.getGroups();
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -64,10 +58,18 @@ export const setRoutineGroup = createAsyncThunk(
   "setRoutineGroup",
   async (data, thunkAPI) => {
     try {
-      const userString = localStorage.getItem("User");
-      const user = JSON.parse(userString);
-      const token = user.token;
       return await groupService.setRoutineGroup(token, data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const deleteClientFromGroup = createAsyncThunk(
+  "deleteClientFromGroup",
+  async (data, thunkAPI) => {
+    try {
+      return await groupService.deleteClientFromGroup(token, data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

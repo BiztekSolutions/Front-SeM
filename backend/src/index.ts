@@ -15,7 +15,7 @@ import Exercise from './models/Exercise';
 
 import Post from './models/Post';
 import Comment from './models/Comment';
-import ClientGroup from './models/ClientGroup';
+
 import GroupExercise from './models/GroupExercise';
 import ExerciseConfiguration from './models/ExerciseConfiguration';
 import ClientHasRoutine from './models/ClientHasRoutine';
@@ -46,11 +46,8 @@ Client.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true 
 Coach.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true });
 
 // CLIENT RELATIONS
-Group.hasMany(ClientGroup, { foreignKey: 'idGroup' });
-ClientGroup.belongsTo(Group, { foreignKey: 'idClient' });
-
-Client.hasMany(ClientGroup, { foreignKey: 'idClient' });
-ClientGroup.belongsTo(Client, { foreignKey: 'idClient' });
+Group.belongsToMany(Client, { through: 'ClientGroup', foreignKey: 'idGroup' });
+Client.belongsToMany(Group, { through: 'ClientGroup', foreignKey: 'idClient' });
 
 Client.hasMany(Routine, { foreignKey: 'idClient' });
 Routine.belongsTo(Client, { foreignKey: 'idClient', onDelete: 'CASCADE', hooks: true });

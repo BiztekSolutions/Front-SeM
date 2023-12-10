@@ -4,7 +4,6 @@ import Group from '../models/Group';
 import Routine from '../models/Routine';
 import Client from '../models/Client';
 import sequelize from '../configs/db';
-import ClientGroup from '../models/ClientGroup';
 
 import { get, list } from '../services/GroupService';
 // Crear un grupo con clientes asignados
@@ -16,6 +15,8 @@ export const createGroup = async (req: Request, res: Response) => {
     const transaction = await sequelize.transaction();
     try {
       const { groupName, selectedUsers } = req.body;
+      console.log(req.body, 'req.body');
+
       if (!groupName) {
         return res.status(400).json({ message: 'Group name is required in the request body' });
       }
@@ -29,8 +30,23 @@ export const createGroup = async (req: Request, res: Response) => {
       const group = await Group.create({ name }, { transaction: transaction });
 
       // Asociar clientes al grupo
-      for (const clientId of selectedUsers) {
-        await ClientGroup.create({ idGroup: group.idGroup, idClient: clientId }, { transaction: transaction });
+      if (group.idGroup) {
+        console.log(group.idGroup, 'group.idGroup');
+        console.log(selectedUsers, 'selectedUsers');
+
+        for (const clientId of selectedUsers) {
+          console.log(typeof clientId, 'clientId');
+
+          const client = await Client.findByPk(clientId); // Obtener instancia de Client
+
+          if (client) {
+            await group.addClient(client, { transaction: transaction });
+          } else {
+            console.log(`Client with id ${clientId} not found`);
+          }
+        }
+      } else {
+        console.log('No se ha creado el grupo');
       }
 
       // Commit de la transacción
@@ -93,7 +109,7 @@ export const setRoutineGroup = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Group or routine not found' });
     }
 
-    await group.setRoutine(routine);
+    await group.addRoutine(routine);
 
     return res.status(200).json({ message: 'Routine added to the group successfully' });
   } catch (error) {

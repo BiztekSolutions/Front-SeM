@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetRutines } from "../../../features/rutinas/rutinasSlice";
+import Group from "./Group";
 
 const SingleUser = () => {
   const activeStyle = {
@@ -18,12 +19,14 @@ const SingleUser = () => {
   const isRoutineRoute = location.pathname.endsWith("/agregarRutina");
   const isAddExerciseRoute = location.pathname.endsWith("/agregarEjercicio");
   const isModRoute = location.pathname.endsWith("/editarRutinas");
+  const isGroupsPage = location.pathname.includes("/grupos");
 
   const resetRutinasAndNavigate = (to) => {
     console.log("reset rutinas");
     dispatch(resetRutines());
     navigate(to);
   };
+
   return (
     <div>
       <nav className="row navbar mx-1 border-t-2 mb-3 ">
@@ -34,7 +37,7 @@ const SingleUser = () => {
               style={activeStyle}
               onClick={() => resetRutinasAndNavigate("./")}
             >
-              Usuario
+              {isGroupsPage ? "Grupo" : "Usuario"}
             </NavLink>
           </li>
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
@@ -46,11 +49,7 @@ const SingleUser = () => {
               Ejercicios
             </NavLink>
           </li>
-          {/* <li>
-            <NavLink to="./hoy" style={activeStyle}>
-              Ejercicios de hoy
-            </NavLink>
-          </li> */}
+
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink
               to="./agregarRutina"
@@ -72,12 +71,7 @@ const SingleUser = () => {
           </li>
         </ul>
       </nav>
-      {!(
-        isExerciseRoute ||
-        isRoutineRoute ||
-        isAddExerciseRoute ||
-        isModRoute
-      ) && <User />}
+      {isGroupsPage ? <Group /> : <User />}
       <Outlet />
     </div>
   );

@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Table, Button, Input, Space } from "antd";
 import styles from "./Users.module.css";
 import Highlighter from "react-highlight-words";
-import { FcFullTrash, FcInfo } from "react-icons/fc";
+import { FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroups, deleteGroup } from "../../features/group/groupSlice";
-
+import { getGroups } from "../../features/group/groupSlice";
+import DeleteGroups from "../../components/DeleteButton/DeleteGroups";
 const Groups = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
@@ -15,42 +15,6 @@ const Groups = () => {
   useEffect(() => {
     dispatch(getGroups());
   }, [dispatch]);
-
-  const handleDelete = (userName, userId) => {
-    // Swal.fire({
-    //   color: "whitesmoke",
-    //   icon: "warning",
-    //   iconColor: "white",
-    //   background: "#1f1f1f",
-    //   buttonsStyling: false,
-    //   title: `<p>Wow wow!</p>`,
-    //   html: `
-    //   <p>
-    //     Are you sure you want to delete the user <b>${userName}</b>?
-    //   </p>
-    //   `,
-    //   showConfirmButton: true,
-    //   confirmButtonText: "Yes",
-    //   confirmButtonColor: "#1f1f1f",
-    //   showDenyButton: true,
-    //   denyButtonText: "No",
-    //   denyButtonColor: "grey",
-    //   denyButtonAriaLabel: "black",
-    //   toast: true,
-    //   customClass: {
-    //     confirmButton: "confirmSwalCheckout",
-    //     denyButton: "denySwalCheckout",
-    //     title: "swalTitle",
-    //     htmlContainer: "swalHtml",
-    //   },
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     dispatch(deleteGroup(userId));
-    //   } else if (result.isDenied) {
-    //     return;
-    //   }
-    // });
-  };
 
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
@@ -171,7 +135,7 @@ const Groups = () => {
 
   const columns = [
     {
-      title: "Group Name",
+      title: "Nombre del grupo",
       dataIndex: "groupName",
       key: "groupName",
       defaultSortOrder: "ascend",
@@ -187,7 +151,7 @@ const Groups = () => {
       ...getColumnSearchProps("firstName"),
     },
     {
-      title: "Actions",
+      title: "Acciones",
       dataIndex: "actions",
       key: "actions",
     },
@@ -198,19 +162,18 @@ const Groups = () => {
     for (let i = 0; i < groups.length; i++) {
       dataSource.push({
         key: i,
-        userName: groups[i].name,
+        groupName: groups[i].name,
 
         actions: (
-          <div className="d-flex align-items-center gap-3">
+          <div className="flex align-items-center gap-3">
             <FcInfo
-              size={19}
+              size={35}
               className="userInfo"
-              onClick={() => navigate(`group/${groups[i].id}`)}
+              onClick={() => navigate(`${groups[i].idGroup}`)}
             />
-            <FcFullTrash
-              size={19}
-              className="userDelete"
-              onClick={() => handleDelete(groups[i].userName, groups[i].id)}
+            <DeleteGroups
+              groupName={groups[i].name}
+              idGroup={groups[i].idGroup}
             />
           </div>
         ),

@@ -74,9 +74,10 @@ const UserCalendar = () => {
             groupExercise.ExerciseConfigurations.forEach(
               (exerciseConfiguration) => {
                 events.push({
+                  id: i++,
                   start: currentDate.toISOString().split("T")[0],
                   description: exerciseConfiguration.Exercise.description,
-                  id: exerciseConfiguration.idExercise,
+                  idExercise: exerciseConfiguration.idExercise,
                   extendedProps: {
                     exerciseConfiguration: exerciseConfiguration,
                   },
@@ -100,13 +101,12 @@ const UserCalendar = () => {
   if (isLoading) {
     return <LoadingSpinner />;
   }
-
+  let i = 0;
+  console.log(events, "events");
   return (
     <div>
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : rutinas && rutinas.length !== 0 ? (
-        rutinas.map((routine, index) => (
+      {events && rutinas && rutinas.length !== 0 && events !== 0 ? (
+        rutinas?.map((routine, index) => (
           <div key={index} className="w-full min-h-screen mt-24 text-2xl">
             <h2>Rutina {index + 1}</h2>
             <FullCalendar
@@ -115,7 +115,9 @@ const UserCalendar = () => {
               initialView="dayGridWeek"
               className="calendar-container"
               events={events}
-              eventContent={(arg) => {
+              eventContent={(arg, index) => {
+                console.log(index, "index");
+                index++;
                 const exerciseConfiguration =
                   arg.event.extendedProps.exerciseConfiguration;
                 return (

@@ -98,179 +98,99 @@ export const updateRoutine = async (req: Request, res: Response) => {
       if (!routine) {
         return res.status(404).json({ message: 'Routine not found' });
       }
-      //Si solamente cambian las config de los ejercicios, el exerciseGroup se matiene pero modifico las config
-      //Si viene un dia nuevo en el exercisesGroup, lo creo y creo las config
-      //Si se elimino un dia del exercisesGroup, lo elimino y elimino las config
-      //Si se agrega un ejercicio a un dia del exercisesGroup, el exerciseGroup se mantiene (porque para ese dia ya existe) pero se crea la config
-      //Si elimino un ejercicio de un dia del exercisesGroup, reviso si ese dia tiene mas ejercicios, si no tiene mas ejercicios, elimino el exerciseGroup y las config
-
       const groups = Object.entries(exercisesGroup);
       for (const [groupKey, groupValue] of groups) {
-        //En esta parte del codigo, valido si en el payload el dia me viene vacio, que no tenga ningun groupExercise para ese dia, y si los tiene, los elimino
-        //Si el payload que me viene, el dia esta vacio
-        if (Object.values(groupValue).length === 0) {
-          //Busco si en la rutina que tengo en la base de datos, existe un groupExercise para ese dia
-          const checkExistingGroupExercise = routine.GroupExercises.filter(
-            (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
-          );
-          //Si existe un groupExercise para ese dia, los elimino
-          if (checkExistingGroupExercise.length > 0) {
-            for (const groupExercise of checkExistingGroupExercise) {
-              await GroupExercise.destroy({
-                where: {
-                  idGroupExercise: groupExercise.idGroupExercise,
-                },
-              });
-              await ExerciseConfiguration.destroy({
-                where: {
-                  idGroupExercise: groupExercise.idGroupExercise,
-                },
-              });
+        //Tengo 3 posibles caminos:
+        //1. Si viene en el payload el dia, y no esta en la rutina, tengo que crear tanto los ExerciseGroup como las configuraciones
+        //2. Si esta en la rutina, y viene en el payload, tengo que actualizar las configuraciones
+        //3. Si esta en la rutina, y no viene en el payload, tengo que eliminar tanto los ExerciseGroup como las configuraciones
+        const groupExercise = routine.groupExercises.filter((groupExercise) => groupExercise.day === groupKey);
+        if (groupExercise.length === 0) {
+          //1. Si viene en el payload el dia, y no esta en la rutina, tengo que crear tanto los ExerciseGroup como las configuraciones
+          const exercises = Object.entries(groupValue);
+          for (const [exerciseKey, exerciseValue] of exercises) {
+            const exercise = await Exercise.findByPk(exerciseKey);
+            if (!exercise) {
+              return res.status(404).json({ message: 'Exercise not found' });
+            }
+            const groupExercise = await GroupExercise.create(
+              {
+                idRoutine: routine.idRoutine,
+                day: groupKey,
+              },
+              { transaction }
+            );
+            await ExerciseConfiguration.create(
+              {
+                repetitions: exerciseValue.configuration?.repeticiones,
+                series: exerciseValue.configuration?.series,
+                idExercise: exercise.idExercise,
+                idGroupExercise: groupExercise.idGroupExercise,
+              },
+              { transaction }
+            );
+          }
+        } else {
+          //2. Si esta en la rutina, y viene en el payload, tengo que actualizar las configuraciones
+          //3. Si esta en la rutina, y no viene en el payload, tengo que eliminar tanto los ExerciseGroup como las configuraciones
+          const exercisesInPayload = Object.keys(groupValue);
+          const exercisesInRoutine = groupExercise[0].ExerciseConfigurations.map((ec) => ec.idExercise.toString());
+
+          // Identificar los ExerciseConfiguration que están en la rutina pero no en el payload
+          const exercisesToDelete = exercisesInRoutine.filter((e) => !exercisesInPayload.includes(e));
+
+          for (const exerciseId of exercisesToDelete) {
+            // Encontrar el ExerciseConfiguration
+            const exerciseConfiguration = await ExerciseConfiguration.findOne({
+              where: {
+                idExercise: exerciseId,
+                idGroupExercise: groupExercise[0].idGroupExercise,
+              },
+            });
+
+            // Eliminar el ExerciseConfiguration
+            if (exerciseConfiguration) {
+              await exerciseConfiguration.destroy({ transaction });
             }
           }
-          //Si el payload que viene para ese dia no esta vacio, significa que tengo ejercicios para ese dia, esto puede significar:
-          //1. Que no exista el exerciseGroup para ese dia, por lo que lo creo y creo las configuraciones (Dia nuevo basicamente)
-        } else {
-          console.log('Tengo ejercicios en el payload para el dia:', groupKey);
-          //Busco si en la rutina que tengo en la base de datos, existe un groupExercise para ese dia
-          const checkExistingGroupExercise = routine.GroupExercises.filter(
-            (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
-          );
-          //Si no existe un groupExercise para ese dia, lo creo
-          if (checkExistingGroupExercise.length === 0) {
-            //Y creo la configuracion para ese ejercicio
-            const exercises = Object.entries(groupValue);
-            for (const [exerciseKey, exerciseValue] of exercises) {
-              console.log('No existe un groupExercise para ese dia, lo creo');
 
-              const groupExercise = await GroupExercise.create(
-                {
-                  idRoutine: routine.idRoutine,
-                  day: groupKey,
-                },
-                { transaction }
-              );
-              console.log('GroupExercise creado:', groupExercise);
-
-              const exercise = await Exercise.findByPk(exerciseKey);
-              if (!exercise) {
-                return res.status(404).json({ message: 'Exercise not found' });
-              }
-              console.log('Creo la configuracion para el ejercicio:', exerciseKey);
-              const testing = await ExerciseConfiguration.create(
+          // Si no quedan ExerciseConfiguration para este GroupExercise, eliminar el GroupExercise
+          if (exercisesInPayload.length === 0) {
+            await groupExercise[0].destroy({ transaction });
+          }
+          const exercises = Object.entries(groupValue);
+          for (const [exerciseKey, exerciseValue] of exercises) {
+            const exercise = await Exercise.findByPk(exerciseKey);
+            if (!exercise) {
+              return res.status(404).json({ message: 'Exercise not found' });
+            }
+            const exerciseConfiguration = await ExerciseConfiguration.findOne({
+              where: {
+                idExercise: exercise.idExercise,
+                idGroupExercise: groupExercise[0].idGroupExercise,
+              },
+            });
+            if (!exerciseConfiguration) {
+              await ExerciseConfiguration.create(
                 {
                   repetitions: exerciseValue.configuration?.repeticiones,
                   series: exerciseValue.configuration?.series,
                   idExercise: exercise.idExercise,
-                  idGroupExercise: groupExercise.idGroupExercise,
+                  idGroupExercise: groupExercise[0].idGroupExercise,
                 },
                 { transaction }
               );
-              console.log('EXERCISE CONFIGURATION TESTING', testing);
-            }
-          } else {
-            console.log('Ya existe un groupExercise para ese dia, lo actualizo');
-            //Si existe un groupExercise para ese dia, significa que tengo ejercicios para ese dia, esto puede significar:
-            //1. Que se agrego un ejercicio a un dia del exercisesGroup, el exerciseGroup se mantiene (porque para ese dia ya existe) pero se crea la config
-            //2. Que se elimino un ejercicio de un dia del exercisesGroup, reviso si ese dia tiene mas ejercicios, si no tiene mas ejercicios, elimino el exerciseGroup y las config
-            //3. Que solamente cambiaron las configuraciones de los ejercicios, por lo que el exerciseGroup se mantiene pero modifico las config
-            const exercises = Object.entries(groupValue);
-            for (const [exerciseKey, exerciseValue] of exercises) {
-              //Busco si en la rutina que tengo en la base de datos, existe una configuracion para ese ejercicio
-              const checkExistingExerciseConfiguration = routine.GroupExercises.filter(
-                (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
-              )[0].ExerciseConfigurations.filter((exerciseConfiguration) => exerciseConfiguration.idExercise === exerciseKey);
-              //Si existe una configuracion para ese ejercicio, la actualizo
-              if (checkExistingExerciseConfiguration.length > 0) {
-                console.log('Ya existe una configuracion para ese ejercicio, la actualizo');
-                await checkExistingExerciseConfiguration[0].update(
-                  {
-                    repetitions: exerciseValue.configuration?.repeticiones,
-                    series: exerciseValue.configuration?.series,
-                  },
-                  { transaction }
-                );
-                //Si no existe una configuracion para ese ejercicio, la creo
-              } else {
-                console.log('No existe una configuracion para ese ejercicio, la creo');
-                const exercise = await Exercise.findByPk(exerciseKey);
-                if (!exercise) {
-                  return res.status(404).json({ message: 'Exercise not found' });
-                }
-                const groupExercise = await GroupExercise.create(
-                  {
-                    idRoutine: routine.idRoutine,
-                    day: groupKey,
-                  },
-                  { transaction }
-                );
-
-                await ExerciseConfiguration.create(
-                  {
-                    repetitions: exerciseValue.configuration?.repeticiones,
-                    series: exerciseValue.configuration?.series,
-                    idExercise: exercise.idExercise,
-                    idGroupExercise: groupExercise.idGroupExercise,
-                  },
-                  { transaction }
-                );
-                //ASDASDASD
-              }
+            } else {
+              await exerciseConfiguration.update(
+                {
+                  repetitions: exerciseValue.configuration?.repeticiones,
+                  series: exerciseValue.configuration?.series,
+                },
+                { transaction }
+              );
             }
           }
         }
-        // else {
-        //   //En esta seccion, se supone que los exerciseGroup que vienen del payload tienen ejercicios, por lo que deberia crearlos o actualizarlos
-        //   const checkExistingGroupExercise = routine.GroupExercises.filter(
-        //     (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
-        //   );
-        //   if (checkExistingGroupExercise.length > 0) {
-        //     //Si ya existe el exerciseGroup para ese dia, lo actualizo
-        //     const checkExistingExerciseConfiguration = checkExistingGroupExercise[0].ExerciseConfigurations.filter(
-        //       (exerciseConfiguration) => exerciseConfiguration.idExercise === exercise.idExercise
-        //     );
-        //     if (checkExistingExerciseConfiguration.length > 0) {
-        //       //Si ya existe la configuracion para ese ejercicio, la actualizo
-        //       await checkExistingExerciseConfiguration[0].update(
-        //         {
-        //           repetitions: exerciseValue.configuration?.repeticiones,
-        //           series: exerciseValue.configuration?.series,
-        //         },
-        //         { transaction }
-        //       );
-        //     } else {
-        //       //Si no existe la configuracion para ese ejercicio, la creo
-        //       await ExerciseConfiguration.create(
-        //         {
-        //           repetitions: exerciseValue.configuration?.repeticiones,
-        //           series: exerciseValue.configuration?.series,
-        //           idExercise: exercise.idExercise,
-        //           idGroupExercise: checkExistingGroupExercise[0].idGroupExercise,
-        //         },
-        //         { transaction }
-        //       );
-        //     }
-        //   } else {
-        //     //Si no existe el exerciseGroup para ese dia, lo creo
-        //     const groupExercise = await GroupExercise.create(
-        //       {
-        //         idRoutine: routine.idRoutine,
-        //         day: groupKey,
-        //       },
-        //       { transaction }
-        //     );
-        //     //Y creo la configuracion para ese ejercicio
-        //     await ExerciseConfiguration.create(
-        //       {
-        //         repetitions: exerciseValue.configuration?.repeticiones,
-        //         series: exerciseValue.configuration?.series,
-        //         idExercise: exercise.idExercise,
-        //         idGroupExercise: groupExercise.idGroupExercise,
-        //       },
-        //       { transaction }
-        //     );
-        //   }
-        // }
       }
       await transaction.commit();
 

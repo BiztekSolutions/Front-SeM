@@ -64,7 +64,7 @@ function Noticias() {
   const closeModal = () => {
     setModalVisible(false);
   };
-  const isUserACoach = coaches.some((coach) => coach.idUser === user.user);
+  const isUserACoach = coaches?.some((coach) => coach.idUser === user.user);
   return (
     <div>
       <h1>Foro</h1>

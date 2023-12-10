@@ -70,50 +70,29 @@ const UserCalendar = () => {
         GroupExercises.forEach((groupExercise) => {
           const configDay = groupExercise.day.toLowerCase();
 
-        if (dayOfWeekString === configDay) {
-          for (const exerciseConfiguration of groupExercise.ExerciseConfigurations) {
-            console.log(exerciseConfiguration, "ejercicio");
-            const cardComponent = (
-              <div
-                className="card-calendar highlight shadow flex flex-col justify-around border-b-4"
-                onClick={() => handleCardClick(exerciseConfiguration)}
-              >
-                <div className="card-body flex flex-col ">
-                  <div className="flex flex-col ml-5 gap-1 border-black">
-                    <b className="text-black ml-2 text-xs">Nombre</b>
-                    <div className="flex ">
-                      <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
-                      <h5 className="card-title   w-full">{exerciseConfiguration.Exercise.name}</h5>
-                    </div>
-                  </div>
-                </div>
-                <div className="card-body">
-                  <h5 className="card-title text-center">
-                    {exerciseConfiguration.series}x
-                    {exerciseConfiguration.repetitions}
-                  </h5>
-                </div>
-              </div>
+          if (dayOfWeekString === configDay) {
+            groupExercise.ExerciseConfigurations.forEach(
+              (exerciseConfiguration) => {
+                events.push({
+                  start: currentDate.toISOString().split("T")[0],
+                  description: exerciseConfiguration.Exercise.description,
+                  id: exerciseConfiguration.idExercise,
+                  extendedProps: {
+                    exerciseConfiguration: exerciseConfiguration,
+                  },
+                });
+              }
             );
-
-            events.push({
-              start: currentDate.toISOString().split("T")[0],
-              description: exerciseConfiguration.Exercise.description,
-              id: exerciseConfiguration.idExercise,
-              extendedProps: {
-                cardComponent: cardComponent,
-              },
-            });
           }
-        }
+        });
+
+        currentDate = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getUTCDate() + 1
+        );
       }
-      console.log(currentDate.getUTCDate(), "fecha");
-      currentDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getUTCDate() + 1
-      );
-    }
+    });
 
     return events;
   };

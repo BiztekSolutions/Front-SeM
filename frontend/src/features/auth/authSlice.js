@@ -99,7 +99,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.message = action.payload.message;
+        state.message = "User already exists";
         state.user = null;
       })
 

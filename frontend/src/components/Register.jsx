@@ -125,7 +125,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     }
 
     if (message === "User already exists") {
-      dispatch(showErrorNotification("Error", "El email de usuario ya existe"));
+      dispatch(showErrorNotification("Error", "Ya existe un usuario creado con esas credenciales. Por favor, inicie sesión."));
       dispatch(clearUserMessage());
     }
 

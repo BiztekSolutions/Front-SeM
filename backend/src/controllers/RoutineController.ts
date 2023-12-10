@@ -168,11 +168,55 @@ export const updateRoutine = async (req: Request, res: Response) => {
               );
               console.log('EXERCISE CONFIGURATION TESTING', testing);
             }
+          } else {
+            console.log('Ya existe un groupExercise para ese dia, lo actualizo');
             //Si existe un groupExercise para ese dia, significa que tengo ejercicios para ese dia, esto puede significar:
             //1. Que se agrego un ejercicio a un dia del exercisesGroup, el exerciseGroup se mantiene (porque para ese dia ya existe) pero se crea la config
             //2. Que se elimino un ejercicio de un dia del exercisesGroup, reviso si ese dia tiene mas ejercicios, si no tiene mas ejercicios, elimino el exerciseGroup y las config
-          } else {
-            continue;
+            //3. Que solamente cambiaron las configuraciones de los ejercicios, por lo que el exerciseGroup se mantiene pero modifico las config
+            const exercises = Object.entries(groupValue);
+            for (const [exerciseKey, exerciseValue] of exercises) {
+              //Busco si en la rutina que tengo en la base de datos, existe una configuracion para ese ejercicio
+              const checkExistingExerciseConfiguration = routine.GroupExercises.filter(
+                (groupExercise) => groupExercise.day.toLowerCase() === groupKey.toLowerCase()
+              )[0].ExerciseConfigurations.filter((exerciseConfiguration) => exerciseConfiguration.idExercise === exerciseKey);
+              //Si existe una configuracion para ese ejercicio, la actualizo
+              if (checkExistingExerciseConfiguration.length > 0) {
+                console.log('Ya existe una configuracion para ese ejercicio, la actualizo');
+                await checkExistingExerciseConfiguration[0].update(
+                  {
+                    repetitions: exerciseValue.configuration?.repeticiones,
+                    series: exerciseValue.configuration?.series,
+                  },
+                  { transaction }
+                );
+                //Si no existe una configuracion para ese ejercicio, la creo
+              } else {
+                console.log('No existe una configuracion para ese ejercicio, la creo');
+                const exercise = await Exercise.findByPk(exerciseKey);
+                if (!exercise) {
+                  return res.status(404).json({ message: 'Exercise not found' });
+                }
+                const groupExercise = await GroupExercise.create(
+                  {
+                    idRoutine: routine.idRoutine,
+                    day: groupKey,
+                  },
+                  { transaction }
+                );
+
+                await ExerciseConfiguration.create(
+                  {
+                    repetitions: exerciseValue.configuration?.repeticiones,
+                    series: exerciseValue.configuration?.series,
+                    idExercise: exercise.idExercise,
+                    idGroupExercise: groupExercise.idGroupExercise,
+                  },
+                  { transaction }
+                );
+                //ASDASDASD
+              }
+            }
           }
         }
         // else {

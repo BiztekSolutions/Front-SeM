@@ -78,7 +78,9 @@ const UserCalendar = () => {
                     <b className="text-black ml-2 text-xs">Nombre</b>
                     <div className="flex ">
                       <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
-                      <h5 className="card-title   w-full">{exerciseConfiguration.Exercise.name}</h5>
+                      <h5 className="card-title   w-full">
+                        {exerciseConfiguration.Exercise.name}
+                      </h5>
                     </div>
                   </div>
                 </div>

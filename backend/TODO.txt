@@ -27,6 +27,7 @@ Scroll a veces no funciona (generalmente en "Agregar rutina")
 Cuando tengo 2 clientes y navego de uno al otro, los ejercicios no se vuelven a querear y me muestra los del cliente anterior.
 El desplegable del user rompe todo.
 IMPORTANTE! El drag n drop no te deja reordenar dentro del dia los ejercicios.
+    --> MAS IMPORTANTE, EN LA DB SE TIENEN QUE GUARDAR ORDENADOS TMB!!!!
 
 Roadmap:
 Hacer que los estados se guarden en el store (Done, testear bien igual)

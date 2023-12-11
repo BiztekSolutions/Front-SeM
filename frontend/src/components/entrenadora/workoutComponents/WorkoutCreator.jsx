@@ -62,10 +62,6 @@ function WorkoutCreator() {
     const value = e.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {
       setDurationInWeeks(value);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        endDate: moment(startDate).add(value, "weeks").format(),
-      }));
     }
   };
 
@@ -88,17 +84,19 @@ function WorkoutCreator() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formData);
-    // dispatch(
-    //   createRutine({
-    //     clientId: id,
-    //     name: formData.name,
-    //     startDate: formData.startDate,
-    //     endDate: formData.endDate,
-    //     observation: formData.observation,
-    //     objective: formData.objective,
-    //     exercisesGroup: formData.exercisesGroup,
-    //   })
-    // );
+    dispatch(
+      createRutine({
+        idClient: id,
+        name: formData.name,
+        startDate: formData.startDate,
+        endDate: moment(formData.startDate)
+          .add(durationInWeeks, "weeks")
+          .format(),
+        observation: formData.observation,
+        objective: formData.objective,
+        exercisesGroup: formData.exercisesGroup,
+      })
+    );
   };
 
   const removeExercise = (day, exerciseIndex) => {
@@ -127,7 +125,7 @@ function WorkoutCreator() {
         name: draggedExercise.name,
         configuration: {
           series: 0,
-          repeticiones: 0,
+          repetitions: 0,
         },
         image1: draggedExercise.image1,
       };
@@ -179,7 +177,7 @@ function WorkoutCreator() {
             ...prevFormData.exercisesGroup[day][exerciseId],
             configuration: {
               ...prevFormData.exercisesGroup[day][exerciseId].configuration,
-              repeticiones: value,
+              repetitions: value,
             },
           },
         },
@@ -345,11 +343,11 @@ function WorkoutCreator() {
                                         value={
                                           formData.exercisesGroup[day]?.[
                                             exercise.idExercise
-                                          ]?.configuration?.repeticiones !==
+                                          ]?.configuration?.repetitions !==
                                           undefined
                                             ? formData.exercisesGroup[day]?.[
                                                 exercise.idExercise
-                                              ]?.configuration?.repeticiones
+                                              ]?.configuration?.repetitions
                                             : ""
                                         }
                                         onChange={(e) =>

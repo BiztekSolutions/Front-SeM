@@ -9,13 +9,8 @@ import GroupExercise from '../models/GroupExercise';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
-    const clients = await Client.findAll();
-
-    const userIds = clients.map((client) => client.idUser);
-
-    const users = await listClients(userIds);
-
-    return res.status(200).json({ message: 'all clients', clients: users });
+    const clients = await listClients();
+    return res.status(200).json({ message: 'all clients', clients });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

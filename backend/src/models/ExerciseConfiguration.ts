@@ -2,18 +2,18 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../configs/db';
 
 class ExerciseConfiguration extends Model {
-  public idRoutineConfiguration!: number;
+  public idExerciseConfiguration!: number;
   public series?: number;
   public day?: String;
   public weight?: number;
   public repetitions?: number;
   public restTime?: number;
-  public order?: number;
+  // public order?: number;
 }
 
 ExerciseConfiguration.init(
   {
-    idRoutineConfiguration: {
+    idExerciseConfiguration: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -24,9 +24,9 @@ ExerciseConfiguration.init(
     repetitions: {
       type: DataTypes.INTEGER,
     },
-    order: {
-      type: DataTypes.INTEGER,
-    },
+    // order: {
+    //   type: DataTypes.INTEGER,
+    // },
   },
   {
     sequelize,

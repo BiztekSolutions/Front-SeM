@@ -2,6 +2,7 @@ import User from '../models/User';
 import Routine from '../models/Routine';
 import Client from '../models/Client';
 import Credential from '../models/Credential';
+import Coach from '../models/Coach';
 
 export const get = async (idUser: number) => {
   try {
@@ -30,11 +31,30 @@ export const list = async () => {
   }
 };
 
-export const listClients = async (userIds: any) => {
+export const listClients = async () => {
   try {
-    return await User.findAll({
-      where: { idUser: userIds },
-      include: [{ model: Credential, attributes: { exclude: ['password', 'idUser', 'created_date', 'updated_date'] } }],
+    return await Client.findAll({
+      include: [
+        {
+          model: User,
+          include: [{ model: Credential, attributes: { exclude: ['password', 'idUser', 'created_date', 'updated_date'] } }],
+        },
+      ],
+    });
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
+
+export const listCoaches = async () => {
+  try {
+    return await Coach.findAll({
+      include: [
+        {
+          model: User,
+          include: [{ model: Credential, attributes: { exclude: ['password', 'idUser', 'created_date', 'updated_date'] } }],
+        },
+      ],
     });
   } catch (e: any) {
     throw new Error(e.message);

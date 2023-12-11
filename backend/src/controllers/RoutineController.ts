@@ -9,12 +9,18 @@ import ExerciseConfiguration from '../models/ExerciseConfiguration';
 
 export const createRoutine = async (req: Request, res: Response) => {
   try {
-    const { name, observation, objective, exercisesGroup, clientId, startDate, endDate } = req.body;
+    //idClient aca esta mal, es el idUser el que esta llegando
+    const { name, observation, objective, exercisesGroup, idClient, startDate, endDate } = req.body;
 
     const transaction = await sequelize.transaction();
 
     try {
-      console.log(req.body, 'BODYyyyyyyy');
+      const client = await Client.findOne({ where: { idClient } }, { transaction });
+
+      if (!client) {
+        return res.status(404).json({ message: 'Client not found' });
+      }
+
       const routine = await Routine.create(
         {
           name,
@@ -22,36 +28,38 @@ export const createRoutine = async (req: Request, res: Response) => {
           objective,
           startDate,
           endDate,
-          idClient: clientId,
+          idClient,
         },
         { transaction }
       );
 
       const groups = Object.entries(exercisesGroup);
       for (const [groupKey, groupValue] of groups) {
-        const groupExercise = await GroupExercise.create(
-          {
-            idRoutine: routine.idRoutine,
-            day: groupKey,
-          },
-          { transaction }
-        );
         const exercises = Object.entries(groupValue);
-        for (const [exerciseKey, exerciseValue] of exercises) {
-          const exercise = await Exercise.findByPk(exerciseKey);
-          if (!exercise) {
-            return res.status(404).json({ message: 'Exercise not found' });
-          }
-          await ExerciseConfiguration.create(
+        if (exercises.length !== 0) {
+          const groupExercise = await GroupExercise.create(
             {
-              repetitions: exerciseValue.configuration.repeticiones,
-              series: exerciseValue.configuration.series,
-              idExercise: exercise.idExercise,
-              idGroupExercise: groupExercise.idGroupExercise,
-              order: exerciseValue.configuration.order,
+              idRoutine: routine.idRoutine,
+              day: groupKey,
             },
             { transaction }
           );
+          for (const [exerciseKey, exerciseValue] of exercises) {
+            const exercise = await Exercise.findByPk(exerciseKey);
+            if (!exercise) {
+              return res.status(404).json({ message: 'Exercise not found' });
+            }
+            await ExerciseConfiguration.create(
+              {
+                repetitions: exerciseValue.configuration.repetitions,
+                series: exerciseValue.configuration.series,
+                idExercise: exercise.idExercise,
+                idGroupExercise: groupExercise.idGroupExercise,
+                //order: exerciseValue.configuration.order,
+              },
+              { transaction }
+            );
+          }
         }
       }
 
@@ -68,6 +76,8 @@ export const createRoutine = async (req: Request, res: Response) => {
 };
 
 export const updateRoutine = async (req: Request, res: Response) => {
+  console.log('ESTOY UPDATEANDO');
+
   try {
     const routineId = parseInt(req.params.routineId as string);
     if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
@@ -99,100 +109,73 @@ export const updateRoutine = async (req: Request, res: Response) => {
       if (!routine) {
         return res.status(404).json({ message: 'Routine not found' });
       }
+
+      //En este for, destruyo todas las configuraciones de ejercicios de cada grupo de ejercicios
+      for (let groupExerciseIndex = 0; groupExerciseIndex < routine.GroupExercises.length; groupExerciseIndex++) {
+        console.log('ENTRE AL FOR', routine.GroupExercises[groupExerciseIndex]);
+        for (
+          let configurationIndex = 0;
+          configurationIndex < routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations.length;
+          configurationIndex++
+        ) {
+          console.log('ENTRE AL SEGUNDO FOR', routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations[configurationIndex]);
+          await ExerciseConfiguration.destroy({
+            where: {
+              idExerciseConfiguration:
+                routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations[configurationIndex].idExerciseConfiguration,
+            },
+            transaction,
+          });
+        }
+        await GroupExercise.destroy({
+          where: { idGroupExercise: routine.GroupExercises[groupExerciseIndex].idGroupExercise },
+          transaction,
+        });
+      }
+
+      //Ahora, creo todo desde 0.
       const groups = Object.entries(exercisesGroup);
       for (const [groupKey, groupValue] of groups) {
-        //Tengo 3 posibles caminos:
-        //1. Si viene en el payload el dia, y no esta en la rutina, tengo que crear tanto los ExerciseGroup como las configuraciones
-        //2. Si esta en la rutina, y viene en el payload, tengo que actualizar las configuraciones
-        //3. Si esta en la rutina, y no viene en el payload, tengo que eliminar tanto los ExerciseGroup como las configuraciones
-        const groupExercise = routine.groupExercises.filter((groupExercise) => groupExercise.day === groupKey);
-        if (groupExercise.length === 0) {
-          //1. Si viene en el payload el dia, y no esta en la rutina, tengo que crear tanto los ExerciseGroup como las configuraciones
-          const exercises = Object.entries(groupValue);
+        const exercises = Object.entries(groupValue);
+        if (exercises.length !== 0) {
+          const groupExercise = await GroupExercise.create(
+            {
+              idRoutine: routine.idRoutine,
+              day: groupKey,
+            },
+            { transaction }
+          );
           for (const [exerciseKey, exerciseValue] of exercises) {
             const exercise = await Exercise.findByPk(exerciseKey);
             if (!exercise) {
               return res.status(404).json({ message: 'Exercise not found' });
             }
-            const groupExercise = await GroupExercise.create(
-              {
-                idRoutine: routine.idRoutine,
-                day: groupKey,
-              },
-              { transaction }
-            );
             await ExerciseConfiguration.create(
               {
-                repetitions: exerciseValue.configuration?.repeticiones,
-                series: exerciseValue.configuration?.series,
+                repetitions: exerciseValue.configuration.repetitions,
+                series: exerciseValue.configuration.series,
                 idExercise: exercise.idExercise,
                 idGroupExercise: groupExercise.idGroupExercise,
+                //order: exerciseValue.configuration.order,
               },
               { transaction }
             );
-          }
-        } else {
-          //2. Si esta en la rutina, y viene en el payload, tengo que actualizar las configuraciones
-          //3. Si esta en la rutina, y no viene en el payload, tengo que eliminar tanto los ExerciseGroup como las configuraciones
-          const exercisesInPayload = Object.keys(groupValue);
-          const exercisesInRoutine = groupExercise[0].ExerciseConfigurations.map((ec) => ec.idExercise.toString());
-
-          // Identificar los ExerciseConfiguration que están en la rutina pero no en el payload
-          const exercisesToDelete = exercisesInRoutine.filter((e) => !exercisesInPayload.includes(e));
-
-          for (const exerciseId of exercisesToDelete) {
-            // Encontrar el ExerciseConfiguration
-            const exerciseConfiguration = await ExerciseConfiguration.findOne({
-              where: {
-                idExercise: exerciseId,
-                idGroupExercise: groupExercise[0].idGroupExercise,
-              },
-            });
-
-            // Eliminar el ExerciseConfiguration
-            if (exerciseConfiguration) {
-              await exerciseConfiguration.destroy({ transaction });
-            }
-          }
-
-          // Si no quedan ExerciseConfiguration para este GroupExercise, eliminar el GroupExercise
-          if (exercisesInPayload.length === 0) {
-            await groupExercise[0].destroy({ transaction });
-          }
-          const exercises = Object.entries(groupValue);
-          for (const [exerciseKey, exerciseValue] of exercises) {
-            const exercise = await Exercise.findByPk(exerciseKey);
-            if (!exercise) {
-              return res.status(404).json({ message: 'Exercise not found' });
-            }
-            const exerciseConfiguration = await ExerciseConfiguration.findOne({
-              where: {
-                idExercise: exercise.idExercise,
-                idGroupExercise: groupExercise[0].idGroupExercise,
-              },
-            });
-            if (!exerciseConfiguration) {
-              await ExerciseConfiguration.create(
-                {
-                  repetitions: exerciseValue.configuration?.repeticiones,
-                  series: exerciseValue.configuration?.series,
-                  idExercise: exercise.idExercise,
-                  idGroupExercise: groupExercise[0].idGroupExercise,
-                },
-                { transaction }
-              );
-            } else {
-              await exerciseConfiguration.update(
-                {
-                  repetitions: exerciseValue.configuration?.repeticiones,
-                  series: exerciseValue.configuration?.series,
-                },
-                { transaction }
-              );
-            }
           }
         }
       }
+
+      //Finalmente updateo los valores de la rutina
+      await routine.update(
+        {
+          name,
+          observation,
+          objective,
+          startDate,
+          endDate,
+          idClient: clientId,
+        },
+        { transaction }
+      );
       await transaction.commit();
 
       res.status(200).json({ message: 'Routine updated successfully', routine });

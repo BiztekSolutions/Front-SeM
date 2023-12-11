@@ -1,4 +1,3 @@
-// slices/groupSlice.js
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { groupService } from "./groupService";
 
@@ -22,16 +21,14 @@ export const createGroup = createAsyncThunk(
   }
 );
 
-export const getGroup = createAsyncThunk(
-  "getGroup",
-  async (data, thunkAPI) => {
-    try {
-      return await groupService.getGroup(data.token, data.idGroup);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
+export const getGroup = createAsyncThunk("getGroup", async (data, thunkAPI) => {
+  try {
+    return await groupService.getGroup(data.token, data.idGroup);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
+});
+
 export const deleteGroup = createAsyncThunk(
   "deleteGroup",
   async (data, thunkAPI) => {
@@ -90,7 +87,7 @@ export const groupSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.message;
+        state.message = "Grupo creado con exito";
         state.group = action.payload.group;
       })
       .addCase(createGroup.rejected, (state, action) => {

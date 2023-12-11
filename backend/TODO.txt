@@ -33,6 +33,8 @@ Pendiente: Cambios en el groupSlice con el token.
 Pendiente: Editar profile tire success o error.
 Pendinte: Agregar avatar al editar perfil.
 Pendiente: El clearMessage debe estar en exerciseSlice tmb.
+Pendiente: Un cliente que ya esta en un grupo no debe aparecer en la lista de clientes de "Crear Grupo" (Outter join se resuelve con nuevo endpoint del back)
+
 
 Roadmap:
 Hacer que los estados se guarden en el store (Done, testear bien igual)

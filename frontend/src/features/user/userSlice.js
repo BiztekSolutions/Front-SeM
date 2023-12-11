@@ -4,7 +4,7 @@ import { userService } from "./userService";
 const initialState = {
   user: {},
   users: [],
-  clients: [],
+  clients: null,
   coaches: [],
   isLoading: false,
   isError: false,

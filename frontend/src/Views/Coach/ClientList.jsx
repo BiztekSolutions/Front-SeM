@@ -5,6 +5,7 @@ import { FcFullTrash, FcInfo } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import ListaUsuarios from "./ListaUsuarios";
 import DeleteButton from "../../components/DeleteButton/DeleteButton";
+
 function ClientList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

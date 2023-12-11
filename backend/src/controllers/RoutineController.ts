@@ -29,25 +29,26 @@ export const createRoutine = async (req: Request, res: Response) => {
 
       const groups = Object.entries(exercisesGroup);
       for (const [groupKey, groupValue] of groups) {
+        const groupExercise = await GroupExercise.create(
+          {
+            idRoutine: routine.idRoutine,
+            day: groupKey,
+          },
+          { transaction }
+        );
         const exercises = Object.entries(groupValue);
         for (const [exerciseKey, exerciseValue] of exercises) {
           const exercise = await Exercise.findByPk(exerciseKey);
           if (!exercise) {
             return res.status(404).json({ message: 'Exercise not found' });
           }
-          const groupExercise = await GroupExercise.create(
-            {
-              idRoutine: routine.idRoutine,
-              day: groupKey,
-            },
-            { transaction }
-          );
           await ExerciseConfiguration.create(
             {
-              repetitions: exerciseValue.configuration?.repeticiones,
-              series: exerciseValue.configuration?.series,
+              repetitions: exerciseValue.configuration.repeticiones,
+              series: exerciseValue.configuration.series,
               idExercise: exercise.idExercise,
               idGroupExercise: groupExercise.idGroupExercise,
+              order: exerciseValue.configuration.order,
             },
             { transaction }
           );

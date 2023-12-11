@@ -8,48 +8,43 @@ import { useDispatch } from "react-redux";
 import { createRutine } from "@/features/rutinas/rutinasSlice";
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
 import { useSelector } from "react-redux";
+import locale from "antd/es/date-picker/locale/es_ES";
+
+const initialState = {
+  name: "",
+  startDate: moment().format("YYYY-MM-DD"),
+  endDate: moment().add(1, "weeks").format("YYYY-MM-DD"),
+  exercisesGroup: {
+    Monday: {},
+    Tuesday: {},
+    Wednesday: {},
+    Thursday: {},
+    Friday: {},
+    Saturday: {},
+  },
+  objective: "",
+  observation: "",
+};
 
 function WorkoutCreator() {
-  const initialState = {
-    name: "",
-    startDate: moment().format("YYYY-MM-DD"),
-    endDate: moment().add(1, "weeks").format("YYYY-MM-DD"),
-    exercisesGroup: {
-      Monday: {},
-      Tuesday: {},
-      Wednesday: {},
-      Thursday: {},
-      Friday: {},
-      Saturday: {},
-    },
-    objective: "",
-    observation: "",
-  };
+  const [formData, setFormData] = useState(initialState);
+  const [durationInWeeks, setDurationInWeeks] = useState(1);
+  const [visibleExercises, setVisibleExercises] = useState(20);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { exercises } = useSelector((state) => state.exercises);
   const dispatch = useDispatch();
   const id = useParams().id;
-  const [formData, setFormData] = useState(initialState);
-  const [startDate, setStartDate] = useState(moment());
-  const [durationInWeeks, setDurationInWeeks] = useState(1);
-  const [exerciseTypes, setExerciseTypes] = useState([]);
 
-  const [visibleExercises, setVisibleExercises] = useState(20); // Número de ejercicios iniciales visibles
-  const [scrollHeight, setScrollHeight] = useState(0);
-  const daySectionRef = useRef(null); // Ref para la sección de los días
-  const [searchTerm, setSearchTerm] = useState("");
+  const daySectionRef = useRef(null);
 
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
   useEffect(() => {
     dispatch(getAllExercises());
   }, []);
-
-  useEffect(() => {
-    const types = [...new Set(exercises?.map((exercise) => exercise.type))];
-    setExerciseTypes(types);
-  }, [exercises]);
 
   const allowDrop = (event) => {
     event.preventDefault();
@@ -92,17 +87,18 @@ function WorkoutCreator() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(
-      createRutine({
-        clientId: id,
-        name: formData.name,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
-        observation: formData.observation,
-        objective: formData.objective,
-        exercisesGroup: formData.exercisesGroup,
-      })
-    );
+    console.log(formData);
+    // dispatch(
+    //   createRutine({
+    //     clientId: id,
+    //     name: formData.name,
+    //     startDate: formData.startDate,
+    //     endDate: formData.endDate,
+    //     observation: formData.observation,
+    //     objective: formData.objective,
+    //     exercisesGroup: formData.exercisesGroup,
+    //   })
+    // );
   };
 
   const removeExercise = (day, exerciseIndex) => {
@@ -195,10 +191,7 @@ function WorkoutCreator() {
     setVisibleExercises((prev) => prev + 10);
   };
 
-  const handleDaySectionScroll = () => {
-    setScrollHeight(daySectionRef.current.scrollTop);
-  };
-
+  const today = moment();
   return (
     <>
       <form
@@ -222,8 +215,8 @@ function WorkoutCreator() {
               <label>Inicio:</label>
               <DatePicker
                 onChange={handleDateChange}
-                defaultValue={moment()}
                 format="YYYY-MM-DD"
+                locale={locale}
                 dropdownMode="top"
               />
             </div>
@@ -286,7 +279,6 @@ function WorkoutCreator() {
           <div
             className="flex-1 p-4 overflow-y-auto max-h-screen"
             ref={daySectionRef}
-            onScroll={handleDaySectionScroll}
           >
             {/* Tablas para cada día de la semana */}
             <div className="flex flex-wrap flex-col">

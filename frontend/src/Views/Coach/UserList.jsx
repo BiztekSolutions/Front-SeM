@@ -12,16 +12,31 @@ import { useNavigate } from "react-router-dom";
 import ListaUsuarios from "./ListaUsuarios";
 import { TiPlus } from "react-icons/ti";
 import DeleteButton from "../../components/DeleteButton/DeleteButton";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 function UserList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { users, clients } = state.users;
+  const { users, clients, isLoading, isError } = useSelector(
+    (state) => state.users
+  );
+
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getClients());
-  }, []);
+    if (!users) {
+      dispatch(getUsers());
+    }
+    if (!clients) {
+      dispatch(getClients());
+    }
+  }, [users, clients]);
+
+  if (isLoading) {
+    <LoadingSpinner />;
+  }
+
+  if (isError) {
+    return <div>Hubo un error</div>;
+  }
 
   const handleCreateClient = (userId) => {
     dispatch(addUserToClients(userId));
@@ -31,9 +46,10 @@ function UserList() {
   };
 
   const dataSource = [];
+
   if (users?.length > 0) {
     for (let i = 0; i < users.length; i++) {
-      const isUserInClients = clients.some(
+      const isUserInClients = clients?.some(
         (client) => client.idUser === users[i].idUser
       );
       dataSource.push({
@@ -59,6 +75,7 @@ function UserList() {
       });
     }
   }
+
   return (
     <div>
       <ListaUsuarios dataSource={dataSource} />

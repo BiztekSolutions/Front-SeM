@@ -1,15 +1,12 @@
 import { useRef, useState, useEffect } from "react";
-
 import { Table, Button, Input, Space, Form } from "antd";
 import Highlighter from "react-highlight-words";
-
 import { SearchOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
-
 import styles from "./Users.module.css";
 import { getClients } from "../../features/user/userSlice";
 import { createGroup } from "../../features/group/groupSlice";
-import { id } from "date-fns/locale";
+
 //import "@sweetalert2/themes/dark/dark.css";
 
 function CrearGrupos() {
@@ -50,7 +47,19 @@ function CrearGrupos() {
   };
 
   const handleSubmit = () => {
-    dispatch(createGroup({ groupName, selectedUsers }));
+    if (groupName.trim() === "") {
+      // Verificar si el nombre del grupo está presente
+      // Puedes mostrar un mensaje de error o realizar cualquier acción que prefieras
+      return;
+    }
+    if (selectedUsers.length > 1) {
+      dispatch(createGroup({ groupName, selectedUsers }));
+      form.resetFields();
+      setGroupName("");
+      setSelectedUsers([]);
+    } else {
+      // Puedes mostrar un mensaje de error si no hay suficientes usuarios seleccionados
+    }
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({

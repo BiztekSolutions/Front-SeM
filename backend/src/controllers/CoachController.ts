@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Coach from '../models/Coach';
-import { listClients } from '../services/UserService';
+import { listCoaches } from '../services/UserService';
 
 export const createCoach = async (req: Request, res: Response) => {
   try {
@@ -28,13 +28,9 @@ export const createCoach = async (req: Request, res: Response) => {
 
 export const getCoaches = async (req: Request, res: Response) => {
   try {
-    const coach = await Coach.findAll();
+    const coach = await listCoaches();
 
-    const userIds = coach.map((coach) => coach.idUser);
-
-    const users = await listClients(userIds);
-
-    return res.status(200).json({ message: 'all coach', coach: users });
+    return res.status(200).json({ message: 'all coach', coach });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

@@ -17,11 +17,13 @@ function Group() {
   const { group } = useSelector((state) => state.groups);
   const { id } = useParams();
   const groupId = id;
+  const auth = useSelector((state) => state.auths);
   const [clientsList, setClientsList] = useState([]);
-
+  console.log(group, "group");
   useEffect(() => {
     if (groupId) {
-      dispatch(getGroup(groupId));
+      console.log("groupId", groupId);
+      dispatch(getGroup({ token: auth.token, idGroup: groupId }));
     }
   }, [groupId]);
 

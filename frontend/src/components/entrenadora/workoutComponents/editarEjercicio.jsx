@@ -10,6 +10,7 @@ import {
   showSuccessNotification,
   showErrorNotification,
 } from "@/features/layout/layoutSlice";
+import { Link } from "react-router-dom";
 
 function EditarEjercicio() {
   const dispatch = useDispatch();
@@ -65,11 +66,24 @@ function EditarEjercicio() {
     return <div>Error: {message}</div>;
   }
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isSuccess && exercises && exercises.length === 0) {
+    return (
+      <div>
+        <Typography.Title level={3}>
+          Aún no hay ejercicios creados, pruebe creando el{" "}
+          <Link to="../agregarEjercicios">primer ejercicio!</Link>
+        </Typography.Title>
+      </div>
+    );
+  }
+
   return (
     <>
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
+      {exercises && (
         <div>
           <Typography.Title level={2}>Editar Ejercicio</Typography.Title>
           <div>

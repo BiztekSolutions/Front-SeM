@@ -6,6 +6,7 @@ import {
   showSuccessNotification,
   showErrorNotification,
 } from "@/features/layout/layoutSlice";
+import { getAllExercises } from "@/features/exercises/exerciseSlice";
 
 const exerciseTypes = [
   { label: "SIN TIPO", value: "SIN TIPO" },
@@ -48,15 +49,14 @@ function AgregarEjercicio() {
 
   useEffect(() => {
     if (message === "Ejercicio creado correctamente") {
+      dispatch(getAllExercises());
       setFormData(initialState);
+      form.resetFields();
       setSelectedExerciseType(exerciseTypes[0].label);
       dispatch(showSuccessNotification("Creación exitosa!", message));
     }
     if (isError) {
       dispatch(showErrorNotification("Error", message));
-    }
-    if (isSuccess) {
-      setFormData(initialState);
     }
   }, [message]);
 
@@ -66,6 +66,7 @@ function AgregarEjercicio() {
       ...prevData,
       [name]: value,
     }));
+    console.log(formData);
   }
 
   function handleExerciseTypeChange(value) {
@@ -114,7 +115,7 @@ function AgregarEjercicio() {
 
   return (
     <div>
-      <Form form={form} onFinish={postExercise}>
+      <Form form={form} onFinish={postExercise} layout="vertical">
         <Form.Item
           required
           label="Nombre:"
@@ -235,7 +236,7 @@ function AgregarEjercicio() {
           />
         </Form.Item>
         <Form.Item required>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isLoading}>
             <Typography.Text>Agregar Ejercicio</Typography.Text>
           </Button>
         </Form.Item>

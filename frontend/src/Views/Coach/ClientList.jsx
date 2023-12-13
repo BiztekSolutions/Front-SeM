@@ -5,39 +5,53 @@ import { FcFullTrash, FcInfo } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import ListaUsuarios from "./ListaUsuarios";
 import DeleteButton from "../../components/DeleteButton/DeleteButton";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+
 function ClientList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { clients } = state.users;
+  const { clients, isLoading, isError } = useSelector((state) => state.users);
+
   useEffect(() => {
-    dispatch(getClients());
-  }, []);
+    if (!clients) {
+      dispatch(getClients());
+    }
+    console.log(clients);
+  }, [clients]);
+
+  if (isLoading) {
+    <LoadingSpinner />;
+  }
+
+  if (isError) {
+    return <div>Hubo un error</div>;
+  }
 
   const dataSource = [];
   if (clients?.length > 0) {
     for (let i = 0; i < clients.length; i++) {
       dataSource.push({
         key: i,
-        firstName: clients[i].name,
-        lastName: clients[i].lastname,
-        email: clients[i].Credentials[0].email,
+        firstName: clients[i].User.name,
+        lastName: clients[i].User.lastname,
+        email: clients[i].User.Credentials[0].email,
         actions: (
           <div className="flex align-items-center gap-3">
             <FcInfo
               size={19}
               className="userInfo h-9 w-9"
-              onClick={() => navigate(`../user/${clients[i].idUser}`)}
+              onClick={() => navigate(`../user/${clients[i].idClient}`)}
             />
             <DeleteButton
-              userName={clients[i].name}
-              userId={clients[i].idUser}
+              userName={clients[i].User.name}
+              userId={clients[i].idClient}
             />
           </div>
         ),
       });
     }
   }
+
   return (
     <div>
       <ListaUsuarios dataSource={dataSource} />

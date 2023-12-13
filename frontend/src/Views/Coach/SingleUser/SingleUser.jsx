@@ -21,6 +21,18 @@ const SingleUser = () => {
   const isModRoute = location.pathname.endsWith("/editarRutinas");
   const isGroupsPage = location.pathname.includes("/grupos");
 
+  const isUserRoute = () => {
+    if (
+      !isExerciseRoute &&
+      !isRoutineRoute &&
+      !isAddExerciseRoute &&
+      !isModRoute
+    ) {
+      return true;
+    }
+    return false;
+  };
+  console.log("isUserRoute", isUserRoute());
   const resetRutinasAndNavigate = (to) => {
     console.log("reset rutinas");
     dispatch(resetRutines());
@@ -71,7 +83,7 @@ const SingleUser = () => {
           </li>
         </ul>
       </nav>
-      {isGroupsPage ? <Group /> : <User />}
+      {isUserRoute() ? isGroupsPage ? <Group /> : <User /> : null}
       <Outlet />
     </div>
   );

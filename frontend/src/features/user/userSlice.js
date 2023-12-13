@@ -3,9 +3,9 @@ import { userService } from "./userService";
 
 const initialState = {
   user: {},
-  users: [],
-  clients: [],
-  coaches: [],
+  users: null,
+  clients: null,
+  coaches: null,
   isLoading: false,
   isError: false,
   isSuccess: false,

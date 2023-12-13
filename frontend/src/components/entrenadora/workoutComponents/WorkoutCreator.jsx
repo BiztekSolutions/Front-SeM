@@ -8,48 +8,43 @@ import { useDispatch } from "react-redux";
 import { createRutine } from "@/features/rutinas/rutinasSlice";
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
 import { useSelector } from "react-redux";
+import locale from "antd/es/date-picker/locale/es_ES";
+
+const initialState = {
+  name: "",
+  startDate: moment().format("YYYY-MM-DD"),
+  endDate: moment().add(1, "weeks").format("YYYY-MM-DD"),
+  exercisesGroup: {
+    Monday: {},
+    Tuesday: {},
+    Wednesday: {},
+    Thursday: {},
+    Friday: {},
+    Saturday: {},
+  },
+  objective: "",
+  observation: "",
+};
 
 function WorkoutCreator() {
-  const initialState = {
-    name: "",
-    startDate: moment().format("YYYY-MM-DD"),
-    endDate: moment().add(1, "weeks").format("YYYY-MM-DD"),
-    exercisesGroup: {
-      Monday: {},
-      Tuesday: {},
-      Wednesday: {},
-      Thursday: {},
-      Friday: {},
-      Saturday: {},
-    },
-    objective: "",
-    observation: "",
-  };
+  const [formData, setFormData] = useState(initialState);
+  const [durationInWeeks, setDurationInWeeks] = useState(1);
+  const [visibleExercises, setVisibleExercises] = useState(20);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { exercises } = useSelector((state) => state.exercises);
   const dispatch = useDispatch();
   const id = useParams().id;
-  const [formData, setFormData] = useState(initialState);
-  const [startDate, setStartDate] = useState(moment());
-  const [durationInWeeks, setDurationInWeeks] = useState(1);
-  const [exerciseTypes, setExerciseTypes] = useState([]);
 
-  const [visibleExercises, setVisibleExercises] = useState(20); // Número de ejercicios iniciales visibles
-  const [scrollHeight, setScrollHeight] = useState(0);
-  const daySectionRef = useRef(null); // Ref para la sección de los días
-  const [searchTerm, setSearchTerm] = useState("");
+  const daySectionRef = useRef(null);
 
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
   useEffect(() => {
     dispatch(getAllExercises());
   }, []);
-
-  useEffect(() => {
-    const types = [...new Set(exercises?.map((exercise) => exercise.type))];
-    setExerciseTypes(types);
-  }, [exercises]);
 
   const allowDrop = (event) => {
     event.preventDefault();
@@ -67,10 +62,6 @@ function WorkoutCreator() {
     const value = e.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {
       setDurationInWeeks(value);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        endDate: moment(startDate).add(value, "weeks").format(),
-      }));
     }
   };
 
@@ -92,12 +83,15 @@ function WorkoutCreator() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(formData);
     dispatch(
       createRutine({
-        clientId: id,
+        idClient: id,
         name: formData.name,
         startDate: formData.startDate,
-        endDate: formData.endDate,
+        endDate: moment(formData.startDate)
+          .add(durationInWeeks, "weeks")
+          .format(),
         observation: formData.observation,
         objective: formData.objective,
         exercisesGroup: formData.exercisesGroup,
@@ -131,7 +125,7 @@ function WorkoutCreator() {
         name: draggedExercise.name,
         configuration: {
           series: 0,
-          repeticiones: 0,
+          repetitions: 0,
         },
         image1: draggedExercise.image1,
       };
@@ -183,7 +177,7 @@ function WorkoutCreator() {
             ...prevFormData.exercisesGroup[day][exerciseId],
             configuration: {
               ...prevFormData.exercisesGroup[day][exerciseId].configuration,
-              repeticiones: value,
+              repetitions: value,
             },
           },
         },
@@ -194,9 +188,30 @@ function WorkoutCreator() {
   const handleLoadMore = () => {
     setVisibleExercises((prev) => prev + 10);
   };
-
-  const handleDaySectionScroll = () => {
-    setScrollHeight(daySectionRef.current.scrollTop);
+  const moveExercise = (day, currentIndex, newIndex) => {
+    if (
+      newIndex >= 0 &&
+      newIndex < Object.keys(formData.exercisesGroup[day]).length
+    ) {
+      console.log(Object.keys(formData.exercisesGroup[day]).length);
+      setFormData((prevFormData) => {
+        const newExercisesGroup = { ...prevFormData.exercisesGroup };
+        const exercisesArray = Object.values(newExercisesGroup[day]);
+        exercisesArray.splice(
+          newIndex,
+          0,
+          exercisesArray.splice(currentIndex, 1)[0]
+        );
+        newExercisesGroup[day] = exercisesArray.reduce(
+          (acc, exercise, i) => ({ ...acc, [i]: exercise }),
+          {}
+        );
+        return {
+          ...prevFormData,
+          exercisesGroup: newExercisesGroup,
+        };
+      });
+    }
   };
 
   return (
@@ -222,8 +237,8 @@ function WorkoutCreator() {
               <label>Inicio:</label>
               <DatePicker
                 onChange={handleDateChange}
-                defaultValue={moment()}
                 format="YYYY-MM-DD"
+                locale={locale}
                 dropdownMode="top"
               />
             </div>
@@ -265,10 +280,10 @@ function WorkoutCreator() {
                 >
                   <img
                     className="w-16 h-16 rounded-full mr-2"
-                    src={exercise.image1}
-                    alt={exercise.name}
+                    src={exercise?.image1}
+                    alt={exercise?.name}
                   />
-                  <p className="text-orange-500">{exercise.name}</p>
+                  <p className="text-orange-500">{exercise?.name}</p>
                 </div>
               ))}
             </div>
@@ -286,7 +301,6 @@ function WorkoutCreator() {
           <div
             className="flex-1 p-4 overflow-y-auto max-h-screen"
             ref={daySectionRef}
-            onScroll={handleDaySectionScroll}
           >
             {/* Tablas para cada día de la semana */}
             <div className="flex flex-wrap flex-col">
@@ -308,16 +322,16 @@ function WorkoutCreator() {
                           <div className="p-2">
                             <ul>
                               <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200">
-                                {exercise.image1 && (
+                                {exercise?.image1 && (
                                   <img
                                     className="w-28 h-28 rounded-full mr-2"
-                                    src={exercise.image1}
-                                    alt={exercise.name}
+                                    src={exercise?.image1}
+                                    alt={exercise?.name}
                                   />
                                 )}
                                 <div>
                                   <p className="text-gray-800 text-card-drop">
-                                    {exercise.name}
+                                    {exercise?.name}
                                   </p>
                                   <div className="flex">
                                     <div className="form-group my-2 mx-4">
@@ -329,10 +343,10 @@ function WorkoutCreator() {
                                         inputMode="numeric"
                                         value={
                                           formData.exercisesGroup[day]?.[
-                                            exercise.idExercise
+                                            exercise?.idExercise
                                           ]?.configuration?.series !== undefined
                                             ? formData.exercisesGroup[day]?.[
-                                                exercise.idExercise
+                                                exercise?.idExercise
                                               ]?.configuration.series
                                             : ""
                                         }
@@ -340,7 +354,7 @@ function WorkoutCreator() {
                                           handleSeries(
                                             e,
                                             day,
-                                            exercise.idExercise
+                                            exercise?.idExercise
                                           )
                                         }
                                       />
@@ -352,25 +366,43 @@ function WorkoutCreator() {
                                         placeholder="Repeticiones"
                                         value={
                                           formData.exercisesGroup[day]?.[
-                                            exercise.idExercise
-                                          ]?.configuration?.repeticiones !==
+                                            exercise?.idExercise
+                                          ]?.configuration?.repetitions !==
                                           undefined
                                             ? formData.exercisesGroup[day]?.[
-                                                exercise.idExercise
-                                              ]?.configuration?.repeticiones
+                                                exercise?.idExercise
+                                              ]?.configuration?.repetitions
                                             : ""
                                         }
                                         onChange={(e) =>
                                           handleRepeticiones(
                                             e,
                                             day,
-                                            exercise.idExercise
+                                            exercise?.idExercise
                                           )
                                         }
                                       />
                                     </div>
                                   </div>
                                 </div>
+                                <button
+                                  className="text-blue-500 w-8 h-8 cursor-pointer"
+                                  type="button"
+                                  onClick={() =>
+                                    moveExercise(day, index, index - 1)
+                                  }
+                                >
+                                  ▲
+                                </button>
+                                <button
+                                  className="text-blue-500 w-8 h-8 cursor-pointer"
+                                  type="button"
+                                  onClick={() =>
+                                    moveExercise(day, index, index + 1)
+                                  }
+                                >
+                                  ▼
+                                </button>
                                 <MdDelete
                                   className="text-red-500 w-10 h-10 cursor-pointer"
                                   onClick={() => removeExercise(day, index)}

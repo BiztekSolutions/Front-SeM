@@ -76,24 +76,29 @@ function EditarRutinas() {
           Friday: {},
           Saturday: {},
         };
-
+        console.log("EDIT ROUTINE", editRoutine);
         editRoutine.GroupExercises.forEach((groupExercise) => {
-          exercisesGroup = {
-            ...exercisesGroup,
-            [groupExercise.day]: {
-              ...exercisesGroup[groupExercise.day],
-              [groupExercise.ExerciseConfigurations[0].idExercise]: {
-                idExercise: groupExercise.ExerciseConfigurations[0].idExercise,
-                name: groupExercise.ExerciseConfigurations[0].Exercise.name,
+          console.log("GROUP EXERCISE", groupExercise);
+          if (groupExercise.ExerciseConfigurations.length > 0) {
+            for (
+              let i = 0;
+              i < groupExercise.ExerciseConfigurations.length;
+              i++
+            ) {
+              const exerciseConfig = groupExercise.ExerciseConfigurations[i];
+              exercisesGroup[groupExercise.day][
+                exerciseConfig.Exercise.idExercise
+              ] = {
+                idExercise: exerciseConfig.Exercise.idExercise,
+                name: exerciseConfig.Exercise.name,
                 configuration: {
-                  series: groupExercise.ExerciseConfigurations[0].series,
-                  repeticiones:
-                    groupExercise.ExerciseConfigurations[0].repetitions,
+                  series: exerciseConfig.series,
+                  repetitions: exerciseConfig.repetitions,
                 },
-                image1: groupExercise.ExerciseConfigurations[0].Exercise.image1,
-              },
-            },
-          };
+                image1: exerciseConfig.Exercise.image1,
+              };
+            }
+          }
         });
 
         const finalData = {
@@ -189,7 +194,7 @@ function EditarRutinas() {
         name: draggedExercise.name,
         configuration: {
           series: 0,
-          repeticiones: 0,
+          repetitions: 0,
         },
         image1: draggedExercise.image1,
       };
@@ -241,7 +246,7 @@ function EditarRutinas() {
             ...prevFormData.exercisesGroup[day][exerciseId],
             configuration: {
               ...prevFormData.exercisesGroup[day][exerciseId].configuration,
-              repeticiones: value,
+              repetitions: value,
             },
           },
         },
@@ -422,11 +427,11 @@ function EditarRutinas() {
                                         value={
                                           formData.exercisesGroup[day]?.[
                                             exercise.idExercise
-                                          ]?.configuration?.repeticiones !==
+                                          ]?.configuration?.repetitions !==
                                           undefined
                                             ? formData.exercisesGroup[day]?.[
                                                 exercise.idExercise
-                                              ]?.configuration?.repeticiones
+                                              ]?.configuration?.repetitions
                                             : ""
                                         }
                                         onChange={(e) =>

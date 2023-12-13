@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Button, Input, Space } from "antd";
+import { Table, Button, Input, Space, Typography } from "antd";
 import styles from "./Users.module.css";
 import Highlighter from "react-highlight-words";
 import { FcInfo } from "react-icons/fc";
@@ -8,10 +8,12 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroups } from "../../features/group/groupSlice";
 import DeleteGroups from "../../components/DeleteButton/DeleteGroups";
+
 const Groups = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { groups } = state.groups;
+
   useEffect(() => {
     dispatch(getGroups());
   }, [dispatch]);
@@ -26,10 +28,12 @@ const Groups = () => {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
   };
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -184,7 +188,7 @@ const Groups = () => {
   return (
     <div className={styles.wrapper}>
       <div>
-        <h3>Lista de Usuarios</h3>
+        <Typography.Title level={2}>Grupos</Typography.Title>
       </div>
       <Table dataSource={dataSource} columns={columns} />
     </div>

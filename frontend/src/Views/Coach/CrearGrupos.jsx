@@ -1,18 +1,24 @@
 import { useRef, useState, useEffect } from "react";
-import { Table, Button, Input, Space, Form } from "antd";
+
+import { Table, Button, Input, Space, Form, Typography } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./Users.module.css";
 import { getClients } from "../../features/user/userSlice";
 import { createGroup } from "../../features/group/groupSlice";
-
-//import "@sweetalert2/themes/dark/dark.css";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+import { showSuccessNotification } from "@/features/layout/layoutSlice";
 
 function CrearGrupos() {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { clients } = state.users;
+  const { clients, isLoading, isError, message } = useSelector(
+    (state) => state.users
+  );
+
+  const groups = useSelector((state) => state.groups);
+  const auth = useSelector((state) => state.auths);
+
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [form] = Form.useForm();
   const [groupName, setGroupName] = useState("");
@@ -21,14 +27,23 @@ function CrearGrupos() {
   const searchInput = useRef(null);
 
   useEffect(() => {
-    dispatch(getClients());
-  }, []);
+    if (!clients) {
+      dispatch(getClients({ token: auth.token }));
+    }
+
+    if (groups.message === "Grupo creado con exito") {
+      form.resetFields();
+      setSelectedUsers([]);
+      showSuccessNotification("Exito", "Grupo creado con exitosamente!");
+    }
+  }, [groups.message]);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
@@ -47,19 +62,7 @@ function CrearGrupos() {
   };
 
   const handleSubmit = () => {
-    if (groupName.trim() === "") {
-      // Verificar si el nombre del grupo está presente
-      // Puedes mostrar un mensaje de error o realizar cualquier acción que prefieras
-      return;
-    }
-    if (selectedUsers.length > 1) {
-      dispatch(createGroup({ groupName, selectedUsers }));
-      form.resetFields();
-      setGroupName("");
-      setSelectedUsers([]);
-    } else {
-      // Puedes mostrar un mensaje de error si no hay suficientes usuarios seleccionados
-    }
+    dispatch(createGroup({ groupName, selectedUsers }));
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -237,14 +240,16 @@ function CrearGrupos() {
       className: "text-3xl",
     },
   ];
+  console.log("clients", clients);
   const dataSource = [];
   if (clients?.length > 0) {
     for (let i = 0; i < clients.length; i++) {
       dataSource.push({
         key: i,
-        firstName: clients[i].name,
-        lastName: clients[i].lastname,
-        email: clients[i].Credentials[0].email,
+        firstName: clients[i].User.name,
+        lastName: clients[i].User.lastname,
+        email:
+          clients[i].User.Credentials && clients[i].User.Credentials[0].email,
         actions: (
           <div className="flex align-items-center gap-3">
             <input
@@ -258,13 +263,21 @@ function CrearGrupos() {
     }
   }
 
+  if (isLoading || groups.isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError) {
+    return <div>{message}</div>;
+  }
+
   return (
     <div className={`${styles.wrapper}`}>
       <div>
-        <h3 className="text-5xl">Crear grupos</h3>
+        <Typography.Title level={2}>Crear grupos</Typography.Title>
       </div>
-      <Form form={form} onFinish={handleSubmit}>
-        <Form.Item label="Nombre del grupo" name="groupName">
+      <Form form={form} onFinish={handleSubmit} layout="vertical">
+        <Form.Item label="Nombre del grupo:" name="groupName">
           <Input
             placeholder="Ingrese el nombre del grupo"
             onChange={(e) => setGroupName(e.target.value)}
@@ -278,7 +291,7 @@ function CrearGrupos() {
         />
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Crear Grupo
+            <Typography.Text>Crear Grupo</Typography.Text>
           </Button>
         </Form.Item>
       </Form>

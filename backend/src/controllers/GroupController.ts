@@ -6,6 +6,7 @@ import Client from '../models/Client';
 import sequelize from '../configs/db';
 
 import { get, list } from '../services/GroupService';
+import ClientGroup from '../models/ClientGroup';
 // Crear un grupo con clientes asignados
 // controllers/groupController.js
 
@@ -113,6 +114,42 @@ export const setRoutineGroup = async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: 'Routine added to the group successfully' });
   } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+export const deleteGroup = async (req: Request, res: Response) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const idGroup = parseInt(req.params.idGroup, 10);
+
+    const group = await Group.findByPk(idGroup);
+
+    if (!group) {
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    const groupRoutine = await Routine.findOne({ where: { groupId: idGroup } });
+
+    if (groupRoutine) {
+      groupRoutine.destroy({ transaction: transaction });
+    }
+
+    const clientGroup = await ClientGroup.findAll({ where: { idGroup: idGroup } });
+
+    if (clientGroup) {
+      clientGroup.forEach(async (client) => {
+        await client.destroy({ transaction: transaction });
+      });
+    }
+
+    await group.destroy({ transaction: transaction });
+
+    transaction.commit();
+    return res.status(200).json({ message: 'Group deleted successfully' });
+  } catch (error) {
+    transaction.rollback();
     console.error(error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }

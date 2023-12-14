@@ -1,4 +1,5 @@
 import Client from '../models/Client';
+import ClientGroup from '../models/ClientGroup';
 
 import Exercise from '../models/Exercise';
 import Group from '../models/Group';
@@ -33,13 +34,18 @@ export const get = async (idGroup: number) => {
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: [
         {
-          model: Client,
-          as: 'Clients', // Cambia 'ClientGroups' por 'Clients' según la relación definida
-          through: { attributes: [] }, // Evita que se incluyan las columnas de la tabla intermedia
+          model: ClientGroup,
           include: [
             {
-              model: User,
-              attributes: { exclude: ['idUser'] },
+              model: Client,
+              as: 'Clients', // Cambia 'ClientGroups' por 'Clients' según la relación definida
+              through: { attributes: [] }, // Evita que se incluyan las columnas de la tabla intermedia
+              include: [
+                {
+                  model: User,
+                  attributes: { exclude: ['idUser'] },
+                },
+              ],
             },
           ],
         },

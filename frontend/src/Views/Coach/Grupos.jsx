@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Button, Input, Space, Typography } from "antd";
-import styles from "./Users.module.css";
+import Table from "antd/lib/table";
+import Button from "antd/lib/button";
+import Input from "antd/lib/input";
+import Space from "antd/lib/space";
+import Typography from "antd/lib/typography";
+
 import Highlighter from "react-highlight-words";
 import { FcInfo } from "react-icons/fc";
 import { SearchOutlined } from "@ant-design/icons";
@@ -9,19 +13,52 @@ import { useDispatch, useSelector } from "react-redux";
 import { getGroups } from "../../features/group/groupSlice";
 import DeleteGroups from "../../components/DeleteButton/DeleteGroups";
 
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from "@/features/layout/layoutSlice";
+import styles from "./Users.module.css";
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+
 const Groups = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { groups } = state.groups;
+  const { groups, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.groups
+  );
 
   useEffect(() => {
-    dispatch(getGroups());
-  }, [dispatch]);
+    if (!groups) {
+      dispatch(getGroups());
+    }
+
+    if (message === "Grupo eliminado con exito") {
+      dispatch(getGroups());
+      dispatch(showSuccessNotification("Éxito!", "Grupo eliminado."));
+    }
+
+    if (message === "No se ha podido eliminar el grupo") {
+      dispatch(
+        showErrorNotification("Error!", "No se ha podido eliminar el grupo.")
+      );
+    }
+  }, [groups]);
 
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError && !groups) {
+    return (
+      <div>
+        <Typography.Title level={3}>Hubo un error</Typography.Title>
+      </div>
+    );
+  }
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();

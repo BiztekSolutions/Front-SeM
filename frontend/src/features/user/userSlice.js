@@ -53,10 +53,9 @@ export const updateUser = createAsyncThunk(
 
 export const getClients = createAsyncThunk(
   "getClients",
-  async (_, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const token = user.token;
-      return await userService.getClients(token);
+      return await userService.getClients(data.token);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

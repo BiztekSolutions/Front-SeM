@@ -1,24 +1,26 @@
 /* eslint-disable react/jsx-key */
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  List,
-  Avatar,
-  Space,
-  Input,
-  Button,
-  Form,
-  Tooltip,
-  Modal,
-  message,
-} from "antd";
-import { MessageOutlined, EyeOutlined } from "@ant-design/icons";
+import List from "antd/lib/list";
+import Avatar from "antd/lib/avatar";
+import Space from "antd/lib/space";
+import Input from "antd/lib/input";
+import Button from "antd/lib/button";
+import Form from "antd/lib/form";
+import Tooltip from "antd/lib/tooltip";
+import Modal from "antd/lib/modal";
+
+import EyeOutlined from "@ant-design/icons/EyeOutlined";
+import MessageOutlined from "@ant-design/icons/MessageOutlined";
+
 import {
   fetchPosts,
   addOrUpdatePost,
   addCommentToPost,
-} from "../../features/posts/postsSlice";
-import { getCoaches } from "../../features/user/userSlice";
+} from "@/features/posts/postsSlice";
+import { getCoaches } from "@/features/user/userSlice";
+import { showSuccessNotification } from "@/features/layout/layoutSlice";
+
 const { TextArea } = Input;
 
 function Noticias() {
@@ -44,7 +46,7 @@ function Noticias() {
   const handleCommentSubmit = async (postId, comment) => {
     dispatch(addCommentToPost({ postId, comment }));
     setComment("");
-    message.success("Comentario agregado con éxito");
+    dispatch(showSuccessNotification("Éxito", "Comentario agregado."));
   };
 
   const handlePostSubmit = (values) => {
@@ -56,8 +58,11 @@ function Noticias() {
     );
     setSelectedPost(null);
     form.resetFields();
-    message.success(
-      `${selectedPost ? "Publicación editada" : "Nueva publicación"} con éxito`
+    dispatch(
+      showSuccessNotification(
+        "Éxito",
+        `${selectedPost ? "Publicación editada" : "Nueva publicación"} creada.`
+      )
     );
   };
 
@@ -110,7 +115,7 @@ function Noticias() {
 
       <Modal
         title={selectedPost ? selectedPost.title : ""}
-        visible={modalVisible}
+        open={modalVisible}
         onCancel={closeModal}
         footer={[
           <Button key="cancel" onClick={closeModal}>

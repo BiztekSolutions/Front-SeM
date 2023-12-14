@@ -19,8 +19,9 @@ const getGroup = async (token, idGroup) => {
   });
   return response.data;
 };
+
 const deleteGroup = async (token, groupId) => {
-  const response = await axios.put(`${base_url}/groups/${groupId}`, {
+  const response = await axios.delete(`${base_url}/groups/${groupId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -32,6 +33,7 @@ const getGroups = async () => {
   const response = await axios.get(`${base_url}/groups`);
   return response.data;
 };
+
 const deleteClientFromGroup = async (token, data) => {
   const response = await axios.put(`${base_url}/groups/delete-client`, data, {
     headers: {

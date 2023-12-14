@@ -3,7 +3,7 @@ import { groupService } from "./groupService";
 
 const initialState = {
   group: {},
-  groups: [],
+  groups: null,
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -126,13 +126,13 @@ export const groupSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.message;
+        state.message = "Grupo eliminado con exito";
       })
       .addCase(deleteGroup.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.message = action.payload.message;
+        state.message = "No se ha podido eliminar el grupo";
         state.group = null;
       })
 

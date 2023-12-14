@@ -19,21 +19,23 @@ AM GRUPOS
 
 Revisiones:
 "Ejercicios" pestaña de user, si no tiene nada se rompe (Fixed)
-"Duracion" input de agregar rutina, pones un numero y agrega de a 1 las semanas.
-"Calendar" por defecto pone una fecha cualquiera (Creo que agrega infinitamente fechas).
-"Editar rutina" si no existe, rompe.
-View profile no existe
-Scroll a veces no funciona (generalmente en "Agregar rutina")
+"Duracion" input de agregar rutina, pones un numero y agrega de a 1 las semanas. (Fixed)
+"Calendar" por defecto pone una fecha cualquiera (Creo que agrega infinitamente fechas). (Fixed)
+"Editar rutina" si no existe, rompe. (Fixed)
+View profile no existe (Fixed)
+    --> Ahora existe, pero rompe si el usuario no es cliente (o sea es coach)
+Scroll a veces no funciona. Esto pasa al loguearse que el scroll queda fijado en la misma posicion que la landing por eso despues rompe.
 Cuando tengo 2 clientes y navego de uno al otro, los ejercicios no se vuelven a querear y me muestra los del cliente anterior.
-El desplegable del user rompe todo.
+El desplegable del user rompe todo. (Fixed)
 IMPORTANTE! El drag n drop no te deja reordenar dentro del dia los ejercicios.
     --> MAS IMPORTANTE, EN LA DB SE TIENEN QUE GUARDAR ORDENADOS TMB!!!!
-Ahora al loguear, a veces hace falta apretar F5 para que comience a funcionar.
+Ahora al loguear, a veces hace falta apretar F5 para que comience a funcionar. (Fixed)
 Pendiente: Cambios en el groupSlice con el token.
+    En realidad, todos los slices no estan enviando el token.
 Pendiente: Editar profile tire success o error.
 Pendinte: Agregar avatar al editar perfil.
 Pendiente: El clearMessage debe estar en exerciseSlice tmb.
-Pendiente: Un cliente que ya esta en un grupo no debe aparecer en la lista de clientes de "Crear Grupo" (Outter join se resuelve con nuevo endpoint del back)
+Organizar finalmente todas las malditas variables que tienen 20 formas de llamarse (groupId, idGroup, etc.)
 
 
 Roadmap:

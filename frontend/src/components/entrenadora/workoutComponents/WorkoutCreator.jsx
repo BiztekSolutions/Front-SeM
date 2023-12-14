@@ -413,7 +413,6 @@ function WorkoutCreator() {
                                     )
                                   }
                                 />
-
                                 <MdDelete
                                   className="text-red-500 w-10 h-10 cursor-pointer"
                                   onClick={() => removeExercise(day, index)}

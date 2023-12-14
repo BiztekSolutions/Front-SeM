@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { DatePicker, Typography } from "antd";
 import moment from "moment";
-import { MdDelete } from "react-icons/md";
+import { MdArrowDownward, MdArrowUpward, MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
@@ -84,9 +84,7 @@ function EditarRutinas() {
               i++
             ) {
               const exerciseConfig = groupExercise.ExerciseConfigurations[i];
-              exercisesGroup[groupExercise.day][
-                exerciseConfig.Exercise.idExercise
-              ] = {
+              exercisesGroup[groupExercise.day][exerciseConfig.order] = {
                 idExercise: exerciseConfig.Exercise.idExercise,
                 name: exerciseConfig.Exercise.name,
                 configuration: {
@@ -270,6 +268,46 @@ function EditarRutinas() {
       </Typography.Text>
     );
   }
+
+  const moveExercise = (day, currentIndex, newIndex) => {
+    console.log(day, currentIndex, newIndex);
+    console.log(typeof currentIndex, typeof newIndex);
+    if (
+      newIndex >= 0 &&
+      newIndex < Object.keys(formData.exercisesGroup[day]).length
+    ) {
+      setFormData((prevFormData) => {
+        const newExercisesGroup = { ...prevFormData.exercisesGroup };
+        const exercises = Object.values(newExercisesGroup[day]);
+
+        // Remove the exercise from its current position
+        const [movedExercise] = exercises.splice(currentIndex, 1);
+
+        // Insert the exercise at the new position
+        exercises.splice(newIndex, 0, movedExercise);
+
+        // Update the configuration index
+        exercises.forEach((exercise, index) => {
+          exercise.configuration = {
+            ...exercise.configuration,
+            index,
+          };
+        });
+
+        // Update the exercises in the newExercisesGroup
+        newExercisesGroup[day] = exercises.reduce((acc, exercise) => {
+          acc[exercise.configuration.index] = exercise;
+          return acc;
+        }, {});
+
+        return {
+          ...prevFormData,
+          exercisesGroup: newExercisesGroup,
+        };
+      });
+    }
+  };
+
   return (
     <>
       <form
@@ -399,20 +437,16 @@ function EditarRutinas() {
                                         placeholder="Series"
                                         inputMode="numeric"
                                         value={
-                                          formData.exercisesGroup[day]?.[
-                                            exercise.idExercise
-                                          ]?.configuration?.series !== undefined
-                                            ? formData.exercisesGroup[day]?.[
-                                                exercise.idExercise
+                                          formData.exercisesGroup[day][index]
+                                            ?.configuration?.series !==
+                                          undefined
+                                            ? formData.exercisesGroup[day][
+                                                index
                                               ]?.configuration.series
                                             : ""
                                         }
                                         onChange={(e) =>
-                                          handleSeries(
-                                            e,
-                                            day,
-                                            exercise.idExercise
-                                          )
+                                          handleSeries(e, day, index)
                                         }
                                       />
                                     </div>
@@ -422,26 +456,41 @@ function EditarRutinas() {
                                         name="repeticiones"
                                         placeholder="Repeticiones"
                                         value={
-                                          formData.exercisesGroup[day]?.[
-                                            exercise.idExercise
-                                          ]?.configuration?.repetitions !==
+                                          formData.exercisesGroup[day][index]
+                                            ?.configuration?.repetitions !==
                                           undefined
-                                            ? formData.exercisesGroup[day]?.[
-                                                exercise.idExercise
+                                            ? formData.exercisesGroup[day][
+                                                index
                                               ]?.configuration?.repetitions
                                             : ""
                                         }
                                         onChange={(e) =>
-                                          handleRepeticiones(
-                                            e,
-                                            day,
-                                            exercise.idExercise
-                                          )
+                                          handleRepeticiones(e, day, index)
                                         }
                                       />
                                     </div>
                                   </div>
                                 </div>
+                                <MdArrowUpward
+                                  className="text-red-500 w-10 h-10 cursor-pointer"
+                                  onClick={() =>
+                                    moveExercise(
+                                      day,
+                                      Number.parseInt(index),
+                                      Number.parseInt(index) - 1
+                                    )
+                                  }
+                                />
+                                <MdArrowDownward
+                                  className="text-red-500 w-10 h-10 cursor-pointer"
+                                  onClick={() =>
+                                    moveExercise(
+                                      day,
+                                      Number.parseInt(index),
+                                      Number.parseInt(index) + 1
+                                    )
+                                  }
+                                />
                                 <MdDelete
                                   className="text-red-500 w-10 h-10 cursor-pointer"
                                   onClick={() => removeExercise(day, index)}

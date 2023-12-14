@@ -23,7 +23,7 @@ function PostList() {
   const handleCommentSubmit = (postId, comment) => {
     dispatch(addCommentToPost({ postId, comment }));
   };
-  console.log(posts, "posts");
+
   return (
     <div>
       <h2>Publicaciones</h2>

@@ -27,12 +27,12 @@ export default function User() {
       {!user.Credentials ? (
         <LoadingSpinner />
       ) : (
-        <div
-          className={`${styles.wrapper} p-6 rounded-lg shadow-lg userDetails`}
-        >
-          <div className={styles.title}>
-            <div className="ml-5 text-4xl font-bold font-barlow-regular flex gap-4">
-              <MdOutlinePerson2 className="rounded-full h-15 w-15" />
+        <div className={`p-6 rounded-lg shadow-lg`}>
+          <div>
+            <div className="ml-5 text-4xl font-bold font-barlow-regular flex items-center justify-center gap-4">
+              <div>
+                <MdOutlinePerson2 className="rounded-full h-15 w-15" />
+              </div>
               <Typography.Title level={3} className="text-center">
                 Perfil de {user.name}
               </Typography.Title>

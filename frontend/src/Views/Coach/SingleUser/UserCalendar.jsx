@@ -62,7 +62,7 @@ const UserCalendar = () => {
       const { startDate, endDate, GroupExercises } = routine.routine;
       let currentDate = new Date(startDate);
       const endDateObject = new Date(endDate);
-      console.log("entreeeee", startDate, endDate);
+
       while (currentDate < endDateObject) {
         const dayOfWeek = currentDate.getUTCDay();
         const dayOfWeekString = getDayOfWeekString(dayOfWeek);
@@ -102,7 +102,7 @@ const UserCalendar = () => {
     return <LoadingSpinner />;
   }
   let i = 0;
-  console.log(events, "events");
+
   return (
     <div>
       {events && rutinas && rutinas.length !== 0 && events !== 0 ? (
@@ -116,7 +116,6 @@ const UserCalendar = () => {
               className="calendar-container"
               events={events}
               eventContent={(arg, index) => {
-                console.log(index, "index");
                 index++;
                 const exerciseConfiguration =
                   arg.event.extendedProps.exerciseConfiguration;

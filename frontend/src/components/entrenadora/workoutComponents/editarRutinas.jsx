@@ -5,7 +5,7 @@ import { DatePicker, Typography } from "antd";
 import moment from "moment";
 import { MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { createRutine } from "@/features/rutinas/rutinasSlice";
+
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
 import { getRutines } from "@/features/rutinas/rutinasSlice";
 import { updateRutine } from "@/features/rutinas/rutinasSlice";
@@ -64,7 +64,6 @@ function EditarRutinas() {
     if (!rutinas) {
       dispatch(getRutines(id));
     } else {
-      console.log("rutinas", rutinas);
       if (rutinas.length !== 0) {
         const editRoutine = rutinas[0].routine;
 
@@ -76,9 +75,8 @@ function EditarRutinas() {
           Friday: {},
           Saturday: {},
         };
-        console.log("EDIT ROUTINE", editRoutine);
+
         editRoutine.GroupExercises.forEach((groupExercise) => {
-          console.log("GROUP EXERCISE", groupExercise);
           if (groupExercise.ExerciseConfigurations.length > 0) {
             for (
               let i = 0;
@@ -115,7 +113,7 @@ function EditarRutinas() {
             "weeks"
           )
         );
-        console.log("FINAL DATA", finalData);
+
         setFormData(finalData);
       }
     }
@@ -162,14 +160,13 @@ function EditarRutinas() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(formData);
+
     dispatch(
       updateRutine({ ...formData, idRoutine: rutinas[0].routine.idRoutine })
     );
   }
 
   const removeExercise = (day, exerciseIndex) => {
-    console.log(day, exerciseIndex);
     setFormData((prevFormData) => {
       const newExercisesGroup = { ...prevFormData.exercisesGroup };
       delete newExercisesGroup[day][exerciseIndex];

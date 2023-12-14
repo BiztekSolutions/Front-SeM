@@ -206,7 +206,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log(action.payload, "payload");
+
         state.message = action.payload.message;
         state.user = action.payload.data ? action.payload.data : state.user;
       })

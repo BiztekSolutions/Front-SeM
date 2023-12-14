@@ -8,10 +8,8 @@ import Form from "antd/lib/form";
 import Typography from "antd/lib/typography";
 
 import Highlighter from "react-highlight-words";
-
 import { SearchOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
-
 import styles from "./Users.module.css";
 import { getClients } from "../../features/user/userSlice";
 import { createGroup, getGroups } from "../../features/group/groupSlice";
@@ -21,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 function CrearGrupos() {
   const dispatch = useDispatch();
-  const { clients, isLoading, isError, isSuccess } = useSelector(
+  const { clients, isLoading, isError, message } = useSelector(
     (state) => state.users
   );
 
@@ -55,6 +53,7 @@ function CrearGrupos() {
     setSearchedColumn(dataIndex);
   };
 
+
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
@@ -73,7 +72,7 @@ function CrearGrupos() {
   };
 
   const handleSubmit = () => {
-    dispatch(createGroup({ groupName, selectedUsers, token: auth.token }));
+    dispatch(createGroup({ groupName, selectedUsers }));
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -251,6 +250,7 @@ function CrearGrupos() {
       className: "text-3xl",
     },
   ];
+
   const dataSource = [];
   if (clients?.length > 0) {
     for (let i = 0; i < clients.length; i++) {

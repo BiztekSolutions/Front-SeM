@@ -29,12 +29,12 @@ const CustomLayout = ({ items }) => {
     setLogged(false);
     localStorage.removeItem("User");
     persistor.purge();
-    console.log("LocalStorage after purge:", localStorage);
+
     window.location.reload();
   };
-  console.log(user, "user");
+
   const { setLogged } = useContext(GlobalContext);
-  console.log(localUser, "localUser");
+
   const menu = (
     <Menu>
       <Menu.Item key="1">

@@ -12,7 +12,7 @@ const DeleteButton = ({ userName, userId }) => {
     dispatch(deleteUser(userId));
     setModalVisible(false);
   };
-  console.log("entreeeee", userName, userId);
+
   return (
     <>
       <FcFullTrash

@@ -75,7 +75,7 @@ function Profile() {
       })
     );
     dispatch(getUser(id));
-    console.log(user, "despues del get user");
+
     setIsEditing(false);
   };
   useEffect(() => {

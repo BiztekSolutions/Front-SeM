@@ -23,7 +23,7 @@ const DeleteButton = ({ userName, userId }) => {
 
       <Modal
         title="¡Atención!"
-        visible={modalVisible}
+        open={modalVisible}
         onOk={handleDelete}
         onCancel={() => setModalVisible(false)}
         okText="Sí"

@@ -2,6 +2,7 @@ import { DataTypes, Model, BelongsToManyAddAssociationMixin, BelongsToManyGetAss
 import sequelize from '../configs/db';
 import Client from './Client';
 import Routine from './Routine';
+import ClientGroup from './ClientGroup';
 
 interface GroupAttributes {
   idGroup: number;
@@ -51,7 +52,7 @@ Group.init(
 
 // Asociación muchos a muchos con Client
 Group.belongsToMany(Client, {
-  through: 'ClientGroup', // Nombre de la tabla intermedia
+  through: ClientGroup, // Nombre de la tabla intermedia
   foreignKey: 'idGroup', // Clave foránea en la tabla intermedia que apunta a Group
   otherKey: 'idClient', // Clave foránea en la tabla intermedia que apunta a Client
 });

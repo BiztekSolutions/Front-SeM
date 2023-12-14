@@ -158,7 +158,7 @@ function Profile() {
       )}
       <Modal
         title="Seleccionar Avatar"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >

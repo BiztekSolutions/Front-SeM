@@ -19,6 +19,7 @@ import Comment from './models/Comment';
 import GroupExercise from './models/GroupExercise';
 import ExerciseConfiguration from './models/ExerciseConfiguration';
 import ClientHasRoutine from './models/ClientHasRoutine';
+import ClientGroup from './models/ClientGroup';
 const app: Application = express();
 const PORT: number = 3000;
 
@@ -46,8 +47,8 @@ Client.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true 
 Coach.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true });
 
 // CLIENT RELATIONS
-Group.belongsToMany(Client, { through: 'ClientGroup', foreignKey: 'idGroup' });
-Client.belongsToMany(Group, { through: 'ClientGroup', foreignKey: 'idClient' });
+Group.belongsToMany(Client, { through: ClientGroup });
+Client.belongsToMany(Group, { through: ClientGroup });
 
 Client.hasMany(Routine, { foreignKey: 'idClient' });
 Routine.belongsTo(Client, { foreignKey: 'idClient', onDelete: 'CASCADE', hooks: true });

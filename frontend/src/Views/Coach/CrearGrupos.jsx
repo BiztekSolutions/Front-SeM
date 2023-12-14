@@ -1,6 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 
-import { Table, Button, Input, Space, Form, Typography } from "antd";
+import Table from "antd/lib/table";
+import Button from "antd/lib/button";
+import Input from "antd/lib/input";
+import Space from "antd/lib/space";
+import Form from "antd/lib/form";
+import Typography from "antd/lib/typography";
+
 import Highlighter from "react-highlight-words";
 
 import { SearchOutlined } from "@ant-design/icons";
@@ -8,9 +14,10 @@ import { useSelector, useDispatch } from "react-redux";
 
 import styles from "./Users.module.css";
 import { getClients } from "../../features/user/userSlice";
-import { createGroup } from "../../features/group/groupSlice";
+import { createGroup, getGroups } from "../../features/group/groupSlice";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 import { showSuccessNotification } from "@/features/layout/layoutSlice";
+import { useNavigate } from "react-router-dom";
 
 function CrearGrupos() {
   const dispatch = useDispatch();
@@ -20,6 +27,7 @@ function CrearGrupos() {
 
   const groups = useSelector((state) => state.groups);
   const auth = useSelector((state) => state.auths);
+  const navigate = useNavigate();
 
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [form] = Form.useForm();
@@ -34,9 +42,10 @@ function CrearGrupos() {
     }
 
     if (groups.message === "Grupo creado con exito") {
-      form.resetFields();
       setSelectedUsers([]);
-      showSuccessNotification("Exito", "Grupo creado con exitosamente!");
+      dispatch(showSuccessNotification("Exito!", "Grupo creado."));
+      dispatch(getGroups());
+      navigate("/coach/grupos");
     }
   }, [groups.message]);
 
@@ -45,7 +54,7 @@ function CrearGrupos() {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-  
+
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
@@ -247,15 +256,15 @@ function CrearGrupos() {
     for (let i = 0; i < clients.length; i++) {
       dataSource.push({
         key: i,
-        firstName: clients[i].name,
-        lastName: clients[i].lastname,
-        email: clients[i].Credentials[0].email,
+        firstName: clients[i].User.name,
+        lastName: clients[i].User.lastname,
+        email: clients[i].User.Credentials[0].email,
         actions: (
           <div className="flex align-items-center gap-3">
             <input
               type="checkbox"
-              checked={selectedUsers.includes(clients[i].idUser)}
-              onChange={() => handleUserSelect(clients[i].idUser)}
+              checked={selectedUsers.includes(clients[i].User.idUser)}
+              onChange={() => handleUserSelect(clients[i].User.idUser)}
             />
           </div>
         ),
@@ -268,7 +277,7 @@ function CrearGrupos() {
   }
 
   if (isError) {
-    return <div>{message}</div>;
+    return <div>{groups.message}</div>;
   }
 
   return (

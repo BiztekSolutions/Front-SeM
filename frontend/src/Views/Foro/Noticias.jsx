@@ -46,7 +46,7 @@ function Noticias() {
   const handleCommentSubmit = async (postId, comment) => {
     dispatch(addCommentToPost({ postId, comment }));
     setComment("");
-    showSuccessNotification("Éxito", "Comentario agregado.");
+    dispatch(showSuccessNotification("Éxito", "Comentario agregado."));
   };
 
   const handlePostSubmit = (values) => {
@@ -58,9 +58,11 @@ function Noticias() {
     );
     setSelectedPost(null);
     form.resetFields();
-    showSuccessNotification(
-      "Éxito",
-      `${selectedPost ? "Publicación editada" : "Nueva publicación"} creada.`
+    dispatch(
+      showSuccessNotification(
+        "Éxito",
+        `${selectedPost ? "Publicación editada" : "Nueva publicación"} creada.`
+      )
     );
   };
 
@@ -113,7 +115,7 @@ function Noticias() {
 
       <Modal
         title={selectedPost ? selectedPost.title : ""}
-        visible={modalVisible}
+        open={modalVisible}
         onCancel={closeModal}
         footer={[
           <Button key="cancel" onClick={closeModal}>

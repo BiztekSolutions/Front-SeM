@@ -109,6 +109,7 @@ function WorkoutForm({ exercises, postWorkout }) {
       setRepeticiones("");
     }
   }
+
   function filterByType(exercises) {
     return exercises?.filter((exercise) => {
       if (typeFilter === "All") return true;

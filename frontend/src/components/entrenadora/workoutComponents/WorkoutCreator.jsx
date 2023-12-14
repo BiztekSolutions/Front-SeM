@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { DatePicker } from "antd";
 import moment from "moment";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdArrowUpward, MdArrowDownward } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { createRutine } from "@/features/rutinas/rutinasSlice";
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
@@ -190,7 +190,10 @@ function WorkoutCreator() {
   const handleLoadMore = () => {
     setVisibleExercises((prev) => prev + 10);
   };
+
   const moveExercise = (day, currentIndex, newIndex) => {
+    console.log(day, currentIndex, newIndex);
+    console.log(typeof currentIndex, typeof newIndex);
     if (
       newIndex >= 0 &&
       newIndex < Object.keys(formData.exercisesGroup[day]).length
@@ -390,24 +393,27 @@ function WorkoutCreator() {
                                     </div>
                                   </div>
                                 </div>
-                                <button
-                                  className="text-blue-500 w-8 h-8 cursor-pointer"
-                                  type="button"
+                                <MdArrowUpward
+                                  className="text-red-500 w-10 h-10 cursor-pointer"
                                   onClick={() =>
-                                    moveExercise(day, index, index - 1)
+                                    moveExercise(
+                                      day,
+                                      Number.parseInt(index),
+                                      Number.parseInt(index) - 1
+                                    )
                                   }
-                                >
-                                  ▲
-                                </button>
-                                <button
-                                  className="text-blue-500 w-8 h-8 cursor-pointer"
-                                  type="button"
+                                />
+                                <MdArrowDownward
+                                  className="text-red-500 w-10 h-10 cursor-pointer"
                                   onClick={() =>
-                                    moveExercise(day, index, index + 1)
+                                    moveExercise(
+                                      day,
+                                      Number.parseInt(index),
+                                      Number.parseInt(index) + 1
+                                    )
                                   }
-                                >
-                                  ▼
-                                </button>
+                                />
+
                                 <MdDelete
                                   className="text-red-500 w-10 h-10 cursor-pointer"
                                   onClick={() => removeExercise(day, index)}

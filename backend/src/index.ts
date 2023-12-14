@@ -47,8 +47,11 @@ Client.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true 
 Coach.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true });
 
 // CLIENT RELATIONS
-Group.belongsToMany(Client, { through: ClientGroup });
-Client.belongsToMany(Group, { through: ClientGroup });
+ClientGroup.belongsTo(Client, { foreignKey: 'idClient' });
+Client.hasMany(ClientGroup, { foreignKey: 'idClient' });
+
+ClientGroup.belongsTo(Group, { foreignKey: 'idGroup' });
+Group.hasMany(ClientGroup, { foreignKey: 'idGroup' });
 
 Client.hasMany(Routine, { foreignKey: 'idClient' });
 Routine.belongsTo(Client, { foreignKey: 'idClient', onDelete: 'CASCADE', hooks: true });

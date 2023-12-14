@@ -42,7 +42,6 @@ function EditarEjercicio() {
 
   const handleSave = () => {
     if (selectedExercise) {
-      console.log("EJERCICIO SELECCIONADO:", selectedExercise);
       dispatch(updateExercise(selectedExercise));
       setSelectedExercise(null);
     }

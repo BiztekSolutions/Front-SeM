@@ -26,7 +26,6 @@ export const updateRutine = createAsyncThunk(
   "updateRutine",
   async (data, thunkAPI) => {
     try {
-      console.log(data);
       return await rutinasService.updateRutine(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

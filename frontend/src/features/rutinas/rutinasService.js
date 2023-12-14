@@ -9,6 +9,7 @@ const getRutines = async (userId, token) => {
       },
     });
     const userRoutines = response.data;
+    console.log(userRoutines, "userRoutines");
     // Obtener un array de promesas para las solicitudes de rutinas individuales
     const routinePromises = userRoutines.routines.map(async (routine) => {
       const routineResponse = await axios.get(
@@ -19,6 +20,7 @@ const getRutines = async (userId, token) => {
           },
         }
       );
+      console.log(routineResponse.data, "routineResponse.data");
       return routineResponse.data;
     });
 
@@ -39,7 +41,10 @@ const getAllRutines = async () => {
 
 const updateRutine = async (data) => {
   try {
-    const response = await axios.put(`${base_url}/routines/${data.idRoutine}`, data);
+    const response = await axios.put(
+      `${base_url}/routines/${data.idRoutine}`,
+      data
+    );
     return response.data;
   } catch (error) {
     throw new Error("Failed to update rutines.");

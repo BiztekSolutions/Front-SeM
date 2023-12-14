@@ -19,10 +19,9 @@ function Group() {
   const groupId = id;
   const auth = useSelector((state) => state.auths);
   const [clientsList, setClientsList] = useState([]);
-  console.log(group, "group");
+
   useEffect(() => {
     if (groupId) {
-      console.log("groupId", groupId);
       dispatch(getGroup({ token: auth.token, idGroup: groupId }));
     }
   }, [groupId]);

@@ -12,7 +12,7 @@ const DeleteGroups = ({ groupName, idGroup }) => {
     dispatch(deleteGroup(idGroup));
     setModalVisible(false);
   };
-  console.log("entreeeee", groupName, idGroup);
+
   return (
     <>
       <FcFullTrash

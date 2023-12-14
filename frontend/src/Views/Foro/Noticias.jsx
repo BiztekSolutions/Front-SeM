@@ -30,7 +30,7 @@ function Noticias() {
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const user = JSON.parse(localStorage.getItem("User"));
-  console.log(posts, "posts");
+
   useEffect(() => {
     dispatch(fetchPosts());
     dispatch(getCoaches());

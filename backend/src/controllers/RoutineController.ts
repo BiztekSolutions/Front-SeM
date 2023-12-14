@@ -118,7 +118,10 @@ export const updateRoutine = async (req: Request, res: Response) => {
           configurationIndex < routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations.length;
           configurationIndex++
         ) {
-          console.log('ENTRE AL SEGUNDO FOR', routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations[configurationIndex]);
+          console.log(
+            'ENTRE AL SEGUNDO FOR',
+            routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations[configurationIndex]
+          );
           await ExerciseConfiguration.destroy({
             where: {
               idExerciseConfiguration:

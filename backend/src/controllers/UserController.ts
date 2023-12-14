@@ -76,21 +76,6 @@ export const getUserRoutines = async (req: Request, res: Response) => {
       include: [
         {
           model: Routine,
-          include: [
-            {
-              model: GroupExercise,
-              include: [
-                {
-                  model: RoutineConfiguration,
-                  include: [
-                    {
-                      model: Exercise,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
         },
       ],
     });

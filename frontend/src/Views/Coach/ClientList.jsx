@@ -1,7 +1,7 @@
-import { deleteUser, getClients } from "../../features/user/userSlice";
+import { getClients } from "../../features/user/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { FcFullTrash, FcInfo } from "react-icons/fc";
+import { FcInfo } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import ListaUsuarios from "./ListaUsuarios";
 import DeleteButton from "../../components/DeleteButton/DeleteButton";
@@ -16,7 +16,6 @@ function ClientList() {
     if (!clients) {
       dispatch(getClients());
     }
-    console.log(clients);
   }, [clients]);
 
   if (isLoading) {

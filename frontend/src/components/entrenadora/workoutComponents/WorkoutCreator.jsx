@@ -120,6 +120,8 @@ function WorkoutCreator() {
     );
 
     if (!alreadyExists) {
+      const newIndex = Object.values(formData.exercisesGroup[day]).length;
+
       const exerciseDrop = {
         idExercise: draggedExercise.idExercise,
         name: draggedExercise.name,
@@ -136,7 +138,7 @@ function WorkoutCreator() {
           ...prevFormData.exercisesGroup,
           [day]: {
             ...prevFormData.exercisesGroup[day],
-            [draggedExercise.idExercise]: exerciseDrop,
+            [newIndex]: exerciseDrop,
           },
         },
       }));
@@ -145,7 +147,7 @@ function WorkoutCreator() {
     }
   };
 
-  const handleSeries = (event, day, exerciseId) => {
+  const handleSeries = (event, day, index) => {
     const value = event.target.value;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -153,10 +155,10 @@ function WorkoutCreator() {
         ...prevFormData.exercisesGroup,
         [day]: {
           ...prevFormData.exercisesGroup[day],
-          [exerciseId]: {
-            ...prevFormData.exercisesGroup[day][exerciseId],
+          [index]: {
+            ...prevFormData.exercisesGroup[day][index],
             configuration: {
-              ...prevFormData.exercisesGroup[day][exerciseId].configuration,
+              ...prevFormData.exercisesGroup[day][index].configuration,
               series: value,
             },
           },
@@ -165,7 +167,7 @@ function WorkoutCreator() {
     }));
   };
 
-  const handleRepeticiones = (event, day, exerciseId) => {
+  const handleRepeticiones = (event, day, index) => {
     const value = event.target.value;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -173,10 +175,10 @@ function WorkoutCreator() {
         ...prevFormData.exercisesGroup,
         [day]: {
           ...prevFormData.exercisesGroup[day],
-          [exerciseId]: {
-            ...prevFormData.exercisesGroup[day][exerciseId],
+          [index]: {
+            ...prevFormData.exercisesGroup[day][index],
             configuration: {
-              ...prevFormData.exercisesGroup[day][exerciseId].configuration,
+              ...prevFormData.exercisesGroup[day][index].configuration,
               repetitions: value,
             },
           },
@@ -193,19 +195,30 @@ function WorkoutCreator() {
       newIndex >= 0 &&
       newIndex < Object.keys(formData.exercisesGroup[day]).length
     ) {
-      console.log(Object.keys(formData.exercisesGroup[day]).length);
       setFormData((prevFormData) => {
         const newExercisesGroup = { ...prevFormData.exercisesGroup };
-        const exercisesArray = Object.values(newExercisesGroup[day]);
-        exercisesArray.splice(
-          newIndex,
-          0,
-          exercisesArray.splice(currentIndex, 1)[0]
-        );
-        newExercisesGroup[day] = exercisesArray.reduce(
-          (acc, exercise, i) => ({ ...acc, [i]: exercise }),
-          {}
-        );
+        const exercises = Object.values(newExercisesGroup[day]);
+
+        // Remove the exercise from its current position
+        const [movedExercise] = exercises.splice(currentIndex, 1);
+
+        // Insert the exercise at the new position
+        exercises.splice(newIndex, 0, movedExercise);
+
+        // Update the configuration index
+        exercises.forEach((exercise, index) => {
+          exercise.configuration = {
+            ...exercise.configuration,
+            index,
+          };
+        });
+
+        // Update the exercises in the newExercisesGroup
+        newExercisesGroup[day] = exercises.reduce((acc, exercise) => {
+          acc[exercise.configuration.index] = exercise;
+          return acc;
+        }, {});
+
         return {
           ...prevFormData,
           exercisesGroup: newExercisesGroup,
@@ -322,13 +335,14 @@ function WorkoutCreator() {
                           <div className="p-2">
                             <ul>
                               <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200">
-                                {exercise?.image1 && (
-                                  <img
-                                    className="w-28 h-28 rounded-full mr-2"
-                                    src={exercise?.image1}
-                                    alt={exercise?.name}
-                                  />
-                                )}
+                                {exercise?.image1 &&
+                                  console.log(index, "iiiii") && (
+                                    <img
+                                      className="w-28 h-28 rounded-full mr-2"
+                                      src={exercise?.image1}
+                                      alt={exercise?.name}
+                                    />
+                                  )}
                                 <div>
                                   <p className="text-gray-800 text-card-drop">
                                     {exercise?.name}
@@ -342,20 +356,16 @@ function WorkoutCreator() {
                                         placeholder="Series"
                                         inputMode="numeric"
                                         value={
-                                          formData.exercisesGroup[day]?.[
-                                            exercise?.idExercise
-                                          ]?.configuration?.series !== undefined
+                                          formData.exercisesGroup[day]?.[index]
+                                            ?.configuration?.series !==
+                                          undefined
                                             ? formData.exercisesGroup[day]?.[
-                                                exercise?.idExercise
+                                                index
                                               ]?.configuration.series
                                             : ""
                                         }
                                         onChange={(e) =>
-                                          handleSeries(
-                                            e,
-                                            day,
-                                            exercise?.idExercise
-                                          )
+                                          handleSeries(e, day, index)
                                         }
                                       />
                                     </div>
@@ -365,21 +375,16 @@ function WorkoutCreator() {
                                         name="repeticiones"
                                         placeholder="Repeticiones"
                                         value={
-                                          formData.exercisesGroup[day]?.[
-                                            exercise?.idExercise
-                                          ]?.configuration?.repetitions !==
+                                          formData.exercisesGroup[day]?.[index]
+                                            ?.configuration?.repetitions !==
                                           undefined
                                             ? formData.exercisesGroup[day]?.[
-                                                exercise?.idExercise
+                                                index
                                               ]?.configuration?.repetitions
                                             : ""
                                         }
                                         onChange={(e) =>
-                                          handleRepeticiones(
-                                            e,
-                                            day,
-                                            exercise?.idExercise
-                                          )
+                                          handleRepeticiones(e, day, index)
                                         }
                                       />
                                     </div>

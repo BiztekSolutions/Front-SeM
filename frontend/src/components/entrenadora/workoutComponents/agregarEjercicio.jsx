@@ -66,7 +66,6 @@ function AgregarEjercicio() {
       ...prevData,
       [name]: value,
     }));
-    console.log(formData);
   }
 
   function handleExerciseTypeChange(value) {

@@ -240,7 +240,7 @@ function CrearGrupos() {
       className: "text-3xl",
     },
   ];
-  console.log("clients", clients);
+
   const dataSource = [];
   if (clients?.length > 0) {
     for (let i = 0; i < clients.length; i++) {

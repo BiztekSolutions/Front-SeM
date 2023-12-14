@@ -123,7 +123,6 @@ export const authSlice = createSlice({
 
       // ACTIONS
       .addCase(updateUserr, (state, action) => {
-        console.log(action.payload, "payloadddddddd");
         state.user = action.payload;
       })
       .addCase(clearAuthMessages, (state) => {

@@ -32,9 +32,8 @@ const SingleUser = () => {
     }
     return false;
   };
-  console.log("isUserRoute", isUserRoute());
+
   const resetRutinasAndNavigate = (to) => {
-    console.log("reset rutinas");
     dispatch(resetRutines());
     navigate(to);
   };

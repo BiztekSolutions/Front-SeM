@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import {
   Dropdown,
@@ -34,6 +34,12 @@ const CustomLayout = ({ items }) => {
   };
 
   const { setLogged } = useContext(GlobalContext);
+
+  useEffect(() => {
+    if (window.innerWidth < 1000) {
+      dispatch(toggleSidebar(true));
+    }
+  }, [dispatch]);
 
   const menu = (
     <Menu>
@@ -75,6 +81,7 @@ const CustomLayout = ({ items }) => {
           collapsible
           collapsed={layout.isSidebarCollapsed}
           theme={layout.isDarkMode ? "dark" : "light"}
+          className="bar-menu"
         >
           <div className="logo flex items-center justify-center">
             {layout.isSidebarCollapsed ? (
@@ -94,11 +101,12 @@ const CustomLayout = ({ items }) => {
             mode="inline"
             items={items}
             theme={layout.isDarkMode ? "dark" : "light"}
+            className="menu-ni-idea"
           />
         </Sider>
         <AntLayout>
           <Header
-            className="flex justify-between px-1 pe-5"
+            className="flex justify-between px-1 pe-5 "
             style={{
               padding: 0,
               backgroundColor: layout.isDarkMode ? "#001529" : "white",
@@ -121,6 +129,7 @@ const CustomLayout = ({ items }) => {
                   width: 64,
                   height: 64,
                 }}
+                className="btn-custom-layout"
               />
             </div>
             {/* @TODO: Esta flag no se ve */}
@@ -185,7 +194,7 @@ const CustomLayout = ({ items }) => {
             </div>
           </Header>
           <Content
-            className="p-12 min-h-screen"
+            className="min-h-screen"
             style={{
               backgroundColor: layout.isDarkMode ? "#111821" : "white",
             }}

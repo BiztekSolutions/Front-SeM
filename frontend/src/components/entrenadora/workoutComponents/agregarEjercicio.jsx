@@ -113,7 +113,7 @@ function AgregarEjercicio() {
   }
 
   return (
-    <div>
+    <div className="add-exercise">
       <Form form={form} onFinish={postExercise} layout="vertical">
         <Form.Item
           required

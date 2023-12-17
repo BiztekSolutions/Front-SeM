@@ -125,7 +125,12 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     }
 
     if (message === "User already exists") {
-      dispatch(showErrorNotification("Error", "Ya existe un usuario creado con esas credenciales. Por favor, inicie sesión."));
+      dispatch(
+        showErrorNotification(
+          "Error",
+          "Ya existe un usuario creado con esas credenciales. Por favor, inicie sesión."
+        )
+      );
       dispatch(clearUserMessage());
     }
 
@@ -158,7 +163,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   return (
     <section>
       <div>
-        <div className="bg-white px-3 w-full ">
+        <div className="bg-white px-3 w-full overflow-scroll">
           {isRegisterOpen ? (
             <div className="flex flex-col md:flex-row ">
               <div className="mb-4 md:mb-0 md:w-1/2">
@@ -312,7 +317,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
           <button
             onClick={handleRegister}
             type="button"
-            className="font-bold rounded mt-2 hover:text-orange-700 border-none"
+            className="font-bold rounded mt-2 hover:text-orange-700 border-none texct-orange-500"
           >
             {isRegisterOpen
               ? "CAMBIAR A INICIAR SESIÓN"

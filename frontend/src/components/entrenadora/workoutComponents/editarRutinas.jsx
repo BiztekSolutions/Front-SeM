@@ -92,6 +92,7 @@ function EditarRutinas() {
                   repetitions: exerciseConfig.repetitions,
                 },
                 image1: exerciseConfig.Exercise.image1,
+                image2: exerciseConfig.Exercise.image2,
               };
             }
           }
@@ -192,6 +193,7 @@ function EditarRutinas() {
           repetitions: 0,
         },
         image1: draggedExercise.image1,
+        image2: draggedExercise.image2,
       };
 
       setFormData((prevFormData) => ({
@@ -353,7 +355,7 @@ function EditarRutinas() {
         </h2>
         {/* Parte izquierda (1/4 de ancho) */}
         <div className="flex mt-5">
-          <div className="w-1/4 p-4 overflow-y-auto max-h-screen exercise-list">
+          <div className="w-1/4 p-4 overflow-y-auto max-h-screen exercise-list text-orange-400">
             <h2 className="text-lg font-semibold mb-2">Lista de Ejercicios</h2>
             <div className="flex justify-center my-4">
               <input
@@ -368,16 +370,23 @@ function EditarRutinas() {
               {filteredExercises?.slice(0, visibleExercises).map((exercise) => (
                 <div
                   key={exercise.idExercise}
-                  className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center bg-orange-200"
+                  className="mb-2 p-2 border border-gray-500 rounded-full cursor-move flex items-center ejercicio"
                   draggable
                   onDragStart={(evt) => startDrag(evt, exercise)}
                 >
-                  <img
-                    className="w-16 h-16 rounded-full mr-2"
-                    src={exercise.image1}
-                    alt={exercise.name}
-                  />
-                  <p className="text-orange-500">{exercise.name}</p>
+                  <div className="flex imgs-exercise-list">
+                    <img
+                      className="w-16 h-16 rounded-full mr-1 img1-exercise-list"
+                      src={exercise.image1}
+                      alt={exercise.name}
+                    />
+                    <img
+                      className="w-16 h-16 rounded-full mr-2 img2-exercise-list"
+                      src={exercise.image2}
+                      alt={exercise.name}
+                    />
+                    <p className="text-orange-500">{exercise.name}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -393,18 +402,18 @@ function EditarRutinas() {
 
           {/* Parte derecha (3/4 de ancho) */}
           <div
-            className="flex-1 p-4 overflow-y-auto max-h-screen"
+            className="flex-1 p-4 overflow-y-auto max-h-screen rutine-all-day"
             ref={daySectionRef}
             onScroll={handleDaySectionScroll}
           >
             {/* Tablas para cada día de la semana */}
-            <div className="flex flex-wrap flex-col">
+            <div className="flex flex-wrap flex-col rutine-per-day">
               {/* Tablas para cada día de la semana */}
               {Object.entries(formData.exercisesGroup).map(
                 ([day, exercises]) => (
                   <div
                     key={day}
-                    className={`w-1/7 p-2`}
+                    className={`w-1/7 p-2 day-rutine`}
                     onDragOver={(evt) => onDragOver(evt)}
                     onDrop={(evt) => onDrop(evt, day)}
                   >
@@ -416,23 +425,30 @@ function EditarRutinas() {
                         <div key={index} className="">
                           <div className="p-2">
                             <ul>
-                              <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200">
+                              <li className="mb-2 card-drop rounded flex justify-between items-center bg-orange-200 exercise-in-day">
                                 {exercise.image1 && (
-                                  <img
-                                    className="w-28 h-28 rounded-full mr-2"
-                                    src={exercise.image1}
-                                    alt={exercise.name}
-                                  />
+                                  <div className="flex imgs-exercise-day">
+                                    <img
+                                      className="w-28 h-28 img1-exercise-day"
+                                      src={exercise.image1}
+                                      alt={exercise.name}
+                                    />
+                                    <img
+                                      className="w-28 h-28 img2-exercise-day"
+                                      src={exercise.image2}
+                                      alt={exercise.name}
+                                    />
+                                  </div>
                                 )}
                                 <div>
                                   <p className="text-gray-800 text-card-drop">
                                     {exercise.name}
                                   </p>
-                                  <div className="flex">
-                                    <div className="form-group my-2 mx-4">
+                                  <div className="flex series-reps">
+                                    <div className="form-group">
                                       <input
                                         type="number"
-                                        className="form-control p-2 border border-gray-300 rounded-full"
+                                        className="form-control p-2 border border-gray-300 rounded-full input-series-reps"
                                         name="series"
                                         placeholder="Series"
                                         inputMode="numeric"
@@ -450,9 +466,9 @@ function EditarRutinas() {
                                         }
                                       />
                                     </div>
-                                    <div className="form-group my-2 mx-4">
+                                    <div className="form-group ">
                                       <input
-                                        className="form-control p-2 border border-gray-300 rounded-full"
+                                        className="form-control p-2 border border-gray-300 rounded-full input2-series-reps"
                                         name="repeticiones"
                                         placeholder="Repeticiones"
                                         value={

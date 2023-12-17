@@ -71,7 +71,7 @@ function Noticias() {
   };
   const isUserACoach = coaches?.some((coach) => coach.idUser === user.user);
   return (
-    <div>
+    <div className="foro">
       <h1>Foro</h1>
       <List
         itemLayout="vertical"

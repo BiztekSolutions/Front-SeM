@@ -53,7 +53,6 @@ function CrearGrupos() {
     setSearchedColumn(dataIndex);
   };
 
-
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
@@ -195,7 +194,7 @@ function CrearGrupos() {
       dataIndex: "firstName",
       key: "firstName",
       defaultSortOrder: "ascend",
-      className: "text-3xl",
+      className: "text-table",
       sorter: (a, b) => {
         if (a.firstName < b.firstName) {
           return -1;
@@ -212,7 +211,7 @@ function CrearGrupos() {
       dataIndex: "lastName",
       key: "lastName",
       defaultSortOrder: "ascend",
-      className: "text-3xl",
+      className: "text-table",
 
       sorter: (a, b) => {
         if (a.lastName < b.lastName) {
@@ -230,7 +229,7 @@ function CrearGrupos() {
       dataIndex: "email",
       key: "email",
       defaultSortOrder: "ascend",
-      className: "text-3xl",
+      className: "text-table",
 
       sorter: (a, b) => {
         if (a.email < b.email) {
@@ -247,7 +246,7 @@ function CrearGrupos() {
       title: "Acciones",
       dataIndex: "actions",
       key: "actions",
-      className: "text-3xl",
+      className: "txt-taeble",
     },
   ];
 
@@ -281,12 +280,16 @@ function CrearGrupos() {
   }
 
   return (
-    <div className={`${styles.wrapper}`}>
+    <div className={`${styles.wrapper} add-group-listt`}>
       <div>
         <Typography.Title level={2}>Crear grupos</Typography.Title>
       </div>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
-        <Form.Item label="Nombre del grupo:" name="groupName">
+        <Form.Item
+          label="Nombre del grupo:"
+          name="groupName"
+          className="name-group"
+        >
           <Input
             placeholder="Ingrese el nombre del grupo"
             onChange={(e) => setGroupName(e.target.value)}
@@ -295,12 +298,14 @@ function CrearGrupos() {
         <Table
           dataSource={dataSource}
           columns={columns}
-          className="text-white text-xl"
+          className="text-white"
           rowClassName="h-12"
         />
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            <Typography.Text>Crear Grupo</Typography.Text>
+          <Button type="primary" htmlType="submit" className="bg-blue-500">
+            <Typography.Text className="tittle-module">
+              Crear Grupo
+            </Typography.Text>
           </Button>
         </Form.Item>
       </Form>

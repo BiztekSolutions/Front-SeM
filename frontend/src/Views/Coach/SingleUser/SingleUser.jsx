@@ -41,11 +41,12 @@ const SingleUser = () => {
   return (
     <div>
       <nav className="row navbar mx-1 border-t-2 mb-3 ">
-        <ul className="flex gap-3 justify-center content-center mt-2">
+        <ul className="flex gap-3 justify-center content-center mt-2 header-clientt">
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink
               to="./"
               style={activeStyle}
+              className="link-header-client"
               onClick={() => resetRutinasAndNavigate("./")}
             >
               {isGroupsPage ? "Grupo" : "Usuario"}
@@ -54,6 +55,7 @@ const SingleUser = () => {
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink
               to="./ejercicios"
+              className="link-header-client"
               style={activeStyle}
               onClick={() => resetRutinasAndNavigate("./")}
             >
@@ -64,6 +66,7 @@ const SingleUser = () => {
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink
               to="./agregarRutina"
+              className="link-header-client"
               style={activeStyle}
               onClick={() => resetRutinasAndNavigate("./")}
             >
@@ -74,6 +77,7 @@ const SingleUser = () => {
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
             <NavLink
               to="./editarRutinas"
+              className="link-header-client"
               style={activeStyle}
               onClick={() => resetRutinasAndNavigate("./")}
             >

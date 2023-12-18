@@ -609,6 +609,13 @@ input.form-control:focus {
 
   .iniSesion {
     margin-top: 70px !important;
+    overflow-y: scroll !important;
+    padding-bottom: 100px;
+  }
+
+  .internal-modal-login {
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .container1-footer {
@@ -977,7 +984,7 @@ input[type="text"] {
 }
 
 .exercise-list::-webkit-scrollbar {
-  width: 15px;
+  width: 2px;
 }
 
 .exercise-list::-webkit-scrollbar-thumb {
@@ -1073,6 +1080,22 @@ input[type="text"] {
   font-family: poppins;
   font-weight: bold;
   margin-bottom: 1rem;
+}
+
+.select-exercise-type {
+  width: 50% !important;
+}
+.btn-add-exe {
+  background-color: rgb(3, 3, 158) !important;
+  width: fit-content;
+  height: 5vh;
+  font-family: poppins;
+  font-weight: bold;
+  border-radius: 1rem;
+}
+
+.btn-add-exe:hover {
+  background-color: rgb(135, 135, 163) !important;
 }
 
 /* -------------- Query -------------- */
@@ -1281,10 +1304,11 @@ input[type="text"] {
 
 @media screen and (max-width: 760px) {
   .input-series-reps {
-    width: 60px !important;
+    width: 50px !important;
+    height: 50px !important;
   }
   .input2-series-reps {
-    width: 60px !important;
+    width: 50px !important;
   }
   .img1-exercise-day {
     border-radius: 50% !important;
@@ -1308,12 +1332,27 @@ input[type="text"] {
   .add-group-listt {
     padding: 2% !important;
   }
+  .text-list-exercise {
+    font-size: 0.8rem !important;
+    line-height: 15px !important;
+  }
+
+  .form-control {
+    font-size: 0.8rem !important;
+    height: 10px !important;
+  }
+
+  .rutine-all-day {
+    padding: 0% !important;
+  }
 }
 
 @media screen and (max-width: 700px) {
   .exercise-list {
-    width: 40% !important;
+    max-width: 100% !important;
     font-size: 0.8rem !important;
+    margin: 0 auto !important;
+    padding: 0px !important;
   }
   .ejercicio {
     border-radius: 1.5rem !important;
@@ -1342,11 +1381,26 @@ input[type="text"] {
   .user-listt {
     padding: 5px !important;
   }
+  .btn-header-client {
+    font-size: 1rem !important;
+    padding: 0.3rem !important;
+  }
+  .day-rutine {
+    width: 90% !important;
+    margin: auto;
+  }
+  .ejercicio {
+    width: 130px;
+  }
+  .text-card-drop {
+    font-size: 0.7rem;
+    line-height: 15px !important;
+    padding: 2px !important;
+  }
 }
 
 @media screen and (max-width: 600px) {
   .exercise-list {
-    width: 30% !important;
     font-size: 0.8rem !important;
     border: none !important;
     padding-right: 0.5rem !important;
@@ -1379,7 +1433,7 @@ input[type="text"] {
   }
   .bar-menu {
     position: absolute !important;
-    top: 9%;
+    top: 12%;
     left: 15%;
     transform: translate(-50%, -20%) !important;
     z-index: 1000;
@@ -1405,7 +1459,7 @@ input[type="text"] {
     display: none !important;
   }
   .img1-exercise-list {
-    border-radius: 50% !important;
+    display: none !important;
   }
   .foro {
     margin-top: 20%;
@@ -1440,5 +1494,13 @@ input[type="text"] {
   }
   .btn-custom-layout {
     display: none !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .add-exercise {
+    width: 70% !important;
+    margin: auto !important;
+    margin-top: 5% !important;
   }
 }

@@ -323,7 +323,9 @@ function WorkoutCreator() {
         {/* Parte izquierda (1/4 de ancho) */}
         <div className="flex mt-5">
           <div className="w-1/4 p-4 overflow-y-auto max-h-screen exercise-list text-orange-400">
-            <h2 className="text-lg font-semibold mb-2">Lista de Ejercicios</h2>
+            <h2 className="text-lg font-semibold mb-2 text-list-exercise">
+              Lista de Ejercicios
+            </h2>
             <div className="flex justify-center my-4">
               <input
                 type="text"

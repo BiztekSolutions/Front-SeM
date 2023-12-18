@@ -11,7 +11,8 @@ const updateUser = async (data) => {
 };
 
 const getUsers = async (token) => {
-  const response = await axios.get(`${base_url}/users/`, {
+  console.log("estoy pidiendo usuarios");
+  const response = await axios.get(`${base_url}/users`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

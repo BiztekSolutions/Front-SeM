@@ -14,7 +14,10 @@ import styles from "./Users.module.css";
 import { getClients } from "../../features/user/userSlice";
 import { createGroup, getGroups } from "../../features/group/groupSlice";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
-import { showSuccessNotification } from "@/features/layout/layoutSlice";
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from "@/features/layout/layoutSlice";
 import { useNavigate } from "react-router-dom";
 
 function CrearGrupos() {
@@ -33,7 +36,8 @@ function CrearGrupos() {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-
+  const localUser = JSON.parse(localStorage.getItem("User"));
+  const token = localUser.token;
   useEffect(() => {
     if (!clients) {
       dispatch(getClients({ token: auth.token }));
@@ -42,8 +46,10 @@ function CrearGrupos() {
     if (groups.message === "Grupo creado con exito") {
       setSelectedUsers([]);
       dispatch(showSuccessNotification("Exito!", "Grupo creado."));
-      dispatch(getGroups());
-      navigate("/coach/grupos");
+      dispatch(getGroups(token));
+      setTimeout(() => {
+        navigate("/coach/grupos");
+      }, 1000);
     }
   }, [groups.message]);
 
@@ -71,6 +77,14 @@ function CrearGrupos() {
   };
 
   const handleSubmit = () => {
+    if (groupName === "") {
+      return dispatch(showErrorNotification("Error!", "Ingrese un nombre."));
+    }
+    if (selectedUsers.length <= 1) {
+      return dispatch(
+        showErrorNotification("Error!", "Seleccione al menos 2 usuarios.")
+      );
+    }
     dispatch(createGroup({ groupName, selectedUsers }));
   };
   const getColumnSearchProps = (dataIndex) => ({

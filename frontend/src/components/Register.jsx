@@ -16,6 +16,7 @@ import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 import AvatarOptions from "./AvatarOptions";
 import { initialState } from "stream-chat-react/dist/components/Channel/channelState";
+import { getUsers, getCoaches } from "../features/user/userSlice";
 
 const credentialsInitialState = {
   password: "",
@@ -33,13 +34,14 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { message, token, user, userId, isLoading } = state.auths;
-
+  const { coaches } = state.users;
   // CONTEXT API
   const globalContext = useContext(GlobalContext);
   const { setLogged } = globalContext;
   const [credentials, setCredentials] = useState(credentialsInitialState);
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
+
   const handleCredentials = (e) => {
     setCredentials({
       ...credentials,
@@ -142,6 +144,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
           "User",
           JSON.stringify({ user: userId, token: token })
         );
+        console.log(token, "token");
+        dispatch(getCoaches(token));
+        dispatch(getUsers(token));
       }
 
       // setLogged to allow functionalities
@@ -150,9 +155,18 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       });
 
       dispatch(showSuccessNotification("Hola", `Bienvenido de vuelta!`));
+      const isUserACoach = coaches?.some((coach) => coach.idUser === userId);
 
       //@TODO: Aca debo redirigir a donde sea. Si es usuario va a ser a /user. Si es coach va a ser a /coach.
-      navigate("/coach");
+      if (isUserACoach) {
+        setTimeout(() => {
+          navigate("/coach");
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          navigate("/coach");
+        }, 1000);
+      }
     }
   }, [message, user, isLoading]);
 
@@ -163,7 +177,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   return (
     <section>
       <div>
-        <div className="bg-white px-3 w-full overflow-scroll">
+        <div className="bg-white px-3 w-full internal-modal-login">
           {isRegisterOpen ? (
             <div className="flex flex-col md:flex-row ">
               <div className="mb-4 md:mb-0 md:w-1/2">
@@ -194,7 +208,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     name="lastname"
                     onChange={handleCredentials}
                     value={credentials.lastname}
-                    className={`form-control w-full px-3 border border-gray-300 rounded ${
+                    className={`form-control w-full px-3 border border-gray-300 rounded overflow-y-scroll ${
                       errors.lastname ? "border-red-500" : ""
                     }`}
                   />
@@ -317,7 +331,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
           <button
             onClick={handleRegister}
             type="button"
-            className="font-bold rounded mt-2 hover:text-orange-700 border-none texct-orange-500"
+            className="font-bold rounded mt-2 hover:text-orange-700 border-none text-orange-500"
           >
             {isRegisterOpen
               ? "CAMBIAR A INICIAR SESIÓN"

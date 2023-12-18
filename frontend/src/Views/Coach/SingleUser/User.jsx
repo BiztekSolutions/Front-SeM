@@ -15,19 +15,24 @@ export default function User() {
   const { user } = useSelector((state) => state.users);
   const { id } = useParams();
   const userId = id;
-
+  const localUser = JSON.parse(localStorage.getItem("User"));
+  const token = localUser.token;
   useEffect(() => {
     if (userId) {
-      dispatch(getUser(userId));
+      dispatch(getUser({ userId, token }));
     }
   }, []);
+
+  if (!user || !user.Credentials) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="profile">
       {!user.Credentials ? (
         <LoadingSpinner />
       ) : (
-        <div className={`p-6 rounded-lg shadow-lg`}>
+        <div className="p-6 rounded-lg shadow-lg">
           <div>
             <div className="ml-5 text-4xl font-bold font-barlow-regular flex items-center justify-center gap-4">
               <div>
@@ -61,12 +66,7 @@ export default function User() {
                 {user.Credentials[0].email}
               </Typography.Text>
             </div>
-            <div className="w-fit flex gap-6 items-center">
-              <Typography.Text className="text-left text-2xl font-bold">
-                Grupo:
-              </Typography.Text>
-              <Typography.Text className="text-xl">Grupo</Typography.Text>
-            </div>
+
             <div className="w-fit flex gap-6 items-center">
               <Typography.Text className="text-left text-2xl font-bold">
                 Eliminar:

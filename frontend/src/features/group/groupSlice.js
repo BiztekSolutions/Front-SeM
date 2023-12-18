@@ -40,13 +40,16 @@ export const deleteGroup = createAsyncThunk(
   }
 );
 
-export const getGroups = createAsyncThunk("getGroups", async (_, thunkAPI) => {
-  try {
-    return await groupService.getGroups();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const getGroups = createAsyncThunk(
+  "getGroups",
+  async (token, thunkAPI) => {
+    try {
+      return await groupService.getGroups(token);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
 export const setRoutineGroup = createAsyncThunk(
   "setRoutineGroup",
@@ -69,7 +72,7 @@ export const deleteClientFromGroup = createAsyncThunk(
     }
   }
 );
-
+export const resetGroups = createAction("reset-groups");
 export const clearGroupMessage = createAction("clear-group-message");
 
 export const groupSlice = createSlice({
@@ -178,6 +181,13 @@ export const groupSlice = createSlice({
       // CLEAR ACTIONS
       .addCase(clearGroupMessage, (state) => {
         state.message = "";
+      })
+      .addCase(resetGroups, (state) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+        state.group = null;
       });
   },
 });

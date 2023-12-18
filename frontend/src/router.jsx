@@ -30,7 +30,6 @@ import EditarEjercicio from "./components/entrenadora/workoutComponents/editarEj
 const Router = () => {
   //@TODO: Arreglar idioma de las rutas. O español o ingles.
   const auth = useSelector((state) => state.auths);
-  const isAdmin = auth.user && auth.user.isAdmin;
 
   return (
     <BrowserRouter>

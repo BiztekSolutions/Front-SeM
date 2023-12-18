@@ -219,7 +219,6 @@ function AgregarEjercicio() {
         </Form.Item>
         <Form.Item
           required
-          label="Tipo de Ejercicio:"
           name="type"
           rules={[
             {
@@ -228,15 +227,24 @@ function AgregarEjercicio() {
             },
           ]}
         >
+          <Typography.Text type="secondary" className="mr-10">
+            Tipo de ejercicio:
+          </Typography.Text>
           <Select
             defaultValue={selectedExerciseType}
             onChange={handleExerciseTypeChange}
             options={exerciseTypes}
+            className="select-exercise-type"
           />
         </Form.Item>
         <Form.Item required>
-          <Button type="primary" htmlType="submit" loading={isLoading}>
-            <Typography.Text>Agregar Ejercicio</Typography.Text>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={isLoading}
+            className="btn-add-exe"
+          >
+            Agregar Ejercicio
           </Button>
         </Form.Item>
       </Form>

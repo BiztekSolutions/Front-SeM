@@ -71,6 +71,7 @@ export const createGroup = async (req: Request, res: Response) => {
 export const getGroup = async (req: Request, res: Response) => {
   try {
     const idGroup = parseInt(req.params.idGroup, 10);
+    console.log(idGroup, 'idGroup');
 
     const group = await get(idGroup);
 

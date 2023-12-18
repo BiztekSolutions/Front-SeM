@@ -20,8 +20,8 @@ const getGroup = async (token, idGroup) => {
   return response.data;
 };
 
-const deleteGroup = async (token, groupId) => {
-  const response = await axios.delete(`${base_url}/groups/${groupId}`, {
+const deleteGroup = async (token, idGroup) => {
+  const response = await axios.delete(`${base_url}/groups/${idGroup}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -46,9 +46,36 @@ const deleteClientFromGroup = async (token, data) => {
   });
   return response.data;
 };
+const getGroupRutines = async (token, idGroup) => {
+  const response = await axios.get(`${base_url}/groups/routines/${idGroup}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const groupRoutines = response.data;
+  console.log(groupRoutines, "groupRoutines");
+  // Obtener un array de promesas para las solicitudes de rutinas individuales
+  const routinePromises = groupRoutines.routines.map(async (routine) => {
+    const routineResponse = await axios.get(
+      `${base_url}/routines/${routine.idRoutine}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(routineResponse.data, "routineResponse.data");
+    return routineResponse.data;
+  });
+
+  // Esperar a que todas las solicitudes se completen
+  const routinesDetails = await Promise.all(routinePromises);
+  return routinesDetails;
+};
 
 const setRoutineGroup = async (token, data) => {
-  const response = await axios.post(`${base_url}/groups/set-routine`, data, {
+  const response = await axios.post(`${base_url}/groups/routine`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -63,4 +90,5 @@ export const groupService = {
   setRoutineGroup,
   deleteGroup,
   deleteClientFromGroup,
+  getGroupRutines,
 };

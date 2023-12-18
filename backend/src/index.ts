@@ -57,8 +57,8 @@ Client.hasMany(Routine, { foreignKey: 'idClient' });
 Routine.belongsTo(Client, { foreignKey: 'idClient', onDelete: 'CASCADE', hooks: true });
 
 // GROUP RELATIONS
-Group.hasMany(Routine, { foreignKey: 'groupId' });
-Routine.belongsTo(Group, { foreignKey: 'groupId' });
+Group.hasMany(Routine, { foreignKey: 'idGroup' });
+Routine.belongsTo(Group, { foreignKey: 'idGroup' });
 
 // ROUTINE RELATIONS
 Routine.hasMany(GroupExercise, { foreignKey: 'idRoutine' });

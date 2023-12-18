@@ -12,6 +12,7 @@ class Routine extends Model {
   public observation?: string;
   public weekDay?: number;
   public idClient?: number;
+  public idGroup?: number;
 }
 
 Routine.init(
@@ -37,6 +38,9 @@ Routine.init(
       type: DataTypes.STRING,
     },
     idClient: {
+      type: DataTypes.INTEGER,
+    },
+    idGroup: {
       type: DataTypes.INTEGER,
     },
   },

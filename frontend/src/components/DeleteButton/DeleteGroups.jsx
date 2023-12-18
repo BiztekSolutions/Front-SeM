@@ -9,7 +9,7 @@ const DeleteGroups = ({ groupName, idGroup }) => {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
-    dispatch(deleteGroup({ groupId: idGroup }));
+    dispatch(deleteGroup({ idGroup: idGroup }));
     setModalVisible(false);
   };
 

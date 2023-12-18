@@ -1,4 +1,5 @@
 // controllers/GroupController.ts
+
 import { Request, Response } from 'express';
 import Group from '../models/Group';
 import Routine from '../models/Routine';
@@ -7,6 +8,9 @@ import sequelize from '../configs/db';
 
 import { get, list } from '../services/GroupService';
 import ClientGroup from '../models/ClientGroup';
+import ExerciseConfiguration from '../models/ExerciseConfiguration';
+import GroupExercise from '../models/GroupExercise';
+import Exercise from '../models/Exercise';
 // Crear un grupo con clientes asignados
 // controllers/groupController.js
 
@@ -98,28 +102,99 @@ export const getGroups = async (req: Request, res: Response) => {
   }
 };
 
-//@TODO: Migrar el contenido de este controller a un Service.
-export const setRoutineGroup = async (req: Request, res: Response) => {
+export const getGroupRoutines = async (req: Request, res: Response) => {
   try {
-    const idGroup = parseInt(req.params.idGroup, 10);
-    const { routineId } = req.body;
+    const idGroup = parseInt(req.params.idGroup as string);
+    if (!idGroup || isNaN(idGroup)) return res.status(400).json({ message: 'Group id is required' });
 
-    const group = await Group.findByPk(idGroup);
-    const routine = await Routine.findByPk(routineId);
+    // Recuperar el usuario con las rutinas asociadas
+    const group = await Group.findByPk(idGroup, {
+      include: [
+        {
+          model: Routine,
+        },
+      ],
+    });
 
-    if (!group || !routine) {
-      return res.status(404).json({ message: 'Group or routine not found' });
+    if (!group) {
+      return res.status(400).json({ message: 'Group not found' });
     }
-
-    await group.addRoutine(routine);
-
-    return res.status(200).json({ message: 'Routine added to the group successfully' });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    //@ts-ignore
+    return res.status(200).json({ routines: group.Routines });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
   }
 };
 
+//@TODO: Migrar el contenido de este controller a un Service.
+
+export const setRoutineGroup = async (req: Request, res: Response) => {
+  try {
+    //idClient aca esta mal, es el idUser el que esta llegando
+    const { name, observation, objective, exercisesGroup, idGroup, startDate, endDate } = req.body;
+    console.log(req.body, 'req.body');
+
+    const transaction = await sequelize.transaction();
+
+    try {
+      const group = await Group.findOne({ where: { idGroup } });
+
+      if (!group) {
+        return res.status(404).json({ message: 'Client not found' });
+      }
+
+      const routine = await Routine.create(
+        {
+          name,
+          observation,
+          objective,
+          startDate,
+          endDate,
+          idGroup,
+        },
+        { transaction }
+      );
+
+      const groups = Object.entries(exercisesGroup);
+      for (const [groupKey, groupValue] of groups) {
+        const exercises = Object.entries(groupValue!);
+        if (exercises.length !== 0) {
+          const groupExercise = await GroupExercise.create(
+            {
+              idRoutine: routine.idRoutine,
+              day: groupKey,
+            },
+            { transaction }
+          );
+          for (const [exerciseKey, exerciseValue] of exercises) {
+            const exercise = await Exercise.findByPk(exerciseValue.idExercise);
+            if (!exercise) {
+              return res.status(404).json({ message: 'Exercise not found' });
+            }
+            await ExerciseConfiguration.create(
+              {
+                repetitions: exerciseValue.configuration.repetitions,
+                series: exerciseValue.configuration.series,
+                idExercise: exercise.idExercise,
+                idGroupExercise: groupExercise.idGroupExercise,
+                order: exerciseKey,
+              },
+              { transaction }
+            );
+          }
+        }
+      }
+
+      await transaction.commit();
+      return res.status(201).json({ message: 'Routine created successfully', routine });
+    } catch (error: any) {
+      await transaction.rollback();
+      console.error(error);
+    }
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 export const deleteGroup = async (req: Request, res: Response) => {
   const transaction = await sequelize.transaction();
   try {
@@ -131,7 +206,7 @@ export const deleteGroup = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Group not found' });
     }
 
-    const groupRoutine = await Routine.findOne({ where: { groupId: idGroup } });
+    const groupRoutine = await Routine.findOne({ where: { idGroup: idGroup } });
 
     if (groupRoutine) {
       groupRoutine.destroy({ transaction: transaction });

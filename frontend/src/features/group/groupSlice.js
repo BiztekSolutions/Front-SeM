@@ -3,6 +3,7 @@ import { groupService } from "./groupService";
 
 const initialState = {
   group: null,
+  rutinaGrupal: null,
   groups: null,
   isLoading: false,
   isError: false,
@@ -21,6 +22,18 @@ export const createGroup = createAsyncThunk(
   }
 );
 
+export const getGroupRutines = createAsyncThunk(
+  "getGroupRutines",
+  async (data, thunkAPI) => {
+    try {
+      console.log(data, "data");
+      return await groupService.getGroupRutines(data.token, data.idGroup);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const getGroup = createAsyncThunk("getGroup", async (data, thunkAPI) => {
   try {
     return await groupService.getGroup(data.token, data.idGroup);
@@ -33,7 +46,7 @@ export const deleteGroup = createAsyncThunk(
   "deleteGroup",
   async (data, thunkAPI) => {
     try {
-      return await groupService.deleteGroup(data.token, data.groupId);
+      return await groupService.deleteGroup(data.token, data.idGroup);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -54,6 +67,7 @@ export const getGroups = createAsyncThunk(
 export const setRoutineGroup = createAsyncThunk(
   "setRoutineGroup",
   async (data, thunkAPI) => {
+    console.log(data);
     try {
       return await groupService.setRoutineGroup(data.token, data);
     } catch (error) {
@@ -99,6 +113,23 @@ export const groupSlice = createSlice({
         state.isError = true;
         state.message = action.payload.message;
         state.group = null;
+      })
+      // GET GROUP RUTINES
+      .addCase(getGroupRutines.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Getting group rutines";
+      })
+      .addCase(getGroupRutines.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.rutinaGrupal = action.payload;
+      })
+      .addCase(getGroupRutines.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.rutinaGrupal = null;
       })
 
       // GET GROUP
@@ -168,6 +199,7 @@ export const groupSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.message = action.payload.message;
+        state.rutinaGrupal = action.payload.routine;
         state.group = action.payload.group;
       })
       .addCase(setRoutineGroup.rejected, (state, action) => {

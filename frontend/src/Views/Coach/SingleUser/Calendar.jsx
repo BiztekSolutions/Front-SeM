@@ -2,40 +2,29 @@ import { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import ExerciseModal from "../../../components/entrenadora/exerciseComponents/ExerciseModal";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getRutines } from "../../../features/rutinas/rutinasSlice";
-import { SiSendinblue } from "react-icons/si";
+import { useSelector } from "react-redux";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 import { Typography } from "antd";
 
-const UserCalendar = () => {
-  const { id } = useParams();
-  const dispatch = useDispatch();
+const Calendar = ({ rutinas }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const state = useSelector((state) => state);
 
-  const { rutinas, isLoading } = state.rutinas;
+  const { isLoading } = state.rutinas;
   const [events, setEvents] = useState([]);
 
+  const isGroupsPage = location.pathname.includes("/grupos");
+
   useEffect(() => {
-    if (rutinas && rutinas.length !== 0) {
+    if (rutinas && rutinas.length !== 0 && isGroupsPage) {
+      const generatedEvents = generateEvents(rutinas);
+      setEvents(generatedEvents);
+    } else if (rutinas && rutinas.length !== 0) {
       const generatedEvents = generateEvents(rutinas);
       setEvents(generatedEvents);
     }
   }, [rutinas]);
-  useEffect(() => {
-    if (id) {
-      dispatch(getRutines(id));
-    }
-  }, [id]);
-
-  useEffect(() => {
-    if (!rutinas) {
-      dispatch(getRutines(id));
-    }
-  }, [rutinas, dispatch, id]);
 
   function handleCardClick(exercise) {
     setSelectedExercise(exercise);
@@ -102,10 +91,21 @@ const UserCalendar = () => {
     return <LoadingSpinner />;
   }
   let i = 0;
-
+  if (rutinas && rutinas.length === 0) {
+    return (
+      <div>
+        <Typography.Text className="text-xl">
+          Este usuario aun no posee ninguna rutina!
+        </Typography.Text>
+      </div>
+    );
+  }
+  console.log(rutinas, "rutinassssss");
   return (
     <div className="user-calendar">
-      {events && rutinas && rutinas.length !== 0 && events !== 0 ? (
+      {events &&
+        rutinas &&
+        rutinas.length !== 0 &&
         rutinas?.map((routine, index) => (
           <div key={index} className="w-full min-h-screen mt-24">
             <h2 className="name-rutine-calendar bg-orange-200 text-black">
@@ -171,14 +171,8 @@ const UserCalendar = () => {
               contentHeight="auto"
             />
           </div>
-        ))
-      ) : (
-        <div>
-          <Typography.Text className="text-xl">
-            Este usuario aun no posee ninguna rutina!
-          </Typography.Text>
-        </div>
-      )}
+        ))}
+
       {showModal ? (
         <ExerciseModal
           exercise={selectedExercise}
@@ -189,4 +183,4 @@ const UserCalendar = () => {
   );
 };
 
-export default UserCalendar;
+export default Calendar;

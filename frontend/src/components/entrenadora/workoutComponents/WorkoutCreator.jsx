@@ -10,6 +10,7 @@ import { getAllExercises } from "@/features/exercises/exerciseSlice";
 import { useSelector } from "react-redux";
 import locale from "antd/es/date-picker/locale/es_ES";
 import { showSuccessNotification } from "../../../features/layout/layoutSlice";
+import { setRoutineGroup } from "../../../features/group/groupSlice";
 
 const initialState = {
   name: "",
@@ -32,12 +33,12 @@ function WorkoutCreator() {
   const [durationInWeeks, setDurationInWeeks] = useState(1);
   const [visibleExercises, setVisibleExercises] = useState(20);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const isSuccess2 = useSelector((state) => state.groups.isSuccess);
   const { exercises } = useSelector((state) => state.exercises);
   const { isSuccess } = useSelector((state) => state.rutinas);
   const dispatch = useDispatch();
   const id = useParams().id;
-
+  const isGroupsPage = location.pathname.includes("/grupos");
   const daySectionRef = useRef(null);
 
   const filteredExercises = exercises?.filter((exercise) =>
@@ -86,22 +87,42 @@ function WorkoutCreator() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formData);
-    dispatch(
-      createRutine({
-        idClient: id,
-        name: formData.name,
-        startDate: formData.startDate,
-        endDate: moment(formData.startDate)
-          .add(durationInWeeks, "weeks")
-          .format(),
-        observation: formData.observation,
-        objective: formData.objective,
-        exercisesGroup: formData.exercisesGroup,
-      })
-    );
-    if (isSuccess) {
-      setFormData(initialState);
-      dispatch(showSuccessNotification("Rutina creada con éxito"));
+    if (isGroupsPage) {
+      dispatch(
+        setRoutineGroup({
+          idGroup: id,
+          name: formData.name,
+          startDate: formData.startDate,
+          endDate: moment(formData.startDate)
+            .add(durationInWeeks, "weeks")
+            .format(),
+          observation: formData.observation,
+          objective: formData.objective,
+          exercisesGroup: formData.exercisesGroup,
+        })
+      );
+      if (isSuccess2) {
+        setFormData(initialState);
+        dispatch(showSuccessNotification("Rutina creada con éxito"));
+      }
+    } else {
+      dispatch(
+        createRutine({
+          idClient: id,
+          name: formData.name,
+          startDate: formData.startDate,
+          endDate: moment(formData.startDate)
+            .add(durationInWeeks, "weeks")
+            .format(),
+          observation: formData.observation,
+          objective: formData.objective,
+          exercisesGroup: formData.exercisesGroup,
+        })
+      );
+      if (isSuccess) {
+        setFormData(initialState);
+        dispatch(showSuccessNotification("Rutina creada con éxito"));
+      }
     }
   };
 

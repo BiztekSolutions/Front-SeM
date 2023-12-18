@@ -35,7 +35,7 @@ Pendiente: Cambios en el groupSlice con el token.
 Pendiente: Editar profile tire success o error.
 Pendinte: Agregar avatar al editar perfil.
 Pendiente: El clearMessage debe estar en exerciseSlice tmb.
-Organizar finalmente todas las malditas variables que tienen 20 formas de llamarse (groupId, idGroup, etc.)
+Organizar finalmente todas las malditas variables que tienen 20 formas de llamarse (idGroup, idGroup, etc.)
 
 
 Roadmap:

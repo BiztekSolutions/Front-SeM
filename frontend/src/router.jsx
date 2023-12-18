@@ -15,7 +15,9 @@ import Workout from "./components/entrenadora/workoutComponents/Workout";
 import WorkoutContainer from "./components/entrenadora/workoutComponents/WorkoutContainer";
 import WorkoutCreator from "./components/entrenadora/workoutComponents/WorkoutCreator.jsx";
 
-import UserCalendar from "./Views/Coach/SingleUser/UserCalendar";
+import UserCalendar from "./Views/Coach/UserCalendar";
+
+import GroupCalendar from "./Views/Coach/GruposCalendar";
 import AgregarEjercicio from "./components/entrenadora/workoutComponents/agregarEjercicio.jsx";
 import Hoy from "./Views/User/Hoy";
 import CrearGrupos from "./Views/Coach/CrearGrupos";
@@ -54,7 +56,11 @@ const Router = () => {
           <Route path="listaDeUsuarios" element={<UserList />} />
           <Route path="listaDeClientes" element={<ClientList />} />
           <Route path="grupos" element={<Grupos />} />
-          <Route path="grupos/:id" element={<SingleUser />} />
+          <Route path="grupos/:id" element={<SingleUser />}>
+            <Route path="ejercicios" element={<GroupCalendar />} />
+            <Route path="agregarRutina" element={<WorkoutCreator />} />
+            <Route path="editarRutinas" element={<EditarRutinas />} />
+          </Route>
           <Route path="creargrupos" element={<CrearGrupos />} />
 
           <Route path="changePassword/:id" element={<ChangePassword />} />

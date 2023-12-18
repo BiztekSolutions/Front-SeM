@@ -18,19 +18,19 @@ function Group() {
     (state) => state.groups
   );
   const { id } = useParams();
-  const groupId = id;
+  const idGroup = id;
   const auth = useSelector((state) => state.auths);
 
   useEffect(() => {
     if (!group) {
       console.log("Entro al effect!");
-      dispatch(getGroup({ token: auth.token, idGroup: groupId }));
+      dispatch(getGroup({ token: auth.token, idGroup: idGroup }));
     }
     console.log("GRUPO", group);
   }, [group]);
 
   const handleDeleteClient = (clientId) => {
-    dispatch(deleteClientFromGroup({ groupId, clientId }));
+    dispatch(deleteClientFromGroup({ idGroup, clientId }));
   };
 
   if (isLoading) return <LoadingSpinner />;

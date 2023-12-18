@@ -7,7 +7,7 @@ import Noticias from "./Views/Foro/Noticias";
 
 import Grupos from "./Views/Coach/Grupos";
 import Profile from "./Views/User/SingleUser/Profile";
-import Mensajeria from "./Views/Coach/Mensajerias";
+
 import SingleUser from "./Views/Coach/SingleUser/SingleUser";
 import User from "./Views/User/User";
 import Cronometro from "./Views/User/Cronometro";
@@ -57,7 +57,7 @@ const Router = () => {
           <Route path="grupos" element={<Grupos />} />
           <Route path="grupos/:id" element={<SingleUser />} />
           <Route path="creargrupos" element={<CrearGrupos />} />
-          <Route path="mensajeria" element={<Mensajeria />} />
+
           <Route path="changePassword/:id" element={<ChangePassword />} />
           <Route path="profile/:id" element={<Profile />} />
         </Route>
@@ -70,7 +70,6 @@ const Router = () => {
           <Route path="hoy" element={<Hoy />} />
           <Route path="rutinas" element={<Rutinas />} />
           <Route path="cronometro" element={<Cronometro />} />
-          <Route path="mensajeria" element={<Mensajeria />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

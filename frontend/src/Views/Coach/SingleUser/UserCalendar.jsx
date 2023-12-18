@@ -115,8 +115,7 @@ const UserCalendar = () => {
               initialView="dayGridWeek"
               className="calendar-container"
               events={events}
-              eventContent={(arg, index) => {
-                index++;
+              eventContent={(arg) => {
                 const exerciseConfiguration =
                   arg.event.extendedProps.exerciseConfiguration;
                 return (

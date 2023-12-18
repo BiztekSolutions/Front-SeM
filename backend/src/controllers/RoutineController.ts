@@ -45,7 +45,7 @@ export const createRoutine = async (req: Request, res: Response) => {
             { transaction }
           );
           for (const [exerciseKey, exerciseValue] of exercises) {
-            const exercise = await Exercise.findByPk(exerciseKey);
+            const exercise = await Exercise.findByPk(exerciseValue.idExercise);
             if (!exercise) {
               return res.status(404).json({ message: 'Exercise not found' });
             }
@@ -55,7 +55,7 @@ export const createRoutine = async (req: Request, res: Response) => {
                 series: exerciseValue.configuration.series,
                 idExercise: exercise.idExercise,
                 idGroupExercise: groupExercise.idGroupExercise,
-                //order: exerciseValue.configuration.order,
+                order: exerciseKey,
               },
               { transaction }
             );
@@ -112,16 +112,11 @@ export const updateRoutine = async (req: Request, res: Response) => {
 
       //En este for, destruyo todas las configuraciones de ejercicios de cada grupo de ejercicios
       for (let groupExerciseIndex = 0; groupExerciseIndex < routine.GroupExercises.length; groupExerciseIndex++) {
-        console.log('ENTRE AL FOR', routine.GroupExercises[groupExerciseIndex]);
         for (
           let configurationIndex = 0;
           configurationIndex < routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations.length;
           configurationIndex++
         ) {
-          console.log(
-            'ENTRE AL SEGUNDO FOR',
-            routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations[configurationIndex]
-          );
           await ExerciseConfiguration.destroy({
             where: {
               idExerciseConfiguration:
@@ -149,7 +144,7 @@ export const updateRoutine = async (req: Request, res: Response) => {
             { transaction }
           );
           for (const [exerciseKey, exerciseValue] of exercises) {
-            const exercise = await Exercise.findByPk(exerciseKey);
+            const exercise = await Exercise.findByPk(exerciseValue.idExercise);
             if (!exercise) {
               return res.status(404).json({ message: 'Exercise not found' });
             }
@@ -159,7 +154,7 @@ export const updateRoutine = async (req: Request, res: Response) => {
                 series: exerciseValue.configuration.series,
                 idExercise: exercise.idExercise,
                 idGroupExercise: groupExercise.idGroupExercise,
-                //order: exerciseValue.configuration.order,
+                order: exerciseKey,
               },
               { transaction }
             );

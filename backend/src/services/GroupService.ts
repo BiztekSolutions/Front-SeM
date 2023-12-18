@@ -11,13 +11,16 @@ export const list = async () => {
     return await Group.findAll({
       include: [
         {
-          model: Client,
-          as: 'Clients',
-          through: { attributes: [] },
+          model: ClientGroup,
           include: [
             {
-              model: User,
-              attributes: { exclude: ['idUser'] },
+              model: Client,
+              include: [
+                {
+                  model: User,
+                  attributes: { exclude: ['idUser'] },
+                },
+              ],
             },
           ],
         },
@@ -38,8 +41,6 @@ export const get = async (idGroup: number) => {
           include: [
             {
               model: Client,
-              as: 'Clients', // Cambia 'ClientGroups' por 'Clients' según la relación definida
-              through: { attributes: [] }, // Evita que se incluyan las columnas de la tabla intermedia
               include: [
                 {
                   model: User,
@@ -67,6 +68,7 @@ export const remove = async (idGroup: number) => {
     throw new Error(e.message);
   }
 };
+
 module.exports = {
   list,
   get,

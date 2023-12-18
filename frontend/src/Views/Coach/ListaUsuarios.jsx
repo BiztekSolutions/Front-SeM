@@ -139,7 +139,7 @@ function ListaUsuarios({ dataSource }) {
       dataIndex: "firstName",
       key: "firstName",
       defaultSortOrder: "ascend",
-      className: "text-3xl",
+      className: "text-table",
       sorter: (a, b) => {
         if (a.firstName < b.firstName) {
           return -1;
@@ -156,7 +156,7 @@ function ListaUsuarios({ dataSource }) {
       dataIndex: "lastName",
       key: "lastName",
       defaultSortOrder: "ascend",
-      className: "text-3xl",
+      className: "text-table",
 
       sorter: (a, b) => {
         if (a.lastName < b.lastName) {
@@ -174,8 +174,7 @@ function ListaUsuarios({ dataSource }) {
       dataIndex: "email",
       key: "email",
       defaultSortOrder: "ascend",
-      className: "text-3xl",
-
+      className: "text-table",
       sorter: (a, b) => {
         if (a.email < b.email) {
           return -1;
@@ -191,14 +190,14 @@ function ListaUsuarios({ dataSource }) {
       title: "Acciones",
       dataIndex: "actions",
       key: "actions",
-      className: "text-3xl",
+      className: "text-table",
     },
   ];
 
   return (
-    <div className={`${styles.wrapper}`}>
+    <div className={`${styles.wrapper} user-listt`}>
       <div>
-        <Typography className="text-5xl">Lista de Usuarios</Typography>
+        <Typography className="tittle-module">Lista de Usuarios</Typography>
       </div>
       <Table
         dataSource={dataSource}

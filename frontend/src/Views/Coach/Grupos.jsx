@@ -223,11 +223,15 @@ const Groups = () => {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} group-listt`}>
       <div>
         <Typography.Title level={2}>Grupos</Typography.Title>
       </div>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        className="table-group"
+      />
     </div>
   );
 };

@@ -23,7 +23,7 @@ export default function User() {
   }, []);
 
   return (
-    <div>
+    <div className="profile">
       {!user.Credentials ? (
         <LoadingSpinner />
       ) : (

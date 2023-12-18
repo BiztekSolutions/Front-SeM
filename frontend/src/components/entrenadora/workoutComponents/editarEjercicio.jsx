@@ -72,7 +72,7 @@ function EditarEjercicio() {
   if (isSuccess && exercises && exercises.length === 0) {
     return (
       <div>
-        <Typography.Title level={3}>
+        <Typography.Title level={2}>
           Aún no hay ejercicios creados, pruebe creando el{" "}
           <Link to="../agregarEjercicios">primer ejercicio!</Link>
         </Typography.Title>
@@ -83,10 +83,9 @@ function EditarEjercicio() {
   return (
     <>
       {exercises && (
-        <div>
+        <div className="edit-exercise p-10">
           <Typography.Title level={2}>Editar Ejercicio</Typography.Title>
           <div>
-            <Typography.Title level={3}>Lista de Ejercicios</Typography.Title>
             <div>
               <Input
                 type="text"
@@ -110,13 +109,22 @@ function EditarEjercicio() {
                   <div className="mb-2">
                     <Typography.Text>{exercise?.name}</Typography.Text>
                   </div>
-                  {exercise?.image1 && (
-                    <img
-                      src={exercise?.image1}
-                      alt={`Imagen de ${exercise?.name}`}
-                      className="w-full h-32 object-cover mb-2"
-                    />
-                  )}
+                  <div className="flex gap-4 justify-center">
+                    {exercise?.image1 && (
+                      <img
+                        src={exercise?.image1}
+                        alt={`Imagen de ${exercise?.name}`}
+                        className="w-32 h-32 object-cover mb-2 rounded-full"
+                      />
+                    )}
+                    {exercise?.image2 && (
+                      <img
+                        src={exercise?.image2}
+                        alt={`Imagen de ${exercise?.name}`}
+                        className="w-32 h-32 object-cover mb-2 rounded-full"
+                      />
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>

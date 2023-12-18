@@ -2,7 +2,7 @@ import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { groupService } from "./groupService";
 
 const initialState = {
-  group: {},
+  group: null,
   groups: null,
   isLoading: false,
   isError: false,
@@ -104,10 +104,10 @@ export const groupSlice = createSlice({
         state.message = "Getting group";
       })
       .addCase(getGroup.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.group = action.payload.group;
         state.isSuccess = true;
         state.isError = false;
-        state.group = action.payload.group;
+        state.isLoading = false;
       })
       .addCase(getGroup.rejected, (state, action) => {
         state.isLoading = false;

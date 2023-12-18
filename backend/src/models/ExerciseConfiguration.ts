@@ -24,9 +24,9 @@ ExerciseConfiguration.init(
     repetitions: {
       type: DataTypes.INTEGER,
     },
-    // order: {
-    //   type: DataTypes.INTEGER,
-    // },
+    order: {
+      type: DataTypes.INTEGER,
+    },
   },
   {
     sequelize,

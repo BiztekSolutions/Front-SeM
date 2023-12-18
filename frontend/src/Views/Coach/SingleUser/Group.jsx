@@ -14,33 +14,32 @@ const { Panel } = Collapse;
 
 function Group() {
   const dispatch = useDispatch();
-  const { group } = useSelector((state) => state.groups);
+  const { group, isLoading, message, isError } = useSelector(
+    (state) => state.groups
+  );
   const { id } = useParams();
   const groupId = id;
   const auth = useSelector((state) => state.auths);
-  const [clientsList, setClientsList] = useState([]);
 
   useEffect(() => {
-    if (groupId) {
+    if (!group) {
+      console.log("Entro al effect!");
       dispatch(getGroup({ token: auth.token, idGroup: groupId }));
     }
-  }, [groupId]);
-
-  useEffect(() => {
-    if (group.Clients) {
-      setClientsList(group.Clients);
-    }
-  }, [group.Clients]);
+    console.log("GRUPO", group);
+  }, [group]);
 
   const handleDeleteClient = (clientId) => {
     dispatch(deleteClientFromGroup({ groupId, clientId }));
   };
 
+  if (isLoading) return <LoadingSpinner />;
+
+  if (isError) return <div>{message}</div>;
+
   return (
     <div>
-      {!group.Clients ? (
-        <LoadingSpinner />
-      ) : (
+      {group && (
         <div className={`p-6 rounded-lg shadow-lg groupDetails`}>
           <div className="text-center">
             <div className="ml-5 text-4xl font-bold font-barlow-regular flex items-center justify-center gap-4">
@@ -64,16 +63,19 @@ function Group() {
             <div className="w-fit flex flex-col gap-6 items-center">
               <Collapse accordion>
                 <Panel header="Integrantes del Grupo:">
-                  {clientsList.map((client) => (
+                  {group.ClientGroups.map((ClientGroups) => (
                     // eslint-disable-next-line react/jsx-key
                     <Space className="flex flex-col">
                       <Typography.Text className="flex flex-row text-xl">
-                        {client.User.name} {client.User.lastname}
+                        {ClientGroups.Client.User.name}{" "}
+                        {ClientGroups.Client.User.lastname}
                       </Typography.Text>
                       <Button
                         type="text"
                         icon={<FaTimesCircle />}
-                        onClick={() => handleDeleteClient(client.idClient)}
+                        onClick={() =>
+                          handleDeleteClient(ClientGroups.Client.idClient)
+                        }
                       />
                     </Space>
                   ))}

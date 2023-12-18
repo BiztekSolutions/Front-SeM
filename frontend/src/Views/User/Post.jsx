@@ -7,7 +7,7 @@ function Post({ post, onCommentSubmit }) {
     e.preventDefault();
     if (comment.trim() !== "") {
       // Llama a la acción para agregar el comentario al post
-      await onCommentSubmit({ postId: post.id, comment });
+      await onCommentSubmit({ idPost: post.idPost, comment });
       setComment("");
     }
   };
@@ -40,7 +40,7 @@ function Post({ post, onCommentSubmit }) {
           <h4 className="text-lg font-semibold mb-2">Comentarios:</h4>
           <ul className="list-disc pl-6">
             {post.Comments.map((comment) => (
-              <li key={comment.id} className="mb-2">
+              <li key={comment.idComment} className="mb-2">
                 {comment.content}
               </li>
             ))}

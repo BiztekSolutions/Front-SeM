@@ -15,7 +15,7 @@ function PostForm({ selectedPost, onSubmit }) {
     // Dispatch de la acción addOrUpdatePost (a través de la acción thunk)
     dispatch(
       addOrUpdatePost({
-        id: selectedPost ? selectedPost.id : null,
+        id: selectedPost ? selectedpost.idPost : null,
         title,
         content,
       })

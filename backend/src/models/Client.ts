@@ -27,7 +27,7 @@ class Client extends Model<ClientAttributes, ClientCreationAttributes> implement
 
   public static associate(models: any): void {
     // Routine association
-    this.belongsToMany(models.Routine, { through: 'ClientRoutine', foreignKey: 'clientId' });
+    this.belongsToMany(models.Routine, { through: 'ClientRoutine', foreignKey: 'idClient' });
 
     // Group association
     this.belongsToMany(models.Group, { through: ClientGroup, foreignKey: 'idClient' });

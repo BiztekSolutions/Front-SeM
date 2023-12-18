@@ -20,6 +20,7 @@ import GroupExercise from './models/GroupExercise';
 import ExerciseConfiguration from './models/ExerciseConfiguration';
 import ClientHasRoutine from './models/ClientHasRoutine';
 import ClientGroup from './models/ClientGroup';
+
 const app: Application = express();
 const PORT: number = 3000;
 
@@ -71,14 +72,14 @@ Exercise.hasMany(ExerciseConfiguration, { foreignKey: 'idExercise' });
 ExerciseConfiguration.belongsTo(Exercise, { foreignKey: 'idExercise' });
 
 //Post relations
-Post.belongsTo(Client, { foreignKey: 'clientId' });
-Client.hasMany(Post, { foreignKey: 'clientId' });
+Post.belongsTo(Client, { foreignKey: 'idClient' });
+Client.hasMany(Post, { foreignKey: 'idClient' });
 
-Comment.belongsTo(Client, { foreignKey: 'clientId' });
-Client.hasMany(Comment, { foreignKey: 'clientId' });
+Comment.belongsTo(Client, { foreignKey: 'idClient' });
+Client.hasMany(Comment, { foreignKey: 'idClient' });
 
-Post.hasMany(Comment, { foreignKey: 'postId', as: 'Comments' });
-Comment.belongsTo(Post, { foreignKey: 'postId' });
+Post.hasMany(Comment, { foreignKey: 'idPost', onDelete: 'CASCADE', hooks: true });
+Comment.belongsTo(Post, { foreignKey: 'idPost', onDelete: 'CASCADE', hooks: true });
 
 sequelize
   .sync({ force: false })

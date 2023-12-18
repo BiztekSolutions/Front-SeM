@@ -4,7 +4,7 @@ import { createComment, deleteComment } from '../../../controllers/CommentContro
 
 const commentRouter: Router = express.Router();
 
-commentRouter.post('/:postId', createComment);
+commentRouter.post('/:idPost', createComment);
 commentRouter.delete('/:commentId', deleteComment);
 
 export default commentRouter;

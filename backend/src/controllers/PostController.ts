@@ -57,7 +57,7 @@ export const createPost = async (req: Request, res: Response): Promise<Response<
     const newPost = await Post.create({
       title,
       content,
-      clientId: client.idClient,
+      idClient: client.idClient,
     });
 
     return res.json(newPost);
@@ -68,11 +68,11 @@ export const createPost = async (req: Request, res: Response): Promise<Response<
 };
 
 export const updatePost = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
-  const postId: number = parseInt(req.params.id, 10);
+  const idPost: number = parseInt(req.params.id, 10);
   const { title, content } = req.body;
 
   try {
-    const post = await Post.findByPk(postId, {
+    const post = await Post.findByPk(idPost, {
       include: Comment,
     });
 
@@ -93,28 +93,27 @@ export const updatePost = async (req: Request, res: Response): Promise<Response<
 };
 
 export const deletePost = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
-  const postId: number = parseInt(req.params.id, 10);
+  const idPost: number = parseInt(req.params.id, 10);
   const transaction = await sequelize.transaction();
 
   try {
-    const post = await Post.findByPk(postId, { transaction });
+    const post = await Post.findByPk(idPost);
 
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
 
-    const postComments = await Comment.findAll({ where: { postId }, transaction });
+    const postComments = await Comment.findAll({ where: { idPost } });
 
     if (postComments) {
       postComments.forEach(async (comment) => {
-        await comment.destroy();
+        await Comment.destroy({ where: { idComment: comment.idComment }, transaction });
       });
     }
 
-    await post.destroy({ transaction });
-
+    await Post.destroy({ where: { idPost }, transaction });
     await transaction.commit();
-    return res.json({ message: 'Post deleted' });
+    return res.status(200).json({ message: 'Post deleted successfully' });
   } catch (error) {
     console.error(error);
     await transaction.rollback();

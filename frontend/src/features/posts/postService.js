@@ -4,22 +4,26 @@ const API_URL = "http://localhost:3000/api/v1/posts";
 const user = JSON.parse(localStorage.getItem("User"));
 
 const postService = {
-  getPosts: async () => {
+  getPosts: async (token) => {
     try {
-      const response = await axios.get(API_URL);
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching posts:", error);
       throw error;
     }
   },
-  addCommentToPost: async (postId, comment, token) => {
+  addCommentToPost: async (postId, comment, clientId, token) => {
     try {
       const response = await axios.post(
         `http://localhost:3000/api/v1/comments/${postId}`,
         {
-          content: comment.comment,
-          userId: user.user,
+          content: comment,
+          userId: clientId,
         },
         {
           headers: {
@@ -30,6 +34,38 @@ const postService = {
       return response.data;
     } catch (error) {
       console.error("Error adding comment:", error);
+      throw error;
+    }
+  },
+  deleteComment: async (commentId, token) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/v1/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      throw error;
+    }
+  },
+  deletePost: async (postId, token) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/v1/posts/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting post:", error);
       throw error;
     }
   },

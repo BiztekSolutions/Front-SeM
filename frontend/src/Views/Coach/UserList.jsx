@@ -20,27 +20,25 @@ function UserList() {
   const { users, clients, isLoading, isError } = useSelector(
     (state) => state.users
   );
+  console.log(users, clients, isLoading, isError, "sasda");
+  const user = JSON.parse(localStorage.getItem("User"));
 
   useEffect(() => {
     if (!users) {
-      dispatch(getUsers());
+      dispatch(getUsers(user.token));
     }
     if (!clients) {
-      dispatch(getClients());
+      dispatch(getClients(user.token));
     }
   }, [users, clients]);
 
   if (isLoading) {
     <LoadingSpinner />;
   }
-
-  if (isError) {
-    return <div>Hubo un error</div>;
-  }
-
   const handleCreateClient = (userId) => {
-    dispatch(addUserToClients(userId));
+    dispatch(addUserToClients(userId, user.token));
     setTimeout(() => {
+      dispatch(getClients(user.token));
       navigate("../listaDeClientes");
     }, 1000);
   };

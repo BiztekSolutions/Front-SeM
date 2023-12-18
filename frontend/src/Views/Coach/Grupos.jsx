@@ -19,16 +19,18 @@ import {
 } from "@/features/layout/layoutSlice";
 import styles from "./Users.module.css";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+import { resetGroups } from "../../features/group/groupSlice";
 
 const Groups = () => {
   const dispatch = useDispatch();
   const { groups, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.groups
   );
-
+  const localUser = JSON.parse(localStorage.getItem("User"));
+  const token = localUser.token;
   useEffect(() => {
     if (!groups) {
-      dispatch(getGroups());
+      dispatch(getGroups(token));
     }
 
     if (message === "Grupo eliminado con exito") {
@@ -41,7 +43,8 @@ const Groups = () => {
         showErrorNotification("Error!", "No se ha podido eliminar el grupo.")
       );
     }
-  }, [groups, message]);
+    dispatch(resetGroups());
+  }, [groups]);
 
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");

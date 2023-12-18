@@ -14,14 +14,22 @@ import {
 import { Form, Input, Button, Modal } from "antd";
 import styles from "../../../components/Component.module.css";
 import { showSuccessNotification } from "../../../features/layout/layoutSlice";
+import { get } from "react-scroll/modules/mixins/scroller";
 
 function Profile() {
-  const { user, clients, message } = useSelector((state) => state.users);
+  // const { user } = useSelector((state) => state.auths);
+  const { clients, message, user } = useSelector((state) => state.users);
+
   const { rutinas } = useSelector((state) => state.rutinas);
   // const { message} = useSelector((state) => state.auths);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState(user.avatar);
-
+  const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar);
+  const [userState, setUserState] = useState({
+    name: user?.name,
+    lastname: user?.lastname,
+  });
+  const localUser = JSON.parse(localStorage.getItem("User"));
+  const token = localUser.token;
   const dispatch = useDispatch();
   const id = useParams().id;
   const [form] = Form.useForm();
@@ -53,17 +61,21 @@ function Profile() {
       setTimeout(() => {
         dispatch(
           updateUserr({
-            name: user.name,
-            lastname: user.lastname,
+            name: userState.name,
+            lastname: userState.lastname,
             avatar: selectedAvatar,
           })
         );
         dispatch(clearAuthMessages());
       }, 4000);
     }
-  }, [user]);
+  }, [message]);
 
   const handleSave = (values) => {
+    setUserState({
+      name: values.name,
+      lastname: values.lastname,
+    });
     dispatch(
       updateUser({
         userId: id,
@@ -74,16 +86,15 @@ function Profile() {
         },
       })
     );
-    dispatch(getUser(id));
-
+    dispatch(getUser({ userId: id, token }));
     setIsEditing(false);
   };
   useEffect(() => {
-    dispatch(getUser(id));
-    dispatch(getClients());
+    dispatch(getUser({ userId: id, token }));
+    dispatch(getClients(token));
   }, [id]);
 
-  const isUserInClients = clients.some(
+  const isUserInClients = clients?.some(
     (client) => client.idUser === user.idUser
   );
   useEffect(() => {

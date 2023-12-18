@@ -36,7 +36,7 @@ function Group() {
   if (isLoading) return <LoadingSpinner />;
 
   if (isError) return <div>{message}</div>;
-
+  console.log(group);
   return (
     <div>
       {group && (
@@ -63,7 +63,7 @@ function Group() {
             <div className="w-fit flex flex-col gap-6 items-center">
               <Collapse accordion>
                 <Panel header="Integrantes del Grupo:">
-                  {group.ClientGroups.map((ClientGroups) => (
+                  {group?.ClientGroups?.map((ClientGroups) => (
                     // eslint-disable-next-line react/jsx-key
                     <Space className="flex flex-col">
                       <Typography.Text className="flex flex-row text-xl">

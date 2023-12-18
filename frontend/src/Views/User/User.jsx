@@ -14,7 +14,6 @@ function getItem(label, key, icon, children, type) {
 const items = [
   getItem("General", "sub1", <FcConferenceCall size={20} />, [
     getItem("Noticias", "noticias"),
-    getItem("Mensajeria", "mensajeria"),
   ]),
   getItem("Rutinas", "sub2", <FcConferenceCall size={20} />, [
     getItem("Mis Rutinas", "rutinas"),

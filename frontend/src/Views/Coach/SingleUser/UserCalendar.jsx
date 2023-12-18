@@ -116,8 +116,7 @@ const UserCalendar = () => {
               plugins={[dayGridPlugin]}
               initialView="dayGridWeek"
               events={events}
-              eventContent={(arg, index) => {
-                index++;
+              eventContent={(arg) => {
                 const exerciseConfiguration =
                   arg.event.extendedProps.exerciseConfiguration;
                 return (

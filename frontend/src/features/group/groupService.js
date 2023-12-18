@@ -29,8 +29,12 @@ const deleteGroup = async (token, groupId) => {
   return response.data;
 };
 
-const getGroups = async () => {
-  const response = await axios.get(`${base_url}/groups`);
+const getGroups = async (token) => {
+  const response = await axios.get(`${base_url}/groups`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 

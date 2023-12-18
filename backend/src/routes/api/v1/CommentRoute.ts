@@ -1,10 +1,10 @@
 // routes/commentRoute.ts
 import express, { Router } from 'express';
-import { createComment, getCommentsForPost } from '../../../controllers/CommentController';
+import { createComment, deleteComment } from '../../../controllers/CommentController';
 
 const commentRouter: Router = express.Router();
 
 commentRouter.post('/:postId', createComment);
-commentRouter.get('/:postId', getCommentsForPost);
+commentRouter.delete('/:commentId', deleteComment);
 
 export default commentRouter;

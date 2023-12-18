@@ -9,46 +9,70 @@ import Button from "antd/lib/button";
 import Form from "antd/lib/form";
 import Tooltip from "antd/lib/tooltip";
 import Modal from "antd/lib/modal";
+import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
 
-import EyeOutlined from "@ant-design/icons/EyeOutlined";
 import MessageOutlined from "@ant-design/icons/MessageOutlined";
 
 import {
   fetchPosts,
   addOrUpdatePost,
   addCommentToPost,
+  deletePost,
+  deleteComment,
 } from "@/features/posts/postsSlice";
-import { getCoaches } from "@/features/user/userSlice";
-import { showSuccessNotification } from "@/features/layout/layoutSlice";
+import { getClients } from "@/features/user/userSlice";
+import { useLocation } from "react-router-dom";
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from "@/features/layout/layoutSlice";
 
 const { TextArea } = Input;
 
 function Noticias() {
   const dispatch = useDispatch();
-  const { posts } = useSelector((state) => state.posts);
-  const { coaches } = useSelector((state) => state.users);
+  const { posts, status } = useSelector((state) => state.posts);
+  const { clients } = useSelector((state) => state.users);
+  const userLogged = useSelector((state) => state.auths.user);
   const [selectedPost, setSelectedPost] = useState(null);
   const [comment, setComment] = useState("");
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const user = JSON.parse(localStorage.getItem("User"));
+  const location = useLocation();
+  const isCoachPage = location.pathname.includes("/coach");
 
+  const isUserAClient = clients?.some((client) => client.idUser === user.user);
   useEffect(() => {
-    dispatch(fetchPosts());
-    dispatch(getCoaches());
-  }, [dispatch]);
+    dispatch(fetchPosts(user.token));
+
+    dispatch(getClients(user.token));
+  }, [dispatch, posts.Comments]);
+  console.log(posts, "posts");
+  const foundClient = clients?.find((client) => client.idUser === user.user);
 
   const handlePostSelect = (post) => {
     setSelectedPost(post);
     setModalVisible(true);
   };
-
+  console.log(userLogged, "userLogged");
   const handleCommentSubmit = async (postId, comment) => {
-    dispatch(addCommentToPost({ postId, comment }));
+    if (!foundClient) {
+      dispatch(showErrorNotification("Error", "No eres un cliente."));
+      return;
+    }
+    dispatch(
+      addCommentToPost({ postId, comment, clientId: foundClient.idClient })
+    );
     setComment("");
-    dispatch(showSuccessNotification("Éxito", "Comentario agregado."));
+    setTimeout(() => {
+      dispatch(fetchPosts());
+    }, 1000);
+    if (status === "succeeded") {
+      dispatch(showSuccessNotification("Éxito", "Comentario agregado."));
+    }
   };
-
+  console.log(selectedPost, "selectedPost");
   const handlePostSubmit = (values) => {
     dispatch(
       addOrUpdatePost({
@@ -64,12 +88,41 @@ function Noticias() {
         `${selectedPost ? "Publicación editada" : "Nueva publicación"} creada.`
       )
     );
+    setTimeout(() => {
+      dispatch(fetchPosts());
+    }, 1000);
   };
 
   const closeModal = () => {
     setModalVisible(false);
   };
-  const isUserACoach = coaches?.some((coach) => coach.idUser === user.user);
+
+  function handleDeletePost(id) {
+    dispatch(deletePost(id));
+    dispatch(showSuccessNotification("Éxito", "Publicación eliminada."));
+    setTimeout(() => {
+      dispatch(fetchPosts());
+    }, 1000);
+  }
+  function handleDeleteComment(commentId) {
+    console.log(commentId, "commentId");
+    dispatch(deleteComment(commentId));
+    setTimeout(() => {
+      dispatch(fetchPosts());
+    }, 1000);
+    if (status === "succeeded") {
+      dispatch(showSuccessNotification("Éxito", "Comentario eliminado."));
+    }
+  }
+  if (!isUserAClient && !isCoachPage) {
+    return (
+      <h3>
+        NO TIENES ACCESO A ESTA PARTE DE LA PAGINA PONTE EN CONTACTO CON LAS
+        ENTRENADORAS PARA QUE TE AGREGUEN COMO CLIENTE
+      </h3>
+    );
+  }
+
   return (
     <div className="foro">
       <h1>Foro</h1>
@@ -89,19 +142,26 @@ function Noticias() {
                     onClick={() => handlePostSelect(post)}
                   ></Button>
                 </Tooltip>
-                <Tooltip title="Vistas">
-                  <Button type="link" icon={<EyeOutlined />}>
-                    {post.views}
-                  </Button>
-                </Tooltip>
+                {userLogged?.idUser === post?.Client?.idUser ? (
+                  <Tooltip title="Eliminar Post">
+                    <Button
+                      type="link"
+                      danger
+                      onClick={() => handleDeletePost(post.id)}
+                      icon={<DeleteOutlined />}
+                    ></Button>
+                  </Tooltip>
+                ) : null}
               </Space>,
             ]}
           >
             <List.Item.Meta
-              avatar={<Avatar src={post.Client.User.avatar} />}
+              avatar={
+                <Avatar src={post?.Client?.User && post.Client.User.avatar} />
+              }
               title={
                 <span className="flex justify-start items-start">
-                  {post.Client.User.name} {post.Client.User.lastname}
+                  {post?.Client?.User?.name} {post?.Client?.User.lastname}
                 </span>
               }
             />
@@ -146,7 +206,8 @@ function Noticias() {
               <Form.Item>
                 <Button
                   type="primary"
-                  htmlType="submit"
+                  htmlType="button"
+                  onClick={() => handleCommentSubmit(selectedPost.id, comment)}
                   className="bg-blue-500 text-white px-4 py-2 rounded-md"
                 >
                   Comentar
@@ -159,10 +220,23 @@ function Noticias() {
                 <ul className="list-disc pl-6">
                   {selectedPost.Comments.map((comment) => (
                     <div key={comment.id} className="mb-2">
-                      <p className="text-gray-700">
-                        <strong>{`${comment.Client.User.name} ${comment.Client.User.lastname}: `}</strong>
-                        {comment.content}
-                      </p>
+                      <Avatar
+                        src={comment.Client?.User && comment.Client.User.avatar}
+                      />
+                      <strong>{`${comment.Client.User.name} ${comment.Client.User.lastname}: `}</strong>
+                      <div className="flex justify-between">
+                        <p className="text-gray-700">{comment.content}</p>
+                        {userLogged.idUser === comment.Client.idUser ? (
+                          <Tooltip title="Eliminar Comentario">
+                            <Button
+                              type="link"
+                              danger
+                              onClick={() => handleDeleteComment(comment.id)}
+                              icon={<DeleteOutlined />}
+                            ></Button>
+                          </Tooltip>
+                        ) : null}
+                      </div>
                     </div>
                   ))}
                 </ul>
@@ -172,7 +246,7 @@ function Noticias() {
         )}
       </Modal>
 
-      {isUserACoach && (
+      {isCoachPage && (
         <div>
           <h2>Nueva Publicación</h2>
           <Form form={form} onFinish={handlePostSubmit}>

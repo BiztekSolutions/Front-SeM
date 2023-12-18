@@ -9,6 +9,7 @@ import { createRutine } from "@/features/rutinas/rutinasSlice";
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
 import { useSelector } from "react-redux";
 import locale from "antd/es/date-picker/locale/es_ES";
+import { showSuccessNotification } from "../../../features/layout/layoutSlice";
 
 const initialState = {
   name: "",
@@ -33,6 +34,7 @@ function WorkoutCreator() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { exercises } = useSelector((state) => state.exercises);
+  const { isSuccess } = useSelector((state) => state.rutinas);
   const dispatch = useDispatch();
   const id = useParams().id;
 
@@ -97,18 +99,40 @@ function WorkoutCreator() {
         exercisesGroup: formData.exercisesGroup,
       })
     );
+    if (isSuccess) {
+      setFormData(initialState);
+      dispatch(showSuccessNotification("Rutina creada con éxito"));
+    }
   };
 
-  const removeExercise = (day, exerciseIndex) => {
-    console.log(day, exerciseIndex);
+  const handleRemoveAndReorder = (day, index) => {
     setFormData((prevFormData) => {
       const newExercisesGroup = { ...prevFormData.exercisesGroup };
-      delete newExercisesGroup[day][exerciseIndex];
+      const exercises = Object.values(newExercisesGroup[day]);
+
+      // Remove the exercise from its current position
+      exercises.splice(index, 1);
+
+      // Update the configuration index
+      exercises.forEach((exercise, i) => {
+        exercise.configuration.index = i;
+      });
+
+      // Update the exercises in the newExercisesGroup
+      newExercisesGroup[day] = exercises.reduce((acc, exercise) => {
+        acc[exercise.configuration.index] = exercise;
+        return acc;
+      }, {});
+
       return {
         ...prevFormData,
         exercisesGroup: newExercisesGroup,
       };
     });
+  };
+
+  const removeExercise = (day, exerciseIndex) => {
+    handleRemoveAndReorder(day, exerciseIndex);
   };
 
   const onDrop = (event, day) => {
@@ -118,10 +142,10 @@ function WorkoutCreator() {
     const alreadyExists = Object.values(formData.exercisesGroup[day]).some(
       (exercise) => exercise.idExercise === draggedExercise.idExercise
     );
-
+    console.log(alreadyExists);
     if (!alreadyExists) {
       const newIndex = Object.values(formData.exercisesGroup[day]).length;
-
+      console.log(newIndex, "newIndex");
       const exerciseDrop = {
         idExercise: draggedExercise.idExercise,
         name: draggedExercise.name,
@@ -132,7 +156,7 @@ function WorkoutCreator() {
         image1: draggedExercise.image1,
         image2: draggedExercise.image2,
       };
-
+      console.log(formData, "formData antes");
       setFormData((prevFormData) => ({
         ...prevFormData,
         exercisesGroup: {
@@ -143,6 +167,7 @@ function WorkoutCreator() {
           },
         },
       }));
+      console.log(formData, "formData despues");
     } else {
       alert("El ejercicio ya existe en este día");
     }

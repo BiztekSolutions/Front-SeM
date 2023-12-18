@@ -1,3 +1,6 @@
+import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+import { Typography } from "antd";
+
 import { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -5,9 +8,6 @@ import ExerciseModal from "../../components/entrenadora/exerciseComponents/Exerc
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getRutines } from "../../features/rutinas/rutinasSlice";
-import { SiSendinblue } from "react-icons/si";
-import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
-import { Typography } from "antd";
 
 function Rutinas() {
   const { id } = useParams();
@@ -104,41 +104,54 @@ function Rutinas() {
   let i = 0;
 
   return (
-    <div>
+    <div className="user-calendar">
       {events && rutinas && rutinas.length !== 0 && events !== 0 ? (
         rutinas?.map((routine, index) => (
-          <div key={index} className="w-full min-h-screen mt-24 text-2xl">
-            <h2>Rutina {index + 1}</h2>
+          <div key={index} className="w-full min-h-screen mt-24">
+            <h2 className="name-rutine-calendar bg-orange-200 text-black">
+              Rutina {index + 1}
+            </h2>
             <FullCalendar
               key={events.length}
               plugins={[dayGridPlugin]}
               initialView="dayGridWeek"
-              className="calendar-container"
               events={events}
               eventContent={(arg) => {
                 const exerciseConfiguration =
                   arg.event.extendedProps.exerciseConfiguration;
                 return (
                   <div
-                    className="card-calendar highlight shadow flex flex-col justify-around border-b-4"
+                    className="card-calendar "
                     onClick={() => handleCardClick(exerciseConfiguration)}
                   >
                     <div className="card-body flex flex-col ">
-                      <div className="flex flex-col ml-5 gap-1 border-black">
-                        <b className="text-black ml-2 text-xs">Nombre</b>
-                        <div className="flex ">
-                          <SiSendinblue className="text-gray-900 rounded-full text-bold mt-1" />
-                          <h5 className="card-title   w-full">
-                            {exerciseConfiguration.Exercise.name}
-                          </h5>
+                      <div className="flex flex-col  gap-1 border-black">
+                        <div className="flex gap-2">
+                          <div className="flex">
+                            <img
+                              src={exerciseConfiguration.Exercise.image1}
+                              alt="image1"
+                              className="img1-calendar"
+                            />
+                            <img
+                              src={exerciseConfiguration.Exercise.image2}
+                              alt="image1"
+                              className="img2-calendar"
+                            />
+                          </div>
+                          <div>
+                            <h5 className="card-title">
+                              {exerciseConfiguration.Exercise.name}
+                            </h5>
+                            <div className="card-body">
+                              <h5 className="card-title text-center">
+                                {exerciseConfiguration.series}x
+                                {exerciseConfiguration.repetitions}
+                              </h5>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="card-body">
-                      <h5 className="card-title text-center">
-                        {exerciseConfiguration.series}x
-                        {exerciseConfiguration.repetitions}
-                      </h5>
                     </div>
                   </div>
                 );
@@ -156,7 +169,6 @@ function Rutinas() {
               hiddenDays={[0]}
               height="80vh"
               contentHeight="auto"
-              locale="es"
             />
           </div>
         ))

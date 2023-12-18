@@ -16,11 +16,16 @@ const userString = localStorage.getItem("User");
 const user = JSON.parse(userString);
 export const addUserToClients = createAsyncThunk(
   "addUserToClients",
-  async (userId, thunkAPI) => {
+  async (userId, token, thunkAPI) => {
     try {
-      const token = user.token;
-      const response = await userService.addUserToClients(token, userId);
-      return response;
+      if (!token) {
+        const token = user.token;
+        const response = await userService.addUserToClients(token, userId);
+        return response;
+      } else {
+        const response = await userService.addUserToClients(token, userId);
+        return response;
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -29,11 +34,16 @@ export const addUserToClients = createAsyncThunk(
 
 export const getCoaches = createAsyncThunk(
   "getCoaches",
-  async (_, thunkAPI) => {
+  async (token, thunkAPI) => {
     try {
-      const token = user.token;
-      const response = await userService.getCoaches(token);
-      return response;
+      if (!token) {
+        const token = user.token;
+        const response = await userService.getCoaches(token);
+        return response;
+      } else {
+        const response = await userService.getCoaches(token);
+        return response;
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -53,9 +63,14 @@ export const updateUser = createAsyncThunk(
 
 export const getClients = createAsyncThunk(
   "getClients",
-  async (data, thunkAPI) => {
+  async (token, thunkAPI) => {
     try {
-      return await userService.getClients(data.token);
+      if (!token) {
+        const token = user.token;
+        return await userService.getClients(token);
+      } else {
+        return await userService.getClients(token);
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -63,22 +78,34 @@ export const getClients = createAsyncThunk(
 );
 export const getUser = createAsyncThunk("getUser", async (data, thunkAPI) => {
   try {
-    const token = user.token;
-    return await userService.getUser(token, data);
+    if (!data.token) {
+      const token = user.token;
+      return await userService.getUser(token, data.userId);
+    } else {
+      return await userService.getUser(data.token, data.userId);
+    }
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
 });
 
-export const getUsers = createAsyncThunk("getUsers", async (_, thunkAPI) => {
-  try {
-    const token = user.token;
-
-    return await userService.getUsers(token);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const getUsers = createAsyncThunk(
+  "getUsers",
+  async (token, thunkAPI) => {
+    try {
+      if (!token) {
+        console.log("no hay token");
+        const token = user.token;
+        return await userService.getUsers(token);
+      } else {
+        console.log(token, "hay token");
+        return await userService.getUsers(token);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 export const deleteUser = createAsyncThunk(
   "deleteUser",
   async (_, thunkAPI) => {
@@ -110,6 +137,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
+        console.log("cargando usuarios", action.payload.users);
         state.message = action.payload.message;
         state.users = action.payload.users;
       })

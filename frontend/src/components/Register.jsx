@@ -16,6 +16,7 @@ import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 import AvatarOptions from "./AvatarOptions";
 import { initialState } from "stream-chat-react/dist/components/Channel/channelState";
+import { getUsers, getCoaches } from "../features/user/userSlice";
 
 const credentialsInitialState = {
   password: "",
@@ -33,13 +34,14 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { message, token, user, userId, isLoading } = state.auths;
-
+  const { coaches } = state.users;
   // CONTEXT API
   const globalContext = useContext(GlobalContext);
   const { setLogged } = globalContext;
   const [credentials, setCredentials] = useState(credentialsInitialState);
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
+
   const handleCredentials = (e) => {
     setCredentials({
       ...credentials,
@@ -142,6 +144,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
           "User",
           JSON.stringify({ user: userId, token: token })
         );
+        console.log(token, "token");
+        dispatch(getCoaches(token));
+        dispatch(getUsers(token));
       }
 
       // setLogged to allow functionalities
@@ -150,9 +155,18 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       });
 
       dispatch(showSuccessNotification("Hola", `Bienvenido de vuelta!`));
+      const isUserACoach = coaches?.some((coach) => coach.idUser === userId);
 
       //@TODO: Aca debo redirigir a donde sea. Si es usuario va a ser a /user. Si es coach va a ser a /coach.
-      navigate("/coach");
+      if (isUserACoach) {
+        setTimeout(() => {
+          navigate("/coach");
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          navigate("/coach");
+        }, 1000);
+      }
     }
   }, [message, user, isLoading]);
 

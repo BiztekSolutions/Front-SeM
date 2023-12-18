@@ -114,7 +114,7 @@ export const updateUser = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    return res.status(200).json({ message: 'Usuario actualizado' });
+    return res.status(200).json({ message: 'Usuario actualizado', data: updateUser });
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({ error: 'Internal server error' });

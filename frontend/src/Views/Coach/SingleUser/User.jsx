@@ -15,12 +15,17 @@ export default function User() {
   const { user } = useSelector((state) => state.users);
   const { id } = useParams();
   const userId = id;
-
+  const localUser = JSON.parse(localStorage.getItem("User"));
+  const token = localUser.token;
   useEffect(() => {
     if (userId) {
-      dispatch(getUser(userId));
+      dispatch(getUser({ userId, token }));
     }
   }, []);
+
+  if (!user || !user.Credentials) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="profile">

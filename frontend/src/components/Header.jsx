@@ -42,7 +42,7 @@ const Header = () => {
         setRegisterOpen(false);
         document.body.style.overflow = "";
       } else {
-        document.body.style.overflow = "hidden";
+        document.body.style.overflow = "scroll";
       }
       return !prevMenu;
     });

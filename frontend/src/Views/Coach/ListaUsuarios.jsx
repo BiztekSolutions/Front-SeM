@@ -3,11 +3,13 @@ import { Table, Button, Input, Space, Typography } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import styles from "./Users.module.css";
+import { useLocation } from "react-router-dom";
 
 function ListaUsuarios({ dataSource }) {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const location = useLocation();
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -18,6 +20,15 @@ function ListaUsuarios({ dataSource }) {
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
+  };
+
+  const getTitleText = () => {
+    // Verifica la ruta actual y devuelve el título correspondiente
+    if (location.pathname === "/coach/listaDeClientes") {
+      return "Lista de Clientes";
+    } else {
+      return "Lista de Usuarios";
+    }
   };
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -197,7 +208,7 @@ function ListaUsuarios({ dataSource }) {
   return (
     <div className={`${styles.wrapper} user-listt`}>
       <div>
-        <Typography className="tittle-module">Lista de Usuarios</Typography>
+        <Typography className="tittle-module">{getTitleText()}</Typography>
       </div>
       <Table
         dataSource={dataSource}

@@ -42,7 +42,7 @@ const SingleUser = () => {
     <div>
       <nav className="row navbar mx-1 border-t-2 mb-3 ">
         <ul className="flex gap-3 justify-center content-center mt-2 header-clientt">
-          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
+          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500 btn-header-client">
             <NavLink
               to="./"
               style={activeStyle}
@@ -52,7 +52,7 @@ const SingleUser = () => {
               {isGroupsPage ? "Grupo" : "Usuario"}
             </NavLink>
           </li>
-          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
+          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500 btn-header-client">
             <NavLink
               to="./ejercicios"
               className="link-header-client"
@@ -63,7 +63,7 @@ const SingleUser = () => {
             </NavLink>
           </li>
 
-          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
+          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500 btn-header-client">
             <NavLink
               to="./agregarRutina"
               className="link-header-client"
@@ -74,7 +74,7 @@ const SingleUser = () => {
             </NavLink>
           </li>
 
-          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500">
+          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500 btn-header-client">
             <NavLink
               to="./editarRutinas"
               className="link-header-client"

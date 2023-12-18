@@ -163,7 +163,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   return (
     <section>
       <div>
-        <div className="bg-white px-3 w-full overflow-scroll">
+        <div className="bg-white px-3 w-full internal-modal-login">
           {isRegisterOpen ? (
             <div className="flex flex-col md:flex-row ">
               <div className="mb-4 md:mb-0 md:w-1/2">
@@ -194,7 +194,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
                     name="lastname"
                     onChange={handleCredentials}
                     value={credentials.lastname}
-                    className={`form-control w-full px-3 border border-gray-300 rounded ${
+                    className={`form-control w-full px-3 border border-gray-300 rounded overflow-y-scroll ${
                       errors.lastname ? "border-red-500" : ""
                     }`}
                   />
@@ -317,7 +317,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
           <button
             onClick={handleRegister}
             type="button"
-            className="font-bold rounded mt-2 hover:text-orange-700 border-none texct-orange-500"
+            className="font-bold rounded mt-2 hover:text-orange-700 border-none text-orange-500"
           >
             {isRegisterOpen
               ? "CAMBIAR A INICIAR SESIÓN"

@@ -3,6 +3,7 @@ import Post from '../models/Post';
 import Comment from '../models/Comment'; // Asegúrate de importar el modelo Comment
 import Client from '../models/Client';
 import User from '../models/User';
+import sequelize from '../configs/db';
 
 export const getAllPosts = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   try {
@@ -93,19 +94,30 @@ export const updatePost = async (req: Request, res: Response): Promise<Response<
 
 export const deletePost = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   const postId: number = parseInt(req.params.id, 10);
+  const transaction = await sequelize.transaction();
 
   try {
-    const post = await Post.findByPk(postId);
+    const post = await Post.findByPk(postId, { transaction });
 
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
 
-    await post.destroy();
+    const postComments = await Comment.findAll({ where: { postId }, transaction });
 
+    if (postComments) {
+      postComments.forEach(async (comment) => {
+        await comment.destroy();
+      });
+    }
+
+    await post.destroy({ transaction });
+
+    await transaction.commit();
     return res.json({ message: 'Post deleted' });
   } catch (error) {
     console.error(error);
+    await transaction.rollback();
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };

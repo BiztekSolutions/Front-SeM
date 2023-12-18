@@ -131,13 +131,13 @@ export const deleteGroup = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Group not found' });
     }
 
-    const groupRoutine = await Routine.findOne({ where: { groupId: idGroup } });
+    const groupRoutine = await Routine.findOne({ where: { groupId: idGroup }, transaction });
 
     if (groupRoutine) {
       groupRoutine.destroy({ transaction: transaction });
     }
 
-    const clientGroup = await ClientGroup.findAll({ where: { idGroup: idGroup } });
+    const clientGroup = await ClientGroup.findAll({ where: { idGroup: idGroup }, transaction });
 
     if (clientGroup) {
       clientGroup.forEach(async (client) => {

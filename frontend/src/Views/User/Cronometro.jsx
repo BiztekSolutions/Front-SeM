@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Card } from "antd";
 import "antd/dist/reset.css";
-
+import "./Hoy.css";
 function Cronometro() {
   const [segundos, setSegundos] = useState(0);
   const [corriendo, setCorriendo] = useState(false);
@@ -44,7 +44,11 @@ function Cronometro() {
   };
 
   return (
-    <Card title="Cronómetro" style={{ width: 300, textAlign: "center" }}>
+    <Card
+      className="cronometro"
+      title="Cronómetro"
+      style={{ textAlign: "center" }}
+    >
       <div>
         <p style={{ fontSize: "24px", fontWeight: "bold" }}>
           {formatearTiempo(segundos)}

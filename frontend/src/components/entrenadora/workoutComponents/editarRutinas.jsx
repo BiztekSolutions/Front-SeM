@@ -28,13 +28,11 @@ const initialState = {
   observation: "",
 };
 
-function EditarRutinas() {
+function EditarRutinas({ rutinas }) {
   const { exercises } = useSelector((state) => state.exercises);
-  const { rutinas, isLoading, message, isError } = useSelector(
-    (state) => state.rutinas
-  );
+
   const dispatch = useDispatch();
-  const id = useParams().id;
+
   const [formData, setFormData] = useState(initialState);
   const [startDate, setStartDate] = useState(moment());
   const [durationInWeeks, setDurationInWeeks] = useState(1);
@@ -48,11 +46,6 @@ function EditarRutinas() {
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  useEffect(() => {
-    if (id) {
-      dispatch(getRutines(id));
-    }
-  }, [id]);
 
   useEffect(() => {
     if (!exercises) {
@@ -61,60 +54,54 @@ function EditarRutinas() {
       const types = [...new Set(exercises.map((exercise) => exercise.type))];
       setExerciseTypes(types);
     }
-    if (!rutinas) {
-      dispatch(getRutines(id));
-    } else {
-      if (rutinas.length !== 0) {
-        const editRoutine = rutinas[0].routine;
 
-        let exercisesGroup = {
-          Monday: {},
-          Tuesday: {},
-          Wednesday: {},
-          Thursday: {},
-          Friday: {},
-          Saturday: {},
-        };
+    if (rutinas && rutinas.length !== 0) {
+      const editRoutine = rutinas[0].routine;
 
-        editRoutine.GroupExercises.forEach((groupExercise) => {
-          if (groupExercise.ExerciseConfigurations.length > 0) {
-            for (
-              let i = 0;
-              i < groupExercise.ExerciseConfigurations.length;
-              i++
-            ) {
-              const exerciseConfig = groupExercise.ExerciseConfigurations[i];
-              exercisesGroup[groupExercise.day][exerciseConfig.order] = {
-                idExercise: exerciseConfig.Exercise.idExercise,
-                name: exerciseConfig.Exercise.name,
-                configuration: {
-                  series: exerciseConfig.series,
-                  repetitions: exerciseConfig.repetitions,
-                },
-                image1: exerciseConfig.Exercise.image1,
-                image2: exerciseConfig.Exercise.image2,
-              };
-            }
+      let exercisesGroup = {
+        Monday: {},
+        Tuesday: {},
+        Wednesday: {},
+        Thursday: {},
+        Friday: {},
+        Saturday: {},
+      };
+
+      editRoutine.GroupExercises.forEach((groupExercise) => {
+        if (groupExercise.ExerciseConfigurations.length > 0) {
+          for (
+            let i = 0;
+            i < groupExercise.ExerciseConfigurations.length;
+            i++
+          ) {
+            const exerciseConfig = groupExercise.ExerciseConfigurations[i];
+            exercisesGroup[groupExercise.day][exerciseConfig.order] = {
+              idExercise: exerciseConfig.Exercise.idExercise,
+              name: exerciseConfig.Exercise.name,
+              configuration: {
+                series: exerciseConfig.series,
+                repetitions: exerciseConfig.repetitions,
+              },
+              image1: exerciseConfig.Exercise.image1,
+              image2: exerciseConfig.Exercise.image2,
+            };
           }
-        });
+        }
+      });
 
-        const finalData = {
-          name: editRoutine.name,
-          startDate: moment(editRoutine.startDate).format("YYYY-MM-DD"),
-          endDate: moment(editRoutine.endDate).format("YYYY-MM-DD"),
-          exercisesGroup,
-          objective: editRoutine.objective,
-          observation: editRoutine.observation,
-        };
-        setDurationInWeeks(
-          moment(editRoutine.endDate).diff(
-            moment(editRoutine.startDate),
-            "weeks"
-          )
-        );
+      const finalData = {
+        name: editRoutine.name,
+        startDate: moment(editRoutine.startDate).format("YYYY-MM-DD"),
+        endDate: moment(editRoutine.endDate).format("YYYY-MM-DD"),
+        exercisesGroup,
+        objective: editRoutine.objective,
+        observation: editRoutine.observation,
+      };
+      setDurationInWeeks(
+        moment(editRoutine.endDate).diff(moment(editRoutine.startDate), "weeks")
+      );
 
-        setFormData(finalData);
-      }
+      setFormData(finalData);
     }
   }, [exercises, rutinas]);
 
@@ -258,10 +245,6 @@ function EditarRutinas() {
   const handleDaySectionScroll = () => {
     setScrollHeight(daySectionRef.current.scrollTop);
   };
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
 
   if (rutinas && rutinas.length === 0) {
     return (

@@ -14,7 +14,6 @@ import {
 import { Form, Input, Button, Modal } from "antd";
 import styles from "../../../components/Component.module.css";
 import { showSuccessNotification } from "../../../features/layout/layoutSlice";
-import { get } from "react-scroll/modules/mixins/scroller";
 
 function Profile() {
   // const { user } = useSelector((state) => state.auths);
@@ -105,7 +104,7 @@ function Profile() {
 
   return (
     <div>
-      <h2 className="mb-10">PERFIL</h2>
+      <h2 className="mb-7 mt-16">PERFIL</h2>
 
       {user && (
         <Form

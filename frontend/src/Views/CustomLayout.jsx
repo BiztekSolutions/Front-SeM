@@ -9,7 +9,7 @@ import {
   theme,
   Typography,
 } from "antd";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import logo from "../assets/logo.png";
 import { GlobalContext } from "../context/globalContext";
@@ -34,7 +34,7 @@ const CustomLayout = ({ items }) => {
   };
 
   const { setLogged } = useContext(GlobalContext);
-
+  const isCoachPage = useLocation().pathname.includes("/coach");
   useEffect(() => {
     if (window.innerWidth < 1000) {
       dispatch(toggleSidebar(true));
@@ -59,6 +59,9 @@ const CustomLayout = ({ items }) => {
 
   const navigate = useNavigate();
   const [current, setCurrent] = useState("noticias");
+  const userLocal = localStorage.getItem("User");
+  const userLocalParse = JSON.parse(userLocal);
+  console.log(userLocal, "id");
 
   const onClick = (e) => {
     if (e.key !== "noticias") {
@@ -66,7 +69,11 @@ const CustomLayout = ({ items }) => {
       setCurrent(e.key);
     } else {
       setCurrent(e.key);
-      navigate("/coach");
+      if (isCoachPage) {
+        navigate("/coach");
+      } else {
+        navigate(`/user/${userLocalParse.user}`);
+      }
     }
   };
   return (
@@ -101,7 +108,7 @@ const CustomLayout = ({ items }) => {
             mode="inline"
             items={items}
             theme={layout.isDarkMode ? "dark" : "light"}
-            className="menu-ni-idea"
+            className="menu-ni-idea m-0"
           />
         </Sider>
         <AntLayout>

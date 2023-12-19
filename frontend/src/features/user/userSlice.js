@@ -82,6 +82,7 @@ export const getUser = createAsyncThunk("getUser", async (data, thunkAPI) => {
       const token = user.token;
       return await userService.getUser(token, data.userId);
     } else {
+      console.log(data.token, "hay token");
       return await userService.getUser(data.token, data.userId);
     }
   } catch (error) {

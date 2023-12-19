@@ -1,25 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { SiSendinblue } from "react-icons/si";
 import { getRutines } from "../../features/rutinas/rutinasSlice";
 import ExerciseModal from "../../components/entrenadora/exerciseComponents/ExerciseModal";
 import { useParams } from "react-router-dom";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
+import "./Hoy.css"; // Importa un archivo de estilos para personalizar aún más
 
 function Hoy() {
-  const [currentDay, setCurrentDay] = useState(new Date().getDay());
+  const [currentDay, setCurrentDay] = useState(new Date().getUTCDay());
+  const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const [cards, setCards] = useState([]);
   const { id } = useParams();
   const dispatch = useDispatch();
   const rutinas = useSelector((state) => state.rutinas.rutinas);
   const isLoading = useSelector((state) => state.rutinas.isLoading);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
     const fetchRoutines = async () => {
       await dispatch(getRutines(id));
     };
     fetchRoutines();
-  }, [dispatch]);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (rutinas) {
+      const exerciseCards = getExerciseCards();
+      setCards(exerciseCards);
+    }
+  }, [currentDay, currentRoutineIndex, rutinas]);
 
   const handleCardClick = (exercise) => {
     setSelectedExercise(exercise);
@@ -33,87 +45,156 @@ function Hoy() {
   const handleDayChange = (amount) => {
     const newDay = (currentDay + amount + 7) % 7;
     setCurrentDay(newDay);
+
+    // Actualizar la fecha al cambiar el día
+    const currentDateCopy = new Date(currentDate);
+    currentDateCopy.setDate(currentDateCopy.getDate() + amount);
+    setCurrentDate(currentDateCopy);
+  };
+
+  const handlePrevRoutine = () => {
+    if (currentRoutineIndex > 0) {
+      setCurrentRoutineIndex(currentRoutineIndex - 1);
+      setCurrentDay(new Date().getUTCDay()); // Resetear el día al cambiar de rutina
+    }
+  };
+
+  const handleNextRoutine = () => {
+    if (currentRoutineIndex < rutinas.length - 1) {
+      setCurrentRoutineIndex(currentRoutineIndex + 1);
+      setCurrentDay(new Date().getUTCDay()); // Resetear el día al cambiar de rutina
+    }
+  };
+
+  const getDayOfWeekString = (dayOfWeek) => {
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    return daysOfWeek[dayOfWeek];
   };
 
   const getExerciseCards = () => {
-    const todayExercises = rutinas.reduce((acc, routine) => {
-      const { exerciseGroups } = routine;
-      exerciseGroups.forEach((group) => {
-        if (group.day === currentDay) {
-          group?.exercises?.forEach((exercise) => {
-            const cardComponent = (
-              <div
-                key={exercise.id}
-                className="card-calendar highlight shadow mb-4 rounded-lg overflow-hidden flex flex-col md:flex-row border"
-                onClick={() => handleCardClick(exercise)}
-              >
-                <div className="md:w-1/3">
+    const currentRoutine = rutinas && rutinas[currentRoutineIndex];
+    if (!currentRoutine) return [];
+
+    const { GroupExercises } = currentRoutine.routine;
+    const hoy = getDayOfWeekString(currentDay);
+
+    const exerciseCards = GroupExercises.reduce((acc, group) => {
+      if (group.day === hoy) {
+        group.ExerciseConfigurations?.forEach((exercise) => {
+          acc.push(
+            <div
+              key={exercise?.idExercise}
+              onClick={() => handleCardClick(exercise)}
+              className="exercise-card-container mb-4 cursor-pointer border hover:border-blue-500"
+            >
+              <div className="flex">
+                <div className="exercise-card-images">
                   <img
-                    src={exercise.photo}
-                    alt="fotoEjercicio"
-                    className="w-full h-auto object-cover"
+                    src={exercise?.Exercise.image1}
+                    alt={`Imagen de ${exercise?.name}`}
+                    className="w-32 h-auto object-cover rounded-l-lg"
+                  />
+                  <img
+                    src={exercise?.Exercise.image2}
+                    alt={`Imagen de ${exercise?.name}`}
+                    className="w-32 h-auto object-cover rounded-r-lg"
                   />
                 </div>
-                <div className="md:w-2/3 p-4">
-                  <div className="flex flex-col ml-5 mb-4">
-                    <div className="flex items-center mb-2">
-                      <SiSendinblue className="text-gray-900 rounded-full text-bold mr-2" />
-                      <h5 className="card-title text-lg font-bold">
-                        {exercise.name}
-                      </h5>
-                    </div>
+                <div className="exercise-card-details p-4">
+                  <div className="mb-2 font-bold">
+                    <Typography.Text>
+                      ID: {exercise?.idExercise}
+                    </Typography.Text>
                   </div>
-                  <div className="text-center ml-12 md:text-left">
-                    <h5 className="text-lg font-semibold mb-2">
-                      {exercise.series}x{exercise.repeticiones}
+                  <div className="mb-2">
+                    <Typography.Text>{exercise?.Exercise.name}</Typography.Text>
+                  </div>
+                  {/* <div className="flex gap-4 justify-center">
+                    <img
+                      src={exercise?.Exercise.image1}
+                      alt={`Imagen de ${exercise?.name}`}
+                      className="w-32 h-32 object-cover mb-2 rounded-full"
+                    />
+                    <img
+                      src={exercise?.Exercise.image2}
+                      alt={`Imagen de ${exercise?.name}`}
+                      className="w-32 h-32 object-cover mb-2 rounded-full"
+                    />
+                  </div> */}
+                  <div className="text-center md:text-left">
+                    <h5 className="text-base font-semibold mb-2">
+                      {exercise.series}x{exercise.repetitions}
                     </h5>
                   </div>
                 </div>
               </div>
-            );
-
-            acc.push(cardComponent);
-          });
-        }
-      });
-
+            </div>
+          );
+        });
+      }
       return acc;
     }, []);
 
-    return todayExercises.length > 0 ? (
-      todayExercises
-    ) : (
-      <p>Hoy toca descansar.</p>
-    );
+    return exerciseCards;
   };
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const formattedDate = currentDate.toLocaleDateString("es-ES", options);
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Ejercicios del Día</h2>
+    <div className="hoy-container">
+      <h2 className="text-2xl font-bold mb-4">
+        {rutinas &&
+          rutinas.length > 0 &&
+          rutinas[currentRoutineIndex]?.routine?.name}
+        {rutinas && rutinas.length > 1 && (
+          <>
+            <LeftOutlined
+              className="cursor-pointer text-2xl"
+              onClick={handlePrevRoutine}
+            />
+            <RightOutlined
+              className="cursor-pointer text-2xl"
+              onClick={handleNextRoutine}
+            />
+          </>
+        )}
+      </h2>
 
       <div className="flex justify-between mb-4">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => handleDayChange(-1)}
         >
-          Ayer
+          <LeftOutlined />
         </button>
-        <span className="text-lg font-semibold">
-          {/* Mostrar el día actual */}
-        </span>
+        <span className="text-lg font-semibold">{formattedDate}</span>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => handleDayChange(1)}
         >
-          Mañana
+          <RightOutlined />
         </button>
       </div>
 
-      <div>{getExerciseCards()}</div>
+      <div className="exercise-cards-container">{cards}</div>
 
       {showModal ? (
         <div>

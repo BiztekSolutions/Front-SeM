@@ -5,12 +5,14 @@ import ExerciseModal from "../../../components/entrenadora/exerciseComponents/Ex
 import { useSelector } from "react-redux";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 import { Typography } from "antd";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import esLocale from "@fullcalendar/core/locales/es";
 
 const Calendar = ({ rutinas }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const state = useSelector((state) => state);
-
+  const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
   const { isLoading } = state.rutinas;
   const [events, setEvents] = useState([]);
 
@@ -30,7 +32,17 @@ const Calendar = ({ rutinas }) => {
     setSelectedExercise(exercise);
     setShowModal(true);
   }
+  const handleNextRoutine = () => {
+    setCurrentRoutineIndex((prevIndex) =>
+      prevIndex < rutinas.length - 1 ? prevIndex + 1 : 0
+    );
+  };
 
+  const handlePrevRoutine = () => {
+    setCurrentRoutineIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : rutinas.length - 1
+    );
+  };
   const getDayOfWeekString = (dayOfWeek) => {
     const daysOfWeek = [
       "sunday",
@@ -100,79 +112,103 @@ const Calendar = ({ rutinas }) => {
       </div>
     );
   }
-  console.log(rutinas, "rutinassssss");
+
   return (
     <div className="user-calendar">
-      {events &&
-        rutinas &&
-        rutinas.length !== 0 &&
-        rutinas?.map((routine, index) => (
-          <div key={index} className="w-full min-h-screen mt-24">
-            <h2 className="name-rutine-calendar bg-orange-200 text-black">
-              Rutina {index + 1}
-            </h2>
-            <FullCalendar
-              key={events.length}
-              plugins={[dayGridPlugin]}
-              initialView="dayGridWeek"
-              events={events}
-              eventContent={(arg) => {
-                const exerciseConfiguration =
-                  arg.event.extendedProps.exerciseConfiguration;
-                return (
-                  <div
-                    className="card-calendar "
-                    onClick={() => handleCardClick(exerciseConfiguration)}
-                  >
-                    <div className="card-body flex flex-col ">
-                      <div className="flex flex-col  gap-1 border-black">
-                        <div className="flex gap-2">
-                          <div className="flex">
-                            <img
-                              src={exerciseConfiguration.Exercise.image1}
-                              alt="image1"
-                              className="img1-calendar"
-                            />
-                            <img
-                              src={exerciseConfiguration.Exercise.image2}
-                              alt="image1"
-                              className="img2-calendar"
-                            />
-                          </div>
-                          <div>
-                            <h5 className="card-title">
-                              {exerciseConfiguration.Exercise.name}
+      <div className="flex items-center justify-between mt-10">
+        {rutinas.length > 1 && (
+          <LeftOutlined
+            className="cursor-pointer text-2xl"
+            onClick={handlePrevRoutine}
+          />
+        )}
+
+        {rutinas.length > 1 && (
+          <RightOutlined
+            className="cursor-pointer text-2xl"
+            onClick={handleNextRoutine}
+          />
+        )}
+      </div>
+      {events && rutinas && rutinas.length !== 0 && (
+        <div key={currentRoutineIndex} className="w-full ">
+          <h2 className="name-rutine-calendar bg-orange-200 text-black">
+            {rutinas[currentRoutineIndex]?.routine?.name}
+          </h2>
+          <FullCalendar
+            key={events.length}
+            plugins={[dayGridPlugin]}
+            initialView="dayGridWeek"
+            events={events}
+            locales={[esLocale]} // Agrega la configuración del idioma español
+            locale="es"
+            fixedWeekCount={false}
+            eventContent={(arg) => {
+              const exerciseConfiguration =
+                arg.event.extendedProps.exerciseConfiguration;
+              return (
+                <div
+                  className="card-calendar "
+                  onClick={() => handleCardClick(exerciseConfiguration)}
+                >
+                  <div className="card-body flex flex-col ">
+                    <div className="flex flex-col  gap-1 border-black">
+                      <div className="flex gap-2">
+                        <div className="flex">
+                          <img
+                            src={exerciseConfiguration.Exercise.image1}
+                            alt="image1"
+                            className="img1-calendar"
+                          />
+                          <img
+                            src={exerciseConfiguration.Exercise.image2}
+                            alt="image1"
+                            className="img2-calendar"
+                          />
+                        </div>
+                        <div>
+                          <h5 className="card-title">
+                            {exerciseConfiguration.Exercise.name}
+                          </h5>
+                          <div className="card-body">
+                            <h5 className="card-title text-center">
+                              {exerciseConfiguration.series}x
+                              {exerciseConfiguration.repetitions}
                             </h5>
-                            <div className="card-body">
-                              <h5 className="card-title text-center">
-                                {exerciseConfiguration.series}x
-                                {exerciseConfiguration.repetitions}
-                              </h5>
-                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                );
-              }}
-              headerToolbar={{
-                left: "prev,next today",
-                center: "title",
-                right: "dayGridMonth,dayGridWeek,timeGridDay",
-              }}
-              dayHeaderContent={(arg) => {
-                return arg.date.toLocaleDateString("en-US", {
-                  weekday: "long",
-                });
-              }}
-              hiddenDays={[0]}
-              height="80vh"
-              contentHeight="auto"
-            />
-          </div>
-        ))}
+                </div>
+              );
+            }}
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,dayGridWeek",
+            }}
+            dayHeaderContent={(arg) => {
+              const firstDay = 0; // Configura el primer día de la semana (0 = domingo, 1 = lunes, ..., 6 = sábado)
+              const currentDay = arg.date.getUTCDay();
+              const daysOfWeek = [
+                "domingo",
+                "lunes",
+                "martes",
+                "miércoles",
+                "jueves",
+                "viernes",
+                "sábado",
+              ];
 
+              return daysOfWeek[(currentDay + firstDay) % 7];
+            }}
+            hiddenDays={[0]}
+            height="80vh"
+            contentHeight="auto"
+          />
+        </div>
+      )}
       {showModal ? (
         <ExerciseModal
           exercise={selectedExercise}

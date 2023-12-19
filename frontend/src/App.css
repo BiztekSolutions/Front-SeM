@@ -850,6 +850,9 @@ input.form-control:focus {
   .ag-courses-item_date-box {
     font-size: 16px;
   }
+  .card-calendar h5 {
+    font-size: 0.7rem;
+  }
 }
 
 /* -------------- Seccion 6 -------------- */
@@ -860,6 +863,9 @@ input.form-control:focus {
   font-weight: bold;
   font-size: 1.5rem;
   border: none;
+}
+.card-calendar h5 {
+  white-space: pre-line;
 }
 
 .card-title {
@@ -1434,17 +1440,24 @@ input[type="text"] {
   .bar-menu {
     position: absolute !important;
     top: 12%;
-    left: 15%;
+    left: 22%;
+    margin: 0 !important;
+    padding: 0 !important;
     transform: translate(-50%, -20%) !important;
     z-index: 1000;
     background-color: transparent !important;
+    max-width: 80vw; /* Cambia el valor según tus necesidades */
+    /* overflow-x: hidden; /* Puedes usar 'scroll' si prefieres barras de desplazamiento horizontales */
   }
+
   .logo {
     display: none !important;
   }
   .menu-ni-idea {
     position: relative !important;
     display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
     background-color: transparent !important;
   }
   .link-header-client {

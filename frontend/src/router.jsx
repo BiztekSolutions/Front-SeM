@@ -21,7 +21,8 @@ import GroupCalendar from "./Views/Coach/GruposCalendar";
 import AgregarEjercicio from "./components/entrenadora/workoutComponents/agregarEjercicio.jsx";
 import Hoy from "./Views/User/Hoy";
 import CrearGrupos from "./Views/Coach/CrearGrupos";
-import EditarRutinas from "./components/entrenadora/workoutComponents/editarRutinas.jsx";
+import EditarRutinasIndividual from "./Views/Coach/EditarRutina";
+import EditarRutinasGrupal from "./Views/Coach/EditarRutinaGrupal";
 import ChangePassword from "./Views/Coach/ChangePassword/ChangePassword.jsx";
 import Rutinas from "./Views/User/Rutinas";
 import UserList from "./Views/Coach/UserList";
@@ -48,7 +49,7 @@ const Router = () => {
             <Route path="ejercicios" element={<UserCalendar />} />
             <Route path="hoy" element={<WorkoutContainer />} />
             <Route path="agregarRutina" element={<WorkoutCreator />} />
-            <Route path="editarRutinas" element={<EditarRutinas />} />
+            <Route path="editarRutinas" element={<EditarRutinasIndividual />} />
             <Route path="workouts/:id" element={<Workout />} />
           </Route>
           <Route path="agregarEjercicios" element={<AgregarEjercicio />} />
@@ -59,7 +60,7 @@ const Router = () => {
           <Route path="grupos/:id" element={<SingleUser />}>
             <Route path="ejercicios" element={<GroupCalendar />} />
             <Route path="agregarRutina" element={<WorkoutCreator />} />
-            <Route path="editarRutinas" element={<EditarRutinas />} />
+            <Route path="editarRutinas" element={<EditarRutinasGrupal />} />
           </Route>
           <Route path="creargrupos" element={<CrearGrupos />} />
 
@@ -70,8 +71,8 @@ const Router = () => {
           path="/user/:id"
           element={auth.token !== "" ? <User /> : <Navigate to="/" />}
         >
+          <Route path="profile/:id" element={<Profile />} />
           <Route index element={<Noticias />} />
-          <Route exact path=":id" element={<Profile />} />
           <Route path="hoy" element={<Hoy />} />
           <Route path="rutinas" element={<Rutinas />} />
           <Route path="cronometro" element={<Cronometro />} />

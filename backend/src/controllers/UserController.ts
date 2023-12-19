@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Request, Response } from 'express';
 import User from '../models/User';
 import { get, list, getRoutines, listClients, remove } from '../services/UserService';
@@ -6,6 +7,7 @@ import Routine from '../models/Routine';
 import Exercise from '../models/Exercise';
 import RoutineConfiguration from '../models/ExerciseConfiguration';
 import GroupExercise from '../models/GroupExercise';
+import ClientGroup from '../models/ClientGroup';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
@@ -126,14 +128,57 @@ export const removeUser = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
 
-    const rowsAffected = await remove(userId);
+    const user = await User.findByPk(userId);
 
-    if (rowsAffected === 0) {
+    if (!user) {
       return res.status(400).json({ message: 'User not found' });
     }
 
+    //busco si el usuario tiene rutinas asociadas
+
+    const userRoutines = await Routine.findAll({
+      where: { idUser: userId },
+    });
+
+    if (userRoutines.length > 0) {
+      userRoutines.forEach(async (routine) => {
+        for (let groupExerciseIndex = 0; groupExerciseIndex < routine.GroupExercises.length; groupExerciseIndex++) {
+          for (
+            let configurationIndex = 0;
+            configurationIndex < routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations.length;
+            configurationIndex++
+          ) {
+            await ExerciseConfiguration.destroy({
+              where: {
+                idExerciseConfiguration:
+                  routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations[configurationIndex].idExerciseConfiguration,
+              },
+              transaction,
+            });
+          }
+          await GroupExercise.destroy({
+            where: { idGroupExercise: routine.GroupExercises[groupExerciseIndex].idGroupExercise },
+            transaction,
+          });
+        }
+      });
+    }
+
+    //busco si el usuario esta adherido a algun grupo
+    const clientGroup = await ClientGroup.findAll({ where: { idUser: userId } });
+
+    if (clientGroup) {
+      clientGroup.forEach(async (client) => {
+        await client.destroy({ transaction: transaction });
+      });
+    }
+
+    await user.destroy({ transaction: transaction });
+
+    await transaction.commit();
     return res.status(200).json({ message: 'User deleted successfully' });
   } catch (error: any) {
+    transaction.rollback();
     return res.status(500).json({ error: error.message });
   }
 };

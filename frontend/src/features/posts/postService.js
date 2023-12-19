@@ -17,13 +17,13 @@ const postService = {
       throw error;
     }
   },
-  addCommentToPost: async (postId, comment, clientId, token) => {
+  addCommentToPost: async (idPost, comment, idClient, token) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/v1/comments/${postId}`,
+        `http://localhost:3000/api/v1/comments/${idPost}`,
         {
           content: comment,
-          userId: clientId,
+          userId: idClient,
         },
         {
           headers: {
@@ -53,10 +53,10 @@ const postService = {
       throw error;
     }
   },
-  deletePost: async (postId, token) => {
+  deletePost: async (idPost, token) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/v1/posts/${postId}`,
+        `http://localhost:3000/api/v1/posts/${idPost}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -91,9 +91,9 @@ const postService = {
     }
   },
 
-  editPost: async (postId, updatedPost) => {
+  editPost: async (idPost, updatedPost) => {
     try {
-      const response = await axios.patch(`${API_URL}/${postId}`, updatedPost);
+      const response = await axios.patch(`${API_URL}/${idPost}`, updatedPost);
       return response.data;
     } catch (error) {
       console.error("Error editing post:", error);

@@ -56,13 +56,13 @@ function Noticias() {
     setModalVisible(true);
   };
   console.log(userLogged, "userLogged");
-  const handleCommentSubmit = async (postId, comment) => {
+  const handleCommentSubmit = async (idPost, comment) => {
     if (!foundClient) {
       dispatch(showErrorNotification("Error", "No eres un cliente."));
       return;
     }
     dispatch(
-      addCommentToPost({ postId, comment, clientId: foundClient.idClient })
+      addCommentToPost({ idPost, comment, idClient: foundClient.idClient })
     );
     setComment("");
     setTimeout(() => {
@@ -132,7 +132,7 @@ function Noticias() {
         dataSource={posts}
         renderItem={(post) => (
           <List.Item
-            key={post.id}
+            key={post.idPost}
             actions={[
               <Space>
                 <Tooltip title="Comentarios">
@@ -147,7 +147,7 @@ function Noticias() {
                     <Button
                       type="link"
                       danger
-                      onClick={() => handleDeletePost(post.id)}
+                      onClick={() => handleDeletePost(post.idPost)}
                       icon={<DeleteOutlined />}
                     ></Button>
                   </Tooltip>
@@ -193,7 +193,7 @@ function Noticias() {
             </div>
             <Form
               form={form}
-              onFinish={() => handleCommentSubmit(selectedPost.id, comment)}
+              onFinish={() => handleCommentSubmit(selectedPost.idPost, comment)}
             >
               <Form.Item>
                 <TextArea
@@ -207,7 +207,7 @@ function Noticias() {
                 <Button
                   type="primary"
                   htmlType="button"
-                  onClick={() => handleCommentSubmit(selectedPost.id, comment)}
+                  onClick={() => handleCommentSubmit(selectedPost.idPost, comment)}
                   className="bg-blue-500 text-white px-4 py-2 rounded-md"
                 >
                   Comentar
@@ -219,7 +219,7 @@ function Noticias() {
                 <h4 className="text-lg font-semibold mb-2">Comentarios:</h4>
                 <ul className="list-disc pl-6">
                   {selectedPost.Comments.map((comment) => (
-                    <div key={comment.id} className="mb-2">
+                    <div key={comment.idComment} className="mb-2">
                       <Avatar
                         src={comment.Client?.User && comment.Client.User.avatar}
                       />
@@ -231,7 +231,7 @@ function Noticias() {
                             <Button
                               type="link"
                               danger
-                              onClick={() => handleDeleteComment(comment.id)}
+                              onClick={() => handleDeleteComment(comment.idComment)}
                               icon={<DeleteOutlined />}
                             ></Button>
                           </Tooltip>

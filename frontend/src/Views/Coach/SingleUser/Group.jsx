@@ -29,8 +29,8 @@ function Group() {
     console.log("GRUPO", group);
   }, [group]);
 
-  const handleDeleteClient = (clientId) => {
-    dispatch(deleteClientFromGroup({ idGroup, clientId }));
+  const handleDeleteClient = (idClient) => {
+    dispatch(deleteClientFromGroup({ idGroup, idClient }));
   };
 
   if (isLoading) return <LoadingSpinner />;

@@ -14,7 +14,7 @@ const UserCalendar = ({ userId }) => {
     const fetchedRoutines = [
       {
         id: 1,
-        clientId: 1,
+        idClient: 1,
         startDate: "2023-10-25",
         endDate: "2023-11-30",
         exercises: [

@@ -39,15 +39,15 @@ export const createGroup = async (req: Request, res: Response) => {
         console.log(group.idGroup, 'group.idGroup');
         console.log(selectedUsers, 'selectedUsers');
 
-        for (const clientId of selectedUsers) {
-          console.log(typeof clientId, 'clientId');
+        for (const idClient of selectedUsers) {
+          console.log(typeof idClient, 'idClient');
 
-          const client = await Client.findByPk(clientId); // Obtener instancia de Client
+          const client = await Client.findByPk(idClient); // Obtener instancia de Client
 
           if (client) {
             await group.addClient(client, { transaction: transaction });
           } else {
-            console.log(`Client with id ${clientId} not found`);
+            console.log(`Client with id ${idClient} not found`);
           }
         }
       } else {
@@ -212,7 +212,7 @@ export const deleteGroup = async (req: Request, res: Response) => {
       groupRoutine.destroy({ transaction: transaction });
     }
 
-    const clientGroup = await ClientGroup.findAll({ where: { idGroup: idGroup } });
+    const clientGroup = await ClientGroup.findAll({ where: { idGroup: idGroup }, transaction });
 
     if (clientGroup) {
       clientGroup.forEach(async (client) => {

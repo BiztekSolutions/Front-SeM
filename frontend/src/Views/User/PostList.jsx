@@ -20,8 +20,8 @@ function PostList() {
     dispatch(fetchPosts());
   }, [dispatch]);
 
-  const handleCommentSubmit = (postId, comment) => {
-    dispatch(addCommentToPost({ postId, comment }));
+  const handleCommentSubmit = (idPost, comment) => {
+    dispatch(addCommentToPost({ idPost, comment }));
   };
 
   return (
@@ -33,7 +33,7 @@ function PostList() {
         dataSource={posts}
         renderItem={(post) => (
           <List.Item
-            key={post.id}
+            key={post.idPost}
             actions={[
               <IconText
                 key="comments"
@@ -56,7 +56,7 @@ function PostList() {
             <Post
               post={post}
               onCommentSubmit={(comment) =>
-                handleCommentSubmit(post.id, comment)
+                handleCommentSubmit(post.idPost, comment)
               }
             />
           </List.Item>

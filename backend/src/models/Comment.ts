@@ -1,26 +1,30 @@
-// models/Comment.ts
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../configs/db';
 import Post from './Post';
 
 class Comment extends Model {
-  public id!: number;
+  public idComment!: number;
   public content!: string;
-  public clientId!: number;
-  public postId!: number; // Cambia aquí para seguir la convención
+  public idClient!: number;
+  public idPost!: number;
 }
 
 Comment.init(
   {
+    idComment: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     content: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    postId: {
+    idPost: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    clientId: {
+    idClient: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -30,6 +34,6 @@ Comment.init(
     modelName: 'Comment',
   }
 );
-Comment.belongsTo(Post, { foreignKey: 'postId' });
+Comment.belongsTo(Post, { foreignKey: 'idPost' });
 
 export default Comment;

@@ -82,7 +82,7 @@ export const updateRoutine = async (req: Request, res: Response) => {
     const routineId = parseInt(req.params.routineId as string);
     if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
 
-    const { name, observation, objective, exercisesGroup, clientId, startDate, endDate } = req.body;
+    const { name, observation, objective, exercisesGroup, idClient, startDate, endDate } = req.body;
 
     const transaction = await sequelize.transaction();
 
@@ -170,7 +170,7 @@ export const updateRoutine = async (req: Request, res: Response) => {
           objective,
           startDate,
           endDate,
-          idClient: clientId,
+          idClient: idClient,
         },
         { transaction }
       );

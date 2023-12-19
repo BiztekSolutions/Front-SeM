@@ -24,8 +24,8 @@ export const deleteComment = createAsyncThunk(
 export const addOrUpdatePost = createAsyncThunk(
   "posts/addOrUpdatePost",
   async (post) => {
-    if (post.id) {
-      return postService.editPost(post.id, post);
+    if (post.idPost) {
+      return postService.editPost(post.idPost, post);
     } else {
       return postService.addPost(post);
     }
@@ -33,31 +33,31 @@ export const addOrUpdatePost = createAsyncThunk(
 );
 export const deletePost = createAsyncThunk(
   "posts/deletePost",
-  async (postId) => {
+  async (idPost) => {
     const userString = localStorage.getItem("User");
 
     const user = JSON.parse(userString);
     const token = user.token;
-    await postService.deletePost(postId, token);
-    return postId;
+    await postService.deletePost(idPost, token);
+    return idPost;
   }
 );
 
 export const addCommentToPost = createAsyncThunk(
   "posts/addCommentToPost",
-  async ({ postId, comment, clientId }) => {
+  async ({ idPost, comment, idClient }) => {
     const userString = localStorage.getItem("User");
 
     const user = JSON.parse(userString);
     const token = user.token;
     const updatedPost = await postService.addCommentToPost(
-      postId,
+      idPost,
       comment,
-      clientId,
+      idClient,
       token
     );
     return {
-      postId,
+      idPost,
       comment: updatedPost.Comments[updatedPost.Comments.length - 1],
     };
   }
@@ -73,8 +73,8 @@ export const postsSlice = createSlice({
   },
   reducers: {
     addCommentToPost: (state, action) => {
-      const { postId, comment } = action.payload;
-      const postIndex = state.posts.findIndex((post) => post.id === postId);
+      const { idPost, comment } = action.payload;
+      const postIndex = state.posts.findIndex((post) => post.idPost === idPost);
 
       if (postIndex !== -1) {
         state.posts[postIndex].Comments.push(comment);
@@ -114,7 +114,7 @@ export const postsSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.posts = state.posts.filter((post) => post.id !== action.payload);
+        state.posts = state.posts.filter((post) => post.idPost !== action.payload);
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.status = "failed";
@@ -126,12 +126,12 @@ export const postsSlice = createSlice({
       })
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const { postId, commentId } = action.payload;
-        const postIndex = state.posts.findIndex((post) => post.id === postId);
+        const { idPost, commentId } = action.payload;
+        const postIndex = state.posts.findIndex((post) => post.idPost === idPost);
         if (postIndex !== -1) {
           state.posts[postIndex].Comments = state.posts[
             postIndex
-          ].Comments.filter((comment) => comment.id !== commentId);
+          ].Comments.filter((comment) => comment.idComment !== commentId);
         }
       })
       .addCase(deleteComment.rejected, (state, action) => {

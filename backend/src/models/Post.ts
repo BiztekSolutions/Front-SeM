@@ -1,17 +1,20 @@
-// models/Post.ts
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../configs/db';
-import Comment from './Comment';
 
 class Post extends Model {
-  public id!: number;
+  public idPost!: number;
   public title!: string;
   public content!: string;
-  public clientId!: number;
+  public idClient!: number;
 }
 
 Post.init(
   {
+    idPost: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -20,7 +23,7 @@ Post.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    clientId: {
+    idClient: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

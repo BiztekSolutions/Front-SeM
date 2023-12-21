@@ -21,6 +21,16 @@ export const createGroup = createAsyncThunk(
     }
   }
 );
+export const addClientToGroup = createAsyncThunk(
+  "addClientToGroup",
+  async (data, thunkAPI) => {
+    try {
+      return await groupService.addClientToGroup(data.token, data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export const getGroupRutines = createAsyncThunk(
   "getGroupRutines",
@@ -208,6 +218,45 @@ export const groupSlice = createSlice({
         state.isError = true;
         state.message = action.payload.message;
         state.group = null;
+      })
+      // DELETE CLIENT FROM GROUP
+      .addCase(deleteClientFromGroup.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Deleting client from group";
+      })
+      .addCase(deleteClientFromGroup.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.group = action.payload.group;
+        state.message = action.payload.message;
+      })
+      .addCase(deleteClientFromGroup.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.group = null;
+        state.message = action.payload.message;
+      })
+
+      // ADD CLIENT TO GROUP
+      .addCase(addClientToGroup.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Adding client to group";
+      })
+      .addCase(addClientToGroup.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.group = action.payload.group;
+        state.message = action.payload.message;
+      })
+      .addCase(addClientToGroup.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.group = null;
+        state.message = action.payload.message;
       })
 
       // CLEAR ACTIONS

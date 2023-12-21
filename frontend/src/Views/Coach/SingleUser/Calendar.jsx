@@ -9,24 +9,22 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import esLocale from "@fullcalendar/core/locales/es";
 
 const Calendar = ({ rutinas }) => {
+  console.log(rutinas, "rutinas es array???");
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const state = useSelector((state) => state);
   const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
   const { isLoading } = state.rutinas;
   const [events, setEvents] = useState([]);
-
+  let i = 0;
   const isGroupsPage = location.pathname.includes("/grupos");
 
   useEffect(() => {
-    if (rutinas && rutinas.length !== 0 && isGroupsPage) {
-      const generatedEvents = generateEvents(rutinas);
-      setEvents(generatedEvents);
-    } else if (rutinas && rutinas.length !== 0) {
-      const generatedEvents = generateEvents(rutinas);
+    if (rutinas && rutinas.length !== 0) {
+      const generatedEvents = generateEvents(rutinas[currentRoutineIndex]);
       setEvents(generatedEvents);
     }
-  }, [rutinas]);
+  }, [rutinas, currentRoutineIndex]);
 
   function handleCardClick(exercise) {
     setSelectedExercise(exercise);
@@ -45,56 +43,55 @@ const Calendar = ({ rutinas }) => {
   };
   const getDayOfWeekString = (dayOfWeek) => {
     const daysOfWeek = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
+      "domingo",
+      "lunes",
+      "martes",
+      "miercoles",
+      "jueves",
+      "viernes",
+      "sábado",
     ];
     return daysOfWeek[dayOfWeek];
   };
 
-  const generateEvents = (routines) => {
+  const generateEvents = (rutinas) => {
     const events = [];
+    console.log(rutinas, "rutinas");
 
-    routines.forEach((routine) => {
-      const { startDate, endDate, GroupExercises } = routine.routine;
-      let currentDate = new Date(startDate);
-      const endDateObject = new Date(endDate);
+    const { startDate, endDate, GroupExercises } = rutinas.routine;
+    let currentDate = new Date(startDate);
+    const endDateObject = new Date(endDate);
 
-      while (currentDate < endDateObject) {
-        const dayOfWeek = currentDate.getUTCDay();
-        const dayOfWeekString = getDayOfWeekString(dayOfWeek);
+    while (currentDate < endDateObject) {
+      const dayOfWeek = currentDate.getUTCDay();
+      const dayOfWeekString = getDayOfWeekString(dayOfWeek);
 
-        GroupExercises.forEach((groupExercise) => {
-          const configDay = groupExercise.day.toLowerCase();
+      GroupExercises.forEach((groupExercise) => {
+        const configDay = groupExercise.day.toLowerCase();
 
-          if (dayOfWeekString === configDay) {
-            groupExercise.ExerciseConfigurations.forEach(
-              (exerciseConfiguration) => {
-                events.push({
-                  id: i++,
-                  start: currentDate.toISOString().split("T")[0],
-                  description: exerciseConfiguration.Exercise.description,
-                  idExercise: exerciseConfiguration.idExercise,
-                  extendedProps: {
-                    exerciseConfiguration: exerciseConfiguration,
-                  },
-                });
-              }
-            );
-          }
-        });
+        if (dayOfWeekString === configDay) {
+          groupExercise.ExerciseConfigurations.forEach(
+            (exerciseConfiguration) => {
+              events.push({
+                id: i++,
+                start: currentDate.toISOString().split("T")[0],
+                description: exerciseConfiguration.Exercise.description,
+                idExercise: exerciseConfiguration.idExercise,
+                extendedProps: {
+                  exerciseConfiguration: exerciseConfiguration,
+                },
+              });
+            }
+          );
+        }
+      });
 
-        currentDate = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          currentDate.getUTCDate() + 1
-        );
-      }
-    });
+      currentDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getUTCDate() + 1
+      );
+    }
 
     return events;
   };
@@ -102,7 +99,7 @@ const Calendar = ({ rutinas }) => {
   if (isLoading) {
     return <LoadingSpinner />;
   }
-  let i = 0;
+
   if (rutinas && rutinas.length === 0) {
     return (
       <div>
@@ -116,14 +113,14 @@ const Calendar = ({ rutinas }) => {
   return (
     <div className="user-calendar">
       <div className="flex items-center justify-between mt-10">
-        {rutinas.length > 1 && (
+        {rutinas && rutinas?.length > 1 && (
           <LeftOutlined
             className="cursor-pointer text-2xl"
             onClick={handlePrevRoutine}
           />
         )}
 
-        {rutinas.length > 1 && (
+        {rutinas && rutinas.length > 1 && (
           <RightOutlined
             className="cursor-pointer text-2xl"
             onClick={handleNextRoutine}

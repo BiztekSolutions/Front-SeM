@@ -39,11 +39,15 @@ const getGroups = async (token) => {
 };
 
 const deleteClientFromGroup = async (token, data) => {
-  const response = await axios.put(`${base_url}/groups/delete-client`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.put(
+    `${base_url}/groups/deleteClient/${data.idGroup}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 const getGroupRutines = async (token, idGroup) => {
@@ -74,6 +78,19 @@ const getGroupRutines = async (token, idGroup) => {
   return routinesDetails;
 };
 
+const addClientToGroup = async (token, data) => {
+  const response = await axios.put(
+    `${base_url}/groups/addClient/${data.idGroup}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 const setRoutineGroup = async (token, data) => {
   const response = await axios.post(`${base_url}/groups/routine`, data, {
     headers: {
@@ -91,4 +108,5 @@ export const groupService = {
   deleteGroup,
   deleteClientFromGroup,
   getGroupRutines,
+  addClientToGroup,
 };

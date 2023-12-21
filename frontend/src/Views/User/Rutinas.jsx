@@ -18,17 +18,21 @@ function Rutinas() {
   const { rutinaGrupal } = state.groups;
   const { isLoading, rutinas } = state.rutinas;
 
-  const idGroup = user?.Client?.ClientGroups[0].idGroup;
-
   useEffect(() => {
     dispatch(getUser({ token, userId: id }));
-    if (idGroup) {
+    if (
+      user &&
+      user.Client &&
+      user.Client.ClientGroups &&
+      user.Client.ClientGroups.length > 0
+    ) {
+      const idGroup = user?.Client?.ClientGroups[0]?.idGroup;
       dispatch(getGroupRutines({ token, idGroup }));
     }
     if (!rutinas) {
       dispatch(getRutines(id));
     }
-  }, [rutinas, dispatch, idGroup]);
+  }, [rutinas, dispatch]);
 
   if (isLoading) {
     return <LoadingSpinner />;

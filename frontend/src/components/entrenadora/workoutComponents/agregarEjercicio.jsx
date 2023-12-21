@@ -43,7 +43,7 @@ function AgregarEjercicio() {
   const [form] = Form.useForm();
 
   const dispatch = useDispatch();
-  const { isLoading, isError, isSuccess, message } = useSelector(
+  const { isLoading, isError, message } = useSelector(
     (state) => state.exercises
   );
 
@@ -69,7 +69,12 @@ function AgregarEjercicio() {
   }
 
   function handleExerciseTypeChange(value) {
+    console.log(value, "value");
     setSelectedExerciseType(value);
+    setFormData((prevData) => ({
+      ...prevData,
+      type: value,
+    }));
   }
 
   async function postExercise() {
@@ -217,6 +222,9 @@ function AgregarEjercicio() {
             value={formData.image2}
           />
         </Form.Item>
+        <Typography.Text type="secondary" className="mr-10">
+          Tipo de ejercicio:
+        </Typography.Text>
         <Form.Item
           required
           name="type"
@@ -227,11 +235,9 @@ function AgregarEjercicio() {
             },
           ]}
         >
-          <Typography.Text type="secondary" className="mr-10">
-            Tipo de ejercicio:
-          </Typography.Text>
           <Select
-            defaultValue={selectedExerciseType}
+            defaultValue={exerciseTypes[0].label}
+            value={selectedExerciseType}
             onChange={handleExerciseTypeChange}
             options={exerciseTypes}
             className="select-exercise-type"

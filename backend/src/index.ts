@@ -43,7 +43,7 @@ Credential.hasMany(Session, { foreignKey: 'idCredential' });
 
 //User.hasOne(Client, { foreignKey: 'idUser' });
 Client.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true });
-
+User.hasOne(Client, { foreignKey: 'idUser' });
 //User.hasOne(Coach, { foreignKey: 'idUser' });
 Coach.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE', hooks: true });
 

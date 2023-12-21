@@ -1,16 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 
-import { useParams } from "react-router-dom";
 import { DatePicker, Typography } from "antd";
 import moment from "moment";
 import { MdArrowDownward, MdArrowUpward, MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
-
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
-import { getRutines } from "@/features/rutinas/rutinasSlice";
+
 import { updateRutine } from "@/features/rutinas/rutinasSlice";
 import { useSelector } from "react-redux";
-import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+import { showSuccessNotification } from "../../../features/layout/layoutSlice";
 
 const initialState = {
   name: "",
@@ -37,15 +36,23 @@ function EditarRutinas({ rutinas }) {
   const [startDate, setStartDate] = useState(moment());
   const [durationInWeeks, setDurationInWeeks] = useState(1);
   const [exerciseTypes, setExerciseTypes] = useState([]);
-
+  const { message } = useSelector((state) => state.rutinas);
   const [visibleExercises, setVisibleExercises] = useState(20); // Número de ejercicios iniciales visibles
   const [scrollHeight, setScrollHeight] = useState(0);
   const daySectionRef = useRef(null); // Ref para la sección de los días
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  useEffect(() => {
+    if (message === "Routine updated successfully") {
+      dispatch(
+        showSuccessNotification("Exito", "Rutina editada correctamente")
+      );
+    }
+  }, [message]);
 
   useEffect(() => {
     if (!exercises) {
@@ -56,15 +63,15 @@ function EditarRutinas({ rutinas }) {
     }
 
     if (rutinas && rutinas.length !== 0) {
-      const editRoutine = rutinas[0].routine;
+      const editRoutine = rutinas[currentRoutineIndex].routine;
 
       let exercisesGroup = {
-        Monday: {},
-        Tuesday: {},
-        Wednesday: {},
-        Thursday: {},
-        Friday: {},
-        Saturday: {},
+        Lunes: {},
+        Martes: {},
+        Miercoles: {},
+        Jueves: {},
+        Viernes: {},
+        Sabado: {},
       };
 
       editRoutine.GroupExercises.forEach((groupExercise) => {
@@ -88,22 +95,23 @@ function EditarRutinas({ rutinas }) {
           }
         }
       });
-
+      console.log(editRoutine, "editRoutine");
       const finalData = {
         name: editRoutine.name,
-        startDate: moment(editRoutine.startDate).format("YYYY-MM-DD"),
-        endDate: moment(editRoutine.endDate).format("YYYY-MM-DD"),
+        startDate: moment.utc(editRoutine.startDate).format("YYYY-MM-DD"),
+        endDate: moment.utc(editRoutine.endDate).format("YYYY-MM-DD"),
         exercisesGroup,
         objective: editRoutine.objective,
         observation: editRoutine.observation,
       };
+      console.log(finalData, "finalData");
       setDurationInWeeks(
         moment(editRoutine.endDate).diff(moment(editRoutine.startDate), "weeks")
       );
 
       setFormData(finalData);
     }
-  }, [exercises, rutinas]);
+  }, [exercises, rutinas, currentRoutineIndex]);
 
   const allowDrop = (event) => {
     event.preventDefault();
@@ -120,11 +128,14 @@ function EditarRutinas({ rutinas }) {
   const handleDurationChange = (e) => {
     const value = e.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {
+      console.log(value);
       setDurationInWeeks(value);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        endDate: moment(startDate).add(value, "weeks").format(),
+        endDate: moment(prevFormData.startDate).add(value, "weeks").format(),
       }));
+      console.log(formData.startDate);
+      console.log(formData.endDate);
     }
   };
 
@@ -137,18 +148,27 @@ function EditarRutinas({ rutinas }) {
   };
 
   const handleDateChange = (date, dateString) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      startDate: dateString,
-      endDate: moment(dateString).add(durationInWeeks, "weeks").format(),
-    }));
+    if (moment(dateString, "YYYY-MM-DD", true).isValid()) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        startDate: dateString,
+
+        endDate: moment(dateString).add(durationInWeeks, "weeks").format(),
+      }));
+    } else {
+      // Manejar el caso de fecha no válida
+      console.error("Fecha no válida:", dateString);
+    }
   };
 
   function handleSubmit(event) {
     event.preventDefault();
 
     dispatch(
-      updateRutine({ ...formData, idRoutine: rutinas[0].routine.idRoutine })
+      updateRutine({
+        ...formData,
+        idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
+      })
     );
   }
 
@@ -246,14 +266,6 @@ function EditarRutinas({ rutinas }) {
     setScrollHeight(daySectionRef.current.scrollTop);
   };
 
-  if (rutinas && rutinas.length === 0) {
-    return (
-      <Typography.Text>
-        Este usuario aun no tiene ninguna rutina creada!
-      </Typography.Text>
-    );
-  }
-
   const moveExercise = (day, currentIndex, newIndex) => {
     console.log(day, currentIndex, newIndex);
     console.log(typeof currentIndex, typeof newIndex);
@@ -293,8 +305,41 @@ function EditarRutinas({ rutinas }) {
     }
   };
 
+  const handlePrevRoutine = () => {
+    setCurrentRoutineIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : rutinas.length - 1
+    );
+  };
+
+  const handleNextRoutine = () => {
+    setCurrentRoutineIndex((prevIndex) =>
+      prevIndex < rutinas.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
+  if (rutinas && rutinas.length === 0) {
+    return (
+      <Typography.Text>
+        Este usuario aun no tiene ninguna rutina creada!
+      </Typography.Text>
+    );
+  }
+
   return (
     <>
+      {rutinas && rutinas?.length > 1 && (
+        <LeftOutlined
+          className="cursor-pointer text-2xl"
+          onClick={handlePrevRoutine}
+        />
+      )}
+
+      {rutinas && rutinas.length > 1 && (
+        <RightOutlined
+          className="cursor-pointer text-2xl"
+          onClick={handleNextRoutine}
+        />
+      )}
       <form
         onSubmit={handleSubmit}
         className="max-w-full mx-auto p-6 flex flex-col formRutines"
@@ -316,6 +361,7 @@ function EditarRutinas({ rutinas }) {
               <label>Inicio:</label>
               <DatePicker
                 onChange={handleDateChange}
+                value={moment(formData.startDate)}
                 defaultValue={startDate}
                 format="YYYY-MM-DD"
                 dropdownMode="top"

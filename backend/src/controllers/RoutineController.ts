@@ -15,7 +15,7 @@ export const createRoutine = async (req: Request, res: Response) => {
     const transaction = await sequelize.transaction();
 
     try {
-      const client = await Client.findOne({ where: { idClient } }, { transaction });
+      const client = await Client.findOne({ where: { idClient } });
 
       if (!client) {
         return res.status(404).json({ message: 'Client not found' });

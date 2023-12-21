@@ -2,7 +2,7 @@ import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { rutinasService } from "./rutinasService";
 
 const initialState = {
-  rutinas: null,
+  rutinas: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -129,7 +129,7 @@ export const rutinasSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.message = action.payload.msg;
+        state.message = action.payload.message;
         state.rutinas = action.payload.data;
       })
       .addCase(updateRutine.rejected, (state, action) => {

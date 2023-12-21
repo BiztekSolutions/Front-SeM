@@ -17,12 +17,12 @@ const initialState = {
   startDate: moment().format("YYYY-MM-DD"),
   endDate: moment().add(1, "weeks").format("YYYY-MM-DD"),
   exercisesGroup: {
-    Monday: {},
-    Tuesday: {},
-    Wednesday: {},
-    Thursday: {},
-    Friday: {},
-    Saturday: {},
+    Lunes: {},
+    Martes: {},
+    Miercoles: {},
+    Jueves: {},
+    Viernes: {},
+    Sabado: {},
   },
   objective: "",
   observation: "",
@@ -121,7 +121,7 @@ function WorkoutCreator() {
       );
       if (isSuccess) {
         setFormData(initialState);
-        dispatch(showSuccessNotification("Rutina creada con éxito"));
+        dispatch(showSuccessNotification("Exito!", "Rutina creada con éxito"));
       }
     }
   };

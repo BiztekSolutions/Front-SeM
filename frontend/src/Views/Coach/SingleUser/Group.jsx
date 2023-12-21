@@ -2,21 +2,29 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { FaUsers, FaTimesCircle } from "react-icons/fa";
-import { Typography, Collapse, Space, Button } from "antd";
+import { Typography, Collapse, Space, Button, Select } from "antd";
 import {
   getGroup,
   deleteClientFromGroup,
 } from "../../../features/group/groupSlice";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 import DeleteGroup from "../../../components/DeleteButton/DeleteGroups";
-
+import {
+  showErrorNotification,
+  showSuccessNotification,
+} from "../../../features/layout/layoutSlice";
+import { getClients } from "../../../features/user/userSlice";
+import { FaUserPlus } from "react-icons/fa";
+import { addClientToGroup } from "../../../features/group/groupSlice";
 const { Panel } = Collapse;
-
+const { Option } = Select;
 function Group() {
   const dispatch = useDispatch();
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const { group, isLoading, message, isError } = useSelector(
     (state) => state.groups
   );
+  const { clients } = useSelector((state) => state.users);
   const { id } = useParams();
   const idGroup = id;
   const auth = useSelector((state) => state.auths);
@@ -26,13 +34,52 @@ function Group() {
       console.log("Entro al effect!");
       dispatch(getGroup({ token: auth.token, idGroup: idGroup }));
     }
-    console.log("GRUPO", group);
-  }, [group]);
+    if (!clients || clients.length === 0) {
+      dispatch(getClients({ token: auth.token }));
+    }
+  }, [group, dispatch]);
 
+  useEffect(() => {
+    console.log(message);
+    if (message === "User deleted from group successfully") {
+      console.log("Entro al effect!");
+      dispatch(
+        showSuccessNotification(
+          "Exito!",
+          "Usuario eliminado del grupo correctamente"
+        )
+      );
+      dispatch(getGroup({ token: auth.token, idGroup: idGroup }));
+    }
+
+    if (message === "User already in the group") {
+      dispatch(
+        showErrorNotification(
+          "Error!",
+          "El usuario ya se encuentra en el grupo"
+        )
+      );
+    }
+    if (message === "User added to group successfully") {
+      dispatch(
+        showSuccessNotification(
+          "Exito!",
+          "Usuario añadido al grupo correctamente"
+        )
+      );
+      dispatch(getGroup({ token: auth.token, idGroup: idGroup }));
+    }
+  }, [message]);
   const handleDeleteClient = (idClient) => {
     dispatch(deleteClientFromGroup({ idGroup, idClient }));
   };
 
+  const handleAddClient = () => {
+    if (selectedUserId) {
+      dispatch(addClientToGroup({ idGroup, idClient: selectedUserId }));
+      setSelectedUserId(null);
+    }
+  };
   if (isLoading) return <LoadingSpinner />;
 
   if (isError) return <div>{message}</div>;
@@ -89,6 +136,40 @@ function Group() {
               <Typography.Text className="text-left text-3xl mt-2 cursor-pointer">
                 <DeleteGroup groupName={group.name} idGroup={group.idGroup} />
               </Typography.Text>
+            </div>
+            <div className="w-fit flex gap-6 items-center">
+              <Typography.Text className="text-left text-2xl font-bold">
+                Añadir Usuario al Grupo:
+              </Typography.Text>
+              <Select
+                style={{ width: 200 }}
+                placeholder="Selecciona un usuario"
+                onChange={(value) => setSelectedUserId(value)}
+                value={selectedUserId}
+              >
+                {clients &&
+                  clients.length > 0 &&
+                  clients
+                    .filter(
+                      (client) =>
+                        !group.ClientGroups.some(
+                          (groupClient) =>
+                            groupClient.Client.idClient === client.idClient
+                        )
+                    )
+                    .map((client) => (
+                      <Option key={client.idClient} value={client.idClient}>
+                        {client.User.name} {client.User.lastname}
+                      </Option>
+                    ))}
+              </Select>
+              <Button
+                type="primary"
+                icon={<FaUserPlus />}
+                onClick={handleAddClient}
+              >
+                Añadir
+              </Button>
             </div>
           </div>
         </div>

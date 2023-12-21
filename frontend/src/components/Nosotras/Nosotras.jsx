@@ -68,11 +68,11 @@ function Nosotras() {
           />
           <TeamMember
             id="card3"
-            nombre="Otro loco"
+            nombre="Alguien mas"
             edad={30}
-            descripcion=" ESTE OTRO LOCO ANDA A SABER QUE HACE Soy Licenciada en Educación Fisica. Soy dueña de este gimnasio. Apasionada por el deporte y la vida sana. Me gusta mucho el deporte y la vida sana. Ejerzo esta profesión hace 10 años."
+            descripcion="este alguien mas Soy Licenciada en Educación Fisica. Soy dueña de este gimnasio. Apasionada por el deporte y la vida sana. Me gusta mucho el deporte y la vida sana. Ejerzo esta profesión hace 10 años."
             ubicacion="Saladillo, Buenos Aires, Argentina"
-            instagram="otroloco"
+            instagram="alguien mas"
           />
         </div>
         <Link

@@ -3,6 +3,7 @@ import Routine from '../models/Routine';
 import Client from '../models/Client';
 import Credential from '../models/Credential';
 import Coach from '../models/Coach';
+import ClientGroup from '../models/ClientGroup';
 
 export const get = async (idUser: number) => {
   try {
@@ -13,6 +14,14 @@ export const get = async (idUser: number) => {
           attributes: {
             exclude: ['password', 'idUser'],
           },
+        },
+        {
+          model: Client,
+          include: [
+            {
+              model: ClientGroup,
+            },
+          ],
         },
       ],
     });

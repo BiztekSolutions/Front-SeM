@@ -230,3 +230,75 @@ export const deleteGroup = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const deleteUserFromGroup = async (req: Request, res: Response) => {
+  try {
+    console.log(req.body, 'req.body');
+    const idGroup = parseInt(req.params.idGroup, 10);
+    const { idClient } = req.body;
+
+    const group = await Group.findByPk(idGroup);
+
+    if (!group) {
+      console.log('Group not found');
+
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    const clientGroup = await ClientGroup.findOne({
+      where: { idGroup, idClient },
+    });
+
+    if (clientGroup) {
+      await clientGroup.destroy();
+      return res.status(200).json({ message: 'User deleted from group successfully' });
+    } else {
+      console.log('User not found in the group');
+
+      return res.status(404).json({ message: 'User not found in the group' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+export const addUserToGroup = async (req: Request, res: Response) => {
+  try {
+    const idGroup = parseInt(req.params.idGroup, 10);
+    const { idClient } = req.body;
+
+    const group = await Group.findByPk(idGroup);
+
+    if (!group) {
+      console.log('Group not found');
+
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    const client = await Client.findByPk(idClient);
+
+    if (!client) {
+      console.log('Client not found');
+
+      return res.status(404).json({ message: 'Client not found' });
+    }
+
+    const clientGroup = await ClientGroup.findOne({
+      where: { idGroup, idClient },
+    });
+
+    if (clientGroup) {
+      console.log('User already in the group');
+
+      return res.status(404).json({ message: 'User already in the group' });
+    }
+
+    await group.addClient(client);
+
+    return res.status(200).json({ message: 'User added to group successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

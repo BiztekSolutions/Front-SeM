@@ -22,15 +22,14 @@ function Hoy() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const { rutinas, isLoading } = state.rutinas;
+  const { isLoading } = state.rutinas;
+  const rutinas2 = state.rutinas.rutinas;
   const { rutinaGrupal } = state.groups;
   const { user } = state.users;
   const [currentDate, setCurrentDate] = useState(new Date());
-  console.log(rutinas, "rutinas");
-  console.log(rutinaGrupal, "rutinas grupal");
-  const rutinas2 = rutinas.concat(rutinaGrupal);
-  console.log(user.Client.ClientGroups[0].idGroup, "user");
-  console.log(rutinas2, "rutinas2");
+
+  const rutinas = rutinas2.concat(rutinaGrupal);
+
   const localUser = JSON.parse(localStorage.getItem("User"));
   const token = localUser.token;
   useEffect(() => {
@@ -38,7 +37,7 @@ function Hoy() {
 
     dispatch(getUser({ token, userId: id }));
     dispatch(
-      getGroupRutines({ token, idGroup: user.Client.ClientGroups[0].idGroup })
+      getGroupRutines({ token, idGroup: user?.Client?.ClientGroups[0].idGroup })
     );
   }, [dispatch, id]);
 
@@ -47,7 +46,7 @@ function Hoy() {
       const exerciseCards = getExerciseCards();
       setCards(exerciseCards);
     }
-  }, [currentDay, currentRoutineIndex, rutinas]);
+  }, [currentDay, currentRoutineIndex, rutinas2]);
 
   const handleCardClick = (exercise) => {
     setSelectedExercise(exercise);
@@ -71,14 +70,16 @@ function Hoy() {
   const handlePrevRoutine = () => {
     if (currentRoutineIndex > 0) {
       setCurrentRoutineIndex(currentRoutineIndex - 1);
-      setCurrentDay(new Date().getUTCDay()); // Resetear el día al cambiar de rutina
+      setCurrentDay(new Date().getUTCDay());
+      setCurrentDate(new Date());
     }
   };
 
   const handleNextRoutine = () => {
     if (currentRoutineIndex < rutinas.length - 1) {
       setCurrentRoutineIndex(currentRoutineIndex + 1);
-      setCurrentDay(new Date().getUTCDay()); // Resetear el día al cambiar de rutina
+      setCurrentDay(new Date().getUTCDay());
+      setCurrentDate(new Date());
     }
   };
 

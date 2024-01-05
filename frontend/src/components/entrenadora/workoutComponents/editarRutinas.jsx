@@ -88,6 +88,7 @@ function EditarRutinas({ rutinas }) {
               configuration: {
                 series: exerciseConfig.series,
                 repetitions: exerciseConfig.repetitions,
+                weight: exerciseConfig.weight,
               },
               image1: exerciseConfig.Exercise.image1,
               image2: exerciseConfig.Exercise.image2,
@@ -198,6 +199,7 @@ function EditarRutinas({ rutinas }) {
         configuration: {
           series: 0,
           repetitions: 0,
+          weight: 0,
         },
         image1: draggedExercise.image1,
         image2: draggedExercise.image2,
@@ -251,6 +253,25 @@ function EditarRutinas({ rutinas }) {
             configuration: {
               ...prevFormData.exercisesGroup[day][exerciseId].configuration,
               repetitions: value,
+            },
+          },
+        },
+      },
+    }));
+  };
+  const handleWeight = (event, day, exerciseId) => {
+    const value = event.target.value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      exercisesGroup: {
+        ...prevFormData.exercisesGroup,
+        [day]: {
+          ...prevFormData.exercisesGroup[day],
+          [exerciseId]: {
+            ...prevFormData.exercisesGroup[day][exerciseId],
+            configuration: {
+              ...prevFormData.exercisesGroup[day][exerciseId].configuration,
+              weight: value,
             },
           },
         },
@@ -511,6 +532,25 @@ function EditarRutinas({ rutinas }) {
                                         }
                                         onChange={(e) =>
                                           handleRepeticiones(e, day, index)
+                                        }
+                                      />
+                                    </div>
+                                    <div className="form-group ">
+                                      <input
+                                        className="form-control p-2 border border-gray-300 rounded-full input2-series-reps"
+                                        name="repeticiones"
+                                        placeholder="Repeticiones"
+                                        value={
+                                          formData.exercisesGroup[day][index]
+                                            ?.configuration?.weight !==
+                                          undefined
+                                            ? formData.exercisesGroup[day][
+                                                index
+                                              ]?.configuration?.weight
+                                            : ""
+                                        }
+                                        onChange={(e) =>
+                                          handleWeight(e, day, index)
                                         }
                                       />
                                     </div>

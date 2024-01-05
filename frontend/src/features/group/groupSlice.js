@@ -3,7 +3,7 @@ import { groupService } from "./groupService";
 
 const initialState = {
   group: null,
-  rutinaGrupal: null,
+  rutinaGrupal: [],
   groups: null,
   isLoading: false,
   isError: false,
@@ -133,6 +133,7 @@ export const groupSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
+        // console.log(action.payload, "action.payload");
         state.rutinaGrupal = action.payload;
       })
       .addCase(getGroupRutines.rejected, (state, action) => {

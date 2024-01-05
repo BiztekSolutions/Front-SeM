@@ -1,29 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getRutines } from "../../features/rutinas/rutinasSlice";
+import {
+  getRutines,
+  updateRutineConfiguration,
+} from "../../features/rutinas/rutinasSlice";
 import ExerciseModal from "../../components/entrenadora/exerciseComponents/ExerciseModal";
 import { useParams } from "react-router-dom";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
-import "./Hoy.css"; // Importa un archivo de estilos para personalizar aún más
+import "./Hoy.css";
+import { getGroupRutines } from "../../features/group/groupSlice";
+import { getUser } from "../../features/user/userSlice";
 
 function Hoy() {
   const [currentDay, setCurrentDay] = useState(new Date().getUTCDay());
+
   const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [cards, setCards] = useState([]);
   const { id } = useParams();
   const dispatch = useDispatch();
-  const rutinas = useSelector((state) => state.rutinas.rutinas);
-  const isLoading = useSelector((state) => state.rutinas.isLoading);
+  const state = useSelector((state) => state);
+  const { rutinas, isLoading } = state.rutinas;
+  const { rutinaGrupal } = state.groups;
+  const { user } = state.users;
   const [currentDate, setCurrentDate] = useState(new Date());
-
+  console.log(rutinas, "rutinas");
+  console.log(rutinaGrupal, "rutinas grupal");
+  const rutinas2 = rutinas.concat(rutinaGrupal);
+  console.log(user.Client.ClientGroups[0].idGroup, "user");
+  console.log(rutinas2, "rutinas2");
+  const localUser = JSON.parse(localStorage.getItem("User"));
+  const token = localUser.token;
   useEffect(() => {
-    const fetchRoutines = async () => {
-      await dispatch(getRutines(id));
-    };
-    fetchRoutines();
+    dispatch(getRutines(id));
+
+    dispatch(getUser({ token, userId: id }));
+    dispatch(
+      getGroupRutines({ token, idGroup: user.Client.ClientGroups[0].idGroup })
+    );
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -71,15 +87,26 @@ function Hoy() {
       "Domingo",
       "Lunes",
       "Martes",
-      "Miércoles",
+      "Miercoles",
       "Jueves",
       "Viernes",
-      "Sábado",
+      "Sabado",
     ];
 
     return daysOfWeek[dayOfWeek];
   };
-
+  const handleEditExercise = (formData) => {
+    const configuration = formData;
+    const exerciseId = formData.exerciseId;
+    dispatch(
+      updateRutineConfiguration({
+        configuration,
+        exerciseId,
+        day: getDayOfWeekString(currentDay),
+        idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
+      })
+    );
+  };
   const getExerciseCards = () => {
     const currentRoutine = rutinas && rutinas[currentRoutineIndex];
     if (!currentRoutine) return [];
@@ -133,6 +160,9 @@ function Hoy() {
                   <div className="text-center md:text-left">
                     <h5 className="text-base font-semibold mb-2">
                       {exercise.series}x{exercise.repetitions}
+                    </h5>
+                    <h5 className="text-base font-semibold mb-2">
+                      {exercise.weight} kg
                     </h5>
                   </div>
                 </div>
@@ -199,7 +229,12 @@ function Hoy() {
 
       {showModal ? (
         <div>
-          <ExerciseModal exercise={selectedExercise} closeModal={closeModal} />
+          <ExerciseModal
+            exercise={selectedExercise}
+            closeModal={closeModal}
+            day={getDayOfWeekString(currentDay)}
+            handleEditExercise={handleEditExercise}
+          />
         </div>
       ) : null}
     </div>

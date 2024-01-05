@@ -1353,6 +1353,10 @@ input[type="text"] {
   }
 }
 
+.inputs {
+  max-width: 115px !important;
+}
+
 @media screen and (max-width: 700px) {
   .exercise-list {
     max-width: 100% !important;

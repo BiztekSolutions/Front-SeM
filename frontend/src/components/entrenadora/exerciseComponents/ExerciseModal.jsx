@@ -1,10 +1,9 @@
 import ExerciseForm from "./ExerciseForm";
 import "./ExerciseModal.css";
 import VideoEmbed from "./VideoEmbed";
-import { useLocation } from "react-router-dom";
+
 // eslint-disable-next-line react/prop-types
 function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
-  const isCoachPage = useLocation().pathname.includes("/coach");
   const showImagesOnMobile = () => {
     const screenWidth = window.innerWidth;
     if (
@@ -68,12 +67,16 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
             </div>
             <div className="mt-4">{showImagesOnMobile()}</div>
           </div>
-          {isCoachPage && (
-            <div className="border-t-4  py-5 modal-footer flex flex-col justify-center">
-              <h5 className="modal-subtitle  text-2xl">Editar ejercicio</h5>
-              <ExerciseForm exercise={exercise} onSubmit={handleEditExercise} />
-            </div>
-          )}
+
+          <div className="border-t-4  py-5 modal-footer flex flex-col justify-center">
+            <h5 className="modal-subtitle  text-2xl">Editar ejercicio</h5>
+            <ExerciseForm
+              exercise={exercise}
+              closeModal={closeModal}
+              onSubmit={handleEditExercise}
+            />
+          </div>
+
           <button
             type="button"
             onClick={closeModal}

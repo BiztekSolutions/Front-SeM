@@ -8,6 +8,8 @@ class ExerciseConfiguration extends Model {
   public weight?: number;
   public repetitions?: number;
   public restTime?: number;
+  public progressWeight?: number;
+
   // public order?: number;
 }
 
@@ -24,6 +26,13 @@ ExerciseConfiguration.init(
     repetitions: {
       type: DataTypes.INTEGER,
     },
+    weight: {
+      type: DataTypes.INTEGER,
+    },
+    progressWeight: {
+      type: DataTypes.INTEGER,
+    },
+
     order: {
       type: DataTypes.INTEGER,
     },

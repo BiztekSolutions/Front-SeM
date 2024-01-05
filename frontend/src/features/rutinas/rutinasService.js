@@ -50,6 +50,17 @@ const updateRutine = async (data) => {
     throw new Error("Failed to update rutines.");
   }
 };
+const updateRutineConfiguration = async (data) => {
+  try {
+    const response = await axios.put(
+      `${base_url}/routines/config/${data.idRoutine}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update rutines.");
+  }
+};
 
 const createRutine = async (data, token) => {
   try {
@@ -68,5 +79,6 @@ export const rutinasService = {
   getRutines,
   getAllRutines,
   updateRutine,
+  updateRutineConfiguration,
   createRutine,
 };

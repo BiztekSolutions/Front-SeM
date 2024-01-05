@@ -53,6 +53,9 @@ export const createRoutine = async (req: Request, res: Response) => {
               {
                 repetitions: exerciseValue.configuration.repetitions,
                 series: exerciseValue.configuration.series,
+                weight: exerciseValue.configuration.weight,
+                progressWeight: exerciseValue.configuration.progressWeight,
+
                 idExercise: exercise.idExercise,
                 idGroupExercise: groupExercise.idGroupExercise,
                 order: exerciseKey,
@@ -152,6 +155,9 @@ export const updateRoutine = async (req: Request, res: Response) => {
               {
                 repetitions: exerciseValue.configuration.repetitions,
                 series: exerciseValue.configuration.series,
+                weight: exerciseValue.configuration.weight,
+                progressWeight: exerciseValue.configuration.progressWeight,
+
                 idExercise: exercise.idExercise,
                 idGroupExercise: groupExercise.idGroupExercise,
                 order: exerciseKey,
@@ -177,6 +183,92 @@ export const updateRoutine = async (req: Request, res: Response) => {
       await transaction.commit();
 
       res.status(200).json({ message: 'Routine updated successfully', routine });
+    } catch (error: any) {
+      await transaction.rollback();
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const updateRoutineConfiguration = async (req: Request, res: Response) => {
+  console.log('ESTOY UPDATEANDO CONFIGURACIÓN DE EJERCICIO EN RUTINA');
+
+  try {
+    const routineId = parseInt(req.params.routineId as string);
+    if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
+
+    const { exerciseId, day, configuration } = req.body;
+
+    const transaction = await sequelize.transaction();
+
+    try {
+      const routine = await Routine.findByPk(routineId, {
+        transaction,
+        include: [
+          {
+            model: GroupExercise,
+            include: [
+              {
+                model: ExerciseConfiguration,
+                include: [
+                  {
+                    model: Exercise,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+
+      if (!routine) {
+        return res.status(404).json({ message: 'Routine not found' });
+      }
+
+      // Buscar el grupo de ejercicio correspondiente al día
+      const groupExercise = await GroupExercise.findOne({
+        where: {
+          idRoutine: routine.idRoutine,
+          day: day,
+        },
+        transaction,
+      });
+
+      if (!groupExercise) {
+        return res.status(404).json({ message: 'Group Exercise not found for the specified day' });
+      }
+
+      // Buscar la configuración de ejercicio correspondiente al ejercicio y al grupo de ejercicio
+      const exerciseConfiguration = await ExerciseConfiguration.findOne({
+        where: {
+          idExercise: exerciseId,
+          idGroupExercise: groupExercise.idGroupExercise,
+        },
+        transaction,
+      });
+
+      if (!exerciseConfiguration) {
+        return res.status(404).json({ message: 'Exercise Configuration not found for the specified exercise and day' });
+      }
+      console.log(configuration, 'configurationnnnnnnnnnnnnnnnnnnnnnnnnnnn');
+
+      // Actualizar la configuración de ejercicio
+      await exerciseConfiguration.update(
+        {
+          repetitions: configuration.repetitions,
+          series: configuration.series,
+          weight: configuration.weight,
+          progressWeight: configuration.progressWeight,
+        },
+        { transaction }
+      );
+
+      await transaction.commit();
+
+      res.status(200).json({ message: 'Exercise Configuration updated successfully', exerciseConfiguration });
     } catch (error: any) {
       await transaction.rollback();
       console.error(error);

@@ -10,8 +10,9 @@ function GroupCalendar() {
   const state = useSelector((state) => state);
   const token = state.auths.token;
   const rutinas = state.groups.rutinaGrupal;
+  console.log(rutinas, "rutina grupal");
   useEffect(() => {
-    if (!rutinas) {
+    if (rutinas && rutinas.length === 0) {
       dispatch(getGroupRutines({ token, idGroup: id }));
     }
   }, [rutinas]);

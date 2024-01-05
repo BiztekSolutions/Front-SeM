@@ -173,6 +173,8 @@ function WorkoutCreator() {
         configuration: {
           series: 0,
           repetitions: 0,
+          weight: 0,
+          progressWeight: 0,
         },
         image1: draggedExercise.image1,
         image2: draggedExercise.image2,
@@ -233,7 +235,40 @@ function WorkoutCreator() {
       },
     }));
   };
+  const handleWeight = (event, day, index) => {
+    const value = event.target.value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      exercisesGroup: {
+        ...prevFormData.exercisesGroup,
+        [day]: {
+          ...prevFormData.exercisesGroup[day],
+          [index]: {
+            ...prevFormData.exercisesGroup[day][index],
+            configuration: {
+              ...prevFormData.exercisesGroup[day][index].configuration,
+              weight: value,
+            },
+          },
+        },
+      },
+    }));
+  };
+  const handleObjectiveChange = (event) => {
+    const value = event.target.value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      objective: value,
+    }));
+  };
 
+  const handleObservationChange = (event) => {
+    const value = event.target.value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      observation: value,
+    }));
+  };
   const handleLoadMore = () => {
     setVisibleExercises((prev) => prev + 10);
   };
@@ -313,6 +348,30 @@ function WorkoutCreator() {
                 onChange={handleDurationChange}
                 value={durationInWeeks}
                 required
+              />
+            </div>
+          </div>
+          <div className="flex  justify-center py-2">
+            <div className="form-group my-2 mx-4 flex flex-col">
+              <label>Objetivo:</label>
+              <textarea
+                type="text"
+                className="form-control"
+                name="objective"
+                placeholder="Objetivo..."
+                value={formData.objective}
+                onChange={handleObjectiveChange}
+              />
+            </div>
+            <div className="form-group my-2 mx-4 flex flex-col">
+              <label>Observaciones:</label>
+              <textarea
+                type="text"
+                className="form-control"
+                name="observation"
+                placeholder="Observaciones..."
+                value={formData.observation}
+                onChange={handleObservationChange}
               />
             </div>
           </div>
@@ -416,7 +475,7 @@ function WorkoutCreator() {
                                     <div className="form-group">
                                       <input
                                         type="number"
-                                        className="form-control border border-gray-300 rounded-full input-series-reps"
+                                        className="form-control inputs border border-gray-300 rounded-full input-series-reps"
                                         name="series"
                                         placeholder="Series"
                                         inputMode="numeric"
@@ -436,7 +495,7 @@ function WorkoutCreator() {
                                     </div>
                                     <div className="form-group">
                                       <input
-                                        className="form-control p-2 border border-gray-300 rounded-full input2-series-reps"
+                                        className="form-control inputs p-2 border border-gray-300 rounded-full input2-series-reps"
                                         name="repeticiones"
                                         placeholder="Repeticiones"
                                         value={
@@ -450,6 +509,25 @@ function WorkoutCreator() {
                                         }
                                         onChange={(e) =>
                                           handleRepeticiones(e, day, index)
+                                        }
+                                      />
+                                    </div>
+                                    <div className="form-group ">
+                                      <input
+                                        className="form-control p-2 inputs border border-gray-300 rounded-full input2-series-reps"
+                                        name="peso"
+                                        placeholder="Peso(kg)"
+                                        value={
+                                          formData.exercisesGroup[day]?.[index]
+                                            ?.configuration?.weight !==
+                                          undefined
+                                            ? formData.exercisesGroup[day]?.[
+                                                index
+                                              ]?.configuration?.weight
+                                            : ""
+                                        }
+                                        onChange={(e) =>
+                                          handleWeight(e, day, index)
                                         }
                                       />
                                     </div>

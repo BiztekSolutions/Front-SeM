@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -8,7 +9,7 @@ import { Typography } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import esLocale from "@fullcalendar/core/locales/es";
 
-const Calendar = ({ rutinas }) => {
+function Calendar({ rutinas }) {
   console.log(rutinas, "rutinas es array???");
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
@@ -16,13 +17,15 @@ const Calendar = ({ rutinas }) => {
   const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
   const { isLoading } = state.rutinas;
   const [events, setEvents] = useState([]);
-  let i = 0;
-  const isGroupsPage = location.pathname.includes("/grupos");
 
+  console.log("error");
   useEffect(() => {
     if (rutinas && rutinas.length !== 0) {
+      console.log("error1");
       const generatedEvents = generateEvents(rutinas[currentRoutineIndex]);
+      console.log("error2");
       setEvents(generatedEvents);
+      console.log("error3");
     }
   }, [rutinas, currentRoutineIndex]);
 
@@ -49,27 +52,33 @@ const Calendar = ({ rutinas }) => {
       "miercoles",
       "jueves",
       "viernes",
-      "sábado",
+      "sabado",
     ];
     return daysOfWeek[dayOfWeek];
   };
 
-  const generateEvents = (rutinas) => {
+  function generateEvents(rutinas) {
     const events = [];
     console.log(rutinas, "rutinas");
 
     const { startDate, endDate, GroupExercises } = rutinas.routine;
+    console.log(startDate, endDate, GroupExercises, "rutinasssssss");
     let currentDate = new Date(startDate);
     const endDateObject = new Date(endDate);
+    console.log("error4");
+    console.log(currentDate, endDateObject, "currentDate");
 
+    let i = 0;
     while (currentDate < endDateObject) {
       const dayOfWeek = currentDate.getUTCDay();
       const dayOfWeekString = getDayOfWeekString(dayOfWeek);
 
+      console.log("error5", dayOfWeekString, dayOfWeek);
       GroupExercises.forEach((groupExercise) => {
         const configDay = groupExercise.day.toLowerCase();
-
+        console.log("error6", configDay);
         if (dayOfWeekString === configDay) {
+          console.log("error6.5", dayOfWeekString);
           groupExercise.ExerciseConfigurations.forEach(
             (exerciseConfiguration) => {
               events.push({
@@ -86,15 +95,13 @@ const Calendar = ({ rutinas }) => {
         }
       });
 
-      currentDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getUTCDate() + 1
-      );
+      currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+
+      console.log("error7", currentDate);
     }
 
     return events;
-  };
+  }
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -113,7 +120,7 @@ const Calendar = ({ rutinas }) => {
   return (
     <div className="user-calendar">
       <div className="flex items-center justify-between mt-10">
-        {rutinas && rutinas?.length > 1 && (
+        {rutinas && rutinas.length > 1 && (
           <LeftOutlined
             className="cursor-pointer text-2xl"
             onClick={handlePrevRoutine}
@@ -214,6 +221,6 @@ const Calendar = ({ rutinas }) => {
       ) : null}
     </div>
   );
-};
+}
 
 export default Calendar;

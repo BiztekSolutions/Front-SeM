@@ -32,6 +32,16 @@ export const updateRutine = createAsyncThunk(
     }
   }
 );
+export const updateRutineConfiguration = createAsyncThunk(
+  "updateRutineConfiguration",
+  async (data, thunkAPI) => {
+    try {
+      return await rutinasService.updateRutineConfiguration(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const getAllRutines = createAsyncThunk(
   "getAllRutines",
   async (data, thunkAPI) => {
@@ -136,9 +146,30 @@ export const rutinasSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.message = action.payload.msg;
+        state.message = action.payload.message;
         state.rutinas = null;
       })
+      // update rutines configuration
+      .addCase(updateRutineConfiguration.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Updating rutines";
+      })
+      .addCase(updateRutineConfiguration.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.message = action.payload.message;
+        state.rutinas = action.payload.data;
+      })
+      .addCase(updateRutineConfiguration.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload.message;
+        state.rutinas = null;
+      })
+
+      //reset rutines
       .addCase(resetRutines, (state) => {
         state.isLoading = false;
         state.isSuccess = false;

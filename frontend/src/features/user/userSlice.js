@@ -6,6 +6,7 @@ const initialState = {
   users: null,
   clients: null,
   coaches: null,
+  trainingLogs: null,
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -107,6 +108,42 @@ export const getUsers = createAsyncThunk(
     }
   }
 );
+
+export const markDayAsTrained = createAsyncThunk(
+  "markDayAsTrained",
+  async ({ clientId, date }, thunkAPI) => {
+    try {
+      const response = await userService.markDayAsTrained(clientId, date);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const markDayAsUntrained = createAsyncThunk(
+  "markDayAsTrained",
+  async ({ clientId, date }, thunkAPI) => {
+    try {
+      const response = await userService.markDayAsUntrained(clientId, date);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const getTrainingLogs = createAsyncThunk(
+  "getTrainingLogs",
+  async ({ token, clientId }, thunkAPI) => {
+    try {
+      const response = await userService.getTrainingLogs(token, clientId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const deleteUser = createAsyncThunk(
   "deleteUser",
   async (_, thunkAPI) => {
@@ -244,6 +281,28 @@ export const userSlice = createSlice({
         state.isError = true;
         state.message = "User update error";
         state.user = null;
+      })
+
+      // get training logs
+      .addCase(getTrainingLogs.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Getting training logs";
+      })
+      .addCase(getTrainingLogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        console.log(action.payload, "action.payload");
+        state.message = action.payload.message;
+        state.trainingLogs = action.payload.trainingLogs;
+      })
+      .addCase(getTrainingLogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        console.log(action.payload, "action.payload");
+        state.message = action.payload.message;
+        state.trainingLogs = null;
       })
 
       // ACTIONS

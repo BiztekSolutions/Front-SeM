@@ -4,9 +4,14 @@ import Routine from './Routine';
 import Group from './Group'; // Import the Group model
 import ClientGroup from './ClientGroup'; // Import the ClientGroup model
 
+interface TrainingLog {
+  date: Date;
+  trained: boolean;
+}
 interface ClientAttributes {
   idClient: number;
   idUser: number;
+  trainingLogs: TrainingLog[];
 }
 
 interface ClientCreationAttributes extends Partial<ClientAttributes> {}
@@ -20,7 +25,7 @@ interface ClientInstance extends Model<ClientAttributes, ClientCreationAttribute
 class Client extends Model<ClientAttributes, ClientCreationAttributes> implements ClientInstance {
   public idClient!: number;
   public idUser!: number;
-
+  public trainingLogs!: TrainingLog[];
   public addRoutine!: BelongsToManyAddAssociationMixin<Routine, number>;
   public getRoutines!: BelongsToManyGetAssociationsMixin<Routine>;
   public getGroups!: BelongsToManyGetAssociationsMixin<Group>; // Add this line for groups
@@ -40,6 +45,11 @@ Client.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    trainingLogs: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+      defaultValue: [],
     },
     idUser: {
       type: DataTypes.INTEGER,

@@ -10,7 +10,12 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
 import "./Hoy.css";
 import { getGroupRutines } from "../../features/group/groupSlice";
-import { getUser } from "../../features/user/userSlice";
+import {
+  getUser,
+  markDayAsTrained,
+  getTrainingLogs,
+  markDayAsUntrained,
+} from "../../features/user/userSlice";
 
 function Hoy() {
   const [currentDay, setCurrentDay] = useState(new Date().getUTCDay());
@@ -25,16 +30,16 @@ function Hoy() {
   const { isLoading } = state.rutinas;
   const rutinas2 = state.rutinas.rutinas;
   const { rutinaGrupal } = state.groups;
-  const { user } = state.users;
+  const { user, trainingLogs } = state.users;
   const [currentDate, setCurrentDate] = useState(new Date());
-
+  console.log(trainingLogs, "trainingLog");
   const rutinas = rutinas2.concat(rutinaGrupal);
 
   const localUser = JSON.parse(localStorage.getItem("User"));
   const token = localUser.token;
   useEffect(() => {
     dispatch(getRutines(id));
-
+    dispatch(getTrainingLogs({ token, clientId: user?.Client?.idClient }));
     dispatch(getUser({ token, userId: id }));
     dispatch(
       getGroupRutines({ token, idGroup: user?.Client?.ClientGroups[0].idGroup })
@@ -108,6 +113,32 @@ function Hoy() {
       })
     );
   };
+
+  const handleMarkAsTrained = () => {
+    const formattedDate = currentDate.toISOString().split("T")[0]; // Convert to "YYYY-MM-DD" format
+    const isDayTrained = trainingLogs.some(
+      (log) => log.date === formattedDate && log.trained
+    );
+
+    if (isDayTrained) {
+      // If the day is already marked as trained, unmark it
+      dispatch(
+        markDayAsUntrained({
+          clientId: user?.Client?.idClient,
+          date: formattedDate,
+        })
+      );
+    } else {
+      // If the day is not marked as trained, mark it
+      dispatch(
+        markDayAsTrained({
+          clientId: user?.Client?.idClient,
+          date: formattedDate,
+        })
+      );
+    }
+  };
+
   const getExerciseCards = () => {
     const currentRoutine = rutinas && rutinas[currentRoutineIndex];
     if (!currentRoutine) return [];
@@ -227,7 +258,17 @@ function Hoy() {
       </div>
 
       <div className="exercise-cards-container">{cards}</div>
-
+      <button
+        className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded`}
+        onClick={handleMarkAsTrained}
+      >
+        {trainingLogs.some(
+          (log) =>
+            log.date === currentDate.toISOString().split("T")[0] && log.trained
+        )
+          ? "Marcar día como NO entrenado"
+          : "Marcar día como entrenado"}
+      </button>
       {showModal ? (
         <div>
           <ExerciseModal

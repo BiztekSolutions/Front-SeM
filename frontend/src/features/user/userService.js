@@ -71,6 +71,51 @@ const getCoaches = async (token) => {
   return response.data;
 };
 
+const markDayAsTrained = async (clientId, date, token) => {
+  const response = await axios.put(
+    `${base_url}/users/entrenamientos/${clientId}`,
+    {
+      date,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+const getTrainingLogs = async (token, clientId) => {
+  const response = await axios.get(
+    `${base_url}/users/entrenamientos/${clientId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+const markDayAsUntrained = async (clientId, date, token) => {
+  const response = await axios.delete(
+    `${base_url}/users/entrenamientos/${clientId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        date,
+      },
+    }
+  );
+
+  return response.data;
+};
+
 export const userService = {
   updateUser,
   addUserToClients,
@@ -79,4 +124,7 @@ export const userService = {
   getUsers,
   deleteUser,
   getCoaches,
+  markDayAsTrained,
+  getTrainingLogs,
+  markDayAsUntrained,
 };

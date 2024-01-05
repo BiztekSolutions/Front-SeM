@@ -42,6 +42,71 @@ export const createClient = async (req: Request, res: Response) => {
   }
 };
 
+export const getTrainingDays = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.clientId as string);
+    if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
+
+    const client = await Client.findByPk(userId);
+
+    if (!client) {
+      return res.status(400).json({ message: 'Client not found' });
+    }
+
+    const trainingLogs = client.trainingLogs;
+    return res.status(200).json({ message: 'Training logs retrieved successfully', trainingLogs: trainingLogs });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const markDayAsTrained = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.clientId as string);
+    const { date } = req.body;
+
+    if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
+    if (!date) return res.status(400).json({ message: 'Date is required in the request body' });
+    const client = await Client.findByPk(userId);
+
+    if (!client) {
+      return res.status(400).json({ message: 'Client not found' });
+    }
+
+    client.trainingLogs.push({ date, trained: true });
+    await client.save();
+
+    return res.status(200).json({ message: 'Day marked as trained successfully' });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const markDayAsUntrained = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.clientId as string);
+    const { date } = req.body;
+
+    if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
+    if (!date) return res.status(400).json({ message: 'Date is required in the request body' });
+
+    const client = await Client.findByPk(userId);
+
+    if (!client) {
+      return res.status(400).json({ message: 'Client not found' });
+    }
+
+    // Eliminar el registro de entrenamiento con la fecha proporcionada
+    client.trainingLogs = client.trainingLogs.filter((log) => log.date !== date);
+
+    await client.save();
+
+    return res.status(200).json({ message: 'Training log removed successfully' });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 export const getUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId as string);

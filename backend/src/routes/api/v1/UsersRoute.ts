@@ -7,6 +7,9 @@ import {
   updateUser,
   getClients,
   removeUser,
+  markDayAsTrained,
+  getTrainingDays,
+  markDayAsUntrained,
 } from '../../../controllers/UserController';
 import { authenticateToken } from '../../../utils/validateToken';
 
@@ -19,5 +22,8 @@ userRouter.post('/:userId/remove', removeUser);
 userRouter.get('/:userId', getUser);
 userRouter.get('/', getUsers);
 userRouter.post('/createClient', createClient);
+userRouter.put('/entrenamientos/:clientId', markDayAsTrained);
+userRouter.delete('/entrenamientos/:clientId', markDayAsUntrained);
+userRouter.get('/entrenamientos/:clientId', getTrainingDays);
 
 export default userRouter;

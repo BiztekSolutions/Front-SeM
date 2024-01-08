@@ -198,6 +198,9 @@ export const updateRoutineConfiguration = async (req: Request, res: Response) =>
 
   try {
     const routineId = parseInt(req.params.routineId as string);
+    console.log(routineId, 'routineId');
+    console.log(req.body, 'req.body');
+
     if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
 
     const { exerciseId, day, configuration } = req.body;
@@ -256,15 +259,38 @@ export const updateRoutineConfiguration = async (req: Request, res: Response) =>
       console.log(configuration, 'configurationnnnnnnnnnnnnnnnnnnnnnnnnnnn');
 
       // Actualizar la configuración de ejercicio
-      await exerciseConfiguration.update(
-        {
+      if (configuration.repetitions && configuration.repetitions !== 0) {
+        await exerciseConfiguration.update({
           repetitions: configuration.repetitions,
+        });
+        {
+          transaction;
+        }
+      }
+      if (configuration.series && configuration.series !== 0) {
+        await exerciseConfiguration.update({
           series: configuration.series,
+        });
+        {
+          transaction;
+        }
+      }
+      if (configuration.weight && configuration.weight !== 0) {
+        await exerciseConfiguration.update({
           weight: configuration.weight,
+        });
+        {
+          transaction;
+        }
+      }
+      if (configuration.progressWeight && configuration.progressWeight !== 0) {
+        await exerciseConfiguration.update({
           progressWeight: configuration.progressWeight,
-        },
-        { transaction }
-      );
+        });
+        {
+          transaction;
+        }
+      }
 
       await transaction.commit();
 

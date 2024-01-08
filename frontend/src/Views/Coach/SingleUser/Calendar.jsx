@@ -8,30 +8,34 @@ import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 import { Typography } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import esLocale from "@fullcalendar/core/locales/es";
+import { useDispatch } from "react-redux";
+import { updateRutineConfiguration } from "../../../features/rutinas/rutinasSlice";
+import { showSuccessNotification } from "../../../features/layout/layoutSlice";
 
 function Calendar({ rutinas }) {
-  console.log(rutinas, "rutinas es array???");
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const state = useSelector((state) => state);
+  const rutinasSlice = useSelector((state) => state.rutinas);
   const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
-  const { isLoading } = state.rutinas;
-  const [events, setEvents] = useState([]);
 
-  console.log("error");
+  const { isSuccess } = rutinasSlice;
+  const [events, setEvents] = useState([]);
+  const [currentDateModal, setCurrentDate] = useState();
+
   useEffect(() => {
     if (rutinas && rutinas.length !== 0) {
-      console.log("error1");
       const generatedEvents = generateEvents(rutinas[currentRoutineIndex]);
-      console.log("error2");
+
       setEvents(generatedEvents);
-      console.log("error3");
     }
   }, [rutinas, currentRoutineIndex]);
 
-  function handleCardClick(exercise) {
+  function handleCardClick({ exerciseConfiguration, currentDate }) {
+    const exercise = exerciseConfiguration;
     setSelectedExercise(exercise);
     setShowModal(true);
+    setCurrentDate(currentDate);
   }
   const handleNextRoutine = () => {
     setCurrentRoutineIndex((prevIndex) =>
@@ -56,29 +60,46 @@ function Calendar({ rutinas }) {
     ];
     return daysOfWeek[dayOfWeek];
   };
-
+  const handleEditExercise = (formData) => {
+    const configuration = formData;
+    const exerciseId = formData.exerciseId;
+    const fecha = new Date(currentDateModal);
+    const opcionesDiaSemana = { weekday: "long" };
+    const diaSemana = new Intl.DateTimeFormat(
+      "es-ES",
+      opcionesDiaSemana
+    ).format(fecha);
+    const diaSemanaCapitalizado =
+      diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+    dispatch(
+      updateRutineConfiguration({
+        configuration,
+        exerciseId,
+        day: diaSemanaCapitalizado,
+        idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
+      })
+    );
+    if (isSuccess) {
+      dispatch(showSuccessNotification("Exito", "Ejercicio editado"));
+      setShowModal(false);
+      window.location.reload();
+    }
+  };
   function generateEvents(rutinas) {
     const events = [];
-    console.log(rutinas, "rutinas");
 
     const { startDate, endDate, GroupExercises } = rutinas.routine;
-    console.log(startDate, endDate, GroupExercises, "rutinasssssss");
     let currentDate = new Date(startDate);
     const endDateObject = new Date(endDate);
-    console.log("error4");
-    console.log(currentDate, endDateObject, "currentDate");
 
     let i = 0;
     while (currentDate < endDateObject) {
       const dayOfWeek = currentDate.getUTCDay();
       const dayOfWeekString = getDayOfWeekString(dayOfWeek);
 
-      console.log("error5", dayOfWeekString, dayOfWeek);
       GroupExercises.forEach((groupExercise) => {
         const configDay = groupExercise.day.toLowerCase();
-        console.log("error6", configDay);
         if (dayOfWeekString === configDay) {
-          console.log("error6.5", dayOfWeekString);
           groupExercise.ExerciseConfigurations.forEach(
             (exerciseConfiguration) => {
               events.push({
@@ -88,6 +109,9 @@ function Calendar({ rutinas }) {
                 idExercise: exerciseConfiguration.idExercise,
                 extendedProps: {
                   exerciseConfiguration: exerciseConfiguration,
+                  currentDate: new Date(currentDate)
+                    .toISOString()
+                    .split("T")[0],
                 },
               });
             }
@@ -96,15 +120,9 @@ function Calendar({ rutinas }) {
       });
 
       currentDate.setUTCDate(currentDate.getUTCDate() + 1);
-
-      console.log("error7", currentDate);
     }
 
     return events;
-  }
-
-  if (isLoading) {
-    return <LoadingSpinner />;
   }
 
   if (rutinas && rutinas.length === 0) {
@@ -136,7 +154,7 @@ function Calendar({ rutinas }) {
       </div>
       {events && rutinas && rutinas.length !== 0 && (
         <div key={currentRoutineIndex} className="w-full ">
-          <h2 className="name-rutine-calendar bg-orange-200 text-black">
+          <h2 className="rutineTittle text-orange-500">
             {rutinas[currentRoutineIndex]?.routine?.name}
           </h2>
           <FullCalendar
@@ -146,14 +164,18 @@ function Calendar({ rutinas }) {
             events={events}
             locales={[esLocale]} // Agrega la configuración del idioma español
             locale="es"
+            firstDay={1}
             fixedWeekCount={false}
             eventContent={(arg) => {
               const exerciseConfiguration =
                 arg.event.extendedProps.exerciseConfiguration;
+              const currentDate = arg.event.extendedProps.currentDate;
               return (
                 <div
                   className="card-calendar "
-                  onClick={() => handleCardClick(exerciseConfiguration)}
+                  onClick={() =>
+                    handleCardClick({ exerciseConfiguration, currentDate })
+                  }
                 >
                   <div className="card-body flex flex-col ">
                     <div className="flex flex-col  gap-1 border-black">
@@ -192,21 +214,6 @@ function Calendar({ rutinas }) {
               center: "title",
               right: "dayGridMonth,dayGridWeek",
             }}
-            dayHeaderContent={(arg) => {
-              const firstDay = 0; // Configura el primer día de la semana (0 = domingo, 1 = lunes, ..., 6 = sábado)
-              const currentDay = arg.date.getUTCDay();
-              const daysOfWeek = [
-                "domingo",
-                "lunes",
-                "martes",
-                "miércoles",
-                "jueves",
-                "viernes",
-                "sábado",
-              ];
-
-              return daysOfWeek[(currentDay + firstDay) % 7];
-            }}
             hiddenDays={[0]}
             height="80vh"
             contentHeight="auto"
@@ -217,6 +224,7 @@ function Calendar({ rutinas }) {
         <ExerciseModal
           exercise={selectedExercise}
           closeModal={() => setShowModal(false)}
+          handleEditExercise={handleEditExercise}
         />
       ) : null}
     </div>

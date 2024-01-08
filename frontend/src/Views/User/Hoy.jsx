@@ -16,6 +16,7 @@ import {
   getTrainingLogs,
   markDayAsUntrained,
 } from "../../features/user/userSlice";
+import { showSuccessNotification } from "../../features/layout/layoutSlice";
 
 function Hoy() {
   const [currentDay, setCurrentDay] = useState(new Date().getUTCDay());
@@ -30,11 +31,12 @@ function Hoy() {
   const { isLoading } = state.rutinas;
   const rutinas2 = state.rutinas.rutinas;
   const { rutinaGrupal } = state.groups;
-  const { user, trainingLogs } = state.users;
+  const { user, trainingLogs, message } = state.users;
   const [currentDate, setCurrentDate] = useState(new Date());
   console.log(trainingLogs, "trainingLog");
   const rutinas = rutinas2.concat(rutinaGrupal);
-
+  const [hasExercises, setHasExercises] = useState(false);
+  const [isDayTrained, setIsDayTrained] = useState();
   const localUser = JSON.parse(localStorage.getItem("User"));
   const token = localUser.token;
   useEffect(() => {
@@ -45,14 +47,31 @@ function Hoy() {
       getGroupRutines({ token, idGroup: user?.Client?.ClientGroups[0].idGroup })
     );
   }, [dispatch, id]);
-
+  console.log(trainingLogs, "traiinigLogs");
   useEffect(() => {
     if (rutinas) {
       const exerciseCards = getExerciseCards();
       setCards(exerciseCards);
     }
-  }, [currentDay, currentRoutineIndex, rutinas2]);
 
+    // Determinar si la fecha actual está en trainingLogs
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    const isDayTrained = trainingLogs?.some(
+      (log) => log.date.split("T")[0] === formattedDate && log.trained
+    );
+    setIsDayTrained(isDayTrained);
+  }, [currentDay, currentRoutineIndex, rutinas2, trainingLogs]);
+  useEffect(() => {
+    if (message === "Day marked as trained successfully") {
+      showSuccessNotification("Exito!", "Dia marcado como entrenado");
+      dispatch(getTrainingLogs({ token, clientId: user?.Client?.idClient }));
+    }
+    if (message === "Training log removed successfully") {
+      showSuccessNotification("Exito!", "Dia marcado como NO entrenado");
+      dispatch(getTrainingLogs({ token, clientId: user?.Client?.idClient }));
+    }
+  }),
+    [message];
   const handleCardClick = (exercise) => {
     setSelectedExercise(exercise);
     setShowModal(true);
@@ -65,7 +84,7 @@ function Hoy() {
   const handleDayChange = (amount) => {
     const newDay = (currentDay + amount + 7) % 7;
     setCurrentDay(newDay);
-
+    setHasExercises(false);
     // Actualizar la fecha al cambiar el día
     const currentDateCopy = new Date(currentDate);
     currentDateCopy.setDate(currentDateCopy.getDate() + amount);
@@ -77,6 +96,7 @@ function Hoy() {
       setCurrentRoutineIndex(currentRoutineIndex - 1);
       setCurrentDay(new Date().getUTCDay());
       setCurrentDate(new Date());
+      setHasExercises(false);
     }
   };
 
@@ -116,9 +136,6 @@ function Hoy() {
 
   const handleMarkAsTrained = () => {
     const formattedDate = currentDate.toISOString().split("T")[0]; // Convert to "YYYY-MM-DD" format
-    const isDayTrained = trainingLogs.some(
-      (log) => log.date === formattedDate && log.trained
-    );
 
     if (isDayTrained) {
       // If the day is already marked as trained, unmark it
@@ -148,6 +165,8 @@ function Hoy() {
 
     const exerciseCards = GroupExercises.reduce((acc, group) => {
       if (group.day === hoy) {
+        setHasExercises(true);
+        console.log(hasExercises);
         group.ExerciseConfigurations?.forEach((exercise) => {
           acc.push(
             <div
@@ -203,6 +222,7 @@ function Hoy() {
           );
         });
       }
+
       return acc;
     }, []);
 
@@ -258,17 +278,24 @@ function Hoy() {
       </div>
 
       <div className="exercise-cards-container">{cards}</div>
-      <button
-        className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded`}
-        onClick={handleMarkAsTrained}
-      >
-        {trainingLogs.some(
-          (log) =>
-            log.date === currentDate.toISOString().split("T")[0] && log.trained
-        )
-          ? "Marcar día como NO entrenado"
-          : "Marcar día como entrenado"}
-      </button>
+      {!hasExercises ? (
+        <p className="text-center text-lg font-bold mb-4">
+          NO TIENES EJERCICIOS ESTE DÍA
+        </p>
+      ) : null}
+
+      {hasExercises && (
+        <button
+          className={`bg-${isDayTrained ? "red" : "green"}-500 hover:bg-${
+            isDayTrained ? "red" : "green"
+          }-700 text-white font-bold py-2 px-4 rounded`}
+          onClick={handleMarkAsTrained}
+        >
+          {isDayTrained
+            ? "Marcar día como NO entrenado"
+            : "Marcar día como entrenado"}
+        </button>
+      )}
       {showModal ? (
         <div>
           <ExerciseModal

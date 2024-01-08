@@ -6,7 +6,7 @@ const initialState = {
   users: null,
   clients: null,
   coaches: null,
-  trainingLogs: null,
+  trainingLogs: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -121,7 +121,7 @@ export const markDayAsTrained = createAsyncThunk(
   }
 );
 export const markDayAsUntrained = createAsyncThunk(
-  "markDayAsTrained",
+  "markDayAsUntrained",
   async ({ clientId, date }, thunkAPI) => {
     try {
       const response = await userService.markDayAsUntrained(clientId, date);
@@ -282,6 +282,44 @@ export const userSlice = createSlice({
         state.message = "User update error";
         state.user = null;
       })
+      // mark day as trained
+      .addCase(markDayAsTrained.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Marking day as trained";
+      })
+      .addCase(markDayAsTrained.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+
+        state.message = action.payload.message;
+      })
+      .addCase(markDayAsTrained.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+
+        state.message = action.payload.message;
+      })
+      // mark day as untrained
+      .addCase(markDayAsUntrained.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Marking day as untrained";
+      })
+      .addCase(markDayAsUntrained.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+
+        state.message = action.payload.message;
+      })
+      .addCase(markDayAsUntrained.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+
+        state.message = action.payload.message;
+      })
 
       // get training logs
       .addCase(getTrainingLogs.pending, (state) => {
@@ -292,7 +330,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log(action.payload, "action.payload");
+
         state.message = action.payload.message;
         state.trainingLogs = action.payload.trainingLogs;
       })
@@ -300,7 +338,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        console.log(action.payload, "action.payload");
+
         state.message = action.payload.message;
         state.trainingLogs = null;
       })

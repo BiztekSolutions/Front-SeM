@@ -9,17 +9,21 @@ import { getUser } from "../../features/user/userSlice";
 import { getGroupRutines } from "../../features/group/groupSlice";
 import "./Hoy.css";
 function Rutinas() {
-  const { id } = useParams();
   const dispatch = useDispatch();
   const localUser = JSON.parse(localStorage.getItem("User"));
   const token = localUser.token;
-  const state = useSelector((state) => state);
-  const { user } = state.users;
-  const { rutinaGrupal } = state.groups;
-  const { isLoading, rutinas } = state.rutinas;
-
+  const users = useSelector((state) => state.users);
+  const groups = useSelector((state) => state.groups);
+  const rutinasSlice = useSelector((state) => state.rutinas);
+  const auths = useSelector((state) => state.auths);
+  const { user } = users;
+  const authUser = auths.user;
+  const { rutinaGrupal } = groups;
+  const { isLoading, rutinas } = rutinasSlice;
+  const [dispatched1, setDispatched] = useState(false);
+  const [dispatched2, setDispatched2] = useState(false);
   useEffect(() => {
-    dispatch(getUser({ token, userId: id }));
+    dispatch(getUser({ token, userId: authUser.idUser }));
     if (
       user &&
       user.Client &&
@@ -27,17 +31,25 @@ function Rutinas() {
       user.Client.ClientGroups.length > 0
     ) {
       const idGroup = user?.Client?.ClientGroups[0]?.idGroup;
-      dispatch(getGroupRutines({ token, idGroup }));
+      if (dispatched1 === false) {
+        if (!rutinaGrupal || rutinaGrupal.length === 0) {
+          dispatch(getGroupRutines({ token, idGroup }));
+          setDispatched(true);
+        }
+      }
     }
-    if (!rutinas) {
-      dispatch(getRutines(id));
+    if (dispatched2 === false) {
+      if (!rutinas || rutinas.length === 0) {
+        dispatch(getRutines(authUser.idUser));
+        setDispatched2(true);
+      }
     }
   }, [rutinas, dispatch]);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
-  console.log(rutinas, "rutinas");
+
   return (
     <div className="rutinas">
       {rutinas && rutinas.length > 0 && <Calendar rutinas={rutinas} />}

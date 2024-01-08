@@ -1073,6 +1073,12 @@ input[type="text"] {
   padding-top: 0px;
 }
 
+.rutineTittle {
+  font-size: 2rem;
+  font-family: poppins;
+  font-weight: bold;
+}
+
 .name-rutine-calendar {
   border-radius: 0 10rem 0 10rem;
   width: 15%;

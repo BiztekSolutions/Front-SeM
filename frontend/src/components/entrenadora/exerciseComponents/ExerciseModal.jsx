@@ -36,12 +36,12 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header relative">
-            <h5 className="modal-title text-3xl text-white p-5">
+            <h5 className="modal-title text-3xl text-white p-2">
               {exercise.Exercise.name}
             </h5>
             <button
               type="button"
-              className="btn-close text-white absolute top-0 right-0 text-2xl"
+              className="  absolute top-0 right-0 text-2xl"
               aria-label="Close"
               onClick={closeModal}
             >
@@ -68,7 +68,7 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
             <div className="mt-4">{showImagesOnMobile()}</div>
           </div>
 
-          <div className="border-t-4  py-5 modal-footer flex flex-col justify-center">
+          <div className="border-t-4  modal-footer flex flex-col justify-center">
             <h5 className="modal-subtitle  text-2xl">Editar ejercicio</h5>
             <ExerciseForm
               exercise={exercise}
@@ -76,14 +76,6 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
               onSubmit={handleEditExercise}
             />
           </div>
-
-          <button
-            type="button"
-            onClick={closeModal}
-            className="btn btn-secondary bg-black my-7"
-          >
-            Close
-          </button>
         </div>
       </div>
     </div>

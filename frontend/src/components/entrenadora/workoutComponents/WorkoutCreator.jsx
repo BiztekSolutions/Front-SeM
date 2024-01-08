@@ -5,7 +5,10 @@ import { DatePicker } from "antd";
 import moment from "moment";
 import { MdDelete, MdArrowUpward, MdArrowDownward } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { createRutine } from "@/features/rutinas/rutinasSlice";
+import {
+  createRutine,
+  resetRutines,
+} from "../../../features/rutinas/rutinasSlice";
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
 import { useSelector } from "react-redux";
 import locale from "antd/es/date-picker/locale/es_ES";
@@ -16,6 +19,7 @@ const initialState = {
   name: "",
   startDate: moment().format("YYYY-MM-DD"),
   endDate: moment().add(1, "weeks").format("YYYY-MM-DD"),
+  durationInWeeks: 1,
   exercisesGroup: {
     Lunes: {},
     Martes: {},
@@ -33,9 +37,9 @@ function WorkoutCreator() {
   const [durationInWeeks, setDurationInWeeks] = useState(1);
   const [visibleExercises, setVisibleExercises] = useState(20);
   const [searchTerm, setSearchTerm] = useState("");
-  const isSuccess2 = useSelector((state) => state.groups.isSuccess);
+  const message2 = useSelector((state) => state.groups.message);
   const { exercises } = useSelector((state) => state.exercises);
-  const { isSuccess } = useSelector((state) => state.rutinas);
+  const { message } = useSelector((state) => state.rutinas);
   const dispatch = useDispatch();
   const id = useParams().id;
   const isGroupsPage = location.pathname.includes("/grupos");
@@ -65,6 +69,10 @@ function WorkoutCreator() {
     const value = e.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {
       setDurationInWeeks(value);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        durationInWeeks: value,
+      }));
     }
   };
 
@@ -86,7 +94,7 @@ function WorkoutCreator() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
+    console.log(formData, "entrando al submit");
     if (isGroupsPage) {
       dispatch(
         setRoutineGroup({
@@ -101,10 +109,6 @@ function WorkoutCreator() {
           exercisesGroup: formData.exercisesGroup,
         })
       );
-      if (isSuccess2) {
-        setFormData(initialState);
-        dispatch(showSuccessNotification("Rutina creada con éxito"));
-      }
     } else {
       dispatch(
         createRutine({
@@ -119,12 +123,27 @@ function WorkoutCreator() {
           exercisesGroup: formData.exercisesGroup,
         })
       );
-      if (isSuccess) {
-        setFormData(initialState);
-        dispatch(showSuccessNotification("Exito!", "Rutina creada con éxito"));
-      }
     }
   };
+
+  useEffect(() => {
+    if (message2 === "Routine created successfully") {
+      setFormData(initialState);
+      dispatch(showSuccessNotification("Exito", "Rutina creada"));
+      setTimeout(() => {
+        dispatch(resetRutines());
+      }, 1000);
+    }
+
+    if (message === "Routine created successfully") {
+      setFormData(initialState);
+      dispatch(showSuccessNotification("Exito!", "Rutina creada"));
+      setTimeout(() => {
+        dispatch(resetRutines());
+      }, 1000);
+    }
+  }),
+    [message, message2];
 
   const handleRemoveAndReorder = (day, index) => {
     setFormData((prevFormData) => {
@@ -214,6 +233,7 @@ function WorkoutCreator() {
         },
       },
     }));
+    console.log(formData, "despues del handleseries");
   };
 
   const handleRepeticiones = (event, day, index) => {
@@ -253,6 +273,9 @@ function WorkoutCreator() {
         },
       },
     }));
+    setTimeout(() => {
+      console.log("This message will be logged after 3 seconds", formData);
+    }, 3000);
   };
   const handleObjectiveChange = (event) => {
     const value = event.target.value;
@@ -346,7 +369,7 @@ function WorkoutCreator() {
                 type="number"
                 className="form-control"
                 onChange={handleDurationChange}
-                value={durationInWeeks}
+                value={formData.durationInWeeks}
                 required
               />
             </div>
@@ -495,7 +518,7 @@ function WorkoutCreator() {
                                     </div>
                                     <div className="form-group">
                                       <input
-                                        className="form-control inputs p-2 border border-gray-300 rounded-full input2-series-reps"
+                                        className="form-control inputs border border-gray-300 rounded-full input-series-reps"
                                         name="repeticiones"
                                         placeholder="Repeticiones"
                                         value={
@@ -514,7 +537,7 @@ function WorkoutCreator() {
                                     </div>
                                     <div className="form-group ">
                                       <input
-                                        className="form-control p-2 inputs border border-gray-300 rounded-full input2-series-reps"
+                                        className="form-control inputs border border-gray-300 rounded-full input-series-reps"
                                         name="peso"
                                         placeholder="Peso(kg)"
                                         value={

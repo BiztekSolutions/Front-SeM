@@ -58,8 +58,7 @@ const getGroupRutines = async (token, idGroup) => {
   });
 
   const groupRoutines = response.data;
-  console.log(groupRoutines, "groupRoutines");
-  // Obtener un array de promesas para las solicitudes de rutinas individuales
+
   const routinePromises = groupRoutines.routines.map(async (routine) => {
     const routineResponse = await axios.get(
       `${base_url}/routines/${routine.idRoutine}`,

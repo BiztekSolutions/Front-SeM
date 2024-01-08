@@ -47,7 +47,7 @@ Client.init(
       autoIncrement: true,
     },
     trainingLogs: {
-      type: DataTypes.JSONB,
+      type: DataTypes.ARRAY(DataTypes.JSONB),
       allowNull: false,
       defaultValue: [],
     },

@@ -159,7 +159,6 @@ export const rutinasSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.message = action.payload.message;
-        state.rutinas = action.payload.data;
       })
       .addCase(updateRutineConfiguration.rejected, (state, action) => {
         state.isLoading = false;

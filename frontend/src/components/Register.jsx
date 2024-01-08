@@ -32,9 +32,11 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { message, token, user, userId, isLoading } = state.auths;
-  const { coaches } = state.users;
+  const auths = useSelector((state) => state.auths);
+  const users = useSelector((state) => state.users);
+
+  const { message, token, user, userId, isLoading } = auths;
+  const { coaches } = users;
   // CONTEXT API
   const globalContext = useContext(GlobalContext);
   const { setLogged } = globalContext;

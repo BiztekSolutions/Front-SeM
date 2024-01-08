@@ -42,10 +42,12 @@ function EditarRutinas({ rutinas }) {
   const daySectionRef = useRef(null); // Ref para la sección de los días
   const [searchTerm, setSearchTerm] = useState("");
   const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
-  const filteredExercises = exercises?.filter((exercise) =>
-    exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const filteredExercises =
+    exercises &&
+    exercises?.filter((exercise) =>
+      exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  console.log(rutinas, "rutinasssss");
   useEffect(() => {
     if (message === "Routine updated successfully") {
       dispatch(
@@ -63,7 +65,7 @@ function EditarRutinas({ rutinas }) {
     }
 
     if (rutinas && rutinas.length !== 0) {
-      const editRoutine = rutinas[currentRoutineIndex].routine;
+      const editRoutine = rutinas[currentRoutineIndex]?.routine;
 
       let exercisesGroup = {
         Lunes: {},
@@ -74,7 +76,7 @@ function EditarRutinas({ rutinas }) {
         Sabado: {},
       };
 
-      editRoutine.GroupExercises.forEach((groupExercise) => {
+      editRoutine?.GroupExercises.forEach((groupExercise) => {
         if (groupExercise.ExerciseConfigurations.length > 0) {
           for (
             let i = 0;
@@ -84,7 +86,7 @@ function EditarRutinas({ rutinas }) {
             const exerciseConfig = groupExercise.ExerciseConfigurations[i];
             exercisesGroup[groupExercise.day][exerciseConfig.order] = {
               idExercise: exerciseConfig.Exercise.idExercise,
-              name: exerciseConfig.Exercise.name,
+              name: exerciseConfig.Exercise?.name,
               configuration: {
                 series: exerciseConfig.series,
                 repetitions: exerciseConfig.repetitions,
@@ -97,7 +99,7 @@ function EditarRutinas({ rutinas }) {
         }
       });
       console.log(editRoutine, "editRoutine");
-      const finalData = {
+      const finalData = editRoutine && {
         name: editRoutine.name,
         startDate: moment.utc(editRoutine.startDate).format("YYYY-MM-DD"),
         endDate: moment.utc(editRoutine.endDate).format("YYYY-MM-DD"),
@@ -498,7 +500,7 @@ function EditarRutinas({ rutinas }) {
                                     <div className="form-group">
                                       <input
                                         type="number"
-                                        className="form-control p-2 border border-gray-300 rounded-full input-series-reps"
+                                        className="form-control inputs border border-gray-300 rounded-full input-series-reps"
                                         name="series"
                                         placeholder="Series"
                                         inputMode="numeric"
@@ -518,7 +520,7 @@ function EditarRutinas({ rutinas }) {
                                     </div>
                                     <div className="form-group ">
                                       <input
-                                        className="form-control p-2 border border-gray-300 rounded-full input2-series-reps"
+                                        className="form-control inputs border border-gray-300 rounded-full input-series-reps"
                                         name="repeticiones"
                                         placeholder="Repeticiones"
                                         value={
@@ -537,9 +539,9 @@ function EditarRutinas({ rutinas }) {
                                     </div>
                                     <div className="form-group ">
                                       <input
-                                        className="form-control p-2 border border-gray-300 rounded-full input2-series-reps"
-                                        name="repeticiones"
-                                        placeholder="Repeticiones"
+                                        className="form-control inputs border border-gray-300 rounded-full input-series-reps"
+                                        name="peso"
+                                        placeholder="Peso(Kg)"
                                         value={
                                           formData.exercisesGroup[day][index]
                                             ?.configuration?.weight !==

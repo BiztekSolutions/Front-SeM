@@ -27,17 +27,11 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
     event.preventDefault();
     const initialWeight = exercise ? exercise.weight : 0;
     const currentWeight = formData.weight;
-    const progressDifference =
-      initialWeight !== 0 ? currentWeight - initialWeight : 0;
-    console.log(progressDifference, "progressDifference");
-    // Actualizar el valor de progressWeight en formData solo si el peso inicial no era 0
-    if (initialWeight !== 0) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        progressWeight:
-          parseFloat(prevFormData.progressWeight) + progressDifference,
-      }));
-    }
+    formData.progressWeight =
+      initialWeight !== 0
+        ? formData.progressWeight + (currentWeight - initialWeight)
+        : 0;
+
     console.log(formData, "formData");
     onSubmit(formData);
     closeModal();
@@ -45,16 +39,16 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
   console.log(exercise, "exercise");
   return (
     <form
-      className="py-5 w-1/2 m-auto rounded-lg flex flex-wrap justify-center gap-5"
+      className="py-2 w-1/2 m-auto rounded-lg flex flex-wrap justify-center gap-5"
       onSubmit={handleSubmit}
     >
-      <div className="form-group mx-4 my-2 flex gap-5">
+      <div className="form-group mx-4 flex">
         {isCoachPage && (
           <div>
             <div>
               <p>Series</p>
 
-              <textarea
+              <input
                 className="form-control"
                 name="series"
                 placeholder="Series"
@@ -64,7 +58,7 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
             </div>
             <div>
               <p>Repeticiones</p>
-              <textarea
+              <input
                 className="form-control"
                 name="reps"
                 placeholder="Reps"
@@ -76,7 +70,7 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
         )}
         <div>
           <p>Peso(kg)</p>
-          <textarea
+          <input
             className="form-control"
             name="weight"
             placeholder="Peso"
@@ -85,8 +79,8 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
           />
         </div>
       </div>
-      {exercise.progressWeight && exercise.progressWeight !== 0 && (
-        <div className="mt-4">
+      {exercise.progressWeight && exercise.progressWeight !== 0 ? (
+        <div className="items-center justify-center flex flex-col">
           <p>
             ¡Felicidades! Has aumentado{" "}
             <span
@@ -103,12 +97,12 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
               <img
                 src="https://media1.tenor.com/m/Bysws45JqI8AAAAC/congratulations-congrats.gif"
                 alt="Felicitation GIF"
+                className=" w-24 h-24 object-cover mb-2 rounded-full"
               />
-              <span className="text-green-500">↑</span>
             </>
           )}
         </div>
-      )}
+      ) : null}
       <button type="submit" className="btn btn-primary mx-4 bg-black">
         Save Changes
       </button>

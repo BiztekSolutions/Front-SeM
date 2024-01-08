@@ -175,6 +175,8 @@ export const setRoutineGroup = async (req: Request, res: Response) => {
               {
                 repetitions: exerciseValue.configuration.repetitions,
                 series: exerciseValue.configuration.series,
+                weight: exerciseValue.configuration.weight,
+                progressWeight: exerciseValue.configuration.progressWeight,
                 idExercise: exercise.idExercise,
                 idGroupExercise: groupExercise.idGroupExercise,
                 order: exerciseKey,

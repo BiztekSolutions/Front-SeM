@@ -46,8 +46,7 @@ export const register = createAsyncThunk("register", async (data, thunkAPI) => {
   try {
     return await authService.register(data);
   } catch (error) {
-    console.error(error);
-    return thunkAPI.rejectWithValue(error.message || "Error desconocido");
+    return thunkAPI.rejectWithValue(error);
   }
 });
 export const updateUserr = createAction("updateUserr");
@@ -99,7 +98,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.message = "User already exists";
+        state.message = action.payload.message;
         state.user = null;
       })
 

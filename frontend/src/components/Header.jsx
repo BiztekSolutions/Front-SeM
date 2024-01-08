@@ -126,9 +126,9 @@ const Header = () => {
               duration={1000}
               id="sedes"
             >
-              <a className="block a-header" href="#sedes">
+              <span className="block a-header" href="#sedes">
                 SEDES
-              </a>
+              </span>
             </Link>
           </li>
           <li className="li-bb">
@@ -140,9 +140,9 @@ const Header = () => {
               duration={1000}
               id="nosotras"
             >
-              <a className="block a-header" href="#nosotras">
+              <span className="block a-header" href="#nosotras">
                 NUESTRO EQUIPO
-              </a>
+              </span>
             </Link>
           </li>
           <li className="z-10 li-bb">
@@ -154,9 +154,9 @@ const Header = () => {
               duration={1000}
               id="contacto"
             >
-              <a className="block a-header" href="#formulario">
+              <span className="block a-header" href="#formulario">
                 CONTACTO
-              </a>
+              </span>
             </Link>
           </li>
           <li className="li-bb">

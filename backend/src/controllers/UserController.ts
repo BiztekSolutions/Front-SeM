@@ -8,6 +8,7 @@ import Exercise from '../models/Exercise';
 import RoutineConfiguration from '../models/ExerciseConfiguration';
 import GroupExercise from '../models/GroupExercise';
 import ClientGroup from '../models/ClientGroup';
+import sequelize from '../configs/db';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
@@ -52,6 +53,7 @@ export const getTrainingDays = async (req: Request, res: Response) => {
     if (!client) {
       return res.status(400).json({ message: 'Client not found' });
     }
+    console.log(client.trainingLogs, 'client.trainingLogs');
 
     const trainingLogs = client.trainingLogs;
     return res.status(200).json({ message: 'Training logs retrieved successfully', trainingLogs: trainingLogs });
@@ -64,6 +66,8 @@ export const markDayAsTrained = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.clientId as string);
     const { date } = req.body;
+    const formattedDate = new Date(date);
+    console.log(formattedDate, 'req.bodyyyyy');
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
     if (!date) return res.status(400).json({ message: 'Date is required in the request body' });
@@ -73,11 +77,19 @@ export const markDayAsTrained = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Client not found' });
     }
 
-    client.trainingLogs.push({ date, trained: true });
-    await client.save();
+    const currentTrainingLogs = client.trainingLogs || [];
+    const updatedTrainingLogs = [...currentTrainingLogs, { date: formattedDate.toISOString(), trained: true }];
+
+    client.update({
+      trainingLogs: updatedTrainingLogs,
+    });
+
+    console.log(client, 'client');
 
     return res.status(200).json({ message: 'Day marked as trained successfully' });
   } catch (error: any) {
+    console.log(error, 'error');
+
     return res.status(500).json({ error: error.message });
   }
 };
@@ -95,9 +107,10 @@ export const markDayAsUntrained = async (req: Request, res: Response) => {
     if (!client) {
       return res.status(400).json({ message: 'Client not found' });
     }
+    console.log(date, 'dateeeeeeeeee');
 
     // Eliminar el registro de entrenamiento con la fecha proporcionada
-    client.trainingLogs = client.trainingLogs.filter((log) => log.date !== date);
+    client.trainingLogs = client.trainingLogs.filter((log) => log.date.split('T')[0] !== date);
 
     await client.save();
 

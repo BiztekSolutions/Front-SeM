@@ -1,8 +1,12 @@
 import { Spin } from "antd";
-import React from "react";
 
 const LoadingSpinner = ({ title = "Cargando", size = "large" }) => {
-  return <Spin tip={title} size={size} />;
+  return (
+    <div>
+      <Spin size={size} />
+      <div style={{ marginTop: 8 }}>{title}</div>
+    </div>
+  );
 };
 
 export default LoadingSpinner;

@@ -69,8 +69,11 @@ function Calendar({ rutinas }) {
       "es-ES",
       opcionesDiaSemana
     ).format(fecha);
-    const diaSemanaCapitalizado =
+    let diaSemanaCapitalizado =
       diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+    if (diaSemanaCapitalizado === "Miércoles") {
+      diaSemanaCapitalizado = "Miercoles";
+    }
     dispatch(
       updateRutineConfiguration({
         configuration,

@@ -60,7 +60,7 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
               <p>Repeticiones</p>
               <input
                 className="form-control"
-                name="reps"
+                name="repetitions"
                 placeholder="Reps"
                 onChange={handleChange}
                 value={formData.repetitions}

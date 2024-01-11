@@ -41,7 +41,13 @@ function Hoy() {
   const token = localUser.token;
   useEffect(() => {
     dispatch(getRutines(id));
-    dispatch(getTrainingLogs({ token, clientId: user?.Client?.idClient }));
+    dispatch(
+      getTrainingLogs({
+        token,
+        clientId: user?.Client?.idClient,
+        idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
+      })
+    );
     dispatch(getUser({ token, userId: id }));
     dispatch(
       getGroupRutines({ token, idGroup: user?.Client?.ClientGroups[0].idGroup })
@@ -56,19 +62,36 @@ function Hoy() {
 
     // Determinar si la fecha actual está en trainingLogs
     const formattedDate = currentDate.toISOString().split("T")[0];
-    const isDayTrained = trainingLogs?.some(
-      (log) => log.date.split("T")[0] === formattedDate && log.trained
+    const trainingLogsRutinaActual = trainingLogs?.filter(
+      (logs) =>
+        logs.idRoutine === rutinas[currentRoutineIndex].routine.idRoutine
     );
+    const isDayTrained = trainingLogsRutinaActual?.some(
+      (log) => log.date?.split("T")[0] === formattedDate
+    );
+    console.log(trainingLogsRutinaActual, isDayTrained, "ahaha");
     setIsDayTrained(isDayTrained);
   }, [currentDay, currentRoutineIndex, rutinas2, trainingLogs]);
   useEffect(() => {
     if (message === "Day marked as trained successfully") {
       showSuccessNotification("Exito!", "Dia marcado como entrenado");
-      dispatch(getTrainingLogs({ token, clientId: user?.Client?.idClient }));
+      dispatch(
+        getTrainingLogs({
+          token,
+          clientId: user?.Client?.idClient,
+          idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
+        })
+      );
     }
     if (message === "Training log removed successfully") {
       showSuccessNotification("Exito!", "Dia marcado como NO entrenado");
-      dispatch(getTrainingLogs({ token, clientId: user?.Client?.idClient }));
+      dispatch(
+        getTrainingLogs({
+          token,
+          clientId: user?.Client?.idClient,
+          idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
+        })
+      );
     }
   }),
     [message];
@@ -132,6 +155,10 @@ function Hoy() {
         idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
       })
     );
+    dispatch(
+      getGroupRutines({ token, idGroup: user?.Client?.ClientGroups[0].idGroup })
+    );
+    dispatch(getRutines(id));
   };
 
   const handleMarkAsTrained = () => {
@@ -143,6 +170,7 @@ function Hoy() {
         markDayAsUntrained({
           clientId: user?.Client?.idClient,
           date: formattedDate,
+          idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
         })
       );
     } else {
@@ -151,6 +179,7 @@ function Hoy() {
         markDayAsTrained({
           clientId: user?.Client?.idClient,
           date: formattedDate,
+          idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
         })
       );
     }

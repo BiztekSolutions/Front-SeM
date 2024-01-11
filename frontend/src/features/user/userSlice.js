@@ -111,9 +111,13 @@ export const getUsers = createAsyncThunk(
 
 export const markDayAsTrained = createAsyncThunk(
   "markDayAsTrained",
-  async ({ clientId, date }, thunkAPI) => {
+  async ({ clientId, date, idRoutine }, thunkAPI) => {
     try {
-      const response = await userService.markDayAsTrained(clientId, date);
+      const response = await userService.markDayAsTrained(
+        clientId,
+        date,
+        idRoutine
+      );
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -122,9 +126,13 @@ export const markDayAsTrained = createAsyncThunk(
 );
 export const markDayAsUntrained = createAsyncThunk(
   "markDayAsUntrained",
-  async ({ clientId, date }, thunkAPI) => {
+  async ({ clientId, date, idRoutine }, thunkAPI) => {
     try {
-      const response = await userService.markDayAsUntrained(clientId, date);
+      const response = await userService.markDayAsUntrained(
+        clientId,
+        date,
+        idRoutine
+      );
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -134,9 +142,13 @@ export const markDayAsUntrained = createAsyncThunk(
 
 export const getTrainingLogs = createAsyncThunk(
   "getTrainingLogs",
-  async ({ token, clientId }, thunkAPI) => {
+  async ({ token, clientId, idRoutine }, thunkAPI) => {
     try {
-      const response = await userService.getTrainingLogs(token, clientId);
+      const response = await userService.getTrainingLogs(
+        token,
+        clientId,
+        idRoutine
+      );
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

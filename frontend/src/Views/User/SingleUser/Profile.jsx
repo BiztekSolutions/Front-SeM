@@ -5,28 +5,34 @@ import {
   getUser,
   getClients,
   updateUser,
+  getTrainingLogs,
 } from "../../../features/user/userSlice";
 import { getRutines } from "../../../features/rutinas/rutinasSlice";
 import {
   updateUserr,
   clearAuthMessages,
 } from "../../../features/auth/authSlice";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Modal } from "antd";
 import styles from "../../../components/Component.module.css";
 import { showSuccessNotification } from "../../../features/layout/layoutSlice";
-
+import Progressbar from "../../../components/Progressbar/Progressbar";
 function Profile() {
   // const { user } = useSelector((state) => state.auths);
-  const { clients, message, user } = useSelector((state) => state.users);
+  const { clients, message, user, trainingLogs } = useSelector(
+    (state) => state.users
+  );
 
   const { rutinas } = useSelector((state) => state.rutinas);
   // const { message} = useSelector((state) => state.auths);
+  const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar);
   const [userState, setUserState] = useState({
     name: user?.name,
     lastname: user?.lastname,
   });
+  const [dispatched, setDispatched] = useState(false);
   const localUser = JSON.parse(localStorage.getItem("User"));
   const token = localUser.token;
   const dispatch = useDispatch();
@@ -36,10 +42,18 @@ function Profile() {
   const showModal = () => {
     setIsModalVisible(true);
   };
+
   useEffect(() => {
     if (user && user.avatar) {
       setSelectedAvatar(user.avatar);
     }
+    dispatch(
+      getTrainingLogs({
+        token,
+        clientId: user?.Client?.idClient,
+        idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
+      })
+    );
   }, [user]);
   const handleSelectAvatar = (avatar) => {
     setSelectedAvatar(avatar);
@@ -53,6 +67,17 @@ function Profile() {
       lastname: user.lastname,
       avatar: selectedAvatar,
     });
+  };
+  const handlePrevRoutine = () => {
+    if (currentRoutineIndex > 0) {
+      setCurrentRoutineIndex(currentRoutineIndex - 1);
+    }
+  };
+
+  const handleNextRoutine = () => {
+    if (currentRoutineIndex < rutinas.length - 1) {
+      setCurrentRoutineIndex(currentRoutineIndex + 1);
+    }
   };
   useEffect(() => {
     if (message === "Usuario actualizado") {
@@ -91,16 +116,81 @@ function Profile() {
   useEffect(() => {
     dispatch(getUser({ userId: id, token }));
     dispatch(getClients(token));
+    dispatch(getTrainingLogs());
   }, [id]);
 
   const isUserInClients = clients?.some(
     (client) => client.idUser === user.idUser
   );
   useEffect(() => {
-    if (isUserInClients) {
-      dispatch(getRutines(id));
+    if (dispatched === false) {
+      if (!rutinas || rutinas.length === 0) {
+        dispatch(getRutines(id));
+        setDispatched(true);
+      }
     }
-  }, [clients]);
+  }, [rutinas]);
+
+  const diasSemana = [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miercoles",
+    "Jueves",
+    "Viernes",
+    "Sabado",
+  ];
+
+  const calculateTrainingPercentage = () => {
+    if (!rutinas || !trainingLogs) return 0;
+
+    // Obtener la rutina actual y el idRoutine correspondiente
+    const currentRoutine = rutinas[currentRoutineIndex]?.routine;
+    const currentRoutineId = currentRoutine?.idRoutine;
+
+    // Filtrar los training logs por la rutina actual
+    const routineTrainingLogs = trainingLogs.filter(
+      (log) => log.idRoutine === currentRoutineId
+    );
+    console.log(routineTrainingLogs, "rutinetraining");
+    // Obtener la fecha de inicio de la rutina y la fecha actual
+    const rutinaStartDate = new Date(currentRoutine?.startDate);
+
+    const currentDate = new Date();
+
+    // Calcular los días de entrenamiento desde el inicio de la rutina hasta la fecha actual
+    const trainingDays = [];
+    let currentDay = rutinaStartDate.getDay(); // Día de la semana en que comenzó la rutina
+
+    // Agregar días de entrenamiento hasta la fecha actual
+    while (rutinaStartDate <= currentDate) {
+      currentRoutine?.GroupExercises?.forEach((group) => {
+        if (group.day === diasSemana[currentDay]) {
+          trainingDays.push(diasSemana[currentDay]);
+        }
+      });
+
+      rutinaStartDate.setDate(rutinaStartDate.getDate() + 1);
+      currentDay = (currentDay + 1) % 7; // Siguiente día de la semana
+    }
+
+    console.log(trainingDays, "trainingdays");
+    // Contar los días de entrenamiento que han sido registrados en los training logs
+
+    // Calcular el porcentaje
+    const percentage =
+      (routineTrainingLogs.length / trainingDays.length) * 100 || 0;
+
+    return percentage;
+  };
+  useEffect(() => {
+    calculateTrainingPercentage();
+  }),
+    [currentRoutineIndex];
+
+  if (!isUserInClients) {
+    return <div>Este usuario no es tu cliente</div>;
+  }
 
   return (
     <div>
@@ -116,41 +206,73 @@ function Profile() {
             email: user.Credentials && user?.Credentials[0]?.email,
           }}
         >
-          <Form.Item
-            className="flex justify-start"
-            label="Avatar"
-            name="avatar"
-          >
-            <div className="">
-              <img
-                src={selectedAvatar}
-                alt="Avatar"
-                onClick={isEditing ? showModal : null}
-                className="h-10 w-10 rounded-full mr-20"
-              />
-            </div>
-          </Form.Item>
+          <div className="flex items-start justify-evenly">
+            <div>
+              <Form.Item
+                className="flex justify-start"
+                label="Avatar"
+                name="avatar"
+              >
+                <div className="">
+                  <img
+                    src={selectedAvatar}
+                    alt="Avatar"
+                    onClick={isEditing ? showModal : null}
+                    className="h-10 w-10 rounded-full mr-20"
+                  />
+                </div>
+              </Form.Item>
 
-          <Form.Item className="flex justify-start" label="Name" name="name">
-            {isEditing ? <Input /> : <div>{user.name}</div>}
-          </Form.Item>
-          <Form.Item
-            className="flex justify-start"
-            label="Last Name"
-            name="lastname"
-          >
-            {isEditing ? <Input /> : <div>{user.lastname}</div>}
-          </Form.Item>
-          <Form.Item className="flex justify-start" label="Email" name="email">
-            <div>{user.Credentials && user?.Credentials[0]?.email}</div>
-          </Form.Item>
-          <Form.Item
-            className="flex justify-start"
-            label="Rutina"
-            name="Rutina"
-          >
-            {rutinas && rutinas.length > 0 ? "Si" : "No"}
-          </Form.Item>
+              <Form.Item
+                className="flex justify-start"
+                label="Name"
+                name="name"
+              >
+                {isEditing ? <Input /> : <div>{user.name}</div>}
+              </Form.Item>
+              <Form.Item
+                className="flex justify-start"
+                label="Last Name"
+                name="lastname"
+              >
+                {isEditing ? <Input /> : <div>{user.lastname}</div>}
+              </Form.Item>
+              <Form.Item
+                className="flex justify-start"
+                label="Email"
+                name="email"
+              >
+                <div>{user.Credentials && user?.Credentials[0]?.email}</div>
+              </Form.Item>
+              <Form.Item
+                className="flex justify-start"
+                label="Rutina"
+                name="Rutina"
+              >
+                {rutinas && rutinas.length > 0 ? "Si" : "No"}
+              </Form.Item>
+            </div>
+            <div className="ml-32">
+              {rutinas && rutinas.length > 1 && (
+                <>
+                  <div className="flex items-center justify-center mb-10">
+                    <LeftOutlined
+                      className="cursor-pointer text-2xl"
+                      onClick={handlePrevRoutine}
+                    />
+
+                    <h2>{rutinas[currentRoutineIndex]?.routine?.name} </h2>
+                    <RightOutlined
+                      className="cursor-pointer text-2xl"
+                      onClick={handleNextRoutine}
+                    />
+                  </div>
+                  <Progressbar percentage={calculateTrainingPercentage()} />
+                  <h4>% de entramiento realizados</h4>
+                </>
+              )}
+            </div>
+          </div>
           {isEditing && (
             <Form.Item>
               <Button type="primary" htmlType="submit">
@@ -160,7 +282,6 @@ function Profile() {
           )}
         </Form>
       )}
-
       {!isEditing && (
         <Button type="link" onClick={handleEditClick}>
           Edit Profile

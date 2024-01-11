@@ -71,45 +71,40 @@ const getCoaches = async (token) => {
   return response.data;
 };
 
-const markDayAsTrained = async (clientId, date, token) => {
+const markDayAsTrained = async (clientId, date, idRoutine) => {
   const response = await axios.put(
     `${base_url}/users/entrenamientos/${clientId}`,
     {
       date,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      idRoutine,
     }
   );
 
   return response.data;
 };
 
-const getTrainingLogs = async (token, clientId) => {
+const getTrainingLogs = async (token, clientId, idRoutine) => {
   const response = await axios.get(
     `${base_url}/users/entrenamientos/${clientId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: {
+        idRoutine,
+      },
     }
   );
 
   return response.data;
 };
 
-const markDayAsUntrained = async (clientId, date, token) => {
+const markDayAsUntrained = async (clientId, date, idRoutine) => {
   const response = await axios.delete(
     `${base_url}/users/entrenamientos/${clientId}`,
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: {
-        date,
-      },
+      date,
+      idRoutine,
     }
   );
 

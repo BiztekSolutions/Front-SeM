@@ -47,6 +47,7 @@ export const getTrainingDays = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.clientId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
+    console.log(req.params, 'req.params');
 
     const client = await Client.findByPk(userId);
 
@@ -65,12 +66,13 @@ export const getTrainingDays = async (req: Request, res: Response) => {
 export const markDayAsTrained = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.clientId as string);
-    const { date } = req.body;
+    const { date, idRoutine } = req.body;
     const formattedDate = new Date(date);
     console.log(formattedDate, 'req.bodyyyyy');
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
     if (!date) return res.status(400).json({ message: 'Date is required in the request body' });
+    if (!idRoutine) return res.status(400).json({ message: 'Routine id is required in the request body' });
     const client = await Client.findByPk(userId);
 
     if (!client) {
@@ -78,7 +80,7 @@ export const markDayAsTrained = async (req: Request, res: Response) => {
     }
 
     const currentTrainingLogs = client.trainingLogs || [];
-    const updatedTrainingLogs = [...currentTrainingLogs, { date: formattedDate.toISOString(), trained: true }];
+    const updatedTrainingLogs = [...currentTrainingLogs, { date: formattedDate.toISOString(), idRoutine: idRoutine }];
 
     client.update({
       trainingLogs: updatedTrainingLogs,
@@ -97,10 +99,11 @@ export const markDayAsTrained = async (req: Request, res: Response) => {
 export const markDayAsUntrained = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.clientId as string);
-    const { date } = req.body;
+    const { date, idRoutine } = req.body;
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
     if (!date) return res.status(400).json({ message: 'Date is required in the request body' });
+    if (!idRoutine) return res.status(400).json({ message: 'Routine id is required in the request body' });
 
     const client = await Client.findByPk(userId);
 
@@ -110,7 +113,7 @@ export const markDayAsUntrained = async (req: Request, res: Response) => {
     console.log(date, 'dateeeeeeeeee');
 
     // Eliminar el registro de entrenamiento con la fecha proporcionada
-    client.trainingLogs = client.trainingLogs.filter((log) => log.date.split('T')[0] !== date);
+    client.trainingLogs = client.trainingLogs.filter((log) => log.date.split('T')[0] !== date && log.idRoutine !== idRoutine);
 
     await client.save();
 

@@ -6,7 +6,7 @@ import ClientGroup from './ClientGroup'; // Import the ClientGroup model
 
 interface TrainingLog {
   date: Date;
-  trained: boolean;
+  idRoutine: number;
 }
 interface ClientAttributes {
   idClient: number;

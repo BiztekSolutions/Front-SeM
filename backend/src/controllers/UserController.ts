@@ -9,6 +9,7 @@ import RoutineConfiguration from '../models/ExerciseConfiguration';
 import GroupExercise from '../models/GroupExercise';
 import ClientGroup from '../models/ClientGroup';
 import sequelize from '../configs/db';
+import { id } from 'date-fns/locale';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
@@ -68,6 +69,8 @@ export const markDayAsTrained = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.clientId as string);
     const { date, idRoutine } = req.body;
     const formattedDate = new Date(date);
+    console.log(date, 'dateeeeeeeeee');
+
     console.log(formattedDate, 'req.bodyyyyy');
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
@@ -100,6 +103,8 @@ export const markDayAsUntrained = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.clientId as string);
     const { date, idRoutine } = req.body;
+    const formattedDate = new Date(date);
+    console.log(idRoutine, 'idRoutine');
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
     if (!date) return res.status(400).json({ message: 'Date is required in the request body' });
@@ -110,10 +115,11 @@ export const markDayAsUntrained = async (req: Request, res: Response) => {
     if (!client) {
       return res.status(400).json({ message: 'Client not found' });
     }
-    console.log(date, 'dateeeeeeeeee');
 
-    // Eliminar el registro de entrenamiento con la fecha proporcionada
-    client.trainingLogs = client.trainingLogs.filter((log) => log.date.split('T')[0] !== date && log.idRoutine !== idRoutine);
+    client.trainingLogs = client.trainingLogs.filter(
+      (log) => new Date(log.date).getTime() !== formattedDate.getTime() || log.idRoutine !== idRoutine
+    );
+    console.log(client.trainingLogs, 'client.trainingLogs');
 
     await client.save();
 

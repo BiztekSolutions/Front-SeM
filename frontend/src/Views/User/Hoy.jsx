@@ -17,6 +17,7 @@ import {
   markDayAsUntrained,
 } from "../../features/user/userSlice";
 import { showSuccessNotification } from "../../features/layout/layoutSlice";
+import { set } from "date-fns";
 
 function Hoy() {
   const [currentDay, setCurrentDay] = useState(new Date().getUTCDay());
@@ -31,6 +32,7 @@ function Hoy() {
   const { isLoading } = state.rutinas;
   const rutinas2 = state.rutinas.rutinas;
   const { rutinaGrupal } = state.groups;
+
   const { user, trainingLogs, message } = state.users;
   const [currentDate, setCurrentDate] = useState(new Date());
   console.log(trainingLogs, "trainingLog");
@@ -38,22 +40,43 @@ function Hoy() {
   const [hasExercises, setHasExercises] = useState(false);
   const [isDayTrained, setIsDayTrained] = useState();
   const localUser = JSON.parse(localStorage.getItem("User"));
+  const [dispatchee, setDispatchee] = useState(false);
   const token = localUser.token;
   useEffect(() => {
     dispatch(getRutines(id));
+    dispatch(getUser({ token, userId: id }));
+    if (user && user.Client && !dispatchee) {
+      dispatch(
+        getTrainingLogs({
+          token,
+          clientId: user?.Client?.idClient,
+          idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
+        })
+      );
+      setDispatchee(true);
+    }
     dispatch(
-      getTrainingLogs({
+      getGroupRutines({
         token,
-        clientId: user?.Client?.idClient,
-        idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
+        idGroup: user?.Client?.ClientGroups[0]?.idGroup,
       })
     );
-    dispatch(getUser({ token, userId: id }));
-    dispatch(
-      getGroupRutines({ token, idGroup: user?.Client?.ClientGroups[0].idGroup })
-    );
-  }, [dispatch, id]);
+  }, [dispatch]);
+  useEffect(() => {
+    if (user && user.Client && !dispatchee) {
+      dispatch(
+        getTrainingLogs({
+          token,
+          clientId: user?.Client?.idClient,
+          idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
+        })
+      );
+      setDispatchee(true);
+    }
+  }, [user]);
+
   console.log(trainingLogs, "traiinigLogs");
+
   useEffect(() => {
     if (rutinas) {
       const exerciseCards = getExerciseCards();
@@ -114,21 +137,16 @@ function Hoy() {
     setCurrentDate(currentDateCopy);
   };
 
-  const handlePrevRoutine = () => {
-    if (currentRoutineIndex > 0) {
-      setCurrentRoutineIndex(currentRoutineIndex - 1);
-      setCurrentDay(new Date().getUTCDay());
-      setCurrentDate(new Date());
-      setHasExercises(false);
-    }
+  const handleNextRoutine = () => {
+    setCurrentRoutineIndex((prevIndex) =>
+      prevIndex < rutinas.length - 1 ? prevIndex + 1 : 0
+    );
   };
 
-  const handleNextRoutine = () => {
-    if (currentRoutineIndex < rutinas.length - 1) {
-      setCurrentRoutineIndex(currentRoutineIndex + 1);
-      setCurrentDay(new Date().getUTCDay());
-      setCurrentDate(new Date());
-    }
+  const handlePrevRoutine = () => {
+    setCurrentRoutineIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : rutinas.length - 1
+    );
   };
 
   const getDayOfWeekString = (dayOfWeek) => {
@@ -155,10 +173,13 @@ function Hoy() {
         idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
       })
     );
-    dispatch(
-      getGroupRutines({ token, idGroup: user?.Client?.ClientGroups[0].idGroup })
-    );
     dispatch(getRutines(id));
+    dispatch(
+      getGroupRutines({
+        token,
+        idGroup: user?.Client?.ClientGroups[0]?.idGroup,
+      })
+    );
   };
 
   const handleMarkAsTrained = () => {
@@ -173,6 +194,8 @@ function Hoy() {
           idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
         })
       );
+      console.log(formattedDate, "formattedDate");
+      console.log(rutinas[currentRoutineIndex].routine.idRoutine, "idRoutine");
     } else {
       // If the day is not marked as trained, mark it
       dispatch(
@@ -273,19 +296,23 @@ function Hoy() {
   return (
     <div className="hoy-container">
       <h2 className="text-2xl font-bold mb-4">
-        {rutinas &&
-          rutinas.length > 0 &&
-          rutinas[currentRoutineIndex]?.routine?.name}
         {rutinas && rutinas.length > 1 && (
           <>
-            <LeftOutlined
-              className="cursor-pointer text-2xl"
-              onClick={handlePrevRoutine}
-            />
-            <RightOutlined
-              className="cursor-pointer text-2xl"
-              onClick={handleNextRoutine}
-            />
+            {currentRoutineIndex === 0 ? null : (
+              <LeftOutlined
+                className="cursor-pointer text-2xl"
+                onClick={handlePrevRoutine}
+              />
+            )}
+            {rutinas &&
+              rutinas.length > 0 &&
+              rutinas[currentRoutineIndex]?.routine?.name}
+            {currentRoutineIndex === rutinas.length - 2 ? null : (
+              <RightOutlined
+                className="cursor-pointer text-2xl"
+                onClick={handleNextRoutine}
+              />
+            )}
           </>
         )}
       </h2>

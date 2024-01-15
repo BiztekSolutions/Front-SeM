@@ -64,6 +64,7 @@ function Calendar({ rutinas }) {
     const configuration = formData;
     const exerciseId = formData.exerciseId;
     const fecha = new Date(currentDateModal);
+    fecha.setDate(fecha.getDate() + 1);
     const opcionesDiaSemana = { weekday: "long" };
     const diaSemana = new Intl.DateTimeFormat(
       "es-ES",

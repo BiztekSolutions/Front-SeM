@@ -152,7 +152,7 @@ function Profile() {
     const routineTrainingLogs = trainingLogs.filter(
       (log) => log.idRoutine === currentRoutineId
     );
-    console.log(routineTrainingLogs, "rutinetraining");
+
     // Obtener la fecha de inicio de la rutina y la fecha actual
     const rutinaStartDate = new Date(currentRoutine?.startDate);
 
@@ -174,7 +174,6 @@ function Profile() {
       currentDay = (currentDay + 1) % 7; // Siguiente día de la semana
     }
 
-    console.log(trainingDays, "trainingdays");
     // Contar los días de entrenamiento que han sido registrados en los training logs
 
     // Calcular el porcentaje

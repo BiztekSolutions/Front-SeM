@@ -27,14 +27,14 @@ function Hoy() {
   const [cards, setCards] = useState([]);
   const { id } = useParams();
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { isLoading } = state.rutinas;
-  const rutinas2 = state.rutinas.rutinas;
-  const { rutinaGrupal } = state.groups;
 
-  const { user, trainingLogs, message } = state.users;
+  const { isLoading } = useSelector((state) => state.rutinas);
+  const rutinas2 = useSelector((state) => state.rutinas.rutinas);
+  const { rutinaGrupal } = useSelector((state) => state.groups);
+
+  const { user, trainingLogs, message } = useSelector((state) => state.users);
   const [currentDate, setCurrentDate] = useState(new Date());
-  console.log(trainingLogs, "trainingLog");
+
   const rutinas = rutinas2.concat(rutinaGrupal);
   const [hasExercises, setHasExercises] = useState(false);
   const [isDayTrained, setIsDayTrained] = useState();
@@ -54,12 +54,15 @@ function Hoy() {
       );
       setDispatchee(true);
     }
-    dispatch(
-      getGroupRutines({
-        token,
-        idGroup: user?.Client?.ClientGroups[0]?.idGroup,
-      })
-    );
+    const idGroup = user?.Client?.ClientGroups[0]?.idGroup;
+    if (idGroup) {
+      dispatch(
+        getGroupRutines({
+          token,
+          idGroup,
+        })
+      );
+    }
   }, [dispatch]);
   useEffect(() => {
     if (user && user.Client && !dispatchee) {
@@ -73,8 +76,6 @@ function Hoy() {
       setDispatchee(true);
     }
   }, [user]);
-
-  console.log(trainingLogs, "traiinigLogs");
 
   useEffect(() => {
     if (rutinas) {
@@ -91,7 +92,7 @@ function Hoy() {
     const isDayTrained = trainingLogsRutinaActual?.some(
       (log) => log.date?.split("T")[0] === formattedDate
     );
-    console.log(trainingLogsRutinaActual, isDayTrained, "ahaha");
+
     setIsDayTrained(isDayTrained);
   }, [currentDay, currentRoutineIndex, rutinas2, trainingLogs]);
   useEffect(() => {
@@ -193,8 +194,6 @@ function Hoy() {
           idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
         })
       );
-      console.log(formattedDate, "formattedDate");
-      console.log(rutinas[currentRoutineIndex].routine.idRoutine, "idRoutine");
     } else {
       // If the day is not marked as trained, mark it
       dispatch(
@@ -217,7 +216,7 @@ function Hoy() {
     const exerciseCards = GroupExercises.reduce((acc, group) => {
       if (group.day === hoy) {
         setHasExercises(true);
-        console.log(hasExercises);
+
         group.ExerciseConfigurations?.forEach((exercise) => {
           acc.push(
             <div

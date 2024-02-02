@@ -61,7 +61,6 @@ const CustomLayout = ({ items }) => {
   const [current, setCurrent] = useState("noticias");
   const userLocal = localStorage.getItem("User");
   const userLocalParse = JSON.parse(userLocal);
-  console.log(userLocal, "id");
 
   const onClick = (e) => {
     if (e.key !== "noticias") {

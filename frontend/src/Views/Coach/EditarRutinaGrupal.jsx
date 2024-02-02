@@ -13,7 +13,7 @@ function EditarRutinasGrupal() {
   const rutinas = state.groups.rutinaGrupal;
   const { isLoading } = state.groups;
   const [dispatched, setDispatched] = useState(false);
-  console.log(rutinas, "rutina grupal");
+
   useEffect(() => {
     if (dispatched === false) {
       if (!rutinas || rutinas.length === 0) {

@@ -31,7 +31,6 @@ function Group() {
 
   useEffect(() => {
     if (!group) {
-      console.log("Entro al effect!");
       dispatch(getGroup({ token: auth.token, idGroup: idGroup }));
     }
     if (!clients || clients.length === 0) {
@@ -40,9 +39,7 @@ function Group() {
   }, [group, dispatch]);
 
   useEffect(() => {
-    console.log(message);
     if (message === "User deleted from group successfully") {
-      console.log("Entro al effect!");
       dispatch(
         showSuccessNotification(
           "Exito!",
@@ -83,7 +80,7 @@ function Group() {
   if (isLoading) return <LoadingSpinner />;
 
   if (isError) return <div>{message}</div>;
-  console.log(group);
+
   return (
     <div>
       {group && (

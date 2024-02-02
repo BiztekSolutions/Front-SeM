@@ -48,14 +48,14 @@ function Noticias() {
 
     dispatch(getClients(user.token));
   }, [dispatch, posts.Comments]);
-  console.log(posts, "posts");
+
   const foundClient = clients?.find((client) => client.idUser === user.user);
 
   const handlePostSelect = (post) => {
     setSelectedPost(post);
     setModalVisible(true);
   };
-  console.log(userLogged, "userLogged");
+
   const handleCommentSubmit = async (idPost, comment) => {
     if (!foundClient) {
       dispatch(showErrorNotification("Error", "No eres un cliente."));
@@ -72,7 +72,7 @@ function Noticias() {
       dispatch(showSuccessNotification("Éxito", "Comentario agregado."));
     }
   };
-  console.log(selectedPost, "selectedPost");
+
   const handlePostSubmit = (values) => {
     dispatch(
       addOrUpdatePost({
@@ -105,7 +105,6 @@ function Noticias() {
     }, 1000);
   }
   function handleDeleteComment(commentId) {
-    console.log(commentId, "commentId");
     dispatch(deleteComment(commentId));
     setTimeout(() => {
       dispatch(fetchPosts());
@@ -207,7 +206,9 @@ function Noticias() {
                 <Button
                   type="primary"
                   htmlType="button"
-                  onClick={() => handleCommentSubmit(selectedPost.idPost, comment)}
+                  onClick={() =>
+                    handleCommentSubmit(selectedPost.idPost, comment)
+                  }
                   className="bg-blue-500 text-white px-4 py-2 rounded-md"
                 >
                   Comentar
@@ -231,7 +232,9 @@ function Noticias() {
                             <Button
                               type="link"
                               danger
-                              onClick={() => handleDeleteComment(comment.idComment)}
+                              onClick={() =>
+                                handleDeleteComment(comment.idComment)
+                              }
                               icon={<DeleteOutlined />}
                             ></Button>
                           </Tooltip>

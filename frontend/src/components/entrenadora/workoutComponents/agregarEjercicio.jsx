@@ -69,7 +69,6 @@ function AgregarEjercicio() {
   }
 
   function handleExerciseTypeChange(value) {
-    console.log(value, "value");
     setSelectedExerciseType(value);
     setFormData((prevData) => ({
       ...prevData,

@@ -13,7 +13,6 @@ const DeleteGroups = ({ groupName, idGroup }) => {
     setModalVisible(false);
   };
 
-  console.log("entreeeee", groupName, idGroup);
   return (
     <>
       <FcFullTrash

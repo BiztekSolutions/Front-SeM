@@ -16,7 +16,7 @@ export const deleteComment = createAsyncThunk(
     const userString = localStorage.getItem("User");
     const user = JSON.parse(userString);
     const token = user.token;
-    console.log(commentId, "commentId");
+
     return postService.deleteComment(commentId, token);
   }
 );
@@ -114,7 +114,9 @@ export const postsSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.posts = state.posts.filter((post) => post.idPost !== action.payload);
+        state.posts = state.posts.filter(
+          (post) => post.idPost !== action.payload
+        );
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.status = "failed";
@@ -127,7 +129,9 @@ export const postsSlice = createSlice({
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.status = "succeeded";
         const { idPost, commentId } = action.payload;
-        const postIndex = state.posts.findIndex((post) => post.idPost === idPost);
+        const postIndex = state.posts.findIndex(
+          (post) => post.idPost === idPost
+        );
         if (postIndex !== -1) {
           state.posts[postIndex].Comments = state.posts[
             postIndex

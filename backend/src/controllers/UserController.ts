@@ -48,19 +48,17 @@ export const getTrainingDays = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.clientId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
-    console.log(req.params, 'req.params');
 
     const client = await Client.findByPk(userId);
 
     if (!client) {
       return res.status(400).json({ message: 'Client not found' });
     }
-    console.log(client.trainingLogs, 'client.trainingLogs');
 
     const trainingLogs = client.trainingLogs;
     return res.status(200).json({ message: 'Training logs retrieved successfully', trainingLogs: trainingLogs });
   } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -69,9 +67,6 @@ export const markDayAsTrained = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.clientId as string);
     const { date, idRoutine } = req.body;
     const formattedDate = new Date(date);
-    console.log(date, 'dateeeeeeeeee');
-
-    console.log(formattedDate, 'req.bodyyyyy');
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
     if (!date) return res.status(400).json({ message: 'Date is required in the request body' });
@@ -89,12 +84,8 @@ export const markDayAsTrained = async (req: Request, res: Response) => {
       trainingLogs: updatedTrainingLogs,
     });
 
-    console.log(client, 'client');
-
     return res.status(200).json({ message: 'Day marked as trained successfully' });
   } catch (error: any) {
-    console.log(error, 'error');
-
     return res.status(500).json({ error: error.message });
   }
 };
@@ -104,7 +95,6 @@ export const markDayAsUntrained = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.clientId as string);
     const { date, idRoutine } = req.body;
     const formattedDate = new Date(date);
-    console.log(idRoutine, 'idRoutine');
 
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
     if (!date) return res.status(400).json({ message: 'Date is required in the request body' });
@@ -119,7 +109,6 @@ export const markDayAsUntrained = async (req: Request, res: Response) => {
     client.trainingLogs = client.trainingLogs.filter(
       (log) => new Date(log.date).getTime() !== formattedDate.getTime() || log.idRoutine !== idRoutine
     );
-    console.log(client.trainingLogs, 'client.trainingLogs');
 
     await client.save();
 
@@ -182,12 +171,10 @@ export const getUserRoutines = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId as string);
-    console.log(userId, 'userId');
 
     if (!userId || isNaN(userId)) {
       return res.status(400).json({ error: 'Invalid user id' });
     }
-    console.log(req.body, 'req.body');
 
     // Validar datos antes de la actualización
     const { name, lastname, avatar } = req.body.newUser;
@@ -195,7 +182,7 @@ export const updateUser = async (req: Request, res: Response) => {
     if (!name && !lastname && !avatar) {
       return res.status(400).json({ error: 'No data provided for update' });
     }
-    console.log(req.body, 'req.body');
+
     // Actualizar solo los campos proporcionados
     const updatedUser = await User.update({ name, lastname, avatar }, { where: { idUser: userId } });
 

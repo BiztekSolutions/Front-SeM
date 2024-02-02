@@ -36,7 +36,6 @@ export const getGroupRutines = createAsyncThunk(
   "getGroupRutines",
   async (data, thunkAPI) => {
     try {
-      console.log(data, "data");
       return await groupService.getGroupRutines(data.token, data.idGroup);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -77,7 +76,6 @@ export const getGroups = createAsyncThunk(
 export const setRoutineGroup = createAsyncThunk(
   "setRoutineGroup",
   async (data, thunkAPI) => {
-    console.log(data);
     try {
       return await groupService.setRoutineGroup(data.token, data);
     } catch (error) {

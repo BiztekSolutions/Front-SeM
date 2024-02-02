@@ -47,7 +47,7 @@ function EditarRutinas({ rutinas }) {
     exercises?.filter((exercise) =>
       exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  console.log(rutinas, "rutinasssss");
+
   useEffect(() => {
     if (message === "Routine updated successfully") {
       dispatch(
@@ -98,7 +98,7 @@ function EditarRutinas({ rutinas }) {
           }
         }
       });
-      console.log(editRoutine, "editRoutine");
+
       const finalData = editRoutine && {
         name: editRoutine.name,
         startDate: moment.utc(editRoutine.startDate).format("YYYY-MM-DD"),
@@ -107,7 +107,7 @@ function EditarRutinas({ rutinas }) {
         objective: editRoutine.objective,
         observation: editRoutine.observation,
       };
-      console.log(finalData, "finalData");
+
       setDurationInWeeks(
         moment(editRoutine.endDate).diff(moment(editRoutine.startDate), "weeks")
       );
@@ -131,14 +131,11 @@ function EditarRutinas({ rutinas }) {
   const handleDurationChange = (e) => {
     const value = e.target.value;
     if (!isNaN(value) && parseFloat(value) >= 0) {
-      console.log(value);
       setDurationInWeeks(value);
       setFormData((prevFormData) => ({
         ...prevFormData,
         endDate: moment(prevFormData.startDate).add(value, "weeks").format(),
       }));
-      console.log(formData.startDate);
-      console.log(formData.endDate);
     }
   };
 
@@ -290,8 +287,6 @@ function EditarRutinas({ rutinas }) {
   };
 
   const moveExercise = (day, currentIndex, newIndex) => {
-    console.log(day, currentIndex, newIndex);
-    console.log(typeof currentIndex, typeof newIndex);
     if (
       newIndex >= 0 &&
       newIndex < Object.keys(formData.exercisesGroup[day]).length

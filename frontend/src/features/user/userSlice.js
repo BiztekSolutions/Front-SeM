@@ -83,7 +83,6 @@ export const getUser = createAsyncThunk("getUser", async (data, thunkAPI) => {
       const token = user.token;
       return await userService.getUser(token, data.userId);
     } else {
-      console.log(data.token, "hay token");
       return await userService.getUser(data.token, data.userId);
     }
   } catch (error) {
@@ -96,11 +95,9 @@ export const getUsers = createAsyncThunk(
   async (token, thunkAPI) => {
     try {
       if (!token) {
-        console.log("no hay token");
         const token = user.token;
         return await userService.getUsers(token);
       } else {
-        console.log(token, "hay token");
         return await userService.getUsers(token);
       }
     } catch (error) {
@@ -187,7 +184,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        console.log("cargando usuarios", action.payload.users);
+
         state.message = action.payload.message;
         state.users = action.payload.users;
       })

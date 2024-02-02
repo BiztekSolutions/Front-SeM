@@ -9,7 +9,7 @@ const getRutines = async (userId, token) => {
       },
     });
     const userRoutines = response.data;
-    console.log(userRoutines, "userRoutines");
+
     // Obtener un array de promesas para las solicitudes de rutinas individuales
     const routinePromises = userRoutines.routines.map(async (routine) => {
       const routineResponse = await axios.get(
@@ -20,7 +20,7 @@ const getRutines = async (userId, token) => {
           },
         }
       );
-      console.log(routineResponse.data, "routineResponse.data");
+
       return routineResponse.data;
     });
 

@@ -20,7 +20,6 @@ export const createGroup = async (req: Request, res: Response) => {
     const transaction = await sequelize.transaction();
     try {
       const { groupName, selectedUsers } = req.body;
-      console.log(req.body, 'req.body');
 
       if (!groupName) {
         return res.status(400).json({ message: 'Group name is required in the request body' });
@@ -36,22 +35,16 @@ export const createGroup = async (req: Request, res: Response) => {
 
       // Asociar clientes al grupo
       if (group.idGroup) {
-        console.log(group.idGroup, 'group.idGroup');
-        console.log(selectedUsers, 'selectedUsers');
-
         for (const idClient of selectedUsers) {
-          console.log(typeof idClient, 'idClient');
-
           const client = await Client.findByPk(idClient); // Obtener instancia de Client
 
           if (client) {
             await group.addClient(client, { transaction: transaction });
           } else {
-            console.log(`Client with id ${idClient} not found`);
+            res.status(400).json({ message: `Client with id ${idClient} not found`, group });
           }
         }
       } else {
-        console.log('No se ha creado el grupo');
       }
 
       // Commit de la transacción
@@ -75,7 +68,6 @@ export const createGroup = async (req: Request, res: Response) => {
 export const getGroup = async (req: Request, res: Response) => {
   try {
     const idGroup = parseInt(req.params.idGroup, 10);
-    console.log(idGroup, 'idGroup');
 
     const group = await get(idGroup);
 
@@ -132,7 +124,6 @@ export const setRoutineGroup = async (req: Request, res: Response) => {
   try {
     //idClient aca esta mal, es el idUser el que esta llegando
     const { name, observation, objective, exercisesGroup, idGroup, startDate, endDate } = req.body;
-    console.log(req.body, 'req.body');
 
     const transaction = await sequelize.transaction();
 
@@ -235,15 +226,12 @@ export const deleteGroup = async (req: Request, res: Response) => {
 
 export const deleteUserFromGroup = async (req: Request, res: Response) => {
   try {
-    console.log(req.body, 'req.body');
     const idGroup = parseInt(req.params.idGroup, 10);
     const { idClient } = req.body;
 
     const group = await Group.findByPk(idGroup);
 
     if (!group) {
-      console.log('Group not found');
-
       return res.status(404).json({ message: 'Group not found' });
     }
 
@@ -255,8 +243,6 @@ export const deleteUserFromGroup = async (req: Request, res: Response) => {
       await clientGroup.destroy();
       return res.status(200).json({ message: 'User deleted from group successfully' });
     } else {
-      console.log('User not found in the group');
-
       return res.status(404).json({ message: 'User not found in the group' });
     }
   } catch (error) {
@@ -273,16 +259,12 @@ export const addUserToGroup = async (req: Request, res: Response) => {
     const group = await Group.findByPk(idGroup);
 
     if (!group) {
-      console.log('Group not found');
-
       return res.status(404).json({ message: 'Group not found' });
     }
 
     const client = await Client.findByPk(idClient);
 
     if (!client) {
-      console.log('Client not found');
-
       return res.status(404).json({ message: 'Client not found' });
     }
 
@@ -291,8 +273,6 @@ export const addUserToGroup = async (req: Request, res: Response) => {
     });
 
     if (clientGroup) {
-      console.log('User already in the group');
-
       return res.status(404).json({ message: 'User already in the group' });
     }
 

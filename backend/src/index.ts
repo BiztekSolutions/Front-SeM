@@ -20,6 +20,7 @@ import GroupExercise from './models/GroupExercise';
 import ExerciseConfiguration from './models/ExerciseConfiguration';
 import ClientHasRoutine from './models/ClientHasRoutine';
 import ClientGroup from './models/ClientGroup';
+import serverless from 'serverless-http';
 
 const app: Application = express();
 const PORT: number = 3000;
@@ -81,6 +82,7 @@ Client.hasMany(Comment, { foreignKey: 'idClient' });
 Post.hasMany(Comment, { foreignKey: 'idPost', onDelete: 'CASCADE', hooks: true });
 Comment.belongsTo(Post, { foreignKey: 'idPost', onDelete: 'CASCADE', hooks: true });
 
+
 sequelize
   .sync({ force: false })
   .then(() => {
@@ -102,4 +104,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 app.use('/', router);
 
-export default app;
+module.exports.handler = serverless(app);

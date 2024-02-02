@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const AuthRoute_1 = require("./AuthRoute");
+const UsersRoute_1 = __importDefault(require("./UsersRoute"));
+const RoutineRoute_1 = __importDefault(require("./RoutineRoute"));
+const ExercisesRoute_1 = __importDefault(require("./ExercisesRoute"));
+const PostRoute_1 = __importDefault(require("./PostRoute"));
+const CommentRoute_1 = __importDefault(require("./CommentRoute"));
+const validateToken_1 = require("../../../utils/validateToken");
+const GroupRoute_1 = __importDefault(require("./GroupRoute"));
+const CoachRoute_1 = __importDefault(require("./CoachRoute"));
+const router = (0, express_1.Router)();
+router.use('/api/v1/auth', AuthRoute_1.authRouter);
+router.use('/api/v1/groups', GroupRoute_1.default);
+router.use('/api/v1/users', UsersRoute_1.default);
+router.use('/api/v1/coach', CoachRoute_1.default);
+router.use('/api/v1/exercises', ExercisesRoute_1.default);
+router.use('/api/v1/routines', RoutineRoute_1.default);
+router.use('/api/v1/posts', PostRoute_1.default);
+router.use('/api/v1/comments', validateToken_1.authenticateToken, CommentRoute_1.default);
+exports.default = router;

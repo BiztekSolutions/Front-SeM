@@ -17,7 +17,6 @@ import {
   markDayAsUntrained,
 } from "../../features/user/userSlice";
 import { showSuccessNotification } from "../../features/layout/layoutSlice";
-import { set } from "date-fns";
 
 function Hoy() {
   const [currentDay, setCurrentDay] = useState(new Date().getUTCDay());

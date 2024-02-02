@@ -6,7 +6,7 @@ import Coach from './Coach';
 import Group from './Group';
 import Routine from './Routine';
 import Exercise from './Exercise';
-import RoutineHasExercise from './RoutineHasExercise';
+import GroupExercise from './GroupExercise';
 import RoutineConfiguration from './ExerciseConfiguration';
 
 // USER RELATIONS
@@ -33,10 +33,9 @@ Routine.belongsToMany(Client, { through: 'ClientHasRoutine' });
 //Group.hasOne(Routine);
 Routine.hasOne(Group);
 
-// ROUTINE RELATIONS
-Routine.belongsToMany(Exercise, { through: RoutineHasExercise });
-Exercise.belongsToMany(Routine, { through: RoutineHasExercise });
-RoutineHasExercise.belongsTo(RoutineConfiguration);
+Routine.hasMany(GroupExercise, { foreignKey: 'idRoutine' });
+GroupExercise.belongsTo(Routine, { foreignKey: 'idRoutine', onDelete: 'CASCADE', hooks: true });
+
 //RoutineConfiguration.belongsTo(RoutineHasExercise);
 
-export { User, Session, Credential, Client, Coach, Group, Routine, Exercise, RoutineHasExercise, RoutineConfiguration };
+export { User, Session, Credential, Client, Coach, Group, Routine, Exercise, GroupExercise, RoutineConfiguration };

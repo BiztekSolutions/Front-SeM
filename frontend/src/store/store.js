@@ -6,7 +6,16 @@ import { layoutSlice } from "@/features/layout/layoutSlice";
 import { postsSlice } from "@/features/posts/postsSlice";
 import { exerciseSlice } from "@/features/exercises/exerciseSlice";
 import { groupSlice } from "@/features/group/groupSlice";
-import { persistStore, persistReducer } from "redux-persist";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 // Configurar la persistencia para el slice auth
@@ -27,6 +36,12 @@ const rootReducer = {
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 const persistor = persistStore(store);

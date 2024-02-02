@@ -1,4 +1,4 @@
-import { Routine, Exercise, RoutineHasExercise, RoutineConfiguration } from '../models/Relations';
+import { Routine, Exercise, GroupExercise, RoutineConfiguration, Group } from '../models/Relations';
 
 export const list = async () => {
   try {
@@ -14,7 +14,7 @@ export const get = async (idRoutine: number) => {
       where: { idRoutine },
       include: [
         {
-          model: RoutineHasExercise,
+          model: GroupExercise,
           foreignKey: 'idRoutine',
           attributes: { exclude: ['idRoutine', 'createdAt', 'updatedAt'] },
           include: [

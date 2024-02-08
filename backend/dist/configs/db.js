@@ -1,12 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const sequelize_1 = require("sequelize");
-const { DB_DEPLOY } = process.env;
+const DB_DEPLOY = "postgres://fl0user:F1sRvJ2lNaDy@ep-tight-meadow-70146425.us-east-2.aws.neon.fl0.io:5432/salud-en-movimiento?sslmode=require";
 const sequelize = new sequelize_1.Sequelize(DB_DEPLOY, {
     dialect: 'postgres',
 });

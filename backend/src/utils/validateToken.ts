@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-dotenv.config();
-const { SECRET_KEY } = process.env;
+
+const SECRET_KEY = 'process.env';
 //TODO: Esta funcion solo valida si el token es valido, no que el token este o no en la DB.
 // Terminar de implementar.
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {

@@ -13,13 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.refresh = exports.logout = exports.login = exports.register = void 0;
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const AuthService_1 = require("../services/AuthService");
 const SessionService_1 = require("../services/SessionService");
-const { SECRET_KEY } = process.env;
+const SECRET_KEY = "process.env";
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {

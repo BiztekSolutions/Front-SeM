@@ -5,9 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const { SECRET_KEY } = process.env;
+const SECRET_KEY = 'process.env';
 //TODO: Esta funcion solo valida si el token es valido, no que el token este o no en la DB.
 // Terminar de implementar.
 const authenticateToken = (req, res, next) => {

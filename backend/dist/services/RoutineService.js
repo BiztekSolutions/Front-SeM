@@ -26,7 +26,7 @@ const get = (idRoutine) => __awaiter(void 0, void 0, void 0, function* () {
             where: { idRoutine },
             include: [
                 {
-                    model: Relations_1.RoutineHasExercise,
+                    model: Relations_1.GroupExercise,
                     foreignKey: 'idRoutine',
                     attributes: { exclude: ['idRoutine', 'createdAt', 'updatedAt'] },
                     include: [

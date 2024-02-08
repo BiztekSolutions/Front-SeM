@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { isRegistered, create } from '../services/AuthService';
 import { create as createSession, remove, find } from '../services/SessionService';
-const { SECRET_KEY } = process.env;
+const SECRET_KEY = "process.env";
 
 export const register = async (req: Request, res: Response) => {
   try {

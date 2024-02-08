@@ -175,9 +175,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sample-app/dev/1706883491616-2024-02-02T14:18:11.616Z/sample-app.zip"
+                "S3Key": "serverless/sample-app/dev/1706886606230-2024-02-02T15:10:06.230Z/sample-app.zip"
               },
-              "Handler": "index/index.handler",
+              "Handler": "dist/index.handler",
               "Runtime": "nodejs20.x",
               "FunctionName": "sample-app-dev-app",
               "MemorySize": 128,
@@ -193,14 +193,14 @@
               "AppLogGroup"
             ]
           },
-          "AppLambdaVersionL5tic0IY3OSE63ulrugL6TnNgGjrirymayWeAx4": {
+          "AppLambdaVersionFlPME4bGzFlXtozebO6lAPtyr9s302Zjuy3tTuY0CA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppLambdaFunction"
               },
-              "CodeSha256": "ICwOlx+XMV8qgUZPzkrl0YbBy8BBEddbd7Y87d3+jrY="
+              "CodeSha256": "3Cp5/MP35y2+P1pLsS4/HiLF78c6yfFFY1zZ6nMPSzg="
             }
           },
           "ApiGatewayRestApi": {
@@ -325,7 +325,7 @@
               "AppLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1706883453207": {
+          "ApiGatewayDeployment1706886599412": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -388,7 +388,7 @@
           "AppLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppLambdaVersionL5tic0IY3OSE63ulrugL6TnNgGjrirymayWeAx4"
+              "Ref": "AppLambdaVersionFlPME4bGzFlXtozebO6lAPtyr9s302Zjuy3tTuY0CA"
             },
             "Export": {
               "Name": "sls-sample-app-dev-AppLambdaFunctionQualifiedArn"
@@ -509,13 +509,13 @@
     "pluginsData": {},
     "functions": {
       "app": {
-        "handler": "index/index.handler",
+        "handler": "dist/index.handler",
         "events": [
           {
             "http": "ANY /"
           },
           {
-            "http": "ANY {proxy+}"
+            "http": "ANY /{proxy+}"
           }
         ],
         "name": "sample-app-dev-app",
@@ -524,7 +524,7 @@
         "timeout": 6,
         "runtime": "nodejs20.x",
         "vpc": {},
-        "versionLogicalId": "AppLambdaVersionL5tic0IY3OSE63ulrugL6TnNgGjrirymayWeAx4"
+        "versionLogicalId": "AppLambdaVersionFlPME4bGzFlXtozebO6lAPtyr9s302Zjuy3tTuY0CA"
       }
     },
     "configValidationMode": "warn",
@@ -543,7 +543,7 @@
     "artifact": "C:\\Users\\arian\\Desktop\\Biztek Projects\\Front-SeM\\backend\\.serverless\\sample-app.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/sample-app/dev/1706883491616-2024-02-02T14:18:11.616Z",
+    "artifactDirectoryName": "serverless/sample-app/dev/1706886606230-2024-02-02T15:10:06.230Z",
     "artifact": "sample-app.zip"
   }
 }

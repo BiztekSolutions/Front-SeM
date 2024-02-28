@@ -1,9 +1,11 @@
 import WorkoutCard from "./WorkoutCard";
 import { v4 as uuidv4 } from "uuid";
 import "./WorkoutContainer.css";
+import { base_url } from "@/utils/utilities";
+
 function WorkoutContainer({ workouts, setWorkouts }) {
   function deleteCard(id) {
-    fetch(`http://localhost:3000/workouts/${id}`, {
+    fetch(`${base_url}/workouts/${id}`, {
       method: "DELETE",
     })
       .then((resp) => resp.json())

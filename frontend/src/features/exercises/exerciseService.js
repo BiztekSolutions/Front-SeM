@@ -1,8 +1,8 @@
 import axios from "axios";
-import { base_url } from "../../utils/utilities";
+import { base_url } from "@/utils/utilities";
 
 const getAllExercises = async () => {
-  const response = await axios.get(`http://localhost:3000/api/v1/exercises`);
+  const response = await axios.get(`${base_url}/exercises`);
   return response.data;
 };
 

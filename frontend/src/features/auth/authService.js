@@ -1,8 +1,9 @@
 import axios from "axios";
+import { base_url } from "@/utils/utilities";
 
 const login = async (user) => {
   const response = await axios.post(
-    `http://localhost:3000/api/v1/auth/login`,
+    `${base_url}/auth/login`,
     user
   );
 
@@ -11,7 +12,7 @@ const login = async (user) => {
 
 const logout = async (userId, token) => {
   const response = await axios.get(
-    `http://localhost:3000/api/v1/logout/${userId}`,
+    `${base_url}/logout/${userId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,7 +24,7 @@ const logout = async (userId, token) => {
 
 const register = async (data) => {
   const response = await axios.post(
-    `http://localhost:3000/api/v1/auth/register`,
+    `${base_url}/auth/register`,
     data
   );
 

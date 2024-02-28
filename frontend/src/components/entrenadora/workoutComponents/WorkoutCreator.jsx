@@ -94,7 +94,7 @@ function WorkoutCreator() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData, "entrando al submit");
+
     if (isGroupsPage) {
       dispatch(
         setRoutineGroup({
@@ -182,10 +182,10 @@ function WorkoutCreator() {
     const alreadyExists = Object.values(formData.exercisesGroup[day]).some(
       (exercise) => exercise.idExercise === draggedExercise.idExercise
     );
-    console.log(alreadyExists);
+
     if (!alreadyExists) {
       const newIndex = Object.values(formData.exercisesGroup[day]).length;
-      console.log(newIndex, "newIndex");
+
       const exerciseDrop = {
         idExercise: draggedExercise.idExercise,
         name: draggedExercise.name,
@@ -198,7 +198,7 @@ function WorkoutCreator() {
         image1: draggedExercise.image1,
         image2: draggedExercise.image2,
       };
-      console.log(formData, "formData antes");
+
       setFormData((prevFormData) => ({
         ...prevFormData,
         exercisesGroup: {
@@ -209,7 +209,6 @@ function WorkoutCreator() {
           },
         },
       }));
-      console.log(formData, "formData despues");
     } else {
       alert("El ejercicio ya existe en este día");
     }
@@ -233,7 +232,6 @@ function WorkoutCreator() {
         },
       },
     }));
-    console.log(formData, "despues del handleseries");
   };
 
   const handleRepeticiones = (event, day, index) => {
@@ -273,9 +271,6 @@ function WorkoutCreator() {
         },
       },
     }));
-    setTimeout(() => {
-      console.log("This message will be logged after 3 seconds", formData);
-    }, 3000);
   };
   const handleObjectiveChange = (event) => {
     const value = event.target.value;
@@ -297,8 +292,6 @@ function WorkoutCreator() {
   };
 
   const moveExercise = (day, currentIndex, newIndex) => {
-    console.log(day, currentIndex, newIndex);
-    console.log(typeof currentIndex, typeof newIndex);
     if (
       newIndex >= 0 &&
       newIndex < Object.keys(formData.exercisesGroup[day]).length

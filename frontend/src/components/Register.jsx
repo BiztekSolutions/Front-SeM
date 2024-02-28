@@ -146,7 +146,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
           "User",
           JSON.stringify({ user: userId, token: token })
         );
-        console.log(token, "token");
+
         dispatch(getCoaches(token));
         dispatch(getUsers(token));
       }

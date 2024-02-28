@@ -5,8 +5,6 @@ import Comment from '../models/Comment';
 export const createComment = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   const idPost = req.params.idPost;
   const { content, userId } = req.body;
-  console.log('content', content);
-  console.log('idPost', idPost);
 
   try {
     const comment = await Comment.create({ content, idPost, idClient: userId });
@@ -20,7 +18,6 @@ export const createComment = async (req: Request, res: Response): Promise<Respon
 
 export const deleteComment = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   const commentId: number = parseInt(req.params.commentId, 10);
-  console.log('commentId', commentId);
 
   try {
     const comment = await Comment.findByPk(commentId);

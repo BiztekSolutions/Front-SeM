@@ -31,7 +31,7 @@ function Rutinas() {
       user.Client.ClientGroups.length > 0
     ) {
       const idGroup = user?.Client?.ClientGroups[0]?.idGroup;
-      if (dispatched1 === false) {
+      if (dispatched1 === false && idGroup !== null && idGroup !== undefined) {
         if (!rutinaGrupal || rutinaGrupal.length === 0) {
           dispatch(getGroupRutines({ token, idGroup }));
           setDispatched(true);

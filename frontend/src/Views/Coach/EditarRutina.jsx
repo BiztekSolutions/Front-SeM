@@ -11,7 +11,7 @@ function EditarRutinasIndividual() {
   const state = useSelector((state) => state);
   const { rutinas, isLoading } = state.rutinas;
   const [dispatched, setDispatched] = useState(false);
-  console.log(rutinas, "rutina individual");
+
   useEffect(() => {
     if (dispatched === false) {
       if (!rutinas || rutinas.length === 0) {

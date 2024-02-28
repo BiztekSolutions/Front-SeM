@@ -68,7 +68,7 @@ const getGroupRutines = async (token, idGroup) => {
         },
       }
     );
-    console.log(routineResponse.data, "routineResponse.data");
+
     return routineResponse.data;
   });
 

@@ -3,6 +3,8 @@ import axios from "axios";
 import AddedExerciseContainer from "./AddedExerciseContainer";
 import WorkoutEditForm from "./WorkoutEditForm";
 import { useParams } from "react-router-dom";
+import { base_url } from "@/utils/utilities";
+
 function Workout({ exercises = {}, workouts = {}, setWorkouts = {} }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [workout, setWorkout] = useState({ exercises: [] });
@@ -16,7 +18,7 @@ function Workout({ exercises = {}, workouts = {}, setWorkouts = {} }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/workouts/${id}`)
+      .get(`${base_url}/workouts/${id}`)
       .then((resp) => setWorkout(resp.data))
       .catch(console.error);
   }, [id]);
@@ -24,7 +26,7 @@ function Workout({ exercises = {}, workouts = {}, setWorkouts = {} }) {
   async function handleEditWorkout(workout, data) {
     try {
       const response = await axios.patch(
-        `http://localhost:3000/workouts/${workout.id}`,
+        `${base_url}/workouts/${workout.id}`,
         data
       );
       const updatedWorkouts = workouts.map((workout) => {

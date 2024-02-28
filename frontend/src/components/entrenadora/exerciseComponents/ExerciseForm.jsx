@@ -32,11 +32,10 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
         ? formData.progressWeight + (currentWeight - initialWeight)
         : 0;
 
-    console.log(formData, "formData");
     onSubmit(formData);
     closeModal();
   }
-  console.log(exercise, "exercise");
+
   return (
     <form
       className="py-2 w-1/2 m-auto rounded-lg flex flex-wrap justify-center gap-5"

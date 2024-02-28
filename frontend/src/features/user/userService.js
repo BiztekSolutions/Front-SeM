@@ -11,7 +11,6 @@ const updateUser = async (data) => {
 };
 
 const getUsers = async (token) => {
-  console.log("estoy pidiendo usuarios");
   const response = await axios.get(`${base_url}/users`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -100,7 +99,6 @@ const getTrainingLogs = async (token, clientId, idRoutine) => {
 };
 
 const markDayAsUntrained = async (clientId, date, idRoutine) => {
-  console.log(date, "dateeeeeeeeeee");
   const response = await axios.delete(
     `${base_url}/users/entrenamientos/${clientId}`,
     {

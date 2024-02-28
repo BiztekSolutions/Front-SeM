@@ -45,7 +45,6 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
 
 export const createPost = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   const { title, content, userId } = req.body;
-  console.log('userId', userId);
 
   try {
     const client = await Client.findOne({ where: { idUser: userId } });

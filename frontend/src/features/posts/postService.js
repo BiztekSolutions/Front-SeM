@@ -1,6 +1,7 @@
 import axios from "axios";
+import { base_url } from "@/utils/utilities";
 
-const API_URL = "http://localhost:3000/api/v1/posts";
+const API_URL = `${base_url}/posts`;
 const user = JSON.parse(localStorage.getItem("User"));
 
 const postService = {
@@ -20,7 +21,7 @@ const postService = {
   addCommentToPost: async (idPost, comment, idClient, token) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/v1/comments/${idPost}`,
+        `${base_url}/comments/${idPost}`,
         {
           content: comment,
           userId: idClient,
@@ -40,7 +41,7 @@ const postService = {
   deleteComment: async (commentId, token) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/v1/comments/${commentId}`,
+        `${base_url}/comments/${commentId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -56,7 +57,7 @@ const postService = {
   deletePost: async (idPost, token) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/v1/posts/${idPost}`,
+        `${base_url}/posts/${idPost}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,7 +74,7 @@ const postService = {
   addPost: async (newPost, token) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/posts",
+        `${base_url}/posts`,
         {
           ...newPost,
           userId: user.user,

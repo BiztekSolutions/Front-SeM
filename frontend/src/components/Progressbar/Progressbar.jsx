@@ -3,7 +3,6 @@ import "react-circular-progressbar/dist/styles.css";
 import "./Progressbar.module.css";
 
 const Progressbar = ({ percentage }) => {
-  console.log(percentage, "[ercentage");
   return (
     <div
       className="percentage-circle-container"

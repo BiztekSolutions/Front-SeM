@@ -20,7 +20,7 @@ function UserList() {
   const { users, clients, isLoading, isError } = useSelector(
     (state) => state.users
   );
-  console.log(users, clients, isLoading, isError, "sasda");
+
   const user = JSON.parse(localStorage.getItem("User"));
 
   useEffect(() => {

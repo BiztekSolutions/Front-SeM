@@ -79,8 +79,6 @@ export const createRoutine = async (req: Request, res: Response) => {
 };
 
 export const updateRoutine = async (req: Request, res: Response) => {
-  console.log('ESTOY UPDATEANDO');
-
   try {
     const routineId = parseInt(req.params.routineId as string);
     if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
@@ -194,12 +192,8 @@ export const updateRoutine = async (req: Request, res: Response) => {
 };
 
 export const updateRoutineConfiguration = async (req: Request, res: Response) => {
-  console.log('ESTOY UPDATEANDO CONFIGURACIÓN DE EJERCICIO EN RUTINA');
-
   try {
     const routineId = parseInt(req.params.routineId as string);
-    console.log(routineId, 'routineId');
-    console.log(req.body, 'req.body');
 
     if (!routineId || isNaN(routineId)) return res.status(400).json({ message: 'Routine id is required' });
 
@@ -256,7 +250,6 @@ export const updateRoutineConfiguration = async (req: Request, res: Response) =>
       if (!exerciseConfiguration) {
         return res.status(404).json({ message: 'Exercise Configuration not found for the specified exercise and day' });
       }
-      console.log(configuration, 'configurationnnnnnnnnnnnnnnnnnnnnnnnnnnn');
 
       const updatedProperties = Object.keys(configuration).reduce((acc, key) => {
         if (

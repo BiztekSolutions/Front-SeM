@@ -578,11 +578,7 @@ input.form-control:focus {
   .borde-inf {
     justify-content: left !important;
   }
-
-  .derechos {
-    font-size: 0.7rem;
-  }
-
+  
   .fawpp {
     height: auto !important;
     width: 85px !important;

@@ -55,7 +55,7 @@ function ContactForm() {
             className="border border-customOrange rounded-md"
           />
         </div>
-        <button type="submit" className="bg-blue-500 py-2 px-4 rounded-md mt-4">
+        <button type="submit" className="bg-customOrange py-2 px-4 rounded-md mt-4">
           Enviar
         </button>
       </form>

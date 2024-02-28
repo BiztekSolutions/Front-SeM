@@ -109,11 +109,11 @@ const Footer = () => {
         </div>
         <a
           href="https://lefelink.com/bizteksolutions/"
-          className="derechos"
+          className="text-customOrange font-light hover:text-white transition-colors duration-300 cursor-pointer"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Todos los derechos reservados | Biztek Solutions
+          © {new Date().getFullYear()} Biztek Solutions | Todos los derechos reservados.
         </a>
         <Link
           className="h-12 w-12 mb-40 ic-up cursor-pointer"

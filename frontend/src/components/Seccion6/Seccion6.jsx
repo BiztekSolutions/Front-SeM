@@ -1,4 +1,4 @@
-import ImgSeM from "../../assets/SeM.png";
+import ImgSeM from "@/assets/SeM.png";
 import { Link } from "react-scroll";
 
 function Seccion6() {

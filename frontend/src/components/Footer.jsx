@@ -1,6 +1,7 @@
 import wppLogo from "../assets/wpp-orange.png";
 import { Link } from "react-scroll";
-import iconoHaciaArriba from "../assets/iconHaciaArriba.png";
+import UpCircleTwoTone from "@ant-design/icons/UpCircleTwoTone";
+
 const Footer = () => {
   //@TODO: Optimizacion: react-scroll se puede volar y reemplazar por useRef de React directamente.
   function redirectToWhatsapp() {
@@ -120,7 +121,10 @@ const Footer = () => {
           smooth={true}
           duration={1000}
         >
-          <img src={iconoHaciaArriba} alt="icono hacia arriba" className="" />
+          <UpCircleTwoTone
+            style={{ fontSize: "32px" }}
+            twoToneColor={"#ff7f30"}
+          />
         </Link>
       </div>
     </div>

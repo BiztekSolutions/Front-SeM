@@ -1,9 +1,8 @@
-import { useRef } from "react";
-import videoFondo from "../../assets/video.mp4";
+import exerciseVideo from "@/assets/exerciseVideo.gif";
+
 import { Link } from "react-scroll";
 
 const Rutinas = () => {
-  const videoRef = useRef(null);
 
   return (
     <div className="landingClassForCarousel">
@@ -20,16 +19,10 @@ const Rutinas = () => {
         <div style={{ position: "relative", overflow: "hidden" }}>
           <div className="video-carousel-inner">
             <div className="carousel-item video-carousel-item active">
-              <video
-                ref={videoRef}
-                id="video1"
+              <img
+                src={exerciseVideo}
                 className="img-fluid custom-video"
-                autoPlay
-                loop
-                muted
-              >
-                <source src={videoFondo} type="video/mp4" loop />
-              </video>
+              />
             </div>
           </div>
         </div>

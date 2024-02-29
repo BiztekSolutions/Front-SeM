@@ -697,10 +697,6 @@ input.form-control:focus {
   }
 }
 
-.iniSesion {
-  cursor: pointer !important;
-}
-
 @media (max-width: 400px) {
   .ic-up {
     margin-bottom: 35% !important;

@@ -18,7 +18,7 @@ function ContactForm() {
         Coloca tus datos y qué preguntas quieres hacernos
       </h3>
       <form onSubmit={handleSubmit(onSubmit)} className="p-4">
-        <div className="grid grid-cols-1 auto-rows-fr gap-4 grid-flow-row">
+        <div className="grid grid-cols-1 auto-rows-fr grid-flow-row gap-4">
           {errors.firstName && <span>Este campo es obligatorio</span>}
           <input
             placeholder="Nombre"

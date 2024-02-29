@@ -1,10 +1,11 @@
-import logo from "../assets/logo.png";
-import { Link } from "react-scroll";
-import Register from "./Register";
 import { useEffect, useRef, useState } from "react";
-import DarkModeToggle from "../components/DarkModeToggle";
-import "../App.css";
+import { Link } from "react-scroll";
 import { IoClose } from "react-icons/io5";
+
+import Register from "./Register";
+import logo from "@/assets/logo.png";
+import DarkModeToggle from "@/components/DarkModeToggle";
+import "../App.css";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -166,7 +167,7 @@ const Header = () => {
               onClick={toggleMenu}
               className="menu-toggle-landing hover:text-customOrange hover:cursor-pointer"
             >
-              {isMenuOpen ? "Close" : "LOGIN"}
+              {!isMenuOpen && "INGRESAR"}
             </div>
           </li>
         </ul>
@@ -174,7 +175,7 @@ const Header = () => {
 
       <div
         ref={menuRef}
-        className={`toggleMenuLanding ${isMenuOpen ? "open" : ""} iniSesion`}
+        className={`toggleMenuLanding ${isMenuOpen && "open"} iniSesion`}
       >
         <div className="flex justify-end">
           <h3 className="create-landing mb-5 text-uppercase mr-20">

@@ -178,167 +178,182 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
 
   return (
     <section>
-      <div>
-        <div className="bg-white px-3 w-full internal-modal-login">
-          {isRegisterOpen ? (
-            <div className="flex flex-col md:flex-row ">
-              <div className="mb-4 md:mb-0 md:w-1/2">
-                <div>
-                  <input
-                    type="text"
-                    id="form3Example1m"
-                    name="name"
-                    onChange={handleCredentials}
-                    value={credentials.name}
-                    className={`form-control w-full px-3 border border-gray-300 rounded ${
-                      errors.name ? "border-red-500" : ""
-                    }`}
-                  />
-                  <label className="text-gray-700" htmlFor="form3Example1m">
-                    Nombre
-                  </label>
-                  {errors.name && (
-                    <p className="text-red-500 text-sm">{errors.name}</p>
-                  )}
-                </div>
-              </div>
-              <div className="md:w-1/2">
-                <div>
-                  <input
-                    type="text"
-                    id="form3Example1n"
-                    name="lastname"
-                    onChange={handleCredentials}
-                    value={credentials.lastname}
-                    className={`form-control w-full px-3 border border-gray-300 rounded overflow-y-scroll ${
-                      errors.lastname ? "border-red-500" : ""
-                    }`}
-                  />
-                  <label className="text-gray-700" htmlFor="form3Example1n">
-                    Apellido
-                  </label>
-                  {errors.lastname && (
-                    <p className="text-red-500 text-sm">{errors.lastname}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : null}
-          <div className="mb-2">
-            <input
-              type="text"
-              name="email"
-              onChange={handleCredentials}
-              value={credentials.email}
-              id="email"
-              className={`form-control w-full px-3 border border-gray-300 rounded ${
-                errors.email ? "border-red-500" : ""
-              }`}
-            />
-            <label className="text-gray-700" htmlFor="email">
-              Correo electrónico
-            </label>
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
-          </div>
-          <div className="flex flex-col ">
-            <div className="mb-2 ">
-              <div className="relative">
-                <input
-                  name="password"
-                  onChange={handleCredentials}
-                  value={credentials.password}
-                  type={showPassword ? "text" : "password"}
-                  className={`form-control w-full px-3 py-2 border border-gray-300 rounded ${
-                    errors.password ? "border-red-500" : ""
-                  }`}
-                />
-                <label className="text-gray-700" htmlFor="form3Example4c">
-                  Contraseña
-                </label>
-                {showPassword ? (
-                  <MdVisibilityOff
-                    className="password-icon"
-                    onClick={passwordVisibility}
-                  />
-                ) : (
-                  <MdVisibility
-                    className="password-icon"
-                    onClick={passwordVisibility}
-                  />
-                )}
-              </div>
-              {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
-              )}
-            </div>
+      <div className="w-full bg-white">
+        <div className="px-3 w-full max-w-full">
+          <div className="grid grid-rows-none gap-4">
             {isRegisterOpen ? (
-              <div className="mb-4 ">
-                <div className="relative">
-                  <input
-                    type={showRepeatPassword ? "text" : "password"}
-                    id="password-input"
-                    name="repeatPassword"
-                    onChange={handleCredentials}
-                    value={credentials.repeatPassword}
-                    className={`form-control w-full px-3 py-2 border border-gray-300 rounded ${
-                      errors.repeatPassword ? "border-red-500" : ""
-                    }`}
-                  />
-                  <label className="text-gray-700" htmlFor="form3Example4cd">
-                    Repita su contraseña
-                  </label>
-                  {showRepeatPassword ? (
-                    <MdVisibilityOff
-                      className="password-icon"
-                      onClick={repeatPasswordVisibility}
-                    />
-                  ) : (
-                    <MdVisibility
-                      className="password-icon"
-                      onClick={repeatPasswordVisibility}
-                    />
-                  )}
-                </div>
-                {errors.repeatPassword && (
-                  <p className="text-red-500 text-sm">
-                    {errors.repeatPassword}
-                  </p>
-                )}
+              <div className="grid grid-cols-2 auto-rows-fr grid-flow-row gap-2">
                 <div className="">
-                  <AvatarOptions onSelectAvatar={handleSelectAvatar} />
-                  {errors.avatar && (
-                    <p className="text-red-500 text-sm">{errors.avatar}</p>
-                  )}
+                  <div>
+                    <label className="text-gray-700">Nombre</label>
+                    <input
+                      id="form3Example1m"
+                      name="name"
+                      onChange={handleCredentials}
+                      value={credentials.name}
+                      className={`w-full px-3 py-2 rounded ${
+                        errors.name && "border-red-500"
+                      }`}
+                    />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm">{errors.name}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="">
+                  <div>
+                    <label className="text-gray-700">Apellido</label>
+                    <input
+                      id="form3Example1n"
+                      name="lastname"
+                      onChange={handleCredentials}
+                      value={credentials.lastname}
+                      className={`w-full px-3 py-2 rounded ${
+                        errors.lastname ? "border-red-500" : ""
+                      }`}
+                    />
+                    {errors.lastname && (
+                      <p className="text-red-500 text-sm">{errors.lastname}</p>
+                    )}
+                  </div>
                 </div>
               </div>
             ) : null}
-          </div>
-
-          <div className="flex justify-center ">
-            <button
-              onClick={handleSubmit}
-              type="button"
-              className="bg-blue-500 hover:bg-black font-bold px-4 rounded"
-            >
-              ENVIAR
-            </button>
-            <div>
-              {generalError && (
-                <p className="text-red-500 text-sm">{generalError}</p>
-              )}
+            <div className="grid py-2">
+              <div>
+                <label className="text-gray-700" htmlFor="email">
+                  Correo electrónico
+                </label>
+                <input
+                  name="email"
+                  onChange={handleCredentials}
+                  value={credentials.email}
+                  id="email"
+                  className={`w-full px-3 py-2 rounded ${
+                    errors.email && "border-red-500"
+                  }`}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
+              </div>
+              <div>
+                <div>
+                  <label className="text-gray-700">Contraseña</label>
+                  <div className="grid grid-cols-[90%_10%] border border-gray-300 rounded">
+                    <input
+                      name="password"
+                      onChange={handleCredentials}
+                      value={credentials.password}
+                      type={showPassword && "password"}
+                      className={`py-2 rounded-l ${
+                        errors.password && "border-red-500"
+                      }`}
+                    />
+                    <div className="flex items-center justify-center">
+                      {showPassword ? (
+                        <MdVisibilityOff
+                          style={{
+                            fontSize: "32px",
+                            fill: "#555",
+                            cursor: "pointer",
+                          }}
+                          onClick={passwordVisibility}
+                        />
+                      ) : (
+                        <MdVisibility
+                          style={{
+                            fontSize: "32px",
+                            fill: "#555",
+                            cursor: "pointer",
+                          }}
+                          onClick={passwordVisibility}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
+                {isRegisterOpen ? (
+                  <div className="">
+                    <div>
+                      <label className="text-gray-700">
+                        Repita su contraseña
+                      </label>
+                      <div className="grid grid-cols-[90%_10%] border border-gray-300 rounded">
+                        <input
+                          name="repeatPassword"
+                          onChange={handleCredentials}
+                          value={credentials.repeatPassword}
+                          type={showRepeatPassword && "password"}
+                          className={`py-2 rounded-l ${
+                            errors.password && "border-red-500"
+                          }`}
+                        />
+                        <div className="flex items-center justify-center">
+                          {showRepeatPassword ? (
+                            <MdVisibilityOff
+                              style={{
+                                fontSize: "32px",
+                                fill: "#555",
+                                cursor: "pointer",
+                              }}
+                              onClick={repeatPasswordVisibility}
+                            />
+                          ) : (
+                            <MdVisibility
+                              style={{
+                                fontSize: "32px",
+                                fill: "#555",
+                                cursor: "pointer",
+                              }}
+                              onClick={repeatPasswordVisibility}
+                            />
+                          )}
+                        </div>
+                        {errors.repeatPassword && (
+                          <p className="text-red-500 text-sm">
+                            {errors.repeatPassword}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="">
+                      <AvatarOptions onSelectAvatar={handleSelectAvatar} />
+                      {errors.avatar && (
+                        <p className="text-red-500 text-sm">{errors.avatar}</p>
+                      )}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             </div>
+            <div className="flex justify-center">
+              <button
+                onClick={handleSubmit}
+                type="button"
+                className="bg-blue-500 hover:bg-black font-bold px-4 rounded"
+              >
+                ENVIAR
+              </button>
+              <div>
+                {generalError && (
+                  <p className="text-red-500 text-sm">{generalError}</p>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={handleRegister}
+              type="button"
+              className="font-bold rounded hover:text-orange-700 border-none text-orange-500"
+            >
+              {isRegisterOpen
+                ? "CAMBIAR A INICIAR SESIÓN"
+                : "CAMBIAR A CREAR CUENTA"}
+            </button>
           </div>
-          <button
-            onClick={handleRegister}
-            type="button"
-            className="font-bold rounded mt-2 hover:text-orange-700 border-none text-orange-500"
-          >
-            {isRegisterOpen
-              ? "CAMBIAR A INICIAR SESIÓN"
-              : "CAMBIAR A CREAR CUENTA"}
-          </button>
         </div>
       </div>
     </section>

@@ -1,11 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 
-import Table from "antd/lib/table";
-import Button from "antd/lib/button";
-import Input from "antd/lib/input";
-import Space from "antd/lib/space";
-import Form from "antd/lib/form";
-import Typography from "antd/lib/typography";
+import { Table, Button, Input, Space, Form, Typography } from "antd";
 
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
@@ -297,13 +292,18 @@ function CrearGrupos() {
   return (
     <div className={`${styles.wrapper} add-group-listt`}>
       <div>
-        <Typography.Title level={2}>Crear grupos</Typography.Title>
+        <Typography className="tittle-module">Crear grupos</Typography>
       </div>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item
           label="Nombre del grupo:"
           name="groupName"
-          className="name-group"
+          rules={[
+            {
+              required: true,
+              message: "Por favor ingresa el nombre del grupo",
+            },
+          ]}
         >
           <Input
             placeholder="Ingrese el nombre del grupo"
@@ -318,9 +318,7 @@ function CrearGrupos() {
         />
         <Form.Item>
           <Button type="primary" htmlType="submit" className="bg-blue-500">
-            <Typography.Text className="tittle-module">
-              Crear Grupo
-            </Typography.Text>
+            Crear Grupo
           </Button>
         </Form.Item>
       </Form>

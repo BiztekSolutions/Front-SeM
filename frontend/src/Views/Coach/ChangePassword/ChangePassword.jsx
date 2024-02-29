@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Input, Button, Form } from "antd";
+import { Input, Button, Form, Typography } from "antd";
 import { updateUser } from "../../../features/user/userSlice";
 
 function ChangePassword() {
@@ -22,39 +22,39 @@ function ChangePassword() {
   };
 
   return (
-    <div>
-      <h2>Change Password</h2>
+    <div className="m-auto mt-[5%] w-[70%]">
+      <Typography.Title level={3}>Cambiar contraseña</Typography.Title>
       {isLoading ? (
-        <p>Loading...</p>
+        <Typography>Cargando...</Typography>
       ) : (
         <Form onFinish={onFinish} layout="vertical">
           <Form.Item
-            label="Old Password"
+            label="Contraseña actual:"
             name="oldPassword"
             rules={[
               {
                 required: true,
-                message: "Please enter your old password!",
+                message: "Por favor ingrese su contraseña actual!",
               },
             ]}
           >
             <Input.Password />
           </Form.Item>
           <Form.Item
-            label="New Password"
+            label="Nueva contraseña:"
             name="newPassword"
             rules={[
               {
                 required: true,
-                message: "Please enter your new password!",
+                message: "Por favor ingrese su nueva contraseña!",
               },
             ]}
           >
             <Input.Password />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Change Password
+            <Button type="primary" htmlType="submit" className="bg-blue-500">
+              Cambiar
             </Button>
           </Form.Item>
         </Form>

@@ -71,7 +71,7 @@ function EditarEjercicio() {
 
   if (isSuccess && exercises && exercises.length === 0) {
     return (
-      <div>
+      <div className="mt-4">
         <Typography.Title level={2}>
           Aún no hay ejercicios creados, pruebe creando el{" "}
           <Link to="../agregarEjercicios">primer ejercicio!</Link>

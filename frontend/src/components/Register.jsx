@@ -166,7 +166,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
         }, 1000);
       } else {
         setTimeout(() => {
-          navigate("/coach");
+          navigate(`/user/${user.userId}`);
         }, 1000);
       }
     }

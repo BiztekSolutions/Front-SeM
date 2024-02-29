@@ -141,73 +141,71 @@ function EditarEjercicio() {
               onOk={handleSave}
               onCancel={() => setSelectedExercise(null)}
             >
-              <div className="">
-                <div className="">
-                  <div>
-                    <label>Nombre:</label>
-                    <Input
-                      type="text"
-                      value={selectedExercise.name || ""}
-                      onChange={(e) =>
-                        setSelectedExercise({
-                          ...selectedExercise,
-                          name: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label>Descripción:</label>
-                    <Input
-                      type="text"
-                      value={selectedExercise.description || ""}
-                      onChange={(e) =>
-                        setSelectedExercise({
-                          ...selectedExercise,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label>Video:</label>
-                    <Input
-                      type="text"
-                      value={selectedExercise.video || ""}
-                      onChange={(e) =>
-                        setSelectedExercise({
-                          ...selectedExercise,
-                          video: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label>Imagen 1:</label>
-                    <Input
-                      type="text"
-                      value={selectedExercise.image1 || ""}
-                      onChange={(e) =>
-                        setSelectedExercise({
-                          ...selectedExercise,
-                          image1: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label>Imagen 2:</label>
-                    <Input
-                      type="text"
-                      value={selectedExercise.image2 || ""}
-                      onChange={(e) =>
-                        setSelectedExercise({
-                          ...selectedExercise,
-                          image2: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+              <div>
+                <div>
+                  <label>Nombre:</label>
+                  <Input
+                    type="text"
+                    value={selectedExercise.name || ""}
+                    onChange={(e) =>
+                      setSelectedExercise({
+                        ...selectedExercise,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>Descripción:</label>
+                  <Input
+                    type="text"
+                    value={selectedExercise.description || ""}
+                    onChange={(e) =>
+                      setSelectedExercise({
+                        ...selectedExercise,
+                        description: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>Video:</label>
+                  <Input
+                    type="text"
+                    value={selectedExercise.video || ""}
+                    onChange={(e) =>
+                      setSelectedExercise({
+                        ...selectedExercise,
+                        video: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>Imagen 1:</label>
+                  <Input
+                    type="text"
+                    value={selectedExercise.image1 || ""}
+                    onChange={(e) =>
+                      setSelectedExercise({
+                        ...selectedExercise,
+                        image1: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <label>Imagen 2:</label>
+                  <Input
+                    type="text"
+                    value={selectedExercise.image2 || ""}
+                    onChange={(e) =>
+                      setSelectedExercise({
+                        ...selectedExercise,
+                        image2: e.target.value,
+                      })
+                    }
+                  />
                 </div>
               </div>
             </Modal>

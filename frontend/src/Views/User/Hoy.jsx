@@ -35,7 +35,7 @@ function Hoy() {
   const { user, trainingLogs, message } = useSelector((state) => state.users);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const rutinas = rutinas2.concat(rutinaGrupal);
+  const rutinas = rutinas2?.concat(rutinaGrupal);
   const [hasExercises, setHasExercises] = useState(false);
   const [isDayTrained, setIsDayTrained] = useState();
   const localUser = JSON.parse(localStorage.getItem("User"));

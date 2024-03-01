@@ -18,7 +18,7 @@ const userRouter = express.Router();
 userRouter.get('/allClients', getClients);
 userRouter.put('/update/:userId', updateUser);
 userRouter.get('/:userId/routines', getUserRoutines);
-userRouter.post('/:userId/remove', removeUser);
+userRouter.post('/delete/:userId', removeUser);
 userRouter.get('/:userId', getUser);
 userRouter.get('/', getUsers);
 userRouter.post('/createClient', createClient);

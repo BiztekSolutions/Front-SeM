@@ -1,15 +1,12 @@
 //@ts-nocheck
 import { Request, Response } from 'express';
 import User from '../models/User';
-import { get, list, getRoutines, listClients, remove } from '../services/UserService';
+import { get, list,  listClients, remove } from '../services/UserService';
 import Client from '../models/Client';
 import Routine from '../models/Routine';
-import Exercise from '../models/Exercise';
-import RoutineConfiguration from '../models/ExerciseConfiguration';
 import GroupExercise from '../models/GroupExercise';
 import ClientGroup from '../models/ClientGroup';
 import sequelize from '../configs/db';
-import { id } from 'date-fns/locale';
 
 export const getClients = async (req: Request, res: Response) => {
   try {
@@ -198,6 +195,7 @@ export const updateUser = async (req: Request, res: Response) => {
 };
 
 export const removeUser = async (req: Request, res: Response) => {
+  const transaction = await sequelize.transaction();
   try {
     const userId = parseInt(req.params.userId as string);
     if (!userId || isNaN(userId)) return res.status(400).json({ message: 'User id is required' });
@@ -208,43 +206,49 @@ export const removeUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'User not found' });
     }
 
+    //busco si el usuario es cliente
+    const client = await Client.findOne({ where: { idUser: userId } });
+
+
+
     //busco si el usuario tiene rutinas asociadas
+    if (client) {
 
-    const userRoutines = await Routine.findAll({
-      where: { idUser: userId },
-    });
+    
+      const userRoutines = await Routine.findAll({
+        where: { idClient: client?.idClient },
+      });
+   
 
-    if (userRoutines.length > 0) {
-      userRoutines.forEach(async (routine) => {
-        for (let groupExerciseIndex = 0; groupExerciseIndex < routine.GroupExercises.length; groupExerciseIndex++) {
-          for (
-            let configurationIndex = 0;
-            configurationIndex < routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations.length;
-            configurationIndex++
-          ) {
-            await ExerciseConfiguration.destroy({
-              where: {
-                idExerciseConfiguration:
-                  routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations[configurationIndex].idExerciseConfiguration,
-              },
+      if (userRoutines.length > 0) {
+        for (const routine of userRoutines) {
+          for (let groupExerciseIndex = 0; groupExerciseIndex < routine.GroupExercises.length; groupExerciseIndex++) {
+            const promises = routine.GroupExercises[groupExerciseIndex].ExerciseConfigurations.map((config) =>
+              ExerciseConfiguration.destroy({
+                where: {
+                  idExerciseConfiguration: config.idExerciseConfiguration,
+                },
+                transaction,
+              })
+            );
+            
+            await Promise.all(promises);
+            
+            await GroupExercise.destroy({
+              where: { idGroupExercise: routine.GroupExercises[groupExerciseIndex].idGroupExercise },
               transaction,
             });
           }
-          await GroupExercise.destroy({
-            where: { idGroupExercise: routine.GroupExercises[groupExerciseIndex].idGroupExercise },
-            transaction,
-          });
         }
-      });
-    }
+      }
 
-    //busco si el usuario esta adherido a algun grupo
-    const clientGroup = await ClientGroup.findAll({ where: { idUser: userId } });
+      //busco si el usuario esta adherido a algun grupo
+      const clientGroup = await ClientGroup.findAll({ where: { idClient: client.idClient } });
 
-    if (clientGroup) {
-      clientGroup.forEach(async (client) => {
-        await client.destroy({ transaction: transaction });
-      });
+      if (clientGroup) {
+        const promises = clientGroup.map((client) => client.destroy({ transaction: transaction }));
+        await Promise.all(promises);
+      }
     }
 
     await user.destroy({ transaction: transaction });
@@ -257,4 +261,4 @@ export const removeUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { getUsers, getUser, getUserRoutines, updateUser, getClients, createClient };
+export default { getUsers, getUser, getUserRoutines, updateUser, getClients, createClient, removeUser, markDayAsTrained, getTrainingDays, markDayAsUntrained};

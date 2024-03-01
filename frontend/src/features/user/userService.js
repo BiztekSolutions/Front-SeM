@@ -52,11 +52,13 @@ const getUser = async (token, userId) => {
   return response.data;
 };
 
-const deleteUser = async (data) => {
+const deleteUser = async ({token,userId}) => {
   const response = await axios.post(
-    `${base_url}/users/delete/${data.userId}`,
-    data
-  );
+    `${base_url}/users/delete/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   return response.data;
 };

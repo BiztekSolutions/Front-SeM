@@ -9,6 +9,8 @@ const { SECRET_KEY } = process.env;
 
 export const register = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
+    
     if (!req?.body?.email || !req?.body?.password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
@@ -22,7 +24,7 @@ export const register = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await create(email, hashedPassword, req.body.name, req.body.lastname, req.body.avatar);
+    const user = await create(email, hashedPassword, req.body.name, req.body.lastname, req.body.avatar.avatar);
 
     if (user) {
       return res.status(201).json({ message: 'User registered successfully', user });
@@ -44,6 +46,8 @@ export const login = async (req: Request, res: Response) => {
 
     const isValidPassword = await bcrypt.compare(password, userCredentials.password);
     if (!isValidPassword) {
+      console.log('Invalid credentials');
+      
       return res.status(403).json({ message: 'Invalid credentials' });
     }
 

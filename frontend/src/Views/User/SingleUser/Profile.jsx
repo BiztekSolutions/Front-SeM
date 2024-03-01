@@ -47,13 +47,16 @@ function Profile() {
     if (user && user.avatar) {
       setSelectedAvatar(user.avatar);
     }
-    dispatch(
-      getTrainingLogs({
-        token,
-        clientId: user?.Client?.idClient,
-        idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
-      })
-    );
+    if (rutinas) {
+      
+      dispatch(
+        getTrainingLogs({
+          token,
+          clientId: user?.Client?.idClient,
+          idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
+        })
+      );
+    }
   }, [user]);
   const handleSelectAvatar = (avatar) => {
     setSelectedAvatar(avatar);

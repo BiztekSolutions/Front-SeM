@@ -28,6 +28,7 @@ const DeleteButton = ({ userName, userId }) => {
         onCancel={() => setModalVisible(false)}
         okText="Sí"
         cancelText="No"
+        okButtonProps={{ style: { backgroundColor: 'red', borderColor: 'black' } }}
       >
         <p>
           ¿Estás seguro de que deseas eliminar al usuario{" "}

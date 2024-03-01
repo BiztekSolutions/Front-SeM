@@ -15,6 +15,7 @@ const initialState = {
 
 const userString = localStorage.getItem("User");
 const user = JSON.parse(userString);
+
 export const addUserToClients = createAsyncThunk(
   "addUserToClients",
   async (userId, token, thunkAPI) => {
@@ -155,11 +156,11 @@ export const getTrainingLogs = createAsyncThunk(
 
 export const deleteUser = createAsyncThunk(
   "deleteUser",
-  async (_, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
       const token = user.token;
 
-      return await userService.deleteUser(token);
+      return await userService.deleteUser({token,userId});
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -291,6 +292,29 @@ export const userSlice = createSlice({
         state.message = "User update error";
         state.user = null;
       })
+
+      // DELETE USER
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Deleting user";
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+
+        state.message = action.payload.message;
+      }
+      )
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+
+        state.message = action.payload.message;
+      }
+      )
+      
       // mark day as trained
       .addCase(markDayAsTrained.pending, (state) => {
         state.isLoading = true;

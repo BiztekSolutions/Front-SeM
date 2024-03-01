@@ -45,7 +45,7 @@ function Noticias() {
   const user = JSON.parse(localStorage.getItem("User"));
   const location = useLocation();
   const isCoachPage = location.pathname.includes("/coach");
-
+  
   const isUserAClient = clients?.some((client) => client.idUser === user.user);
   useEffect(() => {
     dispatch(fetchPosts(user.token));

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { FcInfo } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import ListaUsuarios from "./ListaUsuarios";
-import DeleteButton from "../../components/DeleteButton/DeleteButton";
+
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
 
 function ClientList() {
@@ -41,10 +41,7 @@ function ClientList() {
               className="userInfo h-9 w-9"
               onClick={() => navigate(`../user/${clients[i].idClient}`)}
             />
-            <DeleteButton
-              userName={clients[i].User.name}
-              userId={clients[i].idClient}
-            />
+            
           </div>
         ),
       });

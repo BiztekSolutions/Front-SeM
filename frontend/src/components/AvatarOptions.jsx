@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Component.module.css";
-import { set } from "date-fns";
+
 
 function AvatarOptions({ onSelectAvatar }) {
   const [avatar, setAvatar] = useState("");

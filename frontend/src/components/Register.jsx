@@ -158,7 +158,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
 
       dispatch(showSuccessNotification("Hola", `Bienvenido de vuelta!`));
       const isUserACoach = coaches?.some((coach) => coach.idUser === userId);
-
+      console.log("user", user);
       //@TODO: Aca debo redirigir a donde sea. Si es usuario va a ser a /user. Si es coach va a ser a /coach.
       if (isUserACoach) {
         setTimeout(() => {
@@ -166,7 +166,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
         }, 1000);
       } else {
         setTimeout(() => {
-          navigate("/coach");
+          navigate(`/user/${user.userId}`);
         }, 1000);
       }
     }

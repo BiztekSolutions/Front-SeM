@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-
+import axios from "axios";
 function ContactForm() {
   const {
     register,
@@ -7,7 +7,23 @@ function ContactForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {};
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/v1/email', data);
+  
+      if (response.status === 200) {
+        
+        alert('¡Correo electrónico enviado con éxito!');
+      } else {
+       
+        alert('Error al enviar el correo electrónico. Por favor, inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error al enviar el correo electrónico:', error);
+     
+      alert('Error al enviar el correo electrónico. Por favor, inténtalo de nuevo.');
+    }
+  };
 
   return (
     <div className="m-10 py-10">

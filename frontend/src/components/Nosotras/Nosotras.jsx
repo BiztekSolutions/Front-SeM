@@ -66,14 +66,7 @@ function Nosotras() {
             ubicacion="Saladillo, Buenos Aires, Argentina"
             instagram="milumas"
           />
-          <TeamMember
-            id="card3"
-            nombre="Alguien mas"
-            edad={30}
-            descripcion="este alguien mas Soy Licenciada en Educación Fisica. Soy dueña de este gimnasio. Apasionada por el deporte y la vida sana. Me gusta mucho el deporte y la vida sana. Ejerzo esta profesión hace 10 años."
-            ubicacion="Saladillo, Buenos Aires, Argentina"
-            instagram="alguien mas"
-          />
+          
         </div>
         <Link
           offset={-HeaderHeight}

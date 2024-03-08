@@ -140,6 +140,7 @@ function EditarEjercicio() {
               open={Boolean(selectedExercise !== null)}
               onOk={handleSave}
               onCancel={() => setSelectedExercise(null)}
+              okButtonProps={{ style: { backgroundColor: 'red', borderColor: 'black' } }}
             >
               <div>
                 <div>

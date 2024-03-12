@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Table from "antd/lib/table";
-import Button from "antd/lib/button";
-import Input from "antd/lib/input";
-import Space from "antd/lib/space";
-import Typography from "antd/lib/typography";
+
+import { Table, Button, Input, Space, Typography } from "antd";
 
 import Highlighter from "react-highlight-words";
 import { FcInfo } from "react-icons/fc";
@@ -183,6 +180,7 @@ const Groups = () => {
       dataIndex: "groupName",
       key: "groupName",
       defaultSortOrder: "ascend",
+      className: "text-table",
       sorter: (a, b) => {
         if (a.firstName < b.firstName) {
           return -1;
@@ -198,6 +196,7 @@ const Groups = () => {
       title: "Acciones",
       dataIndex: "actions",
       key: "actions",
+      className: "text-table",
     },
   ];
 
@@ -228,12 +227,13 @@ const Groups = () => {
   return (
     <div className={`${styles.wrapper} group-listt`}>
       <div>
-        <Typography.Title level={2}>Grupos</Typography.Title>
+        <Typography className="tittle-module">Grupos</Typography>
       </div>
       <Table
         dataSource={dataSource}
         columns={columns}
         className="table-group"
+        rowClassName="h-12"
       />
     </div>
   );

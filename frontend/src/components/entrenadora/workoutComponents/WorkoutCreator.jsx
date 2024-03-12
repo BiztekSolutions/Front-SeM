@@ -94,7 +94,19 @@ function WorkoutCreator() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    const numberOfExercises = Object.values(formData.exercisesGroup).reduce(
+      (acc, exercises) => acc + Object.keys(exercises).length,
+      0
+    );
+      
+    if (!formData.startDate) {
+      alert("Debe seleccionar una fecha inicial para la rutina.");
+      return;
+    }
+    if (numberOfExercises < 3) {
+      alert("Debe seleccionar al menos 3 ejercicios para crear la rutina.");
+      return;
+    }
     if (isGroupsPage) {
       dispatch(
         setRoutineGroup({

@@ -1,16 +1,20 @@
 /* eslint-disable react/jsx-key */
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import List from "antd/lib/list";
-import Avatar from "antd/lib/avatar";
-import Space from "antd/lib/space";
-import Input from "antd/lib/input";
-import Button from "antd/lib/button";
-import Form from "antd/lib/form";
-import Tooltip from "antd/lib/tooltip";
-import Modal from "antd/lib/modal";
-import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
 
+import {
+  List,
+  Avatar,
+  Space,
+  Input,
+  Button,
+  Form,
+  Tooltip,
+  Modal,
+  Typography,
+} from "antd";
+
+import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
 import MessageOutlined from "@ant-design/icons/MessageOutlined";
 
 import {
@@ -41,7 +45,7 @@ function Noticias() {
   const user = JSON.parse(localStorage.getItem("User"));
   const location = useLocation();
   const isCoachPage = location.pathname.includes("/coach");
-
+  
   const isUserAClient = clients?.some((client) => client.idUser === user.user);
   useEffect(() => {
     dispatch(fetchPosts(user.token));
@@ -115,16 +119,16 @@ function Noticias() {
   }
   if (!isUserAClient && !isCoachPage) {
     return (
-      <h3>
+      <Typography.Title level={3}>
         NO TIENES ACCESO A ESTA PARTE DE LA PAGINA PONTE EN CONTACTO CON LAS
         ENTRENADORAS PARA QUE TE AGREGUEN COMO CLIENTE
-      </h3>
+      </Typography.Title>
     );
   }
 
   return (
-    <div className="foro">
-      <h1>Foro</h1>
+    <div className="m-auto mt-[5%] w-[70%]">
+      <Typography className="tittle-module">Foro</Typography>
       <List
         itemLayout="vertical"
         size="large"
@@ -164,31 +168,29 @@ function Noticias() {
                 </span>
               }
             />
-            <div className="bg-white p-4 my-4 shadow-md rounded-md">
-              <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
-              <p className="text-gray-700 mb-4">{post.content}</p>
+            <div className="p-4 my-4 shadow-lg rounded-md">
+              <Typography.Title level={3}>{post.title}</Typography.Title>
+              <Typography className="mb-4">{post.content}</Typography>
             </div>
           </List.Item>
         )}
       />
-
       <Modal
         title={selectedPost ? selectedPost.title : ""}
         open={modalVisible}
         onCancel={closeModal}
-        footer={[
-          <Button key="cancel" onClick={closeModal}>
-            Cerrar
-          </Button>,
-        ]}
+        footer={null}
       >
         {selectedPost && (
           <div>
-            <div className="bg-white p-4 my-4 shadow-md rounded-md">
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="p-4 my-4 shadow-md rounded-md">
+              <Typography.Title
+                level={3}
+                className="text-xl font-semibold mb-2"
+              >
                 {selectedPost.title}
-              </h3>
-              <p className="text-gray-700 mb-4">{selectedPost.content}</p>
+              </Typography.Title>
+              <Typography className="mb-4">{selectedPost.content}</Typography>
             </div>
             <Form
               form={form}
@@ -203,16 +205,18 @@ function Noticias() {
                 />
               </Form.Item>
               <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="button"
-                  onClick={() =>
-                    handleCommentSubmit(selectedPost.idPost, comment)
-                  }
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                >
-                  Comentar
-                </Button>
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    type="primary"
+                    htmlType="button"
+                    onClick={() =>
+                      handleCommentSubmit(selectedPost.idPost, comment)
+                    }
+                    className="bg-blue-500"
+                  >
+                    Comentar
+                  </Button>
+                </div>
               </Form.Item>
             </Form>
             {selectedPost.Comments && selectedPost.Comments.length > 0 && (
@@ -226,7 +230,7 @@ function Noticias() {
                       />
                       <strong>{`${comment.Client.User.name} ${comment.Client.User.lastname}: `}</strong>
                       <div className="flex justify-between">
-                        <p className="text-gray-700">{comment.content}</p>
+                        <Typography className="">{comment.content}</Typography>
                         {userLogged.idUser === comment.Client.idUser ? (
                           <Tooltip title="Eliminar Comentario">
                             <Button
@@ -248,19 +252,36 @@ function Noticias() {
           </div>
         )}
       </Modal>
-
       {isCoachPage && (
-        <div>
-          <h2>Nueva Publicación</h2>
-          <Form form={form} onFinish={handlePostSubmit}>
-            <Form.Item label="Título" name="title">
+        <div className="">
+          <Typography.Title level={2}>Nueva Publicación</Typography.Title>
+          <Form form={form} onFinish={handlePostSubmit} layout="vertical">
+            <Form.Item
+              label="Título:"
+              name="title"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingresa el título de la publicación.",
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
-            <Form.Item label="Contenido" name="content">
+            <Form.Item
+              label="Contenido:"
+              name="content"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingresa el contenido de la publicación.",
+                },
+              ]}
+            >
               <TextArea rows={4} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" className="bg-blue-500">
                 Agregar
               </Button>
             </Form.Item>

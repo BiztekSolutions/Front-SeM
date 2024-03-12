@@ -3,6 +3,7 @@ import {
   getUsers,
   addUserToClients,
   getClients,
+ 
 } from "../../features/user/userSlice";
 import { BiCheck } from "react-icons/bi";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,13 +14,15 @@ import ListaUsuarios from "./ListaUsuarios";
 import { TiPlus } from "react-icons/ti";
 import DeleteButton from "../../components/DeleteButton/DeleteButton";
 import LoadingSpinner from "@/shared/components/spinner/LoadingSpinner";
+import { showSuccessNotification } from "../../features/layout/layoutSlice";
 
 function UserList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { users, clients, isLoading, isError } = useSelector(
+  const { users, clients, isLoading, message } = useSelector(
     (state) => state.users
   );
+  
 
   const user = JSON.parse(localStorage.getItem("User"));
 
@@ -33,7 +36,7 @@ function UserList() {
   }, [users, clients]);
 
   if (isLoading) {
-    <LoadingSpinner />;
+     <LoadingSpinner />;
   }
   const handleCreateClient = (userId) => {
     dispatch(addUserToClients(userId, user.token));
@@ -42,37 +45,48 @@ function UserList() {
       navigate("../listaDeClientes");
     }, 1000);
   };
+  
+  const handleDeleteUser = (userId) => {
+    dispatch(deleteUser(userId));
+  }
 
-  const dataSource = [];
 
-  if (users?.length > 0) {
-    for (let i = 0; i < users.length; i++) {
-      const isUserInClients = clients?.some(
-        (client) => client.idUser === users[i].idUser
-      );
-      dataSource.push({
+  useEffect(() => {
+
+    if (message === "User deleted successfully") {
+      dispatch(showSuccessNotification("Usuario eliminado exitosamente"));
+      dispatch(getUsers(user.token));
+    }
+  }, [message]);
+  
+  const isUserInClient = (userId) => {
+    return clients.some((client) => client.idUser === userId);
+  };
+
+  const filteredUsers = users?.filter((u) => u.idUser !== user.user);
+  const dataSource = filteredUsers?.map((user, i) => ({
         key: i,
-        firstName: users[i].name,
-        lastName: users[i].lastname,
-        email: users[i].Credentials[0].email,
+        firstName: user.name,
+        lastName: user.lastname,
+        email: user.Credentials[0].email,
         actions: (
           <div className="flex align-items-center gap-3">
-            {isUserInClients ? (
+            {isUserInClient(user.idUser) ? (
               <BiCheck size={19} className="userAdded h-9 w-9" />
             ) : (
               <TiPlus
                 size={19}
                 className="userAdd h-9 w-9"
-                onClick={() => handleCreateClient(users[i].idUser)}
+                onClick={() => handleCreateClient(user.idUser)}
               />
             )}
 
-            <DeleteButton userName={users[i].name} userId={users[i].idUser} />
+            <DeleteButton userName={user.name} userId={user.idUser} onClick={()=>handleDeleteUser(user.userId)}/>
           </div>
         ),
-      });
-    }
-  }
+      }));
+    
+  
 
   return (
     <div>

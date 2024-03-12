@@ -13,7 +13,7 @@ import {
   clearAuthMessages,
 } from "../../../features/auth/authSlice";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal } from "antd";
+import { Form, Input, Button, Modal, Typography } from "antd";
 import styles from "../../../components/Component.module.css";
 import { showSuccessNotification } from "../../../features/layout/layoutSlice";
 import Progressbar from "../../../components/Progressbar/Progressbar";
@@ -47,13 +47,16 @@ function Profile() {
     if (user && user.avatar) {
       setSelectedAvatar(user.avatar);
     }
-    dispatch(
-      getTrainingLogs({
-        token,
-        clientId: user?.Client?.idClient,
-        idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
-      })
-    );
+    if (rutinas) {
+      
+      dispatch(
+        getTrainingLogs({
+          token,
+          clientId: user?.Client?.idClient,
+          idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
+        })
+      );
+    }
   }, [user]);
   const handleSelectAvatar = (avatar) => {
     setSelectedAvatar(avatar);
@@ -193,8 +196,7 @@ function Profile() {
 
   return (
     <div>
-      <h2 className="mb-7 mt-16">PERFIL</h2>
-
+      <Typography.Title level={3} className="mb-7 mt-16">PERFIL</Typography.Title>
       {user && (
         <Form
           form={form}
@@ -274,16 +276,20 @@ function Profile() {
           </div>
           {isEditing && (
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Save
+              <Button type="primary" className="bg-blue-500" htmlType="submit">
+                Guardar
               </Button>
             </Form.Item>
           )}
         </Form>
       )}
       {!isEditing && (
-        <Button type="link" onClick={handleEditClick}>
-          Edit Profile
+        <Button
+          type="primary"
+          onClick={handleEditClick}
+          className="bg-blue-500"
+        >
+          Editar perfil
         </Button>
       )}
       <Modal

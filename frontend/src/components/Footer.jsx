@@ -1,6 +1,8 @@
 import wppLogo from "../assets/wpp-orange.png";
 import { Link } from "react-scroll";
-import iconoHaciaArriba from "../assets/iconHaciaArriba.png";
+import UpCircleTwoTone from "@ant-design/icons/UpCircleTwoTone";
+import { useNavigate } from "react-router-dom";
+
 const Footer = () => {
   //@TODO: Optimizacion: react-scroll se puede volar y reemplazar por useRef de React directamente.
   function redirectToWhatsapp() {
@@ -18,6 +20,7 @@ const Footer = () => {
       );
     }
   }
+  const navigate = useNavigate();
   const HeaderHeight = 112;
   return (
     <div className="bg-customOrange flex flex-col">
@@ -87,9 +90,32 @@ const Footer = () => {
           <h3 className="text-stone-950 mb-10 font-bold tittle-footer">
             PRIVACIDAD
           </h3>
-          <p>Políticas de privacidad</p>
-          <p>Términos y condiciones</p>
-          <p>FAQs</p>
+          <span
+          style={{
+            cursor: "pointer",
+            ":hover": {
+              cursor: "pointer"
+            }
+          }}
+          
+          onClick={() => navigate("/information/privacy-policy")}
+        >
+          Politica de privacidad
+        </span>
+        <br />
+          <span style={{
+            cursor: "pointer",
+            ":hover": {
+              cursor: "pointer"
+            }
+          }} onClick={() => navigate("/information/terms")}>Términos y condiciones</ span>
+          <br />
+          <span style={{
+            cursor: "pointer",
+            ":hover": {
+              cursor: "pointer"
+            }
+          }} onClick={() => navigate("/information/faq")}>FAQs</ span>
         </div>
       </div>
       <div className="bg-black h-24 flex justify-between items-center p-8">
@@ -108,11 +134,11 @@ const Footer = () => {
         </div>
         <a
           href="https://lefelink.com/bizteksolutions/"
-          className="derechos"
+          className="text-customOrange font-light hover:text-white transition-colors duration-300 cursor-pointer"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Todos los derechos reservados | Biztek Solutions
+          © {new Date().getFullYear()} Biztek Solutions | Todos los derechos reservados.
         </a>
         <Link
           className="h-12 w-12 mb-40 ic-up cursor-pointer"
@@ -120,7 +146,10 @@ const Footer = () => {
           smooth={true}
           duration={1000}
         >
-          <img src={iconoHaciaArriba} alt="icono hacia arriba" className="" />
+          <UpCircleTwoTone
+            style={{ fontSize: "32px" }}
+            twoToneColor={"#ff7f30"}
+          />
         </Link>
       </div>
     </div>

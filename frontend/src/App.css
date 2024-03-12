@@ -578,11 +578,7 @@ input.form-control:focus {
   .borde-inf {
     justify-content: left !important;
   }
-
-  .derechos {
-    font-size: 0.7rem;
-  }
-
+  
   .fawpp {
     height: auto !important;
     width: 85px !important;
@@ -699,10 +695,6 @@ input.form-control:focus {
   .iniSesion {
     max-width: 100% !important;
   }
-}
-
-.iniSesion {
-  cursor: pointer !important;
 }
 
 @media (max-width: 400px) {
@@ -1097,18 +1089,6 @@ input[type="text"] {
 .select-exercise-type {
   width: 50% !important;
 }
-.btn-add-exe {
-  background-color: rgb(3, 3, 158) !important;
-  width: fit-content;
-  height: 5vh;
-  font-family: poppins;
-  font-weight: bold;
-  border-radius: 1rem;
-}
-
-.btn-add-exe:hover {
-  background-color: rgb(135, 135, 163) !important;
-}
 
 /* -------------- Query -------------- */
 
@@ -1386,9 +1366,6 @@ input[type="text"] {
   }
   .img2-exercise-day {
     display: none !important;
-  }
-  .table-group {
-    font-size: 0.8rem !important;
   }
   .text-table {
     font-size: 0.9rem;

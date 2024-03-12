@@ -29,6 +29,8 @@ import UserList from "./Views/Coach/UserList";
 import ClientList from "./Views/Coach/ClientList";
 import { useSelector } from "react-redux";
 import EditarEjercicio from "./components/entrenadora/workoutComponents/editarEjercicio.jsx";
+import PrivacyPolicy from "./components/Policy/PrivacyPolicy";
+
 
 const Router = () => {
   //@TODO: Arreglar idioma de las rutas. O español o ingles.
@@ -39,6 +41,7 @@ const Router = () => {
       <Routes>
         {/* outside */}
         <Route exact path="/" element={<Home />} />
+        <Route path="/information/:section" element={<PrivacyPolicy />} />
         {/* inside COACH */}
         <Route
           path="/coach/*"

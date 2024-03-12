@@ -247,7 +247,7 @@ function AgregarEjercicio() {
             type="primary"
             htmlType="submit"
             loading={isLoading}
-            className="btn-add-exe"
+            className="bg-blue-500"
           >
             Agregar Ejercicio
           </Button>

@@ -39,7 +39,7 @@ function ClientList() {
             <FcInfo
               size={19}
               className="userInfo h-9 w-9"
-              onClick={() => navigate(`../user/${clients[i].idClient}`)}
+              onClick={() => navigate(`../user/${clients[i].User.idUser}`)}
             />
             
           </div>

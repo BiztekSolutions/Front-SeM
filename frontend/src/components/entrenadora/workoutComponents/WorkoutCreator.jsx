@@ -41,13 +41,15 @@ function WorkoutCreator() {
   const { exercises } = useSelector((state) => state.exercises);
   const { message } = useSelector((state) => state.rutinas);
   const dispatch = useDispatch();
-  const id = useParams().id;
+  const user = useSelector((state) => state.users.user);
+  const id = user.Client.idClient;
   const isGroupsPage = location.pathname.includes("/grupos");
   const daySectionRef = useRef(null);
-
+  const idGroup = useParams().id;
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  console.log(message2, "message2", message, "message");
 
   useEffect(() => {
     dispatch(getAllExercises());
@@ -110,7 +112,7 @@ function WorkoutCreator() {
     if (isGroupsPage) {
       dispatch(
         setRoutineGroup({
-          idGroup: id,
+          idGroup: idGroup,
           name: formData.name,
           startDate: formData.startDate,
           endDate: moment(formData.startDate)

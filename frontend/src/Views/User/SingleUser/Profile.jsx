@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   getUser,
   getClients,
@@ -36,7 +35,7 @@ function Profile() {
   const localUser = JSON.parse(localStorage.getItem("User"));
   const token = localUser.token;
   const dispatch = useDispatch();
-  const id = useParams().id;
+  const id = useSelector((state) => state.auths.userId);
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
   const showModal = () => {

@@ -37,7 +37,8 @@ function Noticias() {
   const dispatch = useDispatch();
   const { posts, status } = useSelector((state) => state.posts);
   const { clients } = useSelector((state) => state.users);
-  const userLogged = useSelector((state) => state.auths.user);
+  const userLogged = useSelector((state) => state.auths.userId);
+
   const [selectedPost, setSelectedPost] = useState(null);
   const [comment, setComment] = useState("");
   const [form] = Form.useForm();
@@ -145,7 +146,7 @@ function Noticias() {
                     onClick={() => handlePostSelect(post)}
                   ></Button>
                 </Tooltip>
-                {userLogged?.idUser === post?.Client?.idUser ? (
+                {userLogged === post?.Client?.idUser ? (
                   <Tooltip title="Eliminar Post">
                     <Button
                       type="link"
@@ -231,7 +232,7 @@ function Noticias() {
                       <strong>{`${comment.Client.User.name} ${comment.Client.User.lastname}: `}</strong>
                       <div className="flex justify-between">
                         <Typography className="">{comment.content}</Typography>
-                        {userLogged.idUser === comment.Client.idUser ? (
+                        {userLogged === comment.Client.idUser ? (
                           <Tooltip title="Eliminar Comentario">
                             <Button
                               type="link"

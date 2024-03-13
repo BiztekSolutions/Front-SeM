@@ -7,7 +7,8 @@ import LoadingSpinner from "../../shared/components/spinner/LoadingSpinner";
 import { useState } from "react";
 function EditarRutinasIndividual() {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const user = useSelector((state) => state.users.user);
+  const id = user.Client.idClient;
   const state = useSelector((state) => state);
   const { rutinas, isLoading } = state.rutinas;
   const [dispatched, setDispatched] = useState(false);

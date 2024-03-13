@@ -72,7 +72,7 @@ export const authSlice = createSlice({
         state.message = action.payload.message;
         state.token = action.payload.session.token;
         state.userId = action.payload.session.userId;
-        state.user = { ...action.payload.user };
+        state.user = action.payload.user;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -98,7 +98,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.message = action.payload.message;
+        state.message = action.payload.response.data.message;
         state.user = null;
       })
 

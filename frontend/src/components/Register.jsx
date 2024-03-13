@@ -44,7 +44,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
         setErrors(newErrors);
         return;
       }
-      values.avatar = avatar;
+      values.avatar = avatar.avatar;
       dispatch(register(values));
     } else {
       dispatch(loginUser(values));
@@ -53,7 +53,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     setAvatar("");
   }
 
- 
+ console.log(message, 'asdasd');
 
   const handleRegister = () => {
     setRegisterOpen(!isRegisterOpen);
@@ -91,6 +91,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     }
 
     if (message === "User already exists") {
+      console.log("User already exists");
       dispatch(
         showErrorNotification(
           "Error",
@@ -182,6 +183,7 @@ isRegisterOpen && (
                 name="email"
                 rules={[
                   { required: true, message: "Ingrese su correo electrónico" },
+                  { type: 'email', message: 'Ingrese un correo electrónico válido' },
                 ]}
               >
                 <Input placeholder="Correo electrónico" />

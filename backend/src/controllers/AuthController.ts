@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { isRegistered, create } from '../services/AuthService';
 import { create as createSession, remove, find } from '../services/SessionService';
+import User from '../models/User';
 const { SECRET_KEY } = process.env;
 
 export const register = async (req: Request, res: Response) => {
@@ -19,18 +20,20 @@ export const register = async (req: Request, res: Response) => {
     const existingUser = await isRegistered(email);
 
     if (existingUser) {
+      console.log('User already exists');
+      
       return res.status(400).json({ message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await create(email, hashedPassword, req.body.name, req.body.lastname, req.body.avatar.avatar);
+    const user = await create(email, hashedPassword, req.body.name, req.body.lastname, req.body.avatar);
 
     if (user) {
       return res.status(201).json({ message: 'User registered successfully', user });
     }
   } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -39,7 +42,8 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const userCredentials = await isRegistered(email);
-
+    console.log('userCredentials', userCredentials);
+    
     if (!userCredentials) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -52,6 +56,9 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const existingSession = await find(userCredentials.idCredential);
+    console.log('existingSession', existingSession);
+    
+    const user = await User.findOne({ where: { idUser: userCredentials.idUser } });
 
     if (!existingSession) {
       const token = jwt.sign({ userId: userCredentials.idCredential }, SECRET_KEY || '', { expiresIn: '24h' });
@@ -63,6 +70,7 @@ export const login = async (req: Request, res: Response) => {
           token: newSession.token,
           userId: userCredentials.idCredential,
         },
+        user
       });
     }
 
@@ -76,6 +84,8 @@ export const login = async (req: Request, res: Response) => {
         token: newSession.token,
         userId: userCredentials.idCredential,
       },
+      user
+
     });
   } catch (error: any) {
     console.error(error);

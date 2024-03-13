@@ -6,14 +6,15 @@ import { getRutines } from "../../features/rutinas/rutinasSlice";
 import { useState } from "react";
 function UserCalendar() {
   const dispatch = useDispatch();
-  const { id } = useParams();
+
   const state = useSelector((state) => state);
+  const { user } = state.users;
   const [dispatched, setDispatched] = useState(false);
   const { rutinas } = state.rutinas;
   useEffect(() => {
     if (dispatched === false) {
       if (!rutinas || rutinas.length === 0) {
-        dispatch(getRutines(id));
+        dispatch(getRutines(user.Client.idClient));
         setDispatched(true);
       }
     }

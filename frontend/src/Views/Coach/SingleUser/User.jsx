@@ -26,7 +26,7 @@ export default function User() {
   if (!user || !user.Credentials) {
     return <LoadingSpinner />;
   }
-
+  console.log(user, "user");
   return (
     <div className="profile">
       {!user.Credentials ? (

@@ -4,12 +4,12 @@ import { Request, Response } from 'express';
 import { isRegistered, create } from '../services/AuthService';
 import { create as createSession, remove, find } from '../services/SessionService';
 import User from '../models/User';
-const { SECRET_KEY } = process.env;
+const SECRET_KEY = 'process.env';
 
 export const register = async (req: Request, res: Response) => {
   try {
     console.log(req.body);
-    
+
     if (!req?.body?.email || !req?.body?.password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
@@ -19,7 +19,7 @@ export const register = async (req: Request, res: Response) => {
 
     if (existingUser) {
       console.log('User already exists');
-      
+
       return res.status(400).json({ message: 'User already exists' });
     }
 
@@ -41,7 +41,7 @@ export const login = async (req: Request, res: Response) => {
 
     const userCredentials = await isRegistered(email);
     console.log('userCredentials', userCredentials);
-    
+
     if (!userCredentials) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -49,13 +49,13 @@ export const login = async (req: Request, res: Response) => {
     const isValidPassword = await bcrypt.compare(password, userCredentials.password);
     if (!isValidPassword) {
       console.log('Invalid credentials');
-      
+
       return res.status(403).json({ message: 'Invalid credentials' });
     }
 
     const existingSession = await find(userCredentials.idCredential);
     console.log('existingSession', existingSession);
-    
+
     const user = await User.findOne({ where: { idUser: userCredentials.idUser } });
 
     if (!existingSession) {
@@ -68,7 +68,7 @@ export const login = async (req: Request, res: Response) => {
           token: newSession.token,
           userId: userCredentials.idCredential,
         },
-        user
+        user,
       });
     }
 
@@ -82,8 +82,7 @@ export const login = async (req: Request, res: Response) => {
         token: newSession.token,
         userId: userCredentials.idCredential,
       },
-      user
-
+      user,
     });
   } catch (error: any) {
     console.error(error);

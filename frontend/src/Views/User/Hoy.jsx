@@ -25,7 +25,7 @@ function Hoy() {
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [cards, setCards] = useState([]);
-  const { id } = useParams();
+  const id = useSelector((state) => state.auths.userId); 
   const dispatch = useDispatch();
 
   const { isLoading } = useSelector((state) => state.rutinas);

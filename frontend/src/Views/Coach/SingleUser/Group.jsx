@@ -139,7 +139,7 @@ function Group() {
                 Añadir Usuario al Grupo:
               </Typography.Text>
               <Select
-                style={{ width: 200 }}
+                style={{ width: 200}}
                 placeholder="Selecciona un usuario"
                 onChange={(value) => setSelectedUserId(value)}
                 value={selectedUserId}
@@ -164,6 +164,7 @@ function Group() {
                 type="primary"
                 icon={<FaUserPlus />}
                 onClick={handleAddClient}
+                className="bg-blue-500"
               >
                 Añadir
               </Button>

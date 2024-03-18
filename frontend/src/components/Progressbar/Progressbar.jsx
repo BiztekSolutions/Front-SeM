@@ -3,6 +3,7 @@ import "react-circular-progressbar/dist/styles.css";
 import "./Progressbar.module.css";
 
 const Progressbar = ({ percentage }) => {
+  const roundedPercentage = Math.round(percentage);
   return (
     <div
       className="percentage-circle-container"
@@ -10,7 +11,7 @@ const Progressbar = ({ percentage }) => {
     >
       <CircularProgressbar
         value={percentage}
-        text={`${percentage}%`}
+        text={`${roundedPercentage}%`}
         styles={buildStyles({
           textSize: "6px",
           pathColor: `#2ecc71`, // Color del progreso

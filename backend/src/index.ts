@@ -28,7 +28,7 @@ const PORT: number = 3000;
 // Middlewares
 app.use(express.json());
 app.use(logger('dev'));
-app.use(cors());
+app.use(cors({origin: '*', methods: "*"}));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));

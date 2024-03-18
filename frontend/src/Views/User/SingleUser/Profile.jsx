@@ -35,6 +35,7 @@ function Profile() {
   const localUser = JSON.parse(localStorage.getItem("User"));
   const token = localUser.token;
   const dispatch = useDispatch();
+  const authUser = useSelector((state) => state.auths.user);
   const id = useSelector((state) => state.auths.userId);
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
@@ -115,6 +116,7 @@ function Profile() {
     dispatch(getUser({ userId: id, token }));
     setIsEditing(false);
   };
+  
   useEffect(() => {
     dispatch(getUser({ userId: id, token }));
     dispatch(getClients(token));
@@ -126,8 +128,9 @@ function Profile() {
   );
   useEffect(() => {
     if (dispatched === false) {
+
       if (!rutinas || rutinas.length === 0) {
-        dispatch(getRutines(id));
+        dispatch(getRutines(authUser?.Client?.idClient));
         setDispatched(true);
       }
     }
@@ -145,45 +148,57 @@ function Profile() {
 
   const calculateTrainingPercentage = () => {
     if (!rutinas || !trainingLogs) return 0;
-
-    // Obtener la rutina actual y el idRoutine correspondiente
+  
     const currentRoutine = rutinas[currentRoutineIndex]?.routine;
     const currentRoutineId = currentRoutine?.idRoutine;
-
-    // Filtrar los training logs por la rutina actual
+  
     const routineTrainingLogs = trainingLogs.filter(
       (log) => log.idRoutine === currentRoutineId
     );
-
-    // Obtener la fecha de inicio de la rutina y la fecha actual
-    const rutinaStartDate = new Date(currentRoutine?.startDate);
-
+  
     const currentDate = new Date();
-
-    // Calcular los días de entrenamiento desde el inicio de la rutina hasta la fecha actual
+    
+    const currentMonth = currentDate.getMonth(); // Obtener el mes actual
+    currentDate.setDate(currentDate.getDate() + 1);
+    const rutinaStartDate = new Date(currentRoutine?.startDate);
+    rutinaStartDate.setDate(1); // Establecer el día al 1 para comenzar desde el primer día del mes
+  
     const trainingDays = [];
-    let currentDay = rutinaStartDate.getDay(); // Día de la semana en que comenzó la rutina
-
-    // Agregar días de entrenamiento hasta la fecha actual
+    let currentDay = rutinaStartDate.getDay();
+  
     while (rutinaStartDate <= currentDate) {
-      currentRoutine?.GroupExercises?.forEach((group) => {
-        if (group.day === diasSemana[currentDay]) {
-          trainingDays.push(diasSemana[currentDay]);
-        }
-      });
-
+      // Verificar si el mes actual coincide con el mes en que comenzó la rutina
+      if (rutinaStartDate.getMonth() === currentMonth) {
+        currentRoutine?.GroupExercises?.forEach((group) => {
+          if (group.day === diasSemana[currentDay]) {
+            trainingDays.push(diasSemana[currentDay]);
+          }
+        });
+      }
+  
       rutinaStartDate.setDate(rutinaStartDate.getDate() + 1);
       currentDay = (currentDay + 1) % 7; // Siguiente día de la semana
     }
-
-    // Contar los días de entrenamiento que han sido registrados en los training logs
-
-    // Calcular el porcentaje
-    const percentage =
-      (routineTrainingLogs.length / trainingDays.length) * 100 || 0;
-
+    console.log(trainingDays, "trainingDays");
+    const totalTrainingDays = trainingDays.length;
+  
+    const registeredTrainingDays = routineTrainingLogs.reduce((count, log) => {
+      const logDate = new Date(log.date);
+      
+      // Verificar si la fecha del log de entrenamiento está dentro del mes actual y de la rutina actual
+      if (logDate.getMonth() === currentMonth && log.idRoutine === currentRoutineId) {
+        return count + 1;
+      }
+      
+      return count;
+    }, 0);
+    
+    console.log(routineTrainingLogs, registeredTrainingDays, 'aaaaaaaaaaa');
+    const percentage = (registeredTrainingDays / totalTrainingDays) * 100 || 0;
+  
     return percentage;
   };
+  
   useEffect(() => {
     calculateTrainingPercentage();
   }),
@@ -261,16 +276,21 @@ function Profile() {
                       onClick={handlePrevRoutine}
                     />
 
-                    <h2>{rutinas[currentRoutineIndex]?.routine?.name} </h2>
+                    <h2 className="font-bold text-2xl mx-4">{rutinas[currentRoutineIndex]?.routine?.name} </h2>
                     <RightOutlined
                       className="cursor-pointer text-2xl"
                       onClick={handleNextRoutine}
                     />
                   </div>
+                </> )}
+                {rutinas && rutinas.length > 0 ? (
+                  <>
                   <Progressbar percentage={calculateTrainingPercentage()} />
-                  <h4>% de entramiento realizados</h4>
-                </>
-              )}
+                  <h4 className="mt-4 font-bold">% de entramiento realizados</h4>
+                  <br></br>
+                  <h4 className="font-bold">de este mes</h4>
+                  </>
+              ):null}
             </div>
           </div>
           {isEditing && (

@@ -25,7 +25,7 @@ function Hoy() {
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [cards, setCards] = useState([]);
-  const id = useSelector((state) => state.auths.userId); 
+  const authUser = useSelector((state) => state.auths.user); 
   const dispatch = useDispatch();
 
   const { isLoading } = useSelector((state) => state.rutinas);
@@ -42,8 +42,8 @@ function Hoy() {
   const [dispatchee, setDispatchee] = useState(false);
   const token = localUser.token;
   useEffect(() => {
-    dispatch(getRutines(id));
-    dispatch(getUser({ token, userId: id }));
+    dispatch(getRutines(authUser.Client.idClient));
+    dispatch(getUser({ token, userId: authUser.idUser }));
     if (user && user.Client && !dispatchee) {
       dispatch(
         getTrainingLogs({
@@ -149,6 +149,20 @@ function Hoy() {
     );
   };
 
+
+  function isMaxOneDayAhead()  {
+    const currentDateTimestamp = currentDate.getTime();
+    const currentTimestamp = new Date().getTime();
+      
+    const diffInMs = (currentDateTimestamp - currentTimestamp); 
+      
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)); 
+      
+    console.log(diffInDays <= 0, 'diffInDays');
+    return diffInDays <= 0;
+  };
+
+
   const getDayOfWeekString = (dayOfWeek) => {
     const daysOfWeek = [
       "Domingo",
@@ -162,6 +176,8 @@ function Hoy() {
 
     return daysOfWeek[dayOfWeek];
   };
+
+
   const handleEditExercise = (formData) => {
     const configuration = formData;
     const exerciseId = formData.exerciseId;
@@ -170,10 +186,10 @@ function Hoy() {
         configuration,
         exerciseId,
         day: getDayOfWeekString(currentDay),
-        idRoutine: rutinas[currentRoutineIndex].routine.idRoutine,
+        idRoutine: rutinas[currentRoutineIndex]?.routine?.idRoutine,
       })
     );
-    dispatch(getRutines(id));
+    dispatch(getRutines(authUser?.Client?.idClient));
     dispatch(
       getGroupRutines({
         token,
@@ -259,10 +275,10 @@ function Hoy() {
                     />
                   </div> */}
                   <div className="text-center md:text-left">
-                    <h5 className="text-base font-semibold mb-2">
+                    <h5 className="text-base text-orange-500 font-semibold mb-2">
                       {exercise.series}x{exercise.repetitions}
                     </h5>
-                    <h5 className="text-base font-semibold mb-2">
+                    <h5 className="text-base font-semibold text-orange-500 mb-2">
                       {exercise.weight} kg
                     </h5>
                   </div>
@@ -290,22 +306,26 @@ function Hoy() {
     day: "numeric",
   };
   const formattedDate = currentDate.toLocaleDateString("es-ES", options);
-
+  console.log(rutinas, "rutinas");
   return (
     <div className="hoy-container">
-      <h2 className="text-2xl font-bold mb-4">
+      <h2 className="text-2xl font-bold mb-4 text-orange-500">
         {rutinas && rutinas.length > 1 && (
           <>
             {currentRoutineIndex === 0 ? null : (
+
               <LeftOutlined
-                className="cursor-pointer text-2xl"
+                className="cursor-pointer text-4xl text-orange-500"
                 onClick={handlePrevRoutine}
-              />
+                />
+          
             )}
-            {rutinas &&
-              rutinas.length > 0 &&
-              rutinas[currentRoutineIndex]?.routine?.name}
-            {currentRoutineIndex === rutinas.length - 2 ? null : (
+          </>
+        )}
+        {rutinas && rutinas.length > 0 && rutinas[currentRoutineIndex]?.routine?.name}
+        {rutinas && rutinas.length > 1 && (
+          <>
+            {currentRoutineIndex === rutinas.length - 1 ? null : (
               <RightOutlined
                 className="cursor-pointer text-2xl"
                 onClick={handleNextRoutine}
@@ -322,7 +342,7 @@ function Hoy() {
         >
           <LeftOutlined />
         </button>
-        <span className="text-lg font-semibold">{formattedDate}</span>
+        <span className="text-lg text-orange-500 font-semibold">{formattedDate}</span>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => handleDayChange(1)}
@@ -333,16 +353,16 @@ function Hoy() {
 
       <div className="exercise-cards-container">{cards}</div>
       {!hasExercises ? (
-        <p className="text-center text-lg font-bold mb-4">
+        <p className="text-center text-lg  mb-4 text-orange-500 mt-20">
           NO TIENES EJERCICIOS ESTE DÍA
         </p>
       ) : null}
 
-      {hasExercises && (
+      {hasExercises && isMaxOneDayAhead() && (
         <button
           className={`bg-${isDayTrained ? "red" : "green"}-500 hover:bg-${
             isDayTrained ? "red" : "green"
-          }-700 text-white font-bold py-2 px-4 rounded`}
+          }-700 text-black font-bold py-2 px-4 rounded`}
           onClick={handleMarkAsTrained}
         >
           {isDayTrained

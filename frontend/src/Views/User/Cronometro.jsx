@@ -56,7 +56,7 @@ function Cronometro() {
       </div>
       <div>
         {!corriendo ? (
-          <Button type="primary" onClick={iniciarCronometro}>
+          <Button type="primary" onClick={iniciarCronometro} className="text-orange-500 mr-5">
             Iniciar
           </Button>
         ) : (

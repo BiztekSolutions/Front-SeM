@@ -38,9 +38,10 @@ function Rutinas() {
         }
       }
     }
+    console.log(authUser, 'authUser');
     if (dispatched2 === false) {
       if (!rutinas || rutinas.length === 0) {
-        dispatch(getRutines(authUser.idUser));
+        dispatch(getRutines(authUser.Client.idClient));
         setDispatched2(true);
       }
     }

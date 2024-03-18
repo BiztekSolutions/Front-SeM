@@ -12,7 +12,7 @@ const login = async (user) => {
 
 const logout = async (userId, token) => {
   const response = await axios.get(
-    `${base_url}/logout/${userId}`,
+    `${base_url}/auth/logout`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

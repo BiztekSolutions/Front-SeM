@@ -70,7 +70,7 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
         <div>
           <p>Peso(kg)</p>
           <input
-            className="form-control"
+            className="form-control text-black"
             name="weight"
             placeholder="Peso"
             onChange={handleChange}
@@ -102,8 +102,8 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
           )}
         </div>
       ) : null}
-      <button type="submit" className="btn btn-primary mx-4 bg-black">
-        Save Changes
+      <button type="submit" className="btn btn-primary mx-4 bg-black text-white">
+        Guardar cambios
       </button>
     </form>
   );

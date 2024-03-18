@@ -26,7 +26,6 @@ function Calendar({ rutinas }) {
   useEffect(() => {
     if (rutinas && rutinas.length !== 0) {
       const generatedEvents = generateEvents(rutinas[currentRoutineIndex]);
-
       setEvents(generatedEvents);
     }
   }, [rutinas, currentRoutineIndex]);
@@ -143,10 +142,12 @@ function Calendar({ rutinas }) {
     <div className="user-calendar">
       <div className="flex items-center justify-between mt-10">
         {rutinas && rutinas.length > 1 && (
+        
           <LeftOutlined
             className="cursor-pointer text-2xl"
             onClick={handlePrevRoutine}
-          />
+            />
+
         )}
 
         {rutinas && rutinas.length > 1 && (

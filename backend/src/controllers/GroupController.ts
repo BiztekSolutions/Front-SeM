@@ -20,7 +20,8 @@ export const createGroup = async (req: Request, res: Response) => {
     const transaction = await sequelize.transaction();
     try {
       const { groupName, selectedUsers } = req.body;
-
+      console.log('req.body', req.body);
+      
       if (!groupName) {
         return res.status(400).json({ message: 'Group name is required in the request body' });
       }
@@ -37,11 +38,11 @@ export const createGroup = async (req: Request, res: Response) => {
       if (group.idGroup) {
         for (const idClient of selectedUsers) {
           const client = await Client.findByPk(idClient); // Obtener instancia de Client
-
+        
           if (client) {
             await group.addClient(client, { transaction: transaction });
           } else {
-            res.status(400).json({ message: `Client with id ${idClient} not found`, group });
+            console.error(`Client with id ${idClient} not found`);
           }
         }
       } else {

@@ -48,16 +48,13 @@ function ContactForm() {
             className="border border-customOrange rounded-md"
           />
           {errors.interest && <span>Selecciona una opción</span>}
-          <select {...register("interest", { required: true })} className="border border-customOrange rounded-md">
+          <select {...register("interest", { required: true })} className="border border-customOrange rounded-md" style={{ color: "black" }}>
             <option value="">En qué estás interesado</option>
-            <option value="rutinaPersonalizada">
-              Rutina personalizada en tu casa
-            </option>
-            <option value="entrenamientoPresencial">
-              Entrenamiento presencial
-            </option>
+            <option value="rutinaPersonalizada">Rutina personalizada en tu casa</option>
+            <option value="entrenamientoPresencial">Entrenamiento presencial</option>
             <option value="indumentaria">Indumentaria</option>
           </select>
+
           {errors.email && <span>Ingresa un correo electrónico válido</span>}
           <input
             type="email"

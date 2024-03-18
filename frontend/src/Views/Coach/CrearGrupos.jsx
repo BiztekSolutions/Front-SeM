@@ -80,6 +80,7 @@ function CrearGrupos() {
         showErrorNotification("Error!", "Seleccione al menos 2 usuarios.")
       );
     }
+    console.log(selectedUsers, 'selectedUsers');
     dispatch(createGroup({ groupName, selectedUsers }));
   };
   const getColumnSearchProps = (dataIndex) => ({
@@ -258,7 +259,7 @@ function CrearGrupos() {
       className: "txt-taeble",
     },
   ];
-
+  console.log(clients, 'clients');
   const dataSource = [];
   if (clients?.length > 0) {
     for (let i = 0; i < clients.length; i++) {
@@ -272,8 +273,8 @@ function CrearGrupos() {
           <div className="flex align-items-center gap-3">
             <input
               type="checkbox"
-              checked={selectedUsers.includes(clients[i].User.idUser)}
-              onChange={() => handleUserSelect(clients[i].User.idUser)}
+              checked={selectedUsers.includes(clients[i].idClient)}
+              onChange={() => handleUserSelect(clients[i].idClient)}
             />
           </div>
         ),

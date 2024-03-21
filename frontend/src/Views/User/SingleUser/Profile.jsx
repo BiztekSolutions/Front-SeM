@@ -204,9 +204,7 @@ function Profile() {
   }),
     [currentRoutineIndex];
 
-  if (!isUserInClients) {
-    return <div>Este usuario no es tu cliente</div>;
-  }
+  
 
   return (
     <div>

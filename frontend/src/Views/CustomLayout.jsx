@@ -22,15 +22,14 @@ const CustomLayout = ({ items }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auths.user);
   const layout = useSelector((state) => state.layout);
-
+  const navigate = useNavigate();
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const localUser = JSON.parse(localStorage.getItem("User"));
   const handleLogout = () => {
     setLogged(false);
     localStorage.removeItem("User");
     persistor.purge();
-
-    window.location.reload();
+    navigate("/");
   };
 
   const { setLogged } = useContext(GlobalContext);
@@ -57,7 +56,7 @@ const CustomLayout = ({ items }) => {
     </Menu>
   );
 
-  const navigate = useNavigate();
+  
   const [current, setCurrent] = useState("noticias");
   const userLocal = localStorage.getItem("User");
   const userLocalParse = JSON.parse(userLocal);

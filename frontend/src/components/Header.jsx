@@ -189,10 +189,10 @@ const Header = () => {
           </button>
         </div>
         <div>
-          <Register
+          {isMenuOpen && <Register
             isRegisterOpen={isRegisterOpen}
             setRegisterOpen={setRegisterOpen}
-          />
+          />}
         </div>
       </div>
     </div>

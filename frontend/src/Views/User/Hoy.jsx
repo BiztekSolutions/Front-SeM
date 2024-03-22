@@ -158,7 +158,7 @@ function Hoy() {
       
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)); 
       
-    console.log(diffInDays <= 0, 'diffInDays');
+
     return diffInDays <= 0;
   };
 

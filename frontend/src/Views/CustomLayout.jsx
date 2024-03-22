@@ -16,6 +16,7 @@ import { GlobalContext } from "../context/globalContext";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode, toggleSidebar } from "@/features/layout/layoutSlice";
 import { persistor } from "../store/store";
+import { clearAuthToken, clearAuthMessages } from "../features/auth/authSlice";
 const { Header, Sider, Content } = AntLayout;
 
 const CustomLayout = ({ items }) => {
@@ -25,11 +26,15 @@ const CustomLayout = ({ items }) => {
   const navigate = useNavigate();
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const localUser = JSON.parse(localStorage.getItem("User"));
+  
+  
   const handleLogout = () => {
     setLogged(false);
     localStorage.removeItem("User");
     persistor.purge();
+
     navigate("/");
+
   };
 
   const { setLogged } = useContext(GlobalContext);
@@ -38,15 +43,15 @@ const CustomLayout = ({ items }) => {
     if (window.innerWidth < 1000) {
       dispatch(toggleSidebar(true));
     }
-  }, [dispatch]);
+  }, []);
 
   const menu = (
     <Menu>
       <Menu.Item key="1">
-        <Link to={`./profile/${localUser.user}`}>Perfil</Link>
+        <Link to={`./profile/${localUser?.user}`}>Perfil</Link>
       </Menu.Item>
       <Menu.Item key="2">
-        <Link to={`./changePassword/${localUser.user}`}>
+        <Link to={`./changePassword/${localUser?.user}`}>
           Cambiar contraseña
         </Link>
       </Menu.Item>

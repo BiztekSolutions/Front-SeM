@@ -7,8 +7,7 @@ const destinatario2 = 'Peixflor@gmail.com';
 const user = 'nasir.stark@ethereal.email'
 
 const { CONTRA_TRANSPORTER_MAIL } = process.env;
-console.log('CONTRA_TRANSPORTER_MAIL', CONTRA_TRANSPORTER_MAIL);
-console.log('user', user);
+
 
 
 // Configurar el transporte de Nodemailer
@@ -35,7 +34,7 @@ export const sendEmail = async (from: string, subject: string, text: string) => 
 
     // Enviar el correo electrónico
     const info = await transporter.sendMail(mailOptions);
-    console.log('Correo electrónico enviado:', info.response);
+  
   } catch (error) {
     console.error('Error al enviar el correo electrónico:', error);
     throw error; // Relanza el error para que el controlador lo maneje

@@ -20,7 +20,7 @@ export const createGroup = async (req: Request, res: Response) => {
     const transaction = await sequelize.transaction();
     try {
       const { groupName, selectedUsers } = req.body;
-      console.log('req.body', req.body);
+
       
       if (!groupName) {
         return res.status(400).json({ message: 'Group name is required in the request body' });

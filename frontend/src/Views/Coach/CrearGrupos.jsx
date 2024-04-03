@@ -80,7 +80,7 @@ function CrearGrupos() {
         showErrorNotification("Error!", "Seleccione al menos 2 usuarios.")
       );
     }
-    console.log(selectedUsers, 'selectedUsers');
+
     dispatch(createGroup({ groupName, selectedUsers }));
   };
   const getColumnSearchProps = (dataIndex) => ({

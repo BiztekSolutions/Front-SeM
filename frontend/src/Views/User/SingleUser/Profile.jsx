@@ -33,7 +33,7 @@ function Profile() {
   });
   const [dispatched, setDispatched] = useState(false);
   const localUser = JSON.parse(localStorage.getItem("User"));
-  const token = localUser.token;
+  const token = localUser?.token;
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auths.user);
   const id = useSelector((state) => state.auths.userId);
@@ -179,7 +179,7 @@ function Profile() {
       rutinaStartDate.setDate(rutinaStartDate.getDate() + 1);
       currentDay = (currentDay + 1) % 7; // Siguiente día de la semana
     }
-    console.log(trainingDays, "trainingDays");
+  
     const totalTrainingDays = trainingDays.length;
   
     const registeredTrainingDays = routineTrainingLogs.reduce((count, log) => {
@@ -193,7 +193,7 @@ function Profile() {
       return count;
     }, 0);
     
-    console.log(routineTrainingLogs, registeredTrainingDays, 'aaaaaaaaaaa');
+
     const percentage = (registeredTrainingDays / totalTrainingDays) * 100 || 0;
   
     return percentage;
@@ -204,9 +204,7 @@ function Profile() {
   }),
     [currentRoutineIndex];
 
-  if (!isUserInClients) {
-    return <div>Este usuario no es tu cliente</div>;
-  }
+  
 
   return (
     <div>

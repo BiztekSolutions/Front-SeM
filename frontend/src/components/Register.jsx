@@ -28,6 +28,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const { message, token, user, userId, isLoading } = auths;
   const { coaches } = users;
   const [errors, setErrors] = useState({});
+  const [submit, setSubmit] = useState(false);
   // CONTEXT API
   const globalContext = useContext(GlobalContext);
   const { setLogged } = globalContext;
@@ -49,11 +50,12 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     } else {
       dispatch(loginUser(values));
     }
+    setSubmit(true);
     setErrors({});
     setAvatar("");
   }
 
- console.log(message, 'asdasd');
+
 
   const handleRegister = () => {
     setRegisterOpen(!isRegisterOpen);
@@ -91,7 +93,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     }
 
     if (message === "User already exists") {
-      console.log("User already exists");
+  
       dispatch(
         showErrorNotification(
           "Error",
@@ -101,7 +103,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       dispatch(clearUserMessage());
     }
 
-    if (message === "User logged") {
+    if (message === "User logged" && submit) {
       // Setear LS con userID encriptado
       if (token && userId) {
         localStorage.setItem(
@@ -127,10 +129,9 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
 
   useEffect(() => {
     // Verificar si hay cambios en el estado de coaches
-    if (coaches !== null) {
+    if (coaches !== null && submit) {
       const isUserACoach = coaches?.some((coach) => coach.idUser === userId);
-      console.log("user", user);
-      console.log(coaches, 'coaches');
+
       
       if (isUserACoach) {
         navigate("/coach");

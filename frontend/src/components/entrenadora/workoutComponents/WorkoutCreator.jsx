@@ -49,7 +49,7 @@ function WorkoutCreator() {
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  console.log(message2, "message2", message, "message");
+
 
   useEffect(() => {
     dispatch(getAllExercises());

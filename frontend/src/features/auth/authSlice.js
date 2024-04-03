@@ -1,6 +1,7 @@
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { authService } from "./authService";
 import { userService } from "../user/userService";
+import { PURGE } from "redux-persist";
 
 const initialState = {
   user: {},
@@ -50,7 +51,7 @@ export const register = createAsyncThunk("register", async (data, thunkAPI) => {
   }
 });
 export const updateUserr = createAction("updateUserr");
-
+export const clearAuthToken = createAction("clearAuthToken");
 export const clearAuthMessages = createAction("clearAuthMessages");
 export const clearUserMessage = createAction("clearUserMessage");
 
@@ -60,6 +61,10 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(PURGE, (state) => {
+        state = initialState;
+      })
+
       // LOGIN USER
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -121,6 +126,11 @@ export const authSlice = createSlice({
       })
 
       // ACTIONS
+
+      .addCase(clearAuthToken, (state) => {
+        state.token = "";
+      }
+      )
       .addCase(updateUserr, (state, action) => {
         state.user = action.payload;
       })

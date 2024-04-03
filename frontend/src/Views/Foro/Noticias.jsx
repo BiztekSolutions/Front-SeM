@@ -47,11 +47,11 @@ function Noticias() {
   const location = useLocation();
   const isCoachPage = location.pathname.includes("/coach");
   
-  const isUserAClient = clients?.some((client) => client.idUser === user.user);
+  const isUserAClient = clients?.some((client) => client.idUser === user?.user);
   useEffect(() => {
-    dispatch(fetchPosts(user.token));
+    dispatch(fetchPosts(user?.token));
 
-    dispatch(getClients(user.token));
+    dispatch(getClients(user?.token));
   }, [dispatch, posts.Comments]);
 
   const foundClient = clients?.find((client) => client.idUser === user.user);

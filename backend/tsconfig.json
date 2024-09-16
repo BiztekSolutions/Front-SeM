@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "target": "es6",
     "module": "commonjs",
     "outDir": "dist",
@@ -12,6 +13,6 @@
     "strictPropertyInitialization": false,
     "typeRoots": ["node_modules/@types", "./types"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/controllers/AuthController.tsx"],
   "exclude": ["node_modules"]
 }

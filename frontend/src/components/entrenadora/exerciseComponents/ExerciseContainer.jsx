@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import ExerciseCard from "./ExerciseCard";
 import ExerciseForm from "./ExerciseForm";
+import { base_url } from "../../../utils/utilities";
+
 function ExerciseContainer({ exercises, setExercises }) {
   const [showForm, setShowForm] = useState(false);
 
@@ -18,7 +20,7 @@ function ExerciseContainer({ exercises, setExercises }) {
   async function handleEditExercise(exercise, data) {
     try {
       const response = await axios.patch(
-        `http://localhost:3001/exercises/${exercise.id}`,
+        `${base_url}/exercises/${exercise.id}`,
         data
       );
       const updatedExercises = exercises.map((exercise) => {
@@ -34,7 +36,7 @@ function ExerciseContainer({ exercises, setExercises }) {
   async function handlePostExercise(data) {
     try {
       const response = await axios.post(
-        `http://localhost:3001/exercises`,
+        `${base_url}/exercises`,
         data
       );
       setExercises([...exercises, response.data]);

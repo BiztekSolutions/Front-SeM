@@ -140,28 +140,28 @@ function Calendar({ rutinas }) {
 
   return (
     <div className="user-calendar">
-      <div className="flex items-center justify-between mt-10">
-        {rutinas && rutinas.length > 1 && (
-        
-          <LeftOutlined
+
+      {events && rutinas && rutinas.length !== 0 && (
+        <div key={currentRoutineIndex} className="w-full">
+          <div className="flex items-center justify-center m-10">
+          {rutinas && rutinas.length > 1 && (
+            
+            <LeftOutlined
             className="cursor-pointer text-2xl"
             onClick={handlePrevRoutine}
             />
-
-        )}
-
-        {rutinas && rutinas.length > 1 && (
-          <RightOutlined
-            className="cursor-pointer text-2xl"
-            onClick={handleNextRoutine}
-          />
-        )}
-      </div>
-      {events && rutinas && rutinas.length !== 0 && (
-        <div key={currentRoutineIndex} className="w-full ">
-          <h2 className="rutineTittle text-orange-500">
+            
+          )}
+          <h2 className="rutineTittle text-orange-500 mx-10">
             {rutinas[currentRoutineIndex]?.routine?.name}
           </h2>
+          {rutinas && rutinas.length > 1 && (
+            <RightOutlined
+            className="cursor-pointer text-2xl"
+            onClick={handleNextRoutine}
+            />
+          )}
+          </div>
           <FullCalendar
             key={events.length}
             plugins={[dayGridPlugin]}

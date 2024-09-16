@@ -9,6 +9,8 @@ import AvatarOptions from "./AvatarOptions";
 import { clearUserMessage, register, loginUser } from "../features/auth/authSlice";
 import { showSuccessNotification, showErrorNotification } from "@/features/layout/layoutSlice";
 import { getUsers, getCoaches } from "../features/user/userSlice";
+import styles from "./Modals/Login.module.css"; 
+import { ModalContext } from "../context/ModalContext";
 
 const credentialsInitialState = {
   password: "",
@@ -29,16 +31,17 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
   const { coaches } = users;
   const [errors, setErrors] = useState({});
   const [submit, setSubmit] = useState(false);
+  const {
+    setModal,
+  } = useContext(ModalContext);
   // CONTEXT API
   const globalContext = useContext(GlobalContext);
   const { setLogged } = globalContext;
 
   const [form] = Form.useForm();
 
-  
-
   function handleSubmit(values) {
-    if (isRegisterOpen) {    
+    if (isRegisterOpen) {
       const newErrors = {};
       if (avatar === "") newErrors.avatar = "Seleccione un avatar";
       if (Object.keys(newErrors).length > 0) {
@@ -46,8 +49,10 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
         return;
       }
       values.avatar = avatar.avatar;
+      values.email = values.email.toLowerCase();
       dispatch(register(values));
     } else {
+      values.email = values.email.toLowerCase();
       dispatch(loginUser(values));
     }
     setSubmit(true);
@@ -93,7 +98,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     }
 
     if (message === "User already exists") {
-  
+
       dispatch(
         showErrorNotification(
           "Error",
@@ -110,7 +115,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
           "User",
           JSON.stringify({ user: userId, token: token })
         );
-          
+
         dispatch(getCoaches(token));
         dispatch(getUsers(token));
       }
@@ -123,7 +128,7 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
       dispatch(
         showSuccessNotification("Hola", `Bienvenido de vuelta!`)
       );
-      
+
     }
   }, [message, user, isLoading]);
 
@@ -132,14 +137,14 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
     if (coaches !== null && submit) {
       const isUserACoach = coaches?.some((coach) => coach.idUser === userId);
 
-      
+
       if (isUserACoach) {
         navigate("/coach");
       } else {
         navigate(`/user/${user.idUser}`);
       }
     }
-  }, [coaches]); 
+  }, [coaches]);
 
 
   const handleSelectAvatar = (selectedAvatar) => {
@@ -163,23 +168,23 @@ function Register({ isRegisterOpen, setRegisterOpen }) {
               onFinish={handleSubmit}
               initialValues={credentialsInitialState}
             >{
-isRegisterOpen && (
-  <>
-              <Form.Item
-              name="name"
-              rules={[{ required: true, message: "Ingrese su nombre" }]}
-              >
-                <Input placeholder="Nombre" />
-              </Form.Item>
-              <Form.Item
-              name="lastname"
-              rules={[{ required: true, message: "Ingrese su apellido" }]}
-              >
-                <Input placeholder="Apellido" />
-              </Form.Item>
-                </>
+                isRegisterOpen && (
+                  <>
+                    <Form.Item
+                      name="name"
+                      rules={[{ required: true, message: "Ingrese su nombre" }]}
+                    >
+                      <Input placeholder="Nombre" />
+                    </Form.Item>
+                    <Form.Item
+                      name="lastname"
+                      rules={[{ required: true, message: "Ingrese su apellido" }]}
+                    >
+                      <Input placeholder="Apellido" />
+                    </Form.Item>
+                  </>
 
-              )}
+                )}
               <Form.Item
                 name="email"
                 rules={[
@@ -204,8 +209,17 @@ isRegisterOpen && (
                 <>
                   <Form.Item
                     name="repeatPassword"
+                    dependencies={['password']}
                     rules={[
                       { required: true, message: "Repita la contraseña" },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue('password') === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(new Error('Las contraseñas no coinciden'));
+                        },
+                      }),
                     ]}
                   >
                     <Input.Password
@@ -216,20 +230,33 @@ isRegisterOpen && (
                     />
                   </Form.Item>
                   <div className="">
-                      <AvatarOptions onSelectAvatar={handleSelectAvatar} />
-                      {errors.avatar && (
-                        <p className="text-red-500 text-sm">{errors.avatar}</p>
-                      )}
-                    </div>
+                    <AvatarOptions onSelectAvatar={handleSelectAvatar} />
+                    {errors.avatar && (
+                      <p className="text-red-500 text-sm">{errors.avatar}</p>
+                    )}
+                  </div>
                 </>
               )}
               <Form.Item>
-                <Button type="primary" htmlType="submit" style={{backgroundColor: "black"}}>
+                <Button type="primary" htmlType="submit" style={{ backgroundColor: "black" }}>
                   Enviar
                 </Button>
               </Form.Item>
             </Form>
-            <Button onClick={handleRegister} type="text" style={{marginBottom: "10px"}}>
+            {!isRegisterOpen && (
+              <span >
+              <a
+                  onClick={() => setModal("forgotPasswordModal", true)}
+                className={
+                  styles.forgotPassword
+                }
+              >
+                Olvidé mi contraseña
+              </a>
+            </span>
+            )}  
+
+            <Button onClick={handleRegister} type="text" style={{ marginBottom: "10px" }}>
               {isRegisterOpen
                 ? "Cambiar a iniciar sesión"
                 : "Cambiar a crear cuenta"}

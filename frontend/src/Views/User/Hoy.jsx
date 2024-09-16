@@ -4,10 +4,10 @@ import {
   getRutines,
   updateRutineConfiguration,
 } from "../../features/rutinas/rutinasSlice";
+import { Card, Typography, List, Col, Row } from 'antd';
 import ExerciseModal from "../../components/entrenadora/exerciseComponents/ExerciseModal";
 import { useParams } from "react-router-dom";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Typography } from "antd";
 import "./Hoy.css";
 import { getGroupRutines } from "../../features/group/groupSlice";
 import {
@@ -25,7 +25,7 @@ function Hoy() {
   const [showModal, setShowModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [cards, setCards] = useState([]);
-  const authUser = useSelector((state) => state.auths.user); 
+  const authUser = useSelector((state) => state.auths.user);
   const dispatch = useDispatch();
 
   const { isLoading } = useSelector((state) => state.rutinas);
@@ -35,11 +35,12 @@ function Hoy() {
   const { user, trainingLogs, message } = useSelector((state) => state.users);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const rutinas = rutinas2?.concat(rutinaGrupal);
+  const rutinas = [...(rutinas2 || []), ...(rutinaGrupal || [])];
   const [hasExercises, setHasExercises] = useState(false);
   const [isDayTrained, setIsDayTrained] = useState();
   const localUser = JSON.parse(localStorage.getItem("User"));
   const [dispatchee, setDispatchee] = useState(false);
+
   const token = localUser.token;
   useEffect(() => {
     dispatch(getRutines(authUser.Client.idClient));
@@ -87,7 +88,7 @@ function Hoy() {
     const formattedDate = currentDate.toISOString().split("T")[0];
     const trainingLogsRutinaActual = trainingLogs?.filter(
       (logs) =>
-        logs.idRoutine === rutinas[currentRoutineIndex].routine.idRoutine
+        logs.idRoutine === rutinas[currentRoutineIndex]?.routine?.idRoutine
     );
     const isDayTrained = trainingLogsRutinaActual?.some(
       (log) => log.date?.split("T")[0] === formattedDate
@@ -95,6 +96,7 @@ function Hoy() {
 
     setIsDayTrained(isDayTrained);
   }, [currentDay, currentRoutineIndex, rutinas2, trainingLogs]);
+
   useEffect(() => {
     if (message === "Day marked as trained successfully") {
       showSuccessNotification("Exito!", "Dia marcado como entrenado");
@@ -116,8 +118,8 @@ function Hoy() {
         })
       );
     }
-  }),
-    [message];
+  }), [message];
+
   const handleCardClick = (exercise) => {
     setSelectedExercise(exercise);
     setShowModal(true);
@@ -141,27 +143,19 @@ function Hoy() {
     setCurrentRoutineIndex((prevIndex) =>
       prevIndex < rutinas.length - 1 ? prevIndex + 1 : 0
     );
+    setCurrentDate(new Date());
+    setCurrentDay(new Date().getDay());
+    setHasExercises(false);
   };
 
   const handlePrevRoutine = () => {
     setCurrentRoutineIndex((prevIndex) =>
       prevIndex > 0 ? prevIndex - 1 : rutinas.length - 1
     );
+    setCurrentDate(new Date());
+    setCurrentDay(new Date().getDay());
+    setHasExercises(false);
   };
-
-
-  function isMaxOneDayAhead()  {
-    const currentDateTimestamp = currentDate.getTime();
-    const currentTimestamp = new Date().getTime();
-      
-    const diffInMs = (currentDateTimestamp - currentTimestamp); 
-      
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)); 
-      
-
-    return diffInDays <= 0;
-  };
-
 
   const getDayOfWeekString = (dayOfWeek) => {
     const daysOfWeek = [
@@ -172,6 +166,7 @@ function Hoy() {
       "Jueves",
       "Viernes",
       "Sabado",
+
     ];
 
     return daysOfWeek[dayOfWeek];
@@ -226,73 +221,86 @@ function Hoy() {
     const currentRoutine = rutinas && rutinas[currentRoutineIndex];
     if (!currentRoutine) return [];
 
-    const { GroupExercises } = currentRoutine.routine;
+    const { GroupExercises, startDate } = currentRoutine.routine;
     const hoy = getDayOfWeekString(currentDay);
+
+    const startDateObj = new Date(startDate);
+    const currentDateObj = new Date(currentDate);
+
+    // Si la fecha de inicio de la rutina es mayor que la fecha actual, retornar []
+    if (startDateObj > currentDateObj) return [];
 
     const exerciseCards = GroupExercises.reduce((acc, group) => {
       if (group.day === hoy) {
         setHasExercises(true);
 
         group.ExerciseConfigurations?.forEach((exercise) => {
-          acc.push(
-            <div
-              key={exercise?.idExercise}
-              onClick={() => handleCardClick(exercise)}
-              className="exercise-card-container mb-4 cursor-pointer border hover:border-blue-500"
-            >
-              <div className="flex">
-                <div className="exercise-card-images">
-                  <img
-                    src={exercise?.Exercise.image1}
-                    alt={`Imagen de ${exercise?.name}`}
-                    className="w-32 h-auto object-cover rounded-l-lg"
-                  />
-                  <img
-                    src={exercise?.Exercise.image2}
-                    alt={`Imagen de ${exercise?.name}`}
-                    className="w-32 h-auto object-cover rounded-r-lg"
-                  />
-                </div>
-                <div className="exercise-card-details p-4">
-                  <div className="mb-2 font-bold">
-                    <Typography.Text>
-                      ID: {exercise?.idExercise}
-                    </Typography.Text>
-                  </div>
-                  <div className="mb-2">
-                    <Typography.Text>{exercise?.Exercise.name}</Typography.Text>
-                  </div>
-                  {/* <div className="flex gap-4 justify-center">
-                    <img
-                      src={exercise?.Exercise.image1}
-                      alt={`Imagen de ${exercise?.name}`}
-                      className="w-32 h-32 object-cover mb-2 rounded-full"
-                    />
-                    <img
-                      src={exercise?.Exercise.image2}
-                      alt={`Imagen de ${exercise?.name}`}
-                      className="w-32 h-32 object-cover mb-2 rounded-full"
-                    />
-                  </div> */}
-                  <div className="text-center md:text-left">
-                    <h5 className="text-base text-orange-500 font-semibold mb-2">
-                      {exercise.series}x{exercise.repetitions}
-                    </h5>
-                    <h5 className="text-base font-semibold text-orange-500 mb-2">
-                      {exercise.weight} kg
-                    </h5>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
+          acc.push(exercise);
         });
       }
 
       return acc;
     }, []);
 
-    return exerciseCards;
+    return (
+      <List
+        grid={{
+          gutter: 16,
+          xs: 1,
+          sm: 1,
+          md: 1,
+          lg: 1,
+          xl: 1,
+          xxl: 1,
+        }}
+        dataSource={exerciseCards}
+        renderItem={(exercise) => (
+          <List.Item>
+            <Card
+              className="card-max-height"
+              key={exercise?.idExercise}
+              onClick={() => handleCardClick(exercise)}
+              hoverable
+            >
+              <Row gutter={16}>
+                <Col span={8}>
+                  <img
+                    alt={`Imagen de ${exercise?.name}`}
+                    src={exercise?.Exercise.image1}
+                  />
+                </Col>
+                <Col span={8}>
+                  <img
+                    alt={`Imagen de ${exercise?.name}`}
+                    src={exercise?.Exercise.image2}
+                  />
+                </Col>
+
+                <Col span={8}>
+                  <Card.Meta
+                    title={exercise?.Exercise.name}
+                  />
+                  <Typography.Text >
+                    <span >
+                      series: {exercise.series}
+                    </span>
+                    <br />
+                    <span>
+                      rep: {exercise.repetitions}
+                    </span>
+                    <br />
+                    <span >
+                      Peso: {exercise.weight} kg
+                    </span>
+                  </Typography.Text>
+                </Col>
+              </Row>
+            </Card>
+          </List.Item>
+        )}
+      />
+    );
+
   };
 
   if (isLoading) {
@@ -306,34 +314,43 @@ function Hoy() {
     day: "numeric",
   };
   const formattedDate = currentDate.toLocaleDateString("es-ES", options);
-  console.log(rutinas, "rutinas");
+  const isMobile = window.innerWidth <= 640;
+
   return (
     <div className="hoy-container">
-      <h2 className="text-2xl font-bold mb-4 text-orange-500">
+      <div className="flex justify-center m-5">
         {rutinas && rutinas.length > 1 && (
           <>
             {currentRoutineIndex === 0 ? null : (
 
               <LeftOutlined
-                className="cursor-pointer text-4xl text-orange-500"
+                className="cursor-pointer text-2xl border border-gray-300 rounded-full p-1"
+                style={{ color: isMobile? 'orange' : "grey", 
+                border: isMobile ? 'none' : "true",
+                marginTop: isMobile ? '50px' : "0",}}
                 onClick={handlePrevRoutine}
-                />
-          
+              />
+
             )}
           </>
         )}
-        {rutinas && rutinas.length > 0 && rutinas[currentRoutineIndex]?.routine?.name}
+        <h2 className=" text-2xl md:text-2xl sm:text-sm font-bold m-6 text-orange-500">
+          {rutinas && rutinas.length > 0 && rutinas[currentRoutineIndex]?.routine?.name}
+        </h2>
         {rutinas && rutinas.length > 1 && (
           <>
             {currentRoutineIndex === rutinas.length - 1 ? null : (
               <RightOutlined
-                className="cursor-pointer text-2xl"
+                className="cursor-pointer text-2xl border-2 border-gray-300 rounded-full p-1"
+                style={{ color: window.innerWidth <= 640 ? 'orange' : "grey", 
+                border: window.innerWidth <= 640 ? 'none' : "true",
+                marginTop: window.innerWidth <= 640 ? '50px' : "0",}}
                 onClick={handleNextRoutine}
               />
             )}
           </>
         )}
-      </h2>
+      </div>
 
       <div className="flex justify-between mb-4">
         <button
@@ -342,7 +359,7 @@ function Hoy() {
         >
           <LeftOutlined />
         </button>
-        <span className="text-lg text-orange-500 font-semibold">{formattedDate}</span>
+        <span className="text-lg text-orange-500 font-semibold mx-2">{formattedDate}</span>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => handleDayChange(1)}
@@ -351,18 +368,18 @@ function Hoy() {
         </button>
       </div>
 
-      <div className="exercise-cards-container">{cards}</div>
+      <div className="max-h-96">{cards}</div>
+
       {!hasExercises ? (
         <p className="text-center text-lg  mb-4 text-orange-500 mt-20">
           NO TIENES EJERCICIOS ESTE DÍA
         </p>
       ) : null}
 
-      {hasExercises && isMaxOneDayAhead() && (
+      {hasExercises && (
         <button
-          className={`bg-${isDayTrained ? "red" : "green"}-500 hover:bg-${
-            isDayTrained ? "red" : "green"
-          }-700 text-black font-bold py-2 px-4 rounded`}
+          className={`bg-${isDayTrained ? "red" : "green"}-500 hover:bg-${isDayTrained ? "red" : "green"
+            }-700 text-black font-bold py-2 px-4 rounded`}
           onClick={handleMarkAsTrained}
         >
           {isDayTrained

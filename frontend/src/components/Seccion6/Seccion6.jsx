@@ -14,7 +14,7 @@ function Seccion6() {
         <div className="col-span-3 col-start-2 row-start-1 w-full grid-rows-2 row-span-2 mt-5 card-s6 z-10">
           <div className="imgBx">
             <img
-              src="https://media-public.canva.com/kCUrg/MAD0WHkCUrg/1/s.jpg"
+              src="https://s3.amazonaws.com/salud-en-movimiento.com.ar/photo3-landing.jpeg"
               alt="imagen-seccion6"
               className="col-span-3 col-start-2 row-start-1 w-full grid-rows-2 row-span-2"
             />
@@ -23,7 +23,7 @@ function Seccion6() {
         <div className="w-full col-span-3 col-start-4 row-start-3 card-s6 z-10">
           <div className="imgBx">
             <img
-              src="https://mercadofitness.com/ar/wp-content/uploads/2019/12/Funcional-Gym-present%C3%B3-una-licencia-en-Z%C3%A1rate.jpg"
+              src="https://s3.amazonaws.com/salud-en-movimiento.com.ar/IMG_3869.png"
               alt=""
               className=" w-full col-span-3 col-start-4 row-start-3"
             />
@@ -32,7 +32,7 @@ function Seccion6() {
         <div className="col-span-3 col-start-2 row-start-5 w-full card-s6 z-10">
           <div className="imgBx">
             <img
-              src="https://vioksport.es/wp-content/uploads/2018/05/Entrenamiento-Gym-o-Casa.jpg"
+              src="https://s3.amazonaws.com/salud-en-movimiento.com.ar/IMG_3885.png"
               alt=""
               className="col-span-3 col-start-2 row-start-5 w-full"
             />

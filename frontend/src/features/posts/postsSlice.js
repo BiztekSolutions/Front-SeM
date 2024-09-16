@@ -45,7 +45,7 @@ export const deletePost = createAsyncThunk(
 
 export const addCommentToPost = createAsyncThunk(
   "posts/addCommentToPost",
-  async ({ idPost, comment, idClient }) => {
+  async ({ idPost, comment, idUser }) => {
     const userString = localStorage.getItem("User");
 
     const user = JSON.parse(userString);
@@ -53,7 +53,7 @@ export const addCommentToPost = createAsyncThunk(
     const updatedPost = await postService.addCommentToPost(
       idPost,
       comment,
-      idClient,
+      idUser,
       token
     );
     return {

@@ -263,8 +263,6 @@ export const userSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.message = "User added to clients successfully";
-        // Actualiza el estado según sea necesario, por ejemplo, actualizar la lista de usuarios o clientes
-        // state.users = [...state.users, action.payload.user];
       })
       .addCase(addUserToClients.rejected, (state, action) => {
         state.isLoading = false;
@@ -324,15 +322,14 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-
+        console.log(action.payload)
         state.message = action.payload.message;
       })
       .addCase(markDayAsTrained.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-
-        state.message = action.payload.message;
+        console.log(action.payload, "mark day as trained")
       })
       // mark day as untrained
       .addCase(markDayAsUntrained.pending, (state) => {
@@ -343,7 +340,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-
+        console.log(action.payload, "mark day as untrained")
         state.message = action.payload.message;
       })
       .addCase(markDayAsUntrained.rejected, (state, action) => {
@@ -363,7 +360,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-
+        console.log(action.payload, "get training logs")
         state.message = action.payload.message;
         state.trainingLogs = action.payload.trainingLogs;
       })
@@ -371,8 +368,6 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-
-        state.message = action.payload.message;
         state.trainingLogs = null;
       })
 

@@ -30,7 +30,7 @@ import ClientList from "./Views/Coach/ClientList";
 import { useSelector } from "react-redux";
 import EditarEjercicio from "./components/entrenadora/workoutComponents/editarEjercicio.jsx";
 import PrivacyPolicy from "./components/Policy/PrivacyPolicy";
-
+import ResetPasswordModal from "./components/RecoverPassword/RecoverPassword";
 
 const Router = () => {
   //@TODO: Arreglar idioma de las rutas. O español o ingles.
@@ -43,6 +43,7 @@ const Router = () => {
         <Route exact path="/" element={<Home />} />
         <Route path="/information/:section" element={<PrivacyPolicy />} />
         {/* inside COACH */}
+        <Route path="/reset-password" element={<ResetPasswordModal />} />
         <Route
           path="/coach/*"
           element={auth.token !== "" ? <Coach /> : <Navigate to="/" />}

@@ -47,7 +47,7 @@ function WorkoutCreator() {
   const daySectionRef = useRef(null);
   const idGroup = useParams().id;
   const filteredExercises = exercises?.filter((exercise) =>
-    exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
+    exercise.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
 
@@ -147,9 +147,7 @@ function WorkoutCreator() {
       setTimeout(() => {
         dispatch(resetRutines());
       }, 1000);
-    }
-
-    if (message === "Routine created successfully") {
+    } else if (message === "Routine created successfully") {
       setFormData(initialState);
       dispatch(showSuccessNotification("Exito!", "Rutina creada"));
       setTimeout(() => {

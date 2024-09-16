@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createExercise } from "@/features/exercises/exerciseSlice";
-import { Button, Form, Input, Select, Typography } from "antd";
+import { Button,Upload, Form, Input, Select, Typography } from "antd";
 import {
   showSuccessNotification,
   showErrorNotification,
 } from "@/features/layout/layoutSlice";
 import { getAllExercises } from "@/features/exercises/exerciseSlice";
-
+import { base_url } from "../../../utils/utilities";
+import { UploadOutlined } from '@ant-design/icons';
+import { v4 as uuidv4 } from 'uuid';
+import slugify from "slugify";
 const exerciseTypes = [
   { label: "SIN TIPO", value: "SIN TIPO" },
   { label: "FUERZA", value: "FUERZA" },
@@ -36,6 +39,9 @@ const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
 
 function AgregarEjercicio() {
   const [formData, setFormData] = useState(initialState);
+  const [image, setImage] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [imageUrls, setImageUrls] = useState({ image1: '', image2: '' });
   const [selectedExerciseType, setSelectedExerciseType] = useState(
     exerciseTypes[0].label
   );
@@ -67,6 +73,39 @@ function AgregarEjercicio() {
       [name]: value,
     }));
   }
+
+  const uploadImage = async (image) => {
+    const formImage = new FormData();
+    console.log(image);
+    formImage.append("image", image);
+    let uuid = uuidv4();
+    if (!image) {
+      return undefined;
+    }
+    try {
+      const response = await fetch(base_url + `/exercises/upload-image/exercises/${encodeURIComponent(
+        slugify(formData.name + uuid, {
+          replacement: "-",
+          remove: /[*+~.()'"!:@\/]/g,
+          lower: true,
+        })
+      ) }`, {
+        method: "POST",
+        body: formImage,
+        headers: { Authorization: localStorage.getItem("token") },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      } else {
+        const responseData = await response.json();
+        console.log(responseData);
+        return responseData.payload;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   function handleExerciseTypeChange(value) {
     setSelectedExerciseType(value);
@@ -102,8 +141,8 @@ function AgregarEjercicio() {
         name: formData.name,
         description: formData.description,
         video: formData.video,
-        image1: formData.image1,
-        image2: formData.image2,
+        image1: imageUrls.image1,
+        image2: imageUrls.image2,
         type: selectedExerciseType,
       };
 
@@ -115,6 +154,17 @@ function AgregarEjercicio() {
       console.error(error.message);
     }
   }
+
+  const handleUpload = async (file, imageField) => {
+    console.log(file, imageField);
+    await uploadImage(file).then((url) => {
+      if (url) { 
+        console.log(url);
+        setFormData({ ...formData, [imageField]: url }); 
+        setImageUrls({ ...imageUrls, [imageField]: url }); 
+      }
+    });
+  };
 
   return (
     <div className="add-exercise">
@@ -175,51 +225,30 @@ function AgregarEjercicio() {
             value={formData.video}
           />
         </Form.Item>
-        <Form.Item
-          required
-          label="Imagen 1:"
-          name="image1"
-          rules={[
-            {
-              required: true,
-              message: "Por favor ingresa la URL de la imagen 1",
-            },
-            {
-              pattern: urlRegex,
-              message:
-                "La imagen 1 debe ser una URL válida con formatos: png, jpg, jpeg, gif",
-            },
-          ]}
-        >
-          <Input
-            placeholder="Imagen 1"
-            name="image1"
-            onChange={handleChange}
-            value={formData.image1}
-          />
+        <Form.Item label="Imagen 1:" name="image1" rules={[{ required: true, message: "Por favor carga la imagen 1" }]}>
+          <Upload
+            listType="picture"
+            beforeUpload={(file) => { handleUpload(file, 'image1'); return false; }}
+            onRemove={() => {
+              setImageUrls(prev => ({ ...prev, image1: '' })); 
+            }}
+            fileList={imageUrls.image1 ? [{ uid: '-1', name: 'image1.png', status: 'done', url: imageUrls.image1 }] : []}
+          >
+            <Button icon={<UploadOutlined />}>Click para cargar</Button>
+          </Upload>
         </Form.Item>
-        <Form.Item
-          required
-          label="Imagen 2:"
-          name="image2"
-          rules={[
-            {
-              required: true,
-              message: "Por favor ingresa la URL de la imagen 2",
-            },
-            {
-              pattern: urlRegex,
-              message:
-                "La imagen 2 debe ser una URL válida con formatos: png, jpg, jpeg, gif",
-            },
-          ]}
-        >
-          <Input
-            placeholder="Imagen 2"
-            name="image2"
-            onChange={handleChange}
-            value={formData.image2}
-          />
+
+        <Form.Item label="Imagen 2:" name="image2" rules={[{ required: true, message: "Por favor carga la imagen 2" }]}>
+          <Upload
+            listType="picture"
+            beforeUpload={(file) => { handleUpload(file, 'image2'); return false; }}
+            onRemove={() => {
+              setImageUrls(prev => ({ ...prev, image2: '' })); 
+            }}
+            fileList={imageUrls.image2 ? [{ uid: '-2', name: 'image2.png', status: 'done', url: imageUrls.image2 }] : []}
+          >
+            <Button icon={<UploadOutlined />}>Click para cargar</Button>
+          </Upload>
         </Form.Item>
         <Typography.Text type="secondary" className="mr-10">
           Tipo de ejercicio:

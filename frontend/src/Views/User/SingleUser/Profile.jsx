@@ -12,10 +12,12 @@ import {
   clearAuthMessages,
 } from "../../../features/auth/authSlice";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal, Typography } from "antd";
+import { Form, Input, Button, Modal, Typography, Row, Col } from "antd";
 import styles from "../../../components/Component.module.css";
 import { showSuccessNotification } from "../../../features/layout/layoutSlice";
 import Progressbar from "../../../components/Progressbar/Progressbar";
+import { useLocation } from "react-router-dom";
+import { is } from "date-fns/locale";
 function Profile() {
   // const { user } = useSelector((state) => state.auths);
   const { clients, message, user, trainingLogs } = useSelector(
@@ -27,6 +29,7 @@ function Profile() {
   const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar);
+  const location = useLocation();
   const [userState, setUserState] = useState({
     name: user?.name,
     lastname: user?.lastname,
@@ -39,6 +42,9 @@ function Profile() {
   const id = useSelector((state) => state.auths.userId);
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
+  const isCoachPage = location.pathname.includes("/coach");
+  let percentage = 0;
+
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -47,8 +53,9 @@ function Profile() {
     if (user && user.avatar) {
       setSelectedAvatar(user.avatar);
     }
-    if (rutinas) {
-      
+
+    if (!!rutinas && !isCoachPage) {
+
       dispatch(
         getTrainingLogs({
           token,
@@ -116,11 +123,13 @@ function Profile() {
     dispatch(getUser({ userId: id, token }));
     setIsEditing(false);
   };
-  
+
   useEffect(() => {
     dispatch(getUser({ userId: id, token }));
     dispatch(getClients(token));
-    dispatch(getTrainingLogs());
+    if (!isCoachPage) {
+      dispatch(getTrainingLogs());
+    }
   }, [id]);
 
   const isUserInClients = clients?.some(
@@ -148,66 +157,75 @@ function Profile() {
 
   const calculateTrainingPercentage = () => {
     if (!rutinas || !trainingLogs) return 0;
-  
+
     const currentRoutine = rutinas[currentRoutineIndex]?.routine;
     const currentRoutineId = currentRoutine?.idRoutine;
-  
+
     const routineTrainingLogs = trainingLogs.filter(
       (log) => log.idRoutine === currentRoutineId
     );
-  
+    console.log(routineTrainingLogs);
+
     const currentDate = new Date();
-    
     const currentMonth = currentDate.getMonth(); // Obtener el mes actual
-    currentDate.setDate(currentDate.getDate() + 1);
+    // currentDate.setDate(currentDate.getUTCDate());
+    console.log(currentDate);
+    console.log(currentRoutine);
     const rutinaStartDate = new Date(currentRoutine?.startDate);
-    rutinaStartDate.setDate(1); // Establecer el día al 1 para comenzar desde el primer día del mes
-  
+    console.log(rutinaStartDate.getMonth());
+    if (rutinaStartDate.getMonth() < currentMonth) {
+      rutinaStartDate.setDate(1); // Establecer el día al 1 para comenzar desde el primer día del mes
+      rutinaStartDate.setMonth(currentMonth);
+      console.log(rutinaStartDate);
+    } else if (rutinaStartDate > currentDate) {
+      console.log("Rutina no ha comenzado", rutinaStartDate, currentDate);
+      return -1;
+    }
+
+    console.log(rutinaStartDate);
     const trainingDays = [];
     let currentDay = rutinaStartDate.getDay();
-  
+    console.log(currentDay);
     while (rutinaStartDate <= currentDate) {
-      // Verificar si el mes actual coincide con el mes en que comenzó la rutina
-      if (rutinaStartDate.getMonth() === currentMonth) {
-        currentRoutine?.GroupExercises?.forEach((group) => {
-          if (group.day === diasSemana[currentDay]) {
-            trainingDays.push(diasSemana[currentDay]);
-          }
-        });
-      }
-  
+      console.log(rutinaStartDate, currentDate);
+      currentRoutine?.GroupExercises?.forEach((group) => {
+        console.log(group.day, diasSemana[currentDay]);
+        if (group.day === diasSemana[currentDay]) {
+          console.log(diasSemana[currentDay], group.day);
+          trainingDays.push(diasSemana[currentDay]);
+        }
+      });
       rutinaStartDate.setDate(rutinaStartDate.getDate() + 1);
       currentDay = (currentDay + 1) % 7; // Siguiente día de la semana
     }
-  
+    console.log(trainingDays);
     const totalTrainingDays = trainingDays.length;
-  
+    console.log(totalTrainingDays);
     const registeredTrainingDays = routineTrainingLogs.reduce((count, log) => {
       const logDate = new Date(log.date);
-      
+
       // Verificar si la fecha del log de entrenamiento está dentro del mes actual y de la rutina actual
       if (logDate.getMonth() === currentMonth && log.idRoutine === currentRoutineId) {
         return count + 1;
       }
-      
+
       return count;
     }, 0);
-    
+
 
     const percentage = (registeredTrainingDays / totalTrainingDays) * 100 || 0;
-  
+
     return percentage;
   };
-  
-  useEffect(() => {
-    calculateTrainingPercentage();
-  }),
-    [currentRoutineIndex];
 
-  
+  useEffect(() => {
+    percentage = calculateTrainingPercentage();
+  }), [currentRoutineIndex];
+
+
 
   return (
-    <div>
+    <div className="mt-32">
       <Typography.Title level={3} className="mb-7 mt-16">PERFIL</Typography.Title>
       {user && (
         <Form
@@ -218,81 +236,99 @@ function Profile() {
             lastname: user.lastname,
             email: user.Credentials && user?.Credentials[0]?.email,
           }}
+          style={{ margin: '20px' }} // Agregamos un margen a todo el componente
         >
-          <div className="flex items-start justify-evenly">
-            <div>
+          <Row gutter={16}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Form.Item
-                className="flex justify-start"
-                label="Avatar"
+                className="w-full flex justify-start sm:justify-center items-center"
+                label="Avatar:"
+
                 name="avatar"
               >
-                <div className="">
-                  <img
-                    src={selectedAvatar}
-                    alt="Avatar"
-                    onClick={isEditing ? showModal : null}
-                    className="h-10 w-10 rounded-full mr-20"
-                  />
-                </div>
+                <img
+                  src={selectedAvatar}
+                  alt="Avatar"
+                  onClick={isEditing ? showModal : null}
+                  className="h-10 w-10 rounded-full mr-20"
+                />
               </Form.Item>
 
               <Form.Item
-                className="flex justify-start"
-                label="Name"
+                className="w-full flex justify-start"
+                label="Nombre:"
                 name="name"
+                style={{ marginBottom: '10px' }} // Agregamos un margen inferior a cada Form.Item
               >
                 {isEditing ? <Input /> : <div>{user.name}</div>}
               </Form.Item>
               <Form.Item
-                className="flex justify-start"
-                label="Last Name"
+                className="w-full flex justify-start"
+                label="Apellido:"
                 name="lastname"
+                style={{ marginBottom: '10px' }} // Agregamos un margen inferior a cada Form.Item
               >
                 {isEditing ? <Input /> : <div>{user.lastname}</div>}
               </Form.Item>
               <Form.Item
-                className="flex justify-start"
+                className="w-full flex justify-start"
                 label="Email"
                 name="email"
+                style={{ marginBottom: '10px' }} // Agregamos un margen inferior a cada Form.Item
               >
                 <div>{user.Credentials && user?.Credentials[0]?.email}</div>
               </Form.Item>
               <Form.Item
-                className="flex justify-start"
+                className="w-full flex justify-start"
                 label="Rutina"
                 name="Rutina"
+                style={{ marginBottom: '10px' }} // Agregamos un margen inferior a cada Form.Item
               >
                 {rutinas && rutinas.length > 0 ? "Si" : "No"}
               </Form.Item>
-            </div>
-            <div className="ml-32">
-              {rutinas && rutinas.length > 1 && (
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              {!isCoachPage && (
                 <>
-                  <div className="flex items-center justify-center mb-10">
-                    <LeftOutlined
-                      className="cursor-pointer text-2xl"
-                      onClick={handlePrevRoutine}
-                    />
+                  {rutinas && rutinas.length > 1 ? (
+                    <div className="flex items-center justify-center mb-10">
+                      {currentRoutineIndex === 0 ? null : (
+                        <LeftOutlined
+                          className="cursor-pointer text-2xl border-2 border-gray-300 rounded-full p-1"
+                          onClick={handlePrevRoutine}
+                        />
+                      )}
+                      <h2 className="font-bold text-2xl mx-4">
+                        {rutinas[currentRoutineIndex]?.routine?.name}
+                      </h2>
+                      {currentRoutineIndex === rutinas.length - 1 ? null : (
+                        <RightOutlined
+                          className="cursor-pointer text-2xl border-2 border-gray-300 rounded-full p-1"
+                          onClick={handleNextRoutine}
+                        />
+                      )}
+                    </div>
+                  ) : null}
 
-                    <h2 className="font-bold text-2xl mx-4">{rutinas[currentRoutineIndex]?.routine?.name} </h2>
-                    <RightOutlined
-                      className="cursor-pointer text-2xl"
-                      onClick={handleNextRoutine}
-                    />
-                  </div>
-                </> )}
-                {rutinas && rutinas.length > 0 ? (
-                  <>
-                  <Progressbar percentage={calculateTrainingPercentage()} />
-                  <h4 className="mt-4 font-bold">% de entramiento realizados</h4>
-                  <br></br>
-                  <h4 className="font-bold">de este mes</h4>
-                  </>
-              ):null}
-            </div>
-          </div>
+                  {rutinas && rutinas.length > 0 ? (
+                    <>
+                      {percentage && percentage !== -1 ? (
+                        <>
+                          <Progressbar percentage={percentage} />
+                          <h4 className="mt-4 font-bold">% de entramiento realizados</h4>
+                          <br />
+                          <h4 className="font-bold">de este mes</h4>
+                        </>
+                      ) :
+                        <h4 className="mt-4 font-bold">Esta rutina aun no ha comenzado</h4>}
+                    </>
+                  ) : null}
+                </>
+              )}
+            </Col>
+          </Row>
           {isEditing && (
-            <Form.Item>
+            <Form.Item className="w-full flex justify-center">
               <Button type="primary" className="bg-blue-500" htmlType="submit">
                 Guardar
               </Button>

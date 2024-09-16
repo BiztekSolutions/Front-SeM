@@ -22,7 +22,7 @@ function ChangePassword() {
   };
 
   return (
-    <div className="m-auto mt-[5%] w-[70%]">
+    <div className="m-auto mt-32 mt-[5%] w-[70%]">
       <Typography.Title level={3}>Cambiar contraseña</Typography.Title>
       {isLoading ? (
         <Typography>Cargando...</Typography>

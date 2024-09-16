@@ -70,7 +70,8 @@ function ExerciseForm({ exercise, closeModal, onSubmit }) {
         <div>
           <p>Peso(kg)</p>
           <input
-            className="form-control text-black"
+
+            className="text-black h-6 bg-gray-300 rounded-lg w-full m-2"
             name="weight"
             placeholder="Peso"
             onChange={handleChange}

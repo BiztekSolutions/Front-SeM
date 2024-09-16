@@ -3,7 +3,9 @@ import Post from '../models/Post';
 import Comment from '../models/Comment'; // Asegúrate de importar el modelo Comment
 import Client from '../models/Client';
 import User from '../models/User';
+import Coach from '../models/Coach';
 import sequelize from '../configs/db';
+import { log } from 'console';
 
 export const getAllPosts = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   try {
@@ -11,10 +13,12 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
       include: [
         {
           model: Comment,
+          required: false,
           as: 'Comments',
           include: [
             {
               model: Client,
+              required: false,
               include: [
                 {
                   model: User, // Agrega el modelo User
@@ -22,10 +26,20 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
                 },
               ],
             },
+            {
+              model: Coach,
+              required: false,
+              include: [
+                {
+                  model: User, // Agrega el modelo User
+                  attributes: ['name', 'lastname', 'avatar'], // Puedes especificar las columnas que deseas recuperar
+                },
+              ],
+            }
           ],
         },
         {
-          model: Client,
+          model: Coach,
           include: [
             {
               model: User,
@@ -39,7 +53,7 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
     return res.json(posts);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: error });
   }
 };
 
@@ -47,16 +61,16 @@ export const createPost = async (req: Request, res: Response): Promise<Response<
   const { title, content, userId } = req.body;
 
   try {
-    const client = await Client.findOne({ where: { idUser: userId } });
+    const coach = await Coach.findOne({ where: { idUser: userId } });
 
-    if (!client) {
-      return res.status(404).json({ error: 'Client not found for the user' });
+    if (!coach) {
+      return res.status(404).json({ error: 'User is not a coach' });
     }
 
     const newPost = await Post.create({
       title,
       content,
-      idClient: client.idClient,
+      idCoach: coach ? coach.idCoach : null, 
     });
 
     return res.json(newPost);
@@ -69,7 +83,8 @@ export const createPost = async (req: Request, res: Response): Promise<Response<
 export const updatePost = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   const idPost: number = parseInt(req.params.id, 10);
   const { title, content } = req.body;
-
+  console.log(idPost);
+  
   try {
     const post = await Post.findByPk(idPost, {
       include: Comment,

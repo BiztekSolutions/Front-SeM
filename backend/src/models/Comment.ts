@@ -26,7 +26,11 @@ Comment.init(
     },
     idClient: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+    },
+    idCoach: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
   },
   {

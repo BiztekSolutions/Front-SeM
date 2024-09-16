@@ -37,7 +37,7 @@ export const createGroup = async (req: Request, res: Response) => {
       // Asociar clientes al grupo
       if (group.idGroup) {
         for (const idClient of selectedUsers) {
-          const client = await Client.findByPk(idClient); // Obtener instancia de Client
+          const client = await Client.findByPk(idClient); 
         
           if (client) {
             await group.addClient(client, { transaction: transaction });

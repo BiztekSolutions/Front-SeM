@@ -3,6 +3,8 @@ import User from '../models/User';
 
 export const isRegistered = async (email: string) => {
   try {
+    console.log(email, 'aouisbdoiasndoinasoidnsoain');
+    
     return await Credential.findOne({ where: { email } });
   } catch (e: any) {
     throw new Error(e.message);

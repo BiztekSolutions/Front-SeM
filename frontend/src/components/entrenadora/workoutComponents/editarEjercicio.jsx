@@ -54,7 +54,7 @@ function EditarEjercicio() {
   };
 
   const filteredExercises = exercises?.filter((exercise) =>
-    exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
+    exercise.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleLoadMore = () => {

@@ -169,7 +169,7 @@ button:focus {
 }
 .categoria h3 {
   padding-right: 10px;
-  width: 55%;
+
   margin: 0 auto;
   text-align: center;
   font-family: "AntonRegular", AntonRegular;
@@ -295,6 +295,15 @@ input.form-control:focus {
   border: 3px solid rgba(241, 241, 241, 0.822);
   outline: none !important;
   box-shadow: none;
+}
+
+.card-max-height {
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.fc-toolbar-title {
+  color: rgb(255, 136, 0);
 }
 
 .form-control::placeholder {
@@ -779,7 +788,7 @@ input.form-control:focus {
   transition: color 0.5s ease;
 }
 .ag-courses-item_bg {
-  height: 128px;
+  height: 200px;
   width: 128px;
   background-color: #f5650b60;
 
@@ -1427,7 +1436,6 @@ input[type="text"] {
   .bar-menu {
     position: absolute !important;
     top: 12%;
-    left: 22%;
     margin: 0 !important;
     padding: 0 !important;
     transform: translate(-50%, -20%) !important;
@@ -1447,6 +1455,17 @@ input[type="text"] {
     padding: 0 !important;
     background-color: transparent !important;
   }
+
+  @media (max-width: 640px) {
+    .bar-menu {
+      max-width: 10vw !important;
+
+    }
+    .menu-ni-idea {
+      max-width: 10vw !important;
+    }
+  }
+
   .link-header-client {
     font-size: 0.8rem !important;
     padding: 0rem !important;

@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { base_url } from "../../utils/utilities";
+
 function ContactForm() {
   const {
     register,
@@ -9,7 +11,7 @@ function ContactForm() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/email', data);
+      const response = await axios.post(`${base_url}/email`, data);
   
       if (response.status === 200) {
         

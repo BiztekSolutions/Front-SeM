@@ -161,7 +161,14 @@ const LoginModalN = () => {
                 </div>
 
                 <span className={styles.forgotPassword}>
-                  <label>Olvidaste tu contraseña?</label>
+                  <a
+                    onClick={() => forgotPassword()}
+                    className={
+                      styles.forgotPassword
+                    }
+                  >
+                    Olvidé mi contraseña
+                  </a>
                 </span>
 
                 <button type="submit" className={styles.loginButton}>

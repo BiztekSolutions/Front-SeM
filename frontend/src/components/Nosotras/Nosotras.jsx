@@ -44,30 +44,29 @@ function Nosotras() {
             NUESTRO EQUIPO
           </h1>
           <h3 className="text-lg my-4 text-center mb-28 w-3/5 m-auto description-about">
-            Contamos con un equipo de profesionales dispuestos a ayudarte en
-            cada paso del proceso de entrenamiento. Nuestro objetivo es que te
-            sientas a gusto y puedas lograr tus objetivos.
+            Contamos con un equipo de profesionales dispuestos a ayudarte en cada paso del proceso de entrenamiento. Estamos convencidos de que el movimiento es esencial para la salud y el bienestar en todas las etapas de la vida, mediante el ejercicio, el deporte o la actividad física.
           </h3>
         </div>
         <div className="relative flex justify-center content-center mb-20 flex-wrap m-auto">
           <TeamMember
             id="card1"
-            nombre="Florencia Peix"
+            nombre="Florencia Peix y Milagros Mastantuono"
             edad={24}
-            descripcion="Soy Licenciada en Educación Fisica. Soy dueña de este gimnasio. Apasionada por el deporte y la vida sana. Me gusta mucho el deporte y la vida sana. Ejerzo esta profesión hace 10 años."
+            descripcion="Somos Profesoras Nacionales de Educación Física. Dueñas de este Centro de Entrenamiento. Nuestro enfoque se basa en brindarte un entrenamiento personalizado, según tus necesidades. Trabajamos con personas de todas las edades para alcanzar sus objetivos deportivos y mejorar su salud general."
             ubicacion="Saladillo, Buenos Aires, Argentina"
-            instagram="florpeix"
+            instagram="saludenmovimientogimnasio"
           />
-          <TeamMember
+          {/* <TeamMember
             id="card2"
             nombre="Milagros Mastantuono"
             edad={24}
             descripcion="Soy Licenciada en Educación Fisica. Soy dueña de este gimnasio. Apasionada por el deporte y la vida sana. Me gusta mucho el deporte y la vida sana. Ejerzo esta profesión hace 10 años."
             ubicacion="Saladillo, Buenos Aires, Argentina"
             instagram="milumas"
-          />
-          
+          /> */}
+
         </div>
+        <h5 className="mb-5">Si tenés preguntas, inquietudes o simplemente deseas saber más acerca de nuestros servicios de entrenamiento personalizado,  contáctate con nosotras!</h5>
         <Link
           offset={-HeaderHeight}
           className=" bg-customOrange text-white hover:border-black hover:border-4 hover:text-white font-bold py-4 px-8 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer"

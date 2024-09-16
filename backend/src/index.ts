@@ -12,13 +12,10 @@ import Coach from './models/Coach';
 import Group from './models/Group';
 import Routine from './models/Routine';
 import Exercise from './models/Exercise';
-
 import Post from './models/Post';
 import Comment from './models/Comment';
-
 import GroupExercise from './models/GroupExercise';
 import ExerciseConfiguration from './models/ExerciseConfiguration';
-import ClientHasRoutine from './models/ClientHasRoutine';
 import ClientGroup from './models/ClientGroup';
 
 const app: Application = express();
@@ -27,7 +24,7 @@ const PORT: number = 3000;
 // Middlewares
 app.use(express.json());
 app.use(logger('dev'));
-app.use(cors({origin: '*', methods: "*"}));
+app.use(cors({ origin: '*', methods: '*' }));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -72,11 +69,13 @@ Exercise.hasMany(ExerciseConfiguration, { foreignKey: 'idExercise' });
 ExerciseConfiguration.belongsTo(Exercise, { foreignKey: 'idExercise' });
 
 //Post relations
-Post.belongsTo(Client, { foreignKey: 'idClient' });
-Client.hasMany(Post, { foreignKey: 'idClient' });
+Post.belongsTo(Coach, { foreignKey: 'idCoach' });
+Coach.hasMany(Post, { foreignKey: 'idCoach' });
 
 Comment.belongsTo(Client, { foreignKey: 'idClient' });
 Client.hasMany(Comment, { foreignKey: 'idClient' });
+Comment.belongsTo(Coach, { foreignKey: 'idCoach' });
+Coach.hasMany(Comment, { foreignKey: 'idCoach' });
 
 Post.hasMany(Comment, { foreignKey: 'idPost', onDelete: 'CASCADE', hooks: true });
 Comment.belongsTo(Post, { foreignKey: 'idPost', onDelete: 'CASCADE', hooks: true });

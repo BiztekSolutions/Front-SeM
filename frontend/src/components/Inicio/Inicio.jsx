@@ -2,8 +2,14 @@ import primerimg from "../../assets/primerimg.webp";
 import { Link } from "react-scroll";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import styles from "./Inicio.module.css";
+import { ModalContext } from "../../context/ModalContext";
+import ForgotPasswordModal from "../RecoverPassword/ForgotPassword";
+import { useContext } from "react";
 
 const Inicio = () => {
+  const {
+    modals: { forgotPasswordModal },
+  } = useContext(ModalContext);
   const imgBgStyle = {
     position: "absolute",
     left: "100%",
@@ -79,6 +85,7 @@ const Inicio = () => {
           />
         </div>
       </div>
+      {forgotPasswordModal && <ForgotPasswordModal />}
     </div>
   );
 };

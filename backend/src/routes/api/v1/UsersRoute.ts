@@ -10,7 +10,9 @@ import {
   markDayAsTrained,
   getTrainingDays,
   markDayAsUntrained,
+  updatePassword,
 } from '../../../controllers/UserController';
+import { recoverPassword, userRecoveringPassword } from '../../../controllers/AuthController';   
 import { authenticateToken } from '../../../utils/validateToken';
 
 const userRouter = express.Router();
@@ -25,5 +27,7 @@ userRouter.post('/createClient', createClient);
 userRouter.put('/entrenamientos/:clientId', markDayAsTrained);
 userRouter.delete('/entrenamientos/:clientId', markDayAsUntrained);
 userRouter.get('/entrenamientos/:clientId', getTrainingDays);
+userRouter.post('/recover-password', recoverPassword);
+userRouter.post('/update-password', userRecoveringPassword, updatePassword);
 
 export default userRouter;

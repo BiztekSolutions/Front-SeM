@@ -47,16 +47,15 @@ function Sedes() {
               </SimpleMap>
             </div>
           </div>
-          <div className="typingeffect ">
+          <div className={styles.typingeffect}>
             <div className="ag-format-container">
               <div className="ag-courses_box">
                 <div className="ag-courses_item">
                   <a href="#" className="ag-courses-item_link">
                     <div className="ag-courses-item_bg"></div>
                     <TypingEffect
-                      firstText="Bienvenido a nuestro gimnasio funcional. 
-                      Ofrecemos un entrenamiento semipersonalizado en nuestras sedes."
-                      secondText="Contáctanos para conocer nuestros horarios y ubicación exacta!"
+                      firstText="Bienvenidos a nuestro centro de entrenamiento. Ofrecemos Clases de Funcional y entrenamientos Semipersonalizados."
+                      secondText="Contáctanos para conocer los horarios disponibles"
                       medidaWindow={0.5}
                     />
                   </a>
@@ -71,8 +70,8 @@ function Sedes() {
                   <a href="#" className="ag-courses-item_link">
                     <div className="ag-courses-item_bg"></div>
                     <TypingEffect
-                      firstText="Ponte en forma con nuestro programa de Pilates Tabata. Mejora tu flexibilidad, coordinación, movilidad, estabilidad, fuerza y resistencia"
-                      secondText="Descubre cómo puedes transformar tu cuerpo y mente con nuestros entrenamientos"
+                      firstText="En esta sede, conoce sobre  Pilates Reformer y Mejora tu flexibilidad, movilidad, estabilidad, y fuerza. De manera presencial."
+                      secondText="Contáctanos para conocer los horarios disponibles!"
                       medidaWindow={1}
                     />
                   </a>

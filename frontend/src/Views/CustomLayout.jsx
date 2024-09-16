@@ -10,13 +10,13 @@ import {
   Typography,
 } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CgProfile } from "react-icons/cg";
+
 import logo from "../assets/logo.png";
 import { GlobalContext } from "../context/globalContext";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode, toggleSidebar } from "@/features/layout/layoutSlice";
 import { persistor } from "../store/store";
-import { clearAuthToken, clearAuthMessages } from "../features/auth/authSlice";
+
 const { Header, Sider, Content } = AntLayout;
 
 const CustomLayout = ({ items }) => {
@@ -26,6 +26,20 @@ const CustomLayout = ({ items }) => {
   const navigate = useNavigate();
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const localUser = JSON.parse(localStorage.getItem("User"));
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 700);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Limpiar el evento al desmontar el componente
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   
   
   const handleLogout = () => {
@@ -79,6 +93,7 @@ const CustomLayout = ({ items }) => {
       }
     }
   };
+
   return (
     <ConfigProvider
       theme={{
@@ -88,10 +103,10 @@ const CustomLayout = ({ items }) => {
       <AntLayout>
         <Sider
           trigger={null}
-          collapsible
-          collapsed={layout.isSidebarCollapsed}
+          collapsed={layout.isSidebarCollapsed && isMobile}
           theme={layout.isDarkMode ? "dark" : "light"}
           className="bar-menu"
+          style={isMobile && (isCoachPage ? { left: "13%" } : { left: "26%" })}
         >
           <div className="logo flex items-center justify-center">
             {layout.isSidebarCollapsed ? (

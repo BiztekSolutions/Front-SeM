@@ -13,10 +13,7 @@ const Categorias = () => {
         <Opciones className="text-2x1 text-customOrange" />
       </h1>
       <h3 className="pb-14 text-2xl descripcion">
-        En nuestro Centro de Entrenamiento todos los días tenemos clases
-        semipersonalizadas, en las cuales la rutina esta organizada según las
-        necesidades y objetivos de cada persona. Elige nuestras clases para
-        ponerte en forma mientras te diviertes.
+        En nuestro centro de entrenamiento todos los días tenemos clases para vos!
       </h3>
       <Imagenes />
     </div>

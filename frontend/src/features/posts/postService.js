@@ -18,13 +18,13 @@ const postService = {
       throw error;
     }
   },
-  addCommentToPost: async (idPost, comment, idClient, token) => {
+  addCommentToPost: async (idPost, comment, idUser, token) => {
     try {
       const response = await axios.post(
         `${base_url}/comments/${idPost}`,
         {
           content: comment,
-          userId: idClient,
+          userId: idUser,
         },
         {
           headers: {

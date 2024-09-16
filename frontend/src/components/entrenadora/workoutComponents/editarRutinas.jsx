@@ -345,25 +345,21 @@ function EditarRutinas({ rutinas }) {
 
   return (
     <>
-      {rutinas && rutinas?.length > 1 && (
-        <LeftOutlined
-          className="cursor-pointer text-2xl"
-          onClick={handlePrevRoutine}
-        />
-      )}
 
-      {rutinas && rutinas.length > 1 && (
-        <RightOutlined
-          className="cursor-pointer text-2xl"
-          onClick={handleNextRoutine}
-        />
-      )}
+
+
       <form
         onSubmit={handleSubmit}
         className="max-w-full mx-auto p-6 flex flex-col formRutines"
       >
         <div id="addRutine" className="flex  flex-col">
           <div className="form-group my-2 mx-4">
+          {rutinas && rutinas?.length > 1 && (
+            <LeftOutlined
+              className="cursor-pointer text-2xl"
+              onClick={handlePrevRoutine}
+            />
+          )}
             <input
               type="text"
               className="form-control max-w-xs m-2 border rounded-full"
@@ -373,6 +369,12 @@ function EditarRutinas({ rutinas }) {
               onChange={handleRoutineNameChange}
               required
             />
+          {rutinas && rutinas.length > 1 && (
+            <RightOutlined
+            className="cursor-pointer text-2xl"
+            onClick={handleNextRoutine}
+            />
+          )}
           </div>
           <div className="flex  justify-center py-2">
             <div className="form-group my-2 mx-4 flex flex-col">
@@ -502,10 +504,10 @@ function EditarRutinas({ rutinas }) {
                                         value={
                                           formData.exercisesGroup[day][index]
                                             ?.configuration?.series !==
-                                          undefined
+                                            undefined
                                             ? formData.exercisesGroup[day][
-                                                index
-                                              ]?.configuration.series
+                                              index
+                                            ]?.configuration.series
                                             : ""
                                         }
                                         onChange={(e) =>
@@ -521,10 +523,10 @@ function EditarRutinas({ rutinas }) {
                                         value={
                                           formData.exercisesGroup[day][index]
                                             ?.configuration?.repetitions !==
-                                          undefined
+                                            undefined
                                             ? formData.exercisesGroup[day][
-                                                index
-                                              ]?.configuration?.repetitions
+                                              index
+                                            ]?.configuration?.repetitions
                                             : ""
                                         }
                                         onChange={(e) =>
@@ -540,10 +542,10 @@ function EditarRutinas({ rutinas }) {
                                         value={
                                           formData.exercisesGroup[day][index]
                                             ?.configuration?.weight !==
-                                          undefined
+                                            undefined
                                             ? formData.exercisesGroup[day][
-                                                index
-                                              ]?.configuration?.weight
+                                              index
+                                            ]?.configuration?.weight
                                             : ""
                                         }
                                         onChange={(e) =>

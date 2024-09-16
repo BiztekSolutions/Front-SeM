@@ -34,7 +34,7 @@ const TeamMember = (props) => {
               </label>
             </div>
           </div>
-          <div className="back text-black">
+          <div className="back text-black text-sm">
             <div className="inner">
               <div className="info">
                 <span className="number-edad">{edad}</span>

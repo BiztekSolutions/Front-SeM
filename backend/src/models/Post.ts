@@ -6,6 +6,7 @@ class Post extends Model {
   public title!: string;
   public content!: string;
   public idClient!: number;
+  public idCoach!: number;
 }
 
 Post.init(
@@ -23,7 +24,7 @@ Post.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    idClient: {
+    idCoach: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

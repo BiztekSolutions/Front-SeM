@@ -4,33 +4,10 @@ import VideoEmbed from "./VideoEmbed";
 
 // eslint-disable-next-line react/prop-types
 function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
-  const showImagesOnMobile = () => {
-    const screenWidth = window.innerWidth;
-    if (
-      screenWidth <= 600 &&
-      exercise.Exercise.image1 &&
-      exercise.Exercise.image2
-    ) {
-      return (
-        <div className="flex justify-evenly">
-          <img
-            src={exercise.Exercise.image1}
-            alt="Imagen 1"
-            className="w-32 h-32 object-cover mb-2 rounded-full"
-          />
-          <img
-            src={exercise.Exercise.image2}
-            alt="Imagen 2"
-            className="w-32 h-32 object-cover mb-2 rounded-full"
-          />
-        </div>
-      );
-    }
-    return null;
-  };
+
   return (
     <div
-      className="modal show border-8 z-10 fixed border-white top-0 left-0 translate-x-1/2  rounded-3xl bg-orange-600 w-1/2"
+      className="modal show  z-10 fixed top-0 left-0 translate-x-1/2 bg-orange-600 w-1/2"
       tabIndex="-1"
     >
       <div className="modal-dialog">
@@ -49,7 +26,7 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
             </button>
           </div>
           <div
-            className="modal-body py-5 border-t-4 flex flex-col"
+            className="modal-body py-5 border-t-2 flex flex-col"
             style={{ maxWidth: "100%" }}
           >
             <div className="mb-4 " style={{ maxWidth: "90%" }}>
@@ -65,10 +42,10 @@ function ExerciseModal({ exercise, closeModal, handleEditExercise }) {
                 <VideoEmbed youtubeLink={exercise.Exercise.video} />
               ) : null}
             </div>
-            <div className="mt-4">{showImagesOnMobile()}</div>
+
           </div>
 
-          <div className="border-t-4  modal-footer flex flex-col justify-center">
+          <div className="border-t-2  modal-footer flex flex-col justify-center">
             <h5 className="modal-subtitle  text-2xl">Editar ejercicio</h5>
             <ExerciseForm
               exercise={exercise}

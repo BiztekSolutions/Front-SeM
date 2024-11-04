@@ -6,7 +6,10 @@ const initialState = {
   isLoading: false,
   notification: {},
 };
+
 export const showSuccessNotification = (message, description) => (dispatch) => {
+  console.log("showSuccessNotification");
+  
   dispatch(
     layoutSlice.actions.setNotification({
       type: "success",

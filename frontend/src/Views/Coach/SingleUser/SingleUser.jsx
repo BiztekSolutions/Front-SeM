@@ -20,13 +20,15 @@ const SingleUser = () => {
   const isAddExerciseRoute = location.pathname.endsWith("/agregarEjercicio");
   const isModRoute = location.pathname.endsWith("/editarRutinas");
   const isGroupsPage = location.pathname.includes("/grupos");
+  const isRutinasPage = location.pathname.includes("/rutinas");
 
   const isUserRoute = () => {
     if (
       !isExerciseRoute &&
       !isRoutineRoute &&
       !isAddExerciseRoute &&
-      !isModRoute
+      !isModRoute &&
+      !isRutinasPage
     ) {
       return true;
     }
@@ -40,7 +42,7 @@ const SingleUser = () => {
 
   return (
     <div>
-      <nav className="row navbar mx-1 border-t-2 mb-3 ">
+      <nav className="row navbar mx-1 border-t-2 my-3 ">
         <ul className="flex gap-3 justify-center content-center mt-2 header-clientt">
           <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500 btn-header-client">
             <NavLink
@@ -82,6 +84,17 @@ const SingleUser = () => {
               onClick={() => resetRutinasAndNavigate("./")}
             >
               Editar rutina
+            </NavLink>
+          </li>
+
+          <li className="border-slate-500 border-2 p-3 rounded-lg hover:bg-slate-500 btn-header-client">
+            <NavLink
+              to="./rutinas"
+              className="link-header-client"
+              style={activeStyle}
+              onClick={() => resetRutinasAndNavigate("./")}
+            >
+              Rutinas
             </NavLink>
           </li>
         </ul>

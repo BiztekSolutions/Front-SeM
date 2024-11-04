@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { isRegistered, create } from '../services/AuthService';
 import { create as createSession, remove, find } from '../services/SessionService';
 import User from '../models/User';
@@ -10,9 +10,11 @@ import { renderToString } from 'react-dom/server';
 import React from 'react';
 import { noReplyInterface } from "./../utils/mailer"
 import { CustomError } from '../utils/interfaces';
+import nodemailer from 'nodemailer';
+import Credential from '../models/Credential';
 
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, GMAIL_USER, GMAIL_PASS } = process.env;
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -175,7 +177,7 @@ const EmailComponent: React.FC<{ token: string }> = ({ token }) => {
           display: 'block',
         }}
         target="_blank"
-        href={`https://salud-en-movimiento.com.ar/?token-recuperacion=${token}`}>
+        href={`https://salud-en-movimiento.com.ar/reset-password?${token}`}>
         NUEVA CONSTRASEÑA
       </a>
       < p
@@ -202,21 +204,40 @@ export const recoverPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
 
   const userCredentials = await isRegistered(email);
-  console.log(userCredentials);
   
   if (userCredentials) {
-    const token = jwt.sign({ userId: userCredentials!.idCredential }, SECRET_KEY!, { expiresIn: '1h' });
+
+    const token = jwt.sign({ email: userCredentials!.email }, SECRET_KEY!, { expiresIn: '1h' });
+
     const mailOptions = {
       to: email,
       subject: 'Salud en Movimiento | Recuperación de contraseña',
-      text: `Para restablecer tu contraseña entra a: https://salud-en-movimiento.com.ar/usuarios/recuperar-clave/${token}`,
+      text: `Para restablecer tu contraseña entra a: https://salud-en-movimiento.com.ar/reset-password?${token}`,
       html: renderToString(<EmailComponent token={token} />),
     };
 
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: GMAIL_USER,
+        pass: GMAIL_PASS
+      }
+    });
+    
+    console.log(transporter, mailOptions, GMAIL_PASS, GMAIL_USER, 'transporter!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    
     try {
-      await noReplyInterface.sendMailWithFrom(mailOptions);
+      await transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          return res.status(500).json({ error: 'Failed to send email' });
+        }
+        console.log('Message sent: %s', info.messageId);
+      });
 
-      return { payload: 'Successful password recovery' };
+      res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
       console.log(error);
       throw new CustomError(
@@ -226,29 +247,30 @@ export const recoverPassword = async (req: Request, res: Response) => {
     }
   }
 
-  
-
   return { payload: 'Successful password recovery' };
 };
 
-export const userRecoveringPassword = async (req: Request & { userData?: User }, res: Response) => {
+export const userRecoveringPassword = async (req: Request & { userData?: User }, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1];
-
+  const { newPassword } = req.body;
+  
   if (!token) {
     return res.status(400).send('Token is required');
   }
 
   try {
+    const saltRounds: number = 10;
+    const hashedPassword: string = await bcrypt.hash(newPassword, saltRounds);
     const decoded: any = jwt.verify(token, SECRET_KEY!);
+  
+    
+    const [updatedRows] = await Credential.update({ password: hashedPassword }, { where: { email: decoded.email } });
 
-    const user = await User.findByPk(decoded.recoverUserId);
-
-    if (!user) {
-      return res.status(400).send('Not valid token for recovering password');
+    if (updatedRows > 0) {
+      return res.status(200).json({ message: 'Successful password update' });
+    } else {
+      return res.status(404).json({ error: 'User not found' });
     }
-
-    req.userData = user;
-    return res.status(200).json({ message: 'Token is valid', user });
   } catch (error) {
     return res.status(400).send({ error: 'Invalid token' });
   }

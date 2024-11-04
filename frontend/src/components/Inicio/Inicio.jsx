@@ -35,7 +35,7 @@ const Inicio = () => {
               >
                 <div className="text-left">
                   <h1
-                    className={`text-customOrange relative top-2/3 text-7xl font-bold tracking-widest shadow-custom `}
+                    className={`mb-20 text-customOrange relative top-2/3 text-7xl font-bold tracking-widest shadow-custom `}
                   >
                     GIMNASIO
                   </h1>
@@ -46,11 +46,11 @@ const Inicio = () => {
                   alt=""
                 />
               </div>
-              <h2
-                className={`text-6xl text-left font-bold shadow-custom ${styles.subtitulo}`}
+              <h3
+                className={`mt-4 text-6xl text-left font-bold shadow-custom ${styles.subtitulo}`}
               >
                 SALUD EN MOVIMIENTO
-              </h2>
+              </h3>
             </div>
             <div>
               <div className={`flex gap-20 pt-10 ${styles.flexgap}`}>

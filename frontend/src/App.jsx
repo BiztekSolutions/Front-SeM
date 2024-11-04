@@ -11,7 +11,7 @@ function App() {
   const { setLogged } = context;
   useEffect(() => {
     // LOGIN PERSISTANCE
-    const getUserFromLocalStorage = JSON.parse(localStorage.getItem("user"));
+    const getUserFromLocalStorage = JSON.parse(localStorage.getItem("User"));
     if (getUserFromLocalStorage) {
       setLogged(getUserFromLocalStorage);
     }

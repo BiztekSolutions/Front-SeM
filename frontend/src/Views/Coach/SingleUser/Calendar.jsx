@@ -139,7 +139,7 @@ function Calendar({ rutinas }) {
   }
 
   return (
-    <div className="user-calendar">
+    <div className="user-calendar" style={{ marginTop: '70px' }}>
 
       {events && rutinas && rutinas.length !== 0 && (
         <div key={currentRoutineIndex} className="w-full">

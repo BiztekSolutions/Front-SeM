@@ -83,6 +83,10 @@ function AgregarEjercicio() {
       return undefined;
     }
     try {
+      const userString = localStorage.getItem("User");
+
+      const user = JSON.parse(userString);
+      const token = user.token;
       const response = await fetch(base_url + `/exercises/upload-image/exercises/${encodeURIComponent(
         slugify(formData.name + uuid, {
           replacement: "-",
@@ -92,7 +96,7 @@ function AgregarEjercicio() {
       ) }`, {
         method: "POST",
         body: formImage,
-        headers: { Authorization: localStorage.getItem("token") },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
@@ -167,7 +171,7 @@ function AgregarEjercicio() {
   };
 
   return (
-    <div className="add-exercise">
+    <div className="add-exercise mt-20 p-10">
       <Form form={form} onFinish={postExercise} layout="vertical">
         <Form.Item
           required
@@ -246,8 +250,9 @@ function AgregarEjercicio() {
               setImageUrls(prev => ({ ...prev, image2: '' })); 
             }}
             fileList={imageUrls.image2 ? [{ uid: '-2', name: 'image2.png', status: 'done', url: imageUrls.image2 }] : []}
+            className="full-width-upload"
           >
-            <Button icon={<UploadOutlined />}>Click para cargar</Button>
+            <Button block icon={<UploadOutlined />}>Click para cargar</Button>
           </Upload>
         </Form.Item>
         <Typography.Text type="secondary" className="mr-10">
@@ -268,7 +273,6 @@ function AgregarEjercicio() {
             value={selectedExerciseType}
             onChange={handleExerciseTypeChange}
             options={exerciseTypes}
-            className="select-exercise-type"
           />
         </Form.Item>
         <Form.Item required>

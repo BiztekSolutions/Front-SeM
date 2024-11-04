@@ -1,5 +1,6 @@
 import Form from "./Form";
 import styles from "./Form.module.css";
+import img3 from "../../assets/img3.jpg";
 
 function Formulario() {
   return (
@@ -9,9 +10,9 @@ function Formulario() {
       </div>
       <div className={`${styles.img3} flex-1 flex items-center justify-center`}>
         <img
-          src="https://nerdy-my-ecommerce.s3.us-east-2.amazonaws.com/Fendi/Inaki/img/imgDerecha3.webp"
+          src={img3}
           alt="tercerImagen"
-          className={`w-2/6 `}
+          style={{ backgroundColor: 'transparent'}}
         />
       </div>
     </div>

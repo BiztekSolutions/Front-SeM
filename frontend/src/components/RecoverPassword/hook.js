@@ -1,6 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { base_url } from "../../utils/utilities";
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from "../../features/layout/layoutSlice";
 // Puedes definir tus endpoints aquí
 const API_URL_RECOVER_PASSWORD = "/users/recover-password";
 const API_URL_RESET_PASSWORD = "/users/update-password";
@@ -28,14 +32,18 @@ export const usePasswordRecovery = () => {
       recovering: true,
     });
     try {
-      await axios.post(base_url + API_URL_RECOVER_PASSWORD, {
+      const response = await axios.post(base_url + API_URL_RECOVER_PASSWORD, {
         email,
       });
-
-      setSuccess({
-        ...success,
-        recovering: true,
-      });
+      console.log(response.status, response.data.message);
+      
+      if (response.status == 200) {
+        setSuccess({
+          ...success,
+          recovering: true,
+        });
+      }
+      return response;
     } catch (error) {
       console.log(error);
 
@@ -56,6 +64,8 @@ export const usePasswordRecovery = () => {
       resetting: true,
     });
     try {
+      console.log("resetPassword", newPassword, token);
+      
       await axios.post(
         base_url + API_URL_RESET_PASSWORD,
         {
@@ -63,7 +73,7 @@ export const usePasswordRecovery = () => {
         },
         {
           headers: {
-            Authorization: `BEARER ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

@@ -262,33 +262,5 @@ export const removeUser = async (req: Request, res: Response) => {
   }
 };
 
-export const updatePassword = async (req: Request, res: Response) => {
-  const { userId, newPassword } = req.body;
 
-  if (!userId || !newPassword) {
-    return res.status(400).json({ error: 'User ID and new password are required' });
-  }
-
-  const saltRounds: number = 10;
-  const hashedPassword: string = await bcrypt.hash(newPassword, saltRounds);
-
-  try {
-    const [updatedRows] = await User.update(
-      { password: hashedPassword },
-      {
-        where: { id: userId, provider: 'local' },
-      }
-    );
-
-    if (updatedRows > 0) {
-      return res.status(200).json({ message: 'Successful password update' });
-    } else {
-      return res.status(404).json({ error: 'User not found' });
-    }
-  } catch (error: any) {
-    console.log(error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
-export default { updatePassword, getUsers, getUser, getUserRoutines, updateUser, getClients, createClient, removeUser, markDayAsTrained, getTrainingDays, markDayAsUntrained};
+export default { getUsers, getUser, getUserRoutines, updateUser, getClients, createClient, removeUser, markDayAsTrained, getTrainingDays, markDayAsUntrained};

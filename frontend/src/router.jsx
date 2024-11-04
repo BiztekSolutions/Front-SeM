@@ -13,7 +13,7 @@ import User from "./Views/User/User";
 import Cronometro from "./Views/User/Cronometro";
 import Workout from "./components/entrenadora/workoutComponents/Workout";
 import WorkoutContainer from "./components/entrenadora/workoutComponents/WorkoutContainer";
-import WorkoutCreator from "./components/entrenadora/workoutComponents/WorkoutCreator.jsx";
+import CrearRutinas from "./Views/Coach/CrearRutina";
 
 import UserCalendar from "./Views/Coach/UserCalendar";
 
@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import EditarEjercicio from "./components/entrenadora/workoutComponents/editarEjercicio.jsx";
 import PrivacyPolicy from "./components/Policy/PrivacyPolicy";
 import ResetPasswordModal from "./components/RecoverPassword/RecoverPassword";
+import RutinesList from "./Views/Coach/RutinesList";
 
 const Router = () => {
   //@TODO: Arreglar idioma de las rutas. O español o ingles.
@@ -52,8 +53,9 @@ const Router = () => {
           <Route path="user/:id" element={<SingleUser />}>
             <Route path="ejercicios" element={<UserCalendar />} />
             <Route path="hoy" element={<WorkoutContainer />} />
-            <Route path="agregarRutina" element={<WorkoutCreator />} />
+            <Route path="agregarRutina" element={<CrearRutinas />} />
             <Route path="editarRutinas" element={<EditarRutinasIndividual />} />
+            <Route path="rutinas" element={<RutinesList />} />
             <Route path="workouts/:id" element={<Workout />} />
           </Route>
           <Route path="agregarEjercicios" element={<AgregarEjercicio />} />
@@ -63,7 +65,7 @@ const Router = () => {
           <Route path="grupos" element={<Grupos />} />
           <Route path="grupos/:id" element={<SingleUser />}>
             <Route path="ejercicios" element={<GroupCalendar />} />
-            <Route path="agregarRutina" element={<WorkoutCreator />} />
+            <Route path="agregarRutina" element={<CrearRutinas />} />
             <Route path="editarRutinas" element={<EditarRutinasGrupal />} />
           </Route>
           <Route path="creargrupos" element={<CrearGrupos />} />

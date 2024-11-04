@@ -13,6 +13,8 @@ const { GMAIL_USER, GMAIL_PASS } = process.env;
 // Configurar el transporte de Nodemailer
 let noReplyTransporter = nodemailer.createTransport({
     service: 'gmail',
+    port: 587,
+    secure: false,
     auth: {
       user: GMAIL_USER,
       pass: GMAIL_PASS  
@@ -41,10 +43,11 @@ let noReplyTransporter = nodemailer.createTransport({
           subject,
           text
         };
-        console.log(mailOptions);
+        console.log(mailOptions, 'mailOptions!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         
         
         const info = await noReplyTransporter.sendMail(mailOptions);
+        console.log(info, 'info!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         return info;
       } catch (error) {
         console.error('Error al enviar el correo electrónico:', error);

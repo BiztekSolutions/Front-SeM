@@ -22,9 +22,11 @@ function EditarRutinasGrupal() {
       }
     }
   }, [rutinas]);
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
+  
   return (
     <div>
       <EditarRutinas rutinas={rutinas} />

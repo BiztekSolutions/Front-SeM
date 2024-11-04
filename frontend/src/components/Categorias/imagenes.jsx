@@ -20,7 +20,7 @@ function Imagenes() {
         </div>
         <div className=" flex flex-col  mt-8">
           <img src={pilatesImage} alt="fuerza-img" className="w-full m-auto" />
-          <h3 className="descripcion w-full text-center text-lg font-serif mt-4 border-2 border-gray-300 p-4" style={{ fontFamily: 'Roboto Slab, serif' }}>Pilates: Es un entrenamiento donde se trabaja la flexibilidad, la movilidad, la fuerza y la estabilidad. Al ritmo de la respiración y con ejercicios conscientes.</h3>
+          <h3 className="descripcion w-full text-center text-lg font-serif mt-4 border-2 border-gray-300 p-4" style={{ fontFamily: 'Roboto Slab, serif' }}>Pilates: Es pilates trabajamos la flexibilidad, la movilidad, la fuerza y la estabilidad. Al ritmo de la respiración y con ejercicios conscientes.</h3>
         </div>
         <div className=" flex flex-col  mt-8">
           <img src={pilatesImage} alt="fuerza-img" className="w-full m-auto" />

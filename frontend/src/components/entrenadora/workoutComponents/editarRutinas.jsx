@@ -45,7 +45,7 @@ function EditarRutinas({ rutinas }) {
   const filteredExercises =
     exercises &&
     exercises?.filter((exercise) =>
-      exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
+      exercise.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
   useEffect(() => {

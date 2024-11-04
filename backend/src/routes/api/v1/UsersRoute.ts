@@ -10,7 +10,6 @@ import {
   markDayAsTrained,
   getTrainingDays,
   markDayAsUntrained,
-  updatePassword,
 } from '../../../controllers/UserController';
 import { recoverPassword, userRecoveringPassword } from '../../../controllers/AuthController';   
 import { authenticateToken } from '../../../utils/validateToken';
@@ -28,6 +27,6 @@ userRouter.put('/entrenamientos/:clientId', markDayAsTrained);
 userRouter.delete('/entrenamientos/:clientId', markDayAsUntrained);
 userRouter.get('/entrenamientos/:clientId', getTrainingDays);
 userRouter.post('/recover-password', recoverPassword);
-userRouter.post('/update-password', userRecoveringPassword, updatePassword);
+userRouter.post('/update-password', userRecoveringPassword);
 
 export default userRouter;

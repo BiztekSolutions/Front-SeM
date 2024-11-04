@@ -42,14 +42,13 @@ function WorkoutCreator() {
   const { message } = useSelector((state) => state.rutinas);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
-  const id = user.Client.idClient;
+  const id = user?.Client?.idClient;
   const isGroupsPage = location.pathname.includes("/grupos");
   const daySectionRef = useRef(null);
   const idGroup = useParams().id;
   const filteredExercises = exercises?.filter((exercise) =>
     exercise.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
 
   useEffect(() => {
     dispatch(getAllExercises());

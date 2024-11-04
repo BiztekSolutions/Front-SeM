@@ -1095,9 +1095,6 @@ input[type="text"] {
   margin-bottom: 1rem;
 }
 
-.select-exercise-type {
-  width: 50% !important;
-}
 
 /* -------------- Query -------------- */
 
@@ -1522,4 +1519,9 @@ input[type="text"] {
     margin: auto !important;
     margin-top: 5% !important;
   }
+}
+
+.full-width-upload :where(.css-dev-only-do-not-override-1adbn6x).ant-upload-wrapper .ant-upload-select {
+  display: block !important;
+  width: 100% !important;
 }

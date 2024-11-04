@@ -60,7 +60,7 @@ function UserList() {
   }, [message]);
   
   const isUserInClient = (userId) => {
-    return clients.some((client) => client.idUser === userId);
+    return clients?.some((client) => client?.idUser === userId);
   };
 
   const filteredUsers = users?.filter((u) => u.idUser !== user.user);
@@ -71,7 +71,7 @@ function UserList() {
         email: user.Credentials[0].email,
         actions: (
           <div className="flex align-items-center gap-3">
-            {isUserInClient(user.idUser) ? (
+            {isUserInClient(user?.idUser) ? (
               <BiCheck size={19} className="userAdded h-9 w-9" />
             ) : (
               <TiPlus
